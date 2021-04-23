@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/onboard.dart';
 
-
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
