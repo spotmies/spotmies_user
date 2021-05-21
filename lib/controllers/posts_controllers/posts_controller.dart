@@ -6,6 +6,23 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 
 class PostsController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
+  List jobs = [
+    'AC Service',
+    'Computer',
+    'TV Repair',
+    'Development',
+    'Tutor',
+    'Beauty',
+    'Photography',
+    'Drivers',
+    'Events'
+  ];
+  List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
+  List icons = [
+    Icons.pending_actions,
+    Icons.run_circle_rounded,
+    Icons.done_all
+  ];
 
   var postStream = FirebaseFirestore.instance
       .collection('users')

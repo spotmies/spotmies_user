@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 class ChatScreenController extends ControllerMVC {
@@ -16,8 +21,28 @@ class ChatScreenController extends ControllerMVC {
   List<File> profilepic = [];
   bool uploading = false;
   double val = 0;
+  String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+  final snackbar = SnackBar(
+    content: Text('Please type text...'),
+    action: SnackBarAction(
+      label: 'Undo',
+      onPressed: () {
+        // Some code to undo the change.
+      },
+    ),
+  );
+
+  // final scroll = Timer(Duration(milliseconds: 300),
+  //     () => scrollController.jumpTo(scrollController.position.maxScrollExtent));
 
   List imageLink = [];
+
+  uread(String doc) {
+    return FirebaseFirestore.instance
+        .collection('messaging')
+        .doc(doc)
+        .update({'uread': 0});
+  }
 
   chooseImage() async {
     final pickedFile =
@@ -59,5 +84,51 @@ class ChatScreenController extends ControllerMVC {
           .then((value) => imageLink.add(value + 'ui'.toString()));
       i++;
     }
+  }
+
+  date(msg1, msg2) {
+    var temp1 = jsonDecode(msg1);
+    var temp2 = jsonDecode(msg2);
+    var ct = DateFormat('dd').format(
+        DateTime.fromMillisecondsSinceEpoch(int.parse(temp1['timestamp'])));
+    var pt = DateFormat('dd').format(
+        DateTime.fromMillisecondsSinceEpoch(int.parse(temp2['timestamp'])));
+    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
+    var daypast = DateFormat('EEE').format(
+        DateTime.fromMillisecondsSinceEpoch(int.parse(temp1['timestamp'])));
+    if (ct != pt) {
+      return (daypast == daynow
+          ? 'Today'
+          : (DateFormat('dd MMM yyyy').format(
+              DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(temp1['timestamp'])))));
+    } else {
+      return "";
+    }
+  }
+
+  confirmOrder(String id, String pid) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('adpost')
+        .doc(id)
+        .update({'orderstate': 2});
+    FirebaseFirestore.instance
+        .collection('allads')
+        .doc(id)
+        .update({'orderstate': 2});
+    FirebaseFirestore.instance
+        .collection('messaging')
+        .doc(pid + id)
+        .update({'orderstate': 2});
+
+    FirebaseFirestore.instance
+        .collection('partner')
+        .doc(id)
+        .collection('orders')
+        .doc(id)
+        .update({'orderstate': 2});
   }
 }

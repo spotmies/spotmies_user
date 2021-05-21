@@ -7,6 +7,7 @@ import 'package:spotmies/models/loginModel.dart';
 class LoginPageController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
+  var formkey1 = GlobalKey<FormState>();
   TextEditingController loginnum = TextEditingController();
 
   LoginModel loginModel;

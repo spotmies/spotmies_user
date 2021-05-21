@@ -1,5 +1,6 @@
 
-// import 'package:spotmies/home/ad/maps/geometry.dart';
+
+// import 'package:spotmies/miscellaneous/home/ad/maps/geometry.dart';
 
 // class Place {
 //   final Geometry geometry;

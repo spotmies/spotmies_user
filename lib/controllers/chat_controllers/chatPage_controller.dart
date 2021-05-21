@@ -7,9 +7,18 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 class ChatPageController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
+  ScrollController scrollController = ScrollController();
+
+  uread(String msgid) {
+    return FirebaseFirestore.instance
+        .collection('messaging')
+        .doc(msgid)
+        .update({'uread': 1, 'umsgcount': 0});
+  }
+
   var chatPageStream = FirebaseFirestore.instance
       .collection('messaging')
       .where('userid', isEqualTo: FirebaseAuth.instance.currentUser.uid)
-      //.orderBy('createdAt', descending: true)
+      .where("chatbuild", isEqualTo: true)
       .snapshots();
 }

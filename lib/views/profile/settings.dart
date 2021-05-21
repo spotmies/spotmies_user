@@ -17,6 +17,10 @@ class _SettingState extends StateMVC<Setting> {
 
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _settingsController.scaffoldkey,
       appBar: AppBar(
@@ -50,37 +54,39 @@ class _SettingState extends StateMVC<Setting> {
                   // width: 350,
                   child: ListView(
                     children: [
-                      Container(
+                     Container(
                         padding: EdgeInsets.all(20),
-                        height: 100,
-                        // width: 330,
+                        height: _hight * 0.15,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(30),
-                          // boxShadow: kElevationToShadow[1]
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CircleAvatar(
-                              child: ClipOval(
-                                child: Center(
-                                  child: document['profilepic'] == null
-                                      ? Icon(
-                                          Icons.person,
-                                          color: Colors.white,
-                                          size: 65,
-                                        )
-                                      : Image.network(
-                                          document['profilepic'],
-                                          fit: BoxFit.cover,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                        ),
+                            Container(
+                              height: _width * 0.15,
+                              width: _width * 0.15,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[100],
+                                child: ClipOval(
+                                  child: Center(
+                                    child: document['profilepic'] == null
+                                        ? Icon(
+                                            Icons.person,
+                                            color: Colors.blueGrey,
+                                            size: _width * 0.12,
+                                          )
+                                        : Image.network(
+                                            document['profilepic'],
+                                            fit: BoxFit.cover,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                          ),
+                                  ),
                                 ),
                               ),
-                              radius: 50,
-                              backgroundColor: Colors.blue[800],
                             ),
                             _settingsController.profilepic == null
                                 ? TextButton(
@@ -94,8 +100,8 @@ class _SettingState extends StateMVC<Setting> {
                                           color: Colors.grey[700]),
                                     ))
                                 : TextButton(
-                                    onPressed: () {
-                                      _settingsController.uploadprofile();
+                                    onPressed: () async {
+                                      await _settingsController.uploadprofile();
                                     },
                                     child: Text(
                                       'Upload',
@@ -153,7 +159,7 @@ class _SettingState extends StateMVC<Setting> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              document['altNum'],
+                              document['altnum'],
                               style: TextStyle(fontSize: 18),
                             ),
                             TextButton(

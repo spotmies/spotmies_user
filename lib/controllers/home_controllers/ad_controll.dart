@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/models/admodel.dart';
 
 class AdController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
+  TextEditingController problem = TextEditingController();
 
   String service;
   String title;
@@ -52,6 +54,21 @@ class AdController extends ControllerMVC {
   String add2 = "";
   String add3 = "";
   var docc;
+  var wid = 1;
+  List jobs = [
+    'AC Service',
+    'Computer',
+    'TV Repair',
+    'development',
+    'tutor',
+    'beauty',
+    'photography',
+    'drivers',
+    'events',
+    'Electrician',
+    'Carpentor',
+    'Plumber',
+  ];
 
   AdModel adModel;
 
@@ -104,29 +121,34 @@ class AdController extends ControllerMVC {
     setState(() {
       add1 = addresses.first.featureName;
       add2 = addresses.first.addressLine;
-      add3 = addresses.first.locality;
+      add3 = addresses.first.subLocality;
     });
   }
 
-  pickDate() async {
+  pickDate(BuildContext context) async {
     DateTime date = await showDatePicker(
+        confirmText: 'SET DATE',
         context: context,
         initialDate: pickedDate,
         firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
             DateTime.now().day - 0),
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
-      setState(() async {
-        TimeOfDay t = await showTimePicker(
-          context: context,
-          initialTime: pickedTime,
-        );
-        if (t != null) {
-          setState(() {
-            pickedTime = t;
-          });
-        }
+      setState(() {
         pickedDate = date;
+        print(pickedDate);
+      });
+    }
+  }
+
+  picktime(BuildContext context) async {
+    TimeOfDay t = await showTimePicker(
+      context: context,
+      initialTime: pickedTime,
+    );
+    if (t != null) {
+      setState(() {
+        pickedTime = t;
       });
     }
   }
@@ -134,8 +156,10 @@ class AdController extends ControllerMVC {
   // image pick
 
   chooseImage() async {
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().getImage(
+        source: ImageSource.camera,
+        imageQuality: 10,
+        preferredCameraDevice: CameraDevice.rear);
     setState(() {
       profilepic.add(File(pickedFile?.path));
     });
@@ -175,11 +199,46 @@ class AdController extends ControllerMVC {
     }
   }
 
+  step1() {
+    wid <= 1
+        ? setState(() {
+            if (longitude != '' || pickedTime != null) {
+              wid = wid + 1;
+            }
+          })
+        : print('Step2');
+  }
+
+  step2() {
+    wid <= 2
+        ? setState(() {
+            if (formkey.currentState.validate()) {
+              formkey.currentState.save();
+
+              wid = wid + 1;
+            }
+          })
+        : print('Step2');
+  }
+
+  step3() {
+    wid <= 3 ? adbutton() : print('Step3');
+  }
+
+  widDec() {
+    wid >= 1
+        ? setState(() {
+            wid = wid - 1;
+          })
+        : print('Back');
+  }
+
   adbutton() async {
-    docid();
+    CircularProgressIndicator();
+    await docid();
     await uploadimage();
     var orderid = await docc.id;
-    await FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .collection('adpost')
@@ -189,9 +248,10 @@ class AdController extends ControllerMVC {
       'problem': this.title,
       'money': this.money,
       'posttime': this.now,
-      'scheduledate':
-          '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
-      'scheduletime': '${pickedTime.hour}:${pickedTime.minute}',
+      'scheduledate': DateFormat('dd MMM yyyy').format(
+          (DateTime.fromMillisecondsSinceEpoch(
+              (pickedDate.millisecondsSinceEpoch)))),
+      'scheduletime': '${pickedTime.format(context)}',
       'userid': uid,
       'request': dummy,
       'orderid': orderid,
@@ -200,6 +260,7 @@ class AdController extends ControllerMVC {
         'latitude': latitude,
         'longitude': longitude,
         'add1': add3,
+        'add2': add2
       },
       'orderstate': 0,
     });
@@ -209,9 +270,10 @@ class AdController extends ControllerMVC {
       'problem': this.title,
       'money': this.money,
       'posttime': this.now,
-      'scheduledate':
-          '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
-      'scheduletime': '${pickedTime.hour}:${pickedTime.minute}',
+      'scheduledate': DateFormat('dd MMM yyyy').format(
+          (DateTime.fromMillisecondsSinceEpoch(
+              (pickedDate.millisecondsSinceEpoch)))),
+      'scheduletime': '${pickedTime.format(context)}',
       'userid': uid,
       'request': dummy,
       'orderid': orderid,
@@ -240,9 +302,10 @@ class AdController extends ControllerMVC {
       'problem': this.title,
       'money': this.money,
       'posttime': this.now,
-      'scheduledate':
-          '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
-      'scheduletime': '${pickedTime.hour}:${pickedTime.minute}',
+      'scheduledate': DateFormat('dd MMM yyyy').format(
+          (DateTime.fromMillisecondsSinceEpoch(
+              (pickedDate.millisecondsSinceEpoch)))),
+      'scheduletime': '${pickedTime.format(context)}',
       'userid': uid,
       'request': dummy,
       'orderid': orderid,
@@ -260,9 +323,10 @@ class AdController extends ControllerMVC {
       'problem': this.title,
       'money': this.money,
       'posttime': this.now,
-      'scheduledate':
-          '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
-      'scheduletime': '${pickedTime.hour}:${pickedTime.minute}',
+      'scheduledate': DateFormat('dd MMM yyyy').format(
+          (DateTime.fromMillisecondsSinceEpoch(
+              (pickedDate.millisecondsSinceEpoch)))),
+      'scheduletime': '${pickedTime.format(context)}',
       'userid': uid,
       'request': dummy,
       'orderid': orderid,
@@ -289,7 +353,6 @@ class AdController extends ControllerMVC {
               ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
-                   
                   },
                   child: Text('ok'))
             ],

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:share/share.dart';
-import 'package:spotmies/views/profile/settings.dart';
 import 'package:spotmies/controllers/profile_controllers/profile_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -16,353 +13,9 @@ class _ProfileState extends StateMVC<Profile> {
     this._profileController = controller;
   }
 
+  List list = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   //static final String path = "lib/src/pages/settings/settings3.dart";
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _profileController.scaffoldkey,
-      appBar: AppBar(
-        backgroundColor: Colors.grey[100],
-        leading: IconButton(
-            icon: Icon(
-              Icons.person,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => HomeScreen()));
-            }),
-        title: Text(
-          'Profile',
-          style: TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-      ),
-      backgroundColor: Colors.grey[100],
-      body: StreamBuilder(
-          stream: _profileController.profileSteam,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            var document = snapshot.data;
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 200,
-                    width: 330,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      // boxShadow: kElevationToShadow[1]
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CircleAvatar(
-                          child: ClipOval(
-                            child: Center(
-                              child: document['profilepic'] == null
-                                  ? Icon(
-                                      Icons.person,
-                                      color: Colors.white,
-                                      size: 65,
-                                    )
-                                  : Image.network(
-                                      document['profilepic'],
-                                      fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width,
-                                    ),
-                            ),
-                          ),
-                          radius: 50,
-                          backgroundColor: Colors.blue[800],
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              document['name'] == null
-                                  ? 'New User'
-                                  : document['name'],
-                              style: TextStyle(fontSize: 25),
-                            ),
-                            Text(
-                              document['email'] == null
-                                  ? 'not found'
-                                  : document['email'],
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                      height: 250,
-                      width: double.infinity,
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          InkWell(
-                              onTap: () => Share.share(
-                                  'https://play.google.com/store/apps/details?id=com.spotmiespartner'),
-                              // print(
-                              //     "Refer & Share"), // handle your onTap here
-                              child: Container(
-                                height: 50,
-                                width: double.infinity,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.share,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: 50,
-                                      width: 200,
-                                      child: Text(
-                                        'Refer & Share',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 70,
-                                    ),
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        PrivacyPolicyWebView()));
-                              }, // handle your onTap here
-                              child: Container(
-                                height: 50,
-                                width: double.infinity,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.security,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: 50,
-                                      width: 200,
-                                      child: Text(
-                                        'Privacy Policy',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 70,
-                                    ),
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          HelpAndSupport())), // handle your onTap here
-                              child: Container(
-                                height: 50,
-                                width: double.infinity,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.chat,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: 50,
-                                      width: 200,
-                                      child: Text(
-                                        'Help & Support',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 70,
-                                    ),
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => Setting()));
-                              }, // handle your onTap here
-                              child: Container(
-                                height: 50,
-                                width: double.infinity,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.settings,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: 50,
-                                      width: 200,
-                                      child: Text(
-                                        'Setting',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 70,
-                                    ),
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                          InkWell(
-                              onTap: () async {
-                                _profileController.signout();
-                              }, // handle your onTap here
-                              child: Container(
-                                height: 50,
-                                width: double.infinity,
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.power_settings_new_rounded,
-                                          color: Colors.grey[600],
-                                        )),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(top: 13),
-                                      height: 50,
-                                      width: 200,
-                                      child: Text(
-                                        'Logout',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey[600],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 70,
-                                    ),
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        child: Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.grey[600],
-                                        )),
-                                  ],
-                                ),
-                              )),
-                        ],
-                      )),
-                ],
-              ),
-            );
-          }),
-    );
-  }
-}
-
-class PrivacyPolicyWebView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //appBar: AppBar(),
-      body: WebView(
-        initialUrl:
-            'https://www.privacypolicies.com/live/931def21-ec24-4e98-84c9-1a7be3af4c8a',
-        javascriptMode: JavascriptMode.unrestricted,
-      ),
-    );
-  }
-}
-
-class HelpAndSupport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
@@ -370,146 +23,304 @@ class HelpAndSupport extends StatelessWidget {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Help & Support'),
-        backgroundColor: Colors.blue[900],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            InkWell(
-              onTap: () {},
-              child: Container(
-                  height: _hight * 0.3,
-                  width: _width * 1,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.call,
-                          size: 37,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Make Call',
-                          style: TextStyle(fontSize: 35),
-                        ),
-                      ],
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[200],
-                          blurRadius: 3,
-                          spreadRadius: 4,
-                          offset: Offset(1, 1),
-                        ),
-                        BoxShadow(
-                          color: Colors.grey[50],
-                          blurRadius: 3,
-                          spreadRadius: 0.1,
-                          offset: Offset(-1, -1),
-                        )
-                      ])),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                  height: _hight * 0.3,
-                  width: _width * 1,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.email,
-                          size: 37,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Send Email',
-                          style: TextStyle(fontSize: 35),
-                        ),
-                      ],
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[200],
-                          blurRadius: 3,
-                          spreadRadius: 4,
-                          offset: Offset(1, 1),
-                        ),
-                        BoxShadow(
-                          color: Colors.grey[50],
-                          blurRadius: 3,
-                          spreadRadius: 0.1,
-                          offset: Offset(-1, -1),
-                        )
-                      ])),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                  height: _hight * 0.3,
-                  width: _width * 1,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.call_received,
-                          size: 37,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Request To Call',
-                          style: TextStyle(fontSize: 35),
-                        ),
-                      ],
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[200],
-                          blurRadius: 3,
-                          spreadRadius: 4,
-                          offset: Offset(1, 1),
-                        ),
-                        BoxShadow(
-                          color: Colors.grey[50],
-                          blurRadius: 3,
-                          spreadRadius: 0.1,
-                          offset: Offset(-1, -1),
-                        )
-                      ])),
-            ),
-          ],
+        key: _profileController.scaffoldkey,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            'Profile',
+            style: TextStyle(color: Colors.grey[800]),
+          ),
+          elevation: 0,
         ),
-      ),
-    );
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: StreamBuilder(
+              stream: _profileController.profileSteam,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData)
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                var document = snapshot.data;
+                return Container(
+                  // padding: EdgeInsets.only(top: _hight * 0.08),
+                  height: _hight * 1,
+                  width: _width * 1,
+                  child: Column(
+                    children: [
+                      Stack(alignment: Alignment.topRight, children: [
+                        Container(
+                          height: _hight * 0.4,
+                          width: _width * 0.9,
+                          decoration: BoxDecoration(
+                              gradient: _profileController.color,
+                              borderRadius: BorderRadius.circular(50),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey[300],
+                                    blurRadius: 2,
+                                    spreadRadius: 2,
+                                    offset: Offset(4, 4)),
+                              ]
+                              // boxShadow: kElevationToShadow[1]
+                              ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              CircleAvatar(
+                                child: ClipOval(
+                                  child: Center(
+                                    child: document['profilepic'] == null
+                                        ? Icon(
+                                            Icons.person,
+                                            color: Colors.white,
+                                            size: _width * 0.2,
+                                          )
+                                        : Image.network(
+                                            document['profilepic'],
+                                            fit: BoxFit.cover,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                          ),
+                                  ),
+                                ),
+                                radius: _width * 0.13,
+                                backgroundColor: Colors.blue[800],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    document['name'] == null
+                                        ? 'New User'
+                                        : document['name'],
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.white),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        document['email'] == null
+                                            ? 'not found'
+                                            : document['email'],
+                                        style: TextStyle(
+                                            color: Colors.grey[100],
+                                            fontSize: _width * 0.03,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      SizedBox(
+                                        width: _width * 0.05,
+                                      ),
+                                      Text(
+                                        document['num'] == null
+                                            ? 'not found'
+                                            : document['num'],
+                                        style: TextStyle(
+                                            color: Colors.grey[100],
+                                            fontSize: _width * 0.03,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.white10,
+                                    indent: _width * 0.15,
+                                    endIndent: _width * 0.15,
+                                  ),
+                                  Container(
+                                    height: _hight * 0.1,
+                                    // color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                          width: _width * 0.4,
+                                          // color: Colors.amber,
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '₹ ' + '1234',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[100],
+                                                      fontSize: _width * 0.07,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                Text(
+                                                  'Total Savings',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[100],
+                                                      fontSize: _width * 0.02,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ]),
+                                        ),
+                                        Container(
+                                          width: _width * 0.002,
+                                          color: Colors.white10,
+                                        ),
+                                        Container(
+                                          // color: Colors.amber,
+                                          width: _width * 0.4,
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '12',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[100],
+                                                      fontSize: _width * 0.07,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                Text(
+                                                  'Total orders',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[100],
+                                                      fontSize: _width * 0.02,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ]),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Colors.white10,
+                                    indent: _width * 0.15,
+                                    endIndent: _width * 0.15,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          right: _width * 0.03,
+                          top: _width * 0.03,
+                          child: IconButton(
+                              icon: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Colors.indigo,
+                                  )),
+                              onPressed: () {}),
+                        )
+                      ]),
+                      Container(
+                        color: Colors.white,
+                        height: _hight * 0.1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: _hight * 0.001,
+                              color: Colors.grey[400],
+                              width: _width * 0.35,
+                            ),
+                            Container(
+                              // color: Colors.amber,
+                              width: _width * 0.3,
+                              child: Center(
+                                  child: Text(
+                                'More',
+                                style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontWeight: FontWeight.w700),
+                              )),
+                            ),
+                            Container(
+                              height: _hight * 0.001,
+                              color: Colors.grey[400],
+                              width: _width * 0.35,
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                          height: _hight * 0.38,
+                          width: _width * 1,
+                          color: Colors.white,
+                          child: Center(
+                            child: GridView.builder(
+                                itemCount: 6,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 15,
+                                        mainAxisSpacing: 15),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if (index == 0) {
+                                        _profileController.share();
+                                      }
+                                      if (index == 1) {
+                                        _profileController.privacy();
+                                      }
+                                      if (index == 3) {
+                                        _profileController.settings();
+                                      }
+                                      if (index == 4) {
+                                        _profileController.help();
+                                      }
+                                      if (index == 5) {
+                                        _profileController.signout();
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: _profileController.shadow,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(15),
+                                              bottomRight:
+                                                  Radius.circular(15))),
+                                      child: Stack(
+                                        children: [
+                                          Center(
+                                              child: Text(
+                                            _profileController.tabnames[index],
+                                            style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontWeight: FontWeight.w500),
+                                          )),
+                                          Positioned(
+                                            right: _width * 0.01,
+                                            top: _width * 0.01,
+                                            child: CircleAvatar(
+                                              radius: _width * 0.04,
+                                              backgroundColor: Colors.blue[900],
+                                              child: Icon(
+                                                _profileController.icons[index],
+                                                color: Colors.white,
+                                                size: _width * 0.04,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          )),
+                    ],
+                  ),
+                );
+              }),
+        ));
   }
 }

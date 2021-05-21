@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:spotmies/controllers/chat_controllers/chatScreen_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/views/chat/chatapp/partnerprofile.dart';
 
 class ChatScreen extends StatefulWidget {
   final String value;
@@ -40,14 +42,12 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
         appBar: AppBar(
           backgroundColor: Colors.blue[900],
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              FirebaseFirestore.instance
-                  .collection('messaging')
-                  .doc(value)
-                  .update({'ustatus': 0});
-              Navigator.of(context).pop();
-            }),
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                String doc = value;
+                _chatScreenController.uread(doc);
+                Navigator.of(context).pop();
+              }),
           title: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('messaging')
@@ -59,9 +59,52 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                     child: CircularProgressIndicator(),
                   );
                 var document = snapshot.data;
-                return Text(document['pname'] == null
-                    ? 'technician'
-                    : document['pname']);
+                return InkWell(
+                  onTap: () {
+                    var msgid = document['id'];
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PartnerDetails(
+                        value: msgid,
+                      ),
+                    ));
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        child: AspectRatio(
+                          aspectRatio: 400 / 400,
+                          child: ClipOval(
+                            child: document['ppic'] == null
+                                ? Icon(
+                                    Icons.person,
+                                    color: Colors.black,
+                                    size: 30,
+                                  )
+                                : Image.network(
+                                    document['ppic'].toString(),
+                                    fit: BoxFit.cover,
+                                    width: MediaQuery.of(context).size.width,
+                                  ),
+                          ),
+                        ),
+                        backgroundColor: Colors.grey[50],
+                      ),
+                      SizedBox(
+                        width: _width * 0.03,
+                      ),
+                      Container(
+                        // padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          document['pname'] == null
+                              ? 'Costumer'
+                              : document['pname'],
+                          style: TextStyle(
+                              color: Colors.white, fontSize: _width * 0.055),
+                        ),
+                      )
+                    ],
+                  ),
+                );
               }),
         ),
         body: StreamBuilder(
@@ -110,29 +153,9 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             child: ElevatedButton(
                                 onPressed: () {
                                   //print(document['partnerid']);
-                                  FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(
-                                          FirebaseAuth.instance.currentUser.uid)
-                                      .collection('adpost')
-                                      .doc(document['orderid'])
-                                      .update({'orderstate': 2});
-                                  FirebaseFirestore.instance
-                                      .collection('allads')
-                                      .doc(document['orderid'])
-                                      .update({'orderstate': 2});
-                                  FirebaseFirestore.instance
-                                      .collection('messaging')
-                                      .doc(document['partnerid'] +
-                                          document['orderid'])
-                                      .update({'orderstate': 2});
-
-                                  FirebaseFirestore.instance
-                                      .collection('partner')
-                                      .doc(document['partnerid'])
-                                      .collection('orders')
-                                      .doc(document['orderid'])
-                                      .update({'orderstate': 2});
+                                  String id = document['orderid'];
+                                  String pid = document['partnerid'];
+                                  _chatScreenController.confirmOrder(id, pid);
                                 },
                                 child: Text('Confirm',
                                     style: TextStyle(color: Colors.white))),
@@ -143,214 +166,408 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                   Container(
                     padding: EdgeInsets.all(10),
                     height: document['orderstate'] == 0
-                        ? _hight * 0.8
-                        : _hight * 0.9,
+                        ? _hight * 0.78
+                        : _hight * 0.86,
                     width: _width * 1,
                     child: ListView.builder(
                         controller: _chatScreenController.scrollController,
                         itemCount: msgs.length,
                         itemBuilder: (BuildContext ctxt, int index) {
-                          if (msgs[index].endsWith('u')) {
-                            return Row(
+                          String msgData = msgs[index];
+                          var data = jsonDecode(msgData);
+                          var date2 = index - 1 == -1 ? index : index - 1;
+                          if ((data['sender'] == 'u') &&
+                              (data['type'] == 'text')) {
+                            return Column(
                               children: [
-                                Expanded(
-                                  child: Container(
+                                if (_chatScreenController.date(
+                                        msgData, msgs[date2]) !=
+                                    '')
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        height: _hight * 0.04,
+                                        width: _width * 0.3,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey[800],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
+                                            child: Text(
+                                          _chatScreenController.date(
+                                              msgData, msgs[date2]),
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                                  ),
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                          alignment: Alignment.centerRight,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.centerLeft,
+                                                padding: EdgeInsets.only(
+                                                    top: 10,
+                                                    left: 15,
+                                                    right: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                    )),
+                                                child: Text(data['msg']),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 2, right: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      bottomLeft:
+                                                          Radius.circular(30),
+
+                                                      // bottomLeft:Radius.circular(30)
+                                                    )),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(DateFormat.jm().format(
+                                                        DateTime.fromMillisecondsSinceEpoch(
+                                                            (int.parse(data[
+                                                                    'timestamp']
+                                                                .toString()))))),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                                // Text("date")
+                              ],
+                            );
+                          }
+                          if ((data['sender'] == 'p') &&
+                              (data['type'] == 'text')) {
+                            return Column(
+                              children: [
+                                if (_chatScreenController.date(
+                                        msgData, msgs[date2]) !=
+                                    '')
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        height: _hight * 0.04,
+                                        width: _width * 0.3,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey[800],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
+                                            child: Text(
+                                          _chatScreenController.date(
+                                              msgData, msgs[date2]),
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                                  ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                padding: EdgeInsets.only(
+                                                    top: 10,
+                                                    right: 15,
+                                                    left: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[100],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      // bottomRight:
+                                                      //     Radius.circular(30)
+                                                    )),
+                                                child: Text(data['msg']),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 2, left: 15),
+                                                width: _width * 0.55,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[100],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      bottomRight:
+                                                          Radius.circular(30),
+
+                                                      // bottomLeft:Radius.circular(30)
+                                                    )),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(DateFormat.jm().format(
+                                                        (DateTime
+                                                            .fromMillisecondsSinceEpoch(
+                                                                (int.parse(data[
+                                                                    'timestamp'])))))),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              // Text(date(msgData, msgs[date2])),
+                                            ],
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          }
+                          if ((data['type'] == 'media') &&
+                              (data['sender'] == 'u')) {
+                            return Column(
+                              children: [
+                                if (_chatScreenController.date(
+                                        msgData, msgs[date2]) !=
+                                    '')
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        height: _hight * 0.04,
+                                        width: _width * 0.3,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey[800],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
+                                            child: Text(
+                                          _chatScreenController.date(
+                                              msgData, msgs[date2]),
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                                  ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: Container(
                                       alignment: Alignment.centerRight,
                                       child: Column(
                                         children: [
                                           Container(
                                             padding: EdgeInsets.all(10),
-                                            width: _width * 0.7,
+                                            // height: _hight * 0.3,
+                                            width: _width * 0.5,
                                             decoration: BoxDecoration(
-                                                color: Colors.grey[200],
+                                                color: Colors.grey[50],
                                                 borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(30),
-                                                    topRight:
-                                                        Radius.circular(30),
-                                                    bottomLeft:
-                                                        Radius.circular(30))),
-                                            child: Center(
-                                              child: Text(msgs[index].substring(
-                                                  0, msgs[index].length - 1)),
+                                                  topLeft: Radius.circular(15),
+                                                  topRight: Radius.circular(15),
+                                                )),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'You ',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Colors.black),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    )
+                                                  ],
+                                                ),
+                                                Image.network(
+                                                  data['msg'],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(
+                                                bottom: 2, left: 15),
+                                            width: _width * 0.55,
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[50],
+                                                borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(30),
+
+                                                  // bottomLeft:Radius.circular(30)
+                                                )),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(DateFormat.jm().format((DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        (int.parse(data[
+                                                                'timestamp']
+                                                            .toString())))))),
+                                              ],
                                             ),
                                           ),
                                           SizedBox(
                                             height: 5,
-                                          ),
+                                          )
                                         ],
-                                      )),
+                                      ),
+                                    )),
+                                  ],
                                 ),
                               ],
                             );
                           }
-                          if (msgs[index].endsWith('p')) {
-                            return Row(
+                          if ((data['type'] == 'media') &&
+                              (data['sender'] == 'p')) {
+                            return Column(
                               children: [
-                                Expanded(
-                                  child: Container(
+                                if (_chatScreenController.date(
+                                        msgData, msgs[date2]) !=
+                                    '')
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        height: _hight * 0.04,
+                                        width: _width * 0.3,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey[800],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
+                                            child: Text(
+                                          _chatScreenController.date(
+                                              msgData, msgs[date2]),
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                                  ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: Container(
                                       alignment: Alignment.centerLeft,
                                       child: Column(
                                         children: [
                                           Container(
                                             padding: EdgeInsets.all(10),
-                                            width: _width * 0.7,
+                                            // height: _hight * 0.3,
+                                            width: _width * 0.5,
                                             decoration: BoxDecoration(
-                                                color: Colors.grey[100],
+                                                color: Colors.grey[50],
                                                 borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(30),
-                                                    topRight:
-                                                        Radius.circular(30),
-                                                    bottomRight:
-                                                        Radius.circular(30))),
-                                            child: Center(
-                                              child: Text(msgs[index].substring(
-                                                  0, msgs[index].length - 1)),
+                                                  topLeft: Radius.circular(15),
+                                                  topRight: Radius.circular(15),
+                                                )),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      document['pname'],
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Colors.black),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    )
+                                                  ],
+                                                ),
+                                                Image.network(
+                                                  data['msg'],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(
+                                                bottom: 2, left: 15),
+                                            width: _width * 0.5,
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[50],
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(30),
+
+                                                  // bottomLeft:Radius.circular(30)
+                                                )),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(DateFormat.jm().format((DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                        (int.parse(data[
+                                                                'timestamp']
+                                                            .toString())))))),
+                                              ],
                                             ),
                                           ),
                                           SizedBox(
                                             height: 5,
-                                          ),
+                                          )
                                         ],
-                                      )),
+                                      ),
+                                    )),
+                                  ],
                                 ),
                               ],
                             );
-                          }
-                          if (msgs[index].endsWith('ui')) {
-                            return Row(
-                              children: [
-                                Expanded(
-                                    child: Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        // height: _hight * 0.3,
-                                        width: _width * 0.5,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey[50],
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15),
-                                            )),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'You ',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: Colors.black),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                )
-                                              ],
-                                            ),
-                                            Image.network(
-                                              msgs[index].substring(
-                                                  0, msgs[index].length - 1),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      )
-                                    ],
-                                  ),
-                                )),
-                              ],
-                            );
-                          }
-                          if (msgs[index].endsWith('pi')) {
-                            return Row(
-                              children: [
-                                Expanded(
-                                    child: Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        // height: _hight * 0.3,
-                                        width: _width * 0.5,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey[50],
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15),
-                                            )),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  'From ' + document['pname'],
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: Colors.black),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                )
-                                              ],
-                                            ),
-                                            Image.network(
-                                              msgs[index].substring(
-                                                  0, msgs[index].length - 1),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      )
-                                    ],
-                                  ),
-                                )),
-                              ],
-                            );
                           } else {
-                            return Container(
-                                alignment: Alignment.center,
-                                height: _hight * 0.09,
-                                width: _width * 0.4,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(10),
-                                      height: _hight * 0.06,
-                                      width: _width * 0.7,
-                                      decoration: BoxDecoration(
-                                          color: Colors.blueGrey[700],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15))),
-                                      child: Center(
-                                        child: Text(
-                                          msgs[index].substring(
-                                              0, msgs[index].length - 1),
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
-                                ));
+                            return Text('Undefined');
                           }
                         }),
                     color: Colors.white,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                          color: Colors.transparent,
+                          padding: EdgeInsets.only(right: 20),
+                          height: _hight * 0.035,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.done_all,
+                                color: document['uread'] == 1
+                                    ? Colors.greenAccent
+                                    : Colors.grey,
+                              ),
+                              Text(document['uread'] == 1 ? 'Seen' : 'Unseen'),
+                            ],
+                          )),
+                    ],
                   ),
                   Container(
                     // color: Colors.amber,
@@ -367,9 +584,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               controller: _chatScreenController.controller,
                               keyboardType: TextInputType.name,
                               decoration: InputDecoration(
-                                border:  OutlineInputBorder(
-                                    borderSide:
-                                         BorderSide(color: Colors.white),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
                                     borderRadius: BorderRadius.circular(15)),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius:
@@ -397,7 +613,9 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               color: Colors.grey,
                             ),
                             onPressed: () {
-                              bottomappbar();
+                              var msgcount = document['pmsgcount'];
+                              var pread = document['pread'];
+                              bottomappbar(msgcount, pread);
                             }),
                         Container(
                           height: _hight * 0.1,
@@ -411,32 +629,43 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                     Icons.send,
                                     color: Colors.white,
                                   ),
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    int msgcount = document['umsgcount'] + 1;
                                     _chatScreenController.controller.clear();
-                                    var msgData = [
-                                      '$_chatScreenController.textInput' + 'u'
-                                    ];
-                                    final snackBar = SnackBar(
-                                      content: Text('Yay! A SnackBar!'),
-                                      action: SnackBarAction(
-                                        label: 'Undo',
-                                        onPressed: () {
-                                          // Some code to undo the change.
-                                        },
-                                      ),
-                                    );
-                                    //print('$msgData');
-                                    msgData == null
+
+                                    var msgData = {
+                                      'msg': _chatScreenController.textInput,
+                                      'timestamp':
+                                          _chatScreenController.timestamp,
+                                      'sender': 'u',
+                                      'type': 'text'
+                                    };
+                                    String temp = jsonEncode(msgData);
+                                    _chatScreenController.textInput == null
                                         ? ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar)
+                                            .showSnackBar(
+                                                _chatScreenController.snackbar)
                                         : FirebaseFirestore.instance
                                             .collection('messaging')
                                             .doc(value)
                                             .update({
-                                            'createdAt': DateTime.now(),
+                                            if (document['createdAt'] == null)
+                                              'createdAt': _chatScreenController
+                                                  .timestamp,
                                             'body':
-                                                FieldValue.arrayUnion(msgData)
+                                                FieldValue.arrayUnion([temp]),
+                                            'pmsgcount': document['pread'] == 0
+                                                ? msgcount
+                                                : 0,
                                           });
+                                    Timer(
+                                        Duration(milliseconds: 300),
+                                        () => _chatScreenController
+                                            .scrollController
+                                            .jumpTo(_chatScreenController
+                                                .scrollController
+                                                .position
+                                                .maxScrollExtent));
                                   })),
                         )
                       ],
@@ -464,7 +693,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
 
   //images
 
-  bottomappbar() {
+  bottomappbar(int msgcount, int pread) {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
@@ -576,21 +805,35 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               InkWell(
                                 onTap: () async {
                                   await _chatScreenController.uploadimage();
-                                  await FirebaseFirestore.instance
-                                      .collection('messaging')
-                                      .doc(value)
-                                      .update({
-                                    'createdAt': DateTime.now(),
-                                    'body': FieldValue.arrayUnion(
-                                        _chatScreenController.imageLink)
-                                  });
-                                  Navigator.pop(context);
+                                  _chatScreenController.controller.clear();
+                                  int len =
+                                      _chatScreenController.imageLink.length;
+                                  for (int i = 0; i <= len; i++) {
+                                    var imageData = {
+                                      'msg': _chatScreenController.imageLink[i],
+                                      'timestamp':
+                                          _chatScreenController.timestamp,
+                                      'sender': 'u',
+                                      'type': 'media'
+                                    };
+                                    String temp = jsonEncode(imageData);
+                                    await FirebaseFirestore.instance
+                                        .collection('messaging')
+                                        .doc(value)
+                                        .update({
+                                      'createdAt': DateTime.now(),
+                                      'body': FieldValue.arrayUnion([temp]),
+                                      'pmsgcount':
+                                          pread == 0 ? msgcount + 1 : 0,
+                                    });
+                                    Navigator.pop(context);
+                                  }
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.all(12),
-                                  height: _hight * 0.07,
-                                  //width: _width * 0.1,
-                                  decoration: BoxDecoration(
+                                    padding: EdgeInsets.all(12),
+                                    height: _hight * 0.07,
+                                    //             //width: _width * 0.1,
+                                    decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
                                             blurRadius: 2,
@@ -610,15 +853,76 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                             spreadRadius: 1.0)
                                       ],
                                       color: Colors.white,
-                                      shape: BoxShape.circle),
-                                  child: Icon(
-                                    Icons.send,
-                                    color: Colors.blue[900],
-                                  ),
-                                ),
-                              ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.send,
+                                      color: Colors.blue[900],
+                                    )),
+                              )
                             ],
                           )
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.end,
+                          //   children: [
+                          //     InkWell(
+                          //         onTap: () async {
+                          //           await _chatScreenController.uploadimage();
+
+                          //           int len =
+                          //               _chatScreenController.imageLink.length;
+
+                          //           for (int i = 0; i <= len; i++) {
+                          //             var imageData = {
+                          //               'msg': _chatScreenController.imageLink[i],
+                          //               'timestamp':
+                          //                   _chatScreenController.timestamp,
+                          //               'sender': 'u',
+                          //               'type': 'media'
+                          //             };
+                          //             String temp = jsonEncode(imageData);
+                          //             await FirebaseFirestore.instance
+                          //                 .collection('messaging')
+                          //                 .doc(value)
+                          //                 .update({
+                          //               'createdAt': DateTime.now(),
+                          //               'body': FieldValue.arrayUnion([temp]),
+                          //               'pmsgcount': pread == 0 ? msgcount + 1 : 0,
+                          //             });
+
+                          //             Navigator.pop(context);
+                          //         },
+                          //         child: Container(
+                          //             padding: EdgeInsets.all(12),
+                          //             height: _hight * 0.07,
+                          //             //width: _width * 0.1,
+                          //             decoration: BoxDecoration(
+                          //                 boxShadow: [
+                          //                   BoxShadow(
+                          //                       blurRadius: 2,
+                          //                       offset: Offset(
+                          //                         -2.0,
+                          //                         -1,
+                          //                       ),
+                          //                       color: Colors.grey[50],
+                          //                       spreadRadius: 1.0),
+                          //                   BoxShadow(
+                          //                       blurRadius: 2,
+                          //                       offset: Offset(
+                          //                         2.0,
+                          //                         1,
+                          //                       ),
+                          //                       color: Colors.grey[300],
+                          //                       spreadRadius: 1.0)
+                          //                 ],
+                          //                 color: Colors.white,
+                          //                 shape: BoxShape.circle),
+                          //             child: Icon(
+                          //               Icons.send,
+                          //               color: Colors.blue[900],
+                          //             )))
+                          //   ],
+                          // )
                         ],
                       ),
               ],

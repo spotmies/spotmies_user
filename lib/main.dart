@@ -1,20 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
 
 void main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+      runApp(MyApp());
+    });
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false, home: SplashScreen());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 }
 
@@ -23,4 +26,32 @@ class MyApp extends StatelessWidget {
 //   // make sure you call `initializeApp` before using other Firebase services.
 //   await Firebase.initializeApp();
 //   print("Handling a background message: ${message.messageId}");
+// }
+
+// class LocationService {
+//   Future<LocationData> getLocation() async {
+//     Location location = new Location();
+//     bool _serviceEnabled;
+//     PermissionStatus _permissionGranted;
+//     LocationData _locationData;
+
+//     _serviceEnabled = await location.serviceEnabled();
+//     if (!_serviceEnabled) {
+//       _serviceEnabled = await location.requestService();
+//       if (!_serviceEnabled) {
+//         throw Exception();
+//       }
+//     }
+
+//     _permissionGranted = await location.hasPermission();
+//     if (_permissionGranted == PermissionStatus.denied) {
+//       _permissionGranted = await location.requestPermission();
+//       if (_permissionGranted != PermissionStatus.granted) {
+//         throw Exception();
+//       }
+//     }
+
+//     _locationData = await location.getLocation();
+//     return _locationData;
+//   }
 // }

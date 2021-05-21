@@ -104,90 +104,90 @@
 //   }
 // }
 
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:flutter/material.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class Gmap extends StatefulWidget {
-  @override
-  _GmapState createState() => _GmapState();
-}
+// class Gmap extends StatefulWidget {
+//   @override
+//   _GmapState createState() => _GmapState();
+// }
 
-class _GmapState extends State<Gmap> {
-  var _controller = TextEditingController();
-  Set<Marker> _markers = {};
-  void _onMapCreated(GoogleMapController controller) {
-    controller.setMapStyle(Utils.mapStyle);
-    setState(() {
-      _markers.add(Marker(
-        markerId: MarkerId('id-1'),
-        position: LatLng(17.833, 82.33),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-    });
-  }
+// class _GmapState extends State<Gmap> {
+//   var _controller = TextEditingController();
+//   Set<Marker> _markers = {};
+//   void _onMapCreated(GoogleMapController controller) {
+//     controller.setMapStyle(Utils.mapStyle);
+//     setState(() {
+//       _markers.add(Marker(
+//         markerId: MarkerId('id-1'),
+//         position: LatLng(17.833, 82.33),
+//         icon: BitmapDescriptor.defaultMarker,
+//       ));
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    // final _hight = MediaQuery.of(context).size.height -
-    //     MediaQuery.of(context).padding.top -
-    //     kToolbarHeight;
-    // final _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        // leading: Icon(
-        //   Icons.arrow_back,
-        //   //color: Colors.black,
-        // ),
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        backgroundColor: Colors.white,
-        title: Container(
-          child: TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              hintText: 'Search',
-              // hintStyle: TextStyle(color: Colors.black),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(width: 1, color: Colors.white)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(width: 1, color: Colors.white)),
-            ),
-          ),
-        ),
-      ),
-      body:
-          //  ListView(
-          //   children: [
-          //     //TextField(),
-          //     Container(
-          // height: _hight * 1,
-          // width: _width * 1,
-          // child:
-          GoogleMap(
-              onMapCreated: _onMapCreated,
-              //mapType: MapType.terrain,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              markers: _markers,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(17.833, 82.33),
-                zoom: 15,
-              )),
-    );
-    //     ],
-    //   ),
-    // );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     // final _hight = MediaQuery.of(context).size.height -
+//     //     MediaQuery.of(context).padding.top -
+//     //     kToolbarHeight;
+//     // final _width = MediaQuery.of(context).size.width;
+//     return Scaffold(
+//       appBar: AppBar(
+//         // leading: Icon(
+//         //   Icons.arrow_back,
+//         //   //color: Colors.black,
+//         // ),
+//         iconTheme: IconThemeData(
+//           color: Colors.black, //change your color here
+//         ),
+//         backgroundColor: Colors.white,
+//         title: Container(
+//           child: TextField(
+//             controller: _controller,
+//             decoration: InputDecoration(
+//               hintText: 'Search',
+//               // hintStyle: TextStyle(color: Colors.black),
+//               focusedBorder: OutlineInputBorder(
+//                   borderRadius: BorderRadius.all(Radius.circular(15)),
+//                   borderSide: BorderSide(width: 1, color: Colors.white)),
+//               enabledBorder: OutlineInputBorder(
+//                   borderRadius: BorderRadius.all(Radius.circular(15)),
+//                   borderSide: BorderSide(width: 1, color: Colors.white)),
+//             ),
+//           ),
+//         ),
+//       ),
+//       body:
+//           //  ListView(
+//           //   children: [
+//           //     //TextField(),
+//           //     Container(
+//           // height: _hight * 1,
+//           // width: _width * 1,
+//           // child:
+//           GoogleMap(
+//               onMapCreated: _onMapCreated,
+//               //mapType: MapType.terrain,
+//               myLocationEnabled: true,
+//               myLocationButtonEnabled: true,
+//               markers: _markers,
+//               initialCameraPosition: CameraPosition(
+//                 target: LatLng(17.833, 82.33),
+//                 zoom: 15,
+//               )),
+//     );
+//     //     ],
+//     //   ),
+//     // );
+//   }
+// }
 
-class Utils {
-  static String mapStyle = '''
-[]
-  ''';
-}
+// class Utils {
+//   static String mapStyle = '''
+// []
+//   ''';
+// }
 
 // import 'package:flutter/material.dart';
 // import 'package:google_places_flutter/google_places_flutter.dart';

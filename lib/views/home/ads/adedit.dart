@@ -74,7 +74,7 @@ class _PostAdEditState extends StateMVC<PostAdEdit> {
               ),
               InkWell(
                 onTap: () {
-                  _adController.pickDate();
+                  _adController.pickDate(context);
                 },
                 child: Container(
                     padding: EdgeInsets.all(20),

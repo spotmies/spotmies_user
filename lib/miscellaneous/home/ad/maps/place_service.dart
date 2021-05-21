@@ -1,8 +1,7 @@
 // import 'package:http/http.dart' as http;
+// import 'package:spotmies/miscellaneous/home/ad/maps/place.dart';
 // import 'dart:convert' as convert;
-
-// import 'package:spotmies/home/ad/maps/place.dart';
-// import 'package:spotmies/home/ad/maps/place_search.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/place_search.dart';
 
 // class PlacesService {
 //   final key = 'AIzaSyDsBYFDuPmxR3AtMFz-rO8vZrM2C-UoNdo';

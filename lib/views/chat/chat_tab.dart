@@ -18,77 +18,71 @@ class _ChatState extends State<Chat> {
   ];
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     return DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(0),
-              ),
-            ),
-            toolbarHeight: 48,
-            backgroundColor: Colors.blue[800],
-            elevation: 0,
-            bottom: TabBar(
-                indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(
-                      color: Colors.amber,
-                      width: 3.0,
-                    ),
-                    insets: EdgeInsets.symmetric(horizontal: 45.0)),
-                indicatorColor: Colors.white,
-                tabs: [
-                  Tab(
-                    icon: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 15,
+            title: Text('Responses',
+                style: TextStyle(
+                    color: Colors.grey.shade800, fontWeight: FontWeight.bold)),
+            actions: [
+             
+              Icon(Icons.person,color: Colors.grey[800],)
+            ],
+            backgroundColor: Colors.white,
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(_hight * 0.09),
+              child: Container(
+                height: _hight*0.06,
+                padding: EdgeInsets.only(left:0,right: 0,bottom: 5),
+                child: TabBar(
+                    unselectedLabelColor: Colors.grey[700],
+                    
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorWeight: 0,
+                    indicator: BoxDecoration(
+                       
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.blue[900]),
+                    tabs: [
+                      Tab(
+                        icon: Container(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.workspaces_filled),
+                                SizedBox(
+                                  width: _width * 0.02,
+                                ),
+                                Text(
+                                  'Quotes',
+                                ),
+                              ]),
                         ),
-                        Text(
-                          'Responses',
-                          style: TextStyle(
-                            color: Colors.white,
+                      ),
+                      Tab(
+                        icon: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.mark_chat_read),
+                              SizedBox(
+                                width: _width * 0.02,
+                              ),
+                              Text(
+                                'Chat',
+                              ),
+                            ],
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       _radius = !_radius;
-                        //     });
-                        //   },
-                        // ),
-                      ],
-                    ),
-                  ),
-                  Tab(
-                    icon: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        //Icon(Icons.chat, color: Colors.blue[900]),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          'Chat',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        //  GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       _radius = !_radius;
-                        //     });
-                        //   },
-                        // ),
-                      ],
-                    ),
-                  ),
-                  // Tab(
-                  //   //icon: Icon(Icons.feedback),
-                  //   text: 'responce',
-                  // ),
-                ]),
+                      ),
+                    ]),
+              ),
+            ),
           ),
           body: TabBarView(children: list),
         ));

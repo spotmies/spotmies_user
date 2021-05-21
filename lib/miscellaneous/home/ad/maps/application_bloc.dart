@@ -3,13 +3,13 @@
 // import 'package:flutter/foundation.dart';
 // import 'package:geolocator/geolocator.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:spotmies/home/ad/maps/geolocation.dart';
-// import 'package:spotmies/home/ad/maps/geometry.dart';
-// import 'package:spotmies/home/ad/maps/location.dart';
-// import 'package:spotmies/home/ad/maps/marker_service.dart';
-// import 'package:spotmies/home/ad/maps/place.dart';
-// import 'package:spotmies/home/ad/maps/place_search.dart';
-// import 'package:spotmies/home/ad/maps/place_service.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/geolocation.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/geometry.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/location.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/marker_service.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/place.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/place_search.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/place_service.dart';
 
 // class ApplicationBloc with ChangeNotifier {
 //   final geoLocatorService = GeolocatorService();

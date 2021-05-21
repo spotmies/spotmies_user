@@ -1,5 +1,5 @@
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:spotmies/home/ad/maps/place.dart';
+// import 'package:spotmies/miscellaneous/home/ad/maps/place.dart';
 
 // class MarkerService {
 

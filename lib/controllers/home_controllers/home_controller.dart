@@ -11,7 +11,34 @@ class HomeController extends ControllerMVC {
   var formkey = GlobalKey<FormState>();
 FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   // location and place access
-
+List jobs = [
+    'AC Service',
+    'Computer',
+    'TV Repair',
+    'development',
+    'tutor',
+    'beauty',
+    'photography',
+    'drivers',
+    'events',
+    'Electrician',
+    'Carpentor',
+    'Plumber',
+  ];
+  List icons = [
+    Icons.miscellaneous_services,
+    Icons.laptop_mac,
+    Icons.tv,
+    Icons.developer_mode,
+    Icons.person_search,
+    Icons.face,
+    Icons.camera_enhance,
+    Icons.car_rental,
+    Icons.event,
+    Icons.electrical_services,
+    Icons.carpenter,
+    Icons.plumbing_sharp,
+  ];
   var latitude = "";
   var longitude = "";
   String add1 = "";
@@ -19,23 +46,23 @@ FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   String add3 = "";
 
   //function for location
-  void getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+  // void getCurrentLocation() async {
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
 
-    var lastPosition = await Geolocator.getLastKnownPosition();
-    print(lastPosition);
+  //   var lastPosition = await Geolocator.getLastKnownPosition();
+  //   print(lastPosition);
 
-    String lat = '${position.latitude}';
-    String long = '${position.longitude}';
+  //   String lat = '${position.latitude}';
+  //   String long = '${position.longitude}';
 
-    print('$lat,$long');
+  //   print('$lat,$long');
 
-    setState(() {
-      latitude = '${position.latitude}';
-      longitude = '${position.longitude}';
-    });
-  }
+  //   setState(() {
+  //     latitude = '${position.latitude}';
+  //     longitude = '${position.longitude}';
+  //   });
+  //}
 
   @override
   void initState() {
