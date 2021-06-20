@@ -14,8 +14,6 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
   _LoginPageScreenState() : super(LoginPageController()) {
     this._loginPageController = controller;
   }
-  // TextEditingController loginnum = TextEditingController();
-  // final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +71,9 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: TextFormField(
-                                    onSaved: (item) => _loginPageController.loginModel.loginnum,
+                                    onSaved: (item) => _loginPageController
+                                        .loginModel.loginnum,
+                                    
                                     decoration: InputDecoration(
                                       border: new OutlineInputBorder(
                                           borderSide: new BorderSide(
@@ -109,7 +109,14 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                       }
                                       return null;
                                     },
-                                    //maxLength: 10,
+                                    maxLength: 10,
+                                    
+                                    keyboardAppearance: Brightness.dark,
+                                    buildCounter: (BuildContext context,
+                                            {int currentLength,
+                                            int maxLength,
+                                            bool isFocused}) =>
+                                        null,
                                     keyboardType: TextInputType.number,
                                     controller: _loginPageController.loginnum,
                                   ),

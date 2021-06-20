@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:spotmies/views/home/ads/adfromHome.dart';
 import 'package:spotmies/controllers/home_controllers/home_controller.dart';
+import 'package:spotmies/views/home/ads/ad.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -22,7 +25,7 @@ class _HomeState extends StateMVC<Home> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Colors.grey[50],
+        backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 48,
           backgroundColor: Colors.white,
@@ -36,26 +39,20 @@ class _HomeState extends StateMVC<Home> {
                   color: Colors.blue[900],
                   size: 15,
                 ),
-                // SizedBox(
-                //   width: 3,
-                // ),
-                Expanded(
-                  child: TextButton(
-                    child: Text(
+                TextButton(
+                  child: Text(
                       _homeController.add2 == null
                           ? 'seethammadhara'
                           : _homeController.add2,
                       overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                          color: Colors.blue[900],
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.0),
-                    ),
-                    onPressed: () async {
-                      await _homeController.getAddressofLocation();
-                    },
-                  ),
+                      style: GoogleFonts.josefinSans(
+                        fontSize: _width * 0.04,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[900],
+                      )),
+                  onPressed: () async {
+                    await _homeController.getAddressofLocation();
+                  },
                 ),
               ],
             ),
@@ -66,69 +63,51 @@ class _HomeState extends StateMVC<Home> {
                   Icons.notifications_active,
                   color: Colors.blue[900],
                 ),
-                onPressed: () async {
-                  // await _stepperPersonalInfo.firebaseMessaging
-                  //     .subscribeToTopic('sendmeNotification');
-                  // //_shownotification();
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => Notifications()));
-                }),
+                onPressed: () async {}),
             SizedBox(
               width: 5,
             ),
           ],
         ),
         body: Container(
-          padding: EdgeInsets.only(top: 15),
+          padding: EdgeInsets.only(top: 15, left: 5, right: 5),
           width: _width * 1,
           child: GridView.builder(
             itemCount: _homeController.jobs.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4, crossAxisSpacing: 1, mainAxisSpacing: 15),
+                crossAxisCount: 4, crossAxisSpacing: 5, mainAxisSpacing: 5),
             itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PostAdFromHome(
-                                value: '$index',
-                              )));
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                         boxShadow:
-                                [
-                                  BoxShadow(
-                                      color: Colors.grey[300],
-                                      blurRadius: 5,
-                                      spreadRadius: 5,
-                                      offset: Offset(3, 3)),
-                                  BoxShadow(
-                                      color: Colors.grey[200],
-                                      blurRadius: 5,
-                                      spreadRadius: 5,
-                                      offset: Offset(-3, -3))
-                                ]
-                      ),
-                      child: CircleAvatar(
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: FloatingActionButton(
+                        mini: true,
+                        heroTag: '$index',
                         backgroundColor: Colors.blue[900],
                         child: Icon(
                           _homeController.icons[index],
                           color: Colors.white,
+                          size: _width * 0.05,
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: _hight * 0.01,
-                    ),
-                    Text(_homeController.jobs[index],
-                        style: TextStyle(fontSize: _width * 0.03))
-                  ],
-                ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PostAd( 
+                                        jobFromHome: index,
+                                      )));
+                        }),
+                  ),
+                  SizedBox(
+                    height: _hight * 0.005,
+                  ),
+                  Text(_homeController.jobs[index],
+                      style: GoogleFonts.josefinSans(
+                        fontSize: _width * 0.03,
+                        color: Colors.black,
+                      ))
+                ],
               );
             },
           ),

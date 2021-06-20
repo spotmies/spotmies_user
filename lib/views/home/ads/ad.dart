@@ -6,15 +6,18 @@ import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 //path for adding post data
 
 class PostAd extends StatefulWidget {
+  final int jobFromHome;
+  PostAd({this.jobFromHome});
   @override
-  _PostAdState createState() => _PostAdState();
+  _PostAdState createState() => _PostAdState(jobFromHome);
 }
 
 class _PostAdState extends StateMVC<PostAd> {
   AdController _adController;
-  _PostAdState() : super(AdController()) {
+  _PostAdState(this.jobFromHome) : super(AdController()) {
     this._adController = controller;
   }
+  int jobFromHome;
 
   var latitude = "";
   var longitude = "";
@@ -171,6 +174,7 @@ class _PostAdState extends StateMVC<PostAd> {
                                             BorderRadius.circular(15)),
                                     child: DropdownButton(
                                       underline: SizedBox(),
+                                      
                                       value: _adController.dropDownValue,
                                       icon: Icon(
                                         Icons.arrow_drop_down_circle,
@@ -190,11 +194,11 @@ class _PostAdState extends StateMVC<PostAd> {
                                         9,
                                         10,
                                         11,
-                                      ].map<DropdownMenuItem<int>>((int value) {
+                                      ].map<DropdownMenuItem<int>>((int jobFromFAB) {
                                         return DropdownMenuItem<int>(
-                                          value: value,
+                                          value: jobFromFAB,
                                           child: Text(_adController.jobs
-                                              .elementAt(value)),
+                                              .elementAt(jobFromHome==null?jobFromFAB:jobFromHome)),
                                         );
                                       }).toList(),
                                       onChanged: (newVal) {

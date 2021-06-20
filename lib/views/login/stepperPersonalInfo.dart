@@ -17,9 +17,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
+    // final _hight = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _stepperPersonalInfo.scaffoldkey,
@@ -75,7 +75,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 CircularProgressIndicator(
                                   
                                 );
-                                await _stepperPersonalInfo.uploadimage();
+                                await _stepperPersonalInfo.step3();
                                 await Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
@@ -133,7 +133,45 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               Step(
                 title: Text('Step1'),
                 subtitle: Text('Terms'),
-                content: Column(
+                content: step1(),
+                isActive: _stepperPersonalInfo.currentStep >= 0,
+                state: _stepperPersonalInfo.currentStep >= 0
+                    ? StepState.complete
+                    : StepState.disabled,
+              ),
+              Step(
+                title: Text('Step 2'),
+                subtitle: Text('Profile'),
+                content: Form(
+                  key: _stepperPersonalInfo.formkey,
+                  child:step2(),
+                ),
+                isActive: _stepperPersonalInfo.currentStep >= 1,
+                state: _stepperPersonalInfo.currentStep >= 1
+                    ? StepState.complete
+                    : StepState.disabled,
+              ),
+              Step(
+                title: Text('Step 3'),
+                subtitle: Text('Photo'),
+                content:step3(),
+                isActive: _stepperPersonalInfo.currentStep >= 2,
+                state: _stepperPersonalInfo.currentStep >= 2
+                    ? StepState.complete
+                    : StepState.disabled,
+              ),
+            ]),
+      ),
+    );
+  }
+
+
+  Widget step1(){
+     final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
+    return Column(
                   children: [
                     Container(
                       padding: EdgeInsets.all(10),
@@ -216,7 +254,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                                 );
                                               }),
                                           Text(
-                                              'I agree to accept the terms and Conditions'),
+                                              'I agree to accept the terms and Conditions',style: TextStyle(fontSize: _width*0.035),),
                                         ],
                                       ),
                                     ],
@@ -225,18 +263,15 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                           }),
                     ),
                   ],
-                ),
-                isActive: _stepperPersonalInfo.currentStep >= 0,
-                state: _stepperPersonalInfo.currentStep >= 0
-                    ? StepState.complete
-                    : StepState.disabled,
-              ),
-              Step(
-                title: Text('Step 2'),
-                subtitle: Text('Profile'),
-                content: Form(
-                  key: _stepperPersonalInfo.formkey,
-                  child: Column(
+                );
+  }
+
+  Widget step2(){
+     final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
+    return  Column(
                     children: [
                       Container(
                         height: _hight * 0.75,
@@ -419,17 +454,15 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         ),
                       ),
                     ],
-                  ),
-                ),
-                isActive: _stepperPersonalInfo.currentStep >= 1,
-                state: _stepperPersonalInfo.currentStep >= 1
-                    ? StepState.complete
-                    : StepState.disabled,
-              ),
-              Step(
-                title: Text('Step 3'),
-                subtitle: Text('Photo'),
-                content: Column(
+                  );
+  }
+
+  Widget step3(){
+     final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    //final _width = MediaQuery.of(context).size.width;
+    return  Column(
                   children: [
                     Container(
                       height: _hight * 0.75,
@@ -523,14 +556,6 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                           ]),
                     )
                   ],
-                ),
-                isActive: _stepperPersonalInfo.currentStep >= 2,
-                state: _stepperPersonalInfo.currentStep >= 2
-                    ? StepState.complete
-                    : StepState.disabled,
-              ),
-            ]),
-      ),
-    );
+                );
   }
 }

@@ -27,6 +27,7 @@ class ChatScreenController extends ControllerMVC {
     action: SnackBarAction(
       label: 'Undo',
       onPressed: () {
+        print(UniqueKey());
         // Some code to undo the change.
       },
     ),

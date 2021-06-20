@@ -7,8 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/models/stepperPersonalModel.dart';
-
 
 class StepperPersonal extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
@@ -31,7 +32,7 @@ class StepperPersonal extends ControllerMVC {
   String tca;
   File profilepic;
   bool accept = false;
-  String imageLink3 = "";
+  String imageLink = "";
   // DateTime now = DateTime.now();
 
   StepperPersonalModel stepperPersonalModel;
@@ -42,21 +43,6 @@ class StepperPersonal extends ControllerMVC {
   step1() {
     if (accept == true) {
       currentStep += 1;
-
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .set({
-        'joinedat': DateTime.now(),
-        'name': null,
-        'email': null,
-        'profilepic': null,
-        // 'phone': '+91$value',
-        'altNum': null,
-        'terms&Conditions': tca,
-        'reference': 0,
-        'uid': FirebaseAuth.instance.currentUser.uid
-      });
     } else {
       Timer(
           Duration(milliseconds: 100),
@@ -66,14 +52,9 @@ class StepperPersonal extends ControllerMVC {
         content: Text('Need to accept all the terms & conditions'),
         action: SnackBarAction(
           label: 'Close',
-          onPressed: () {
-            // Some code to undo the change.
-          },
+          onPressed: () {},
         ),
       );
-
-      // Find the ScaffoldMessenger in the widget tree
-      // and use it to show a SnackBar.
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -82,39 +63,52 @@ class StepperPersonal extends ControllerMVC {
     if (formkey.currentState.validate()) {
       formkey.currentState.save();
       currentStep += 1;
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .update({
-        'name': this.name,
-        'altNum': this.altnumber,
-        'Num': this.number,
-        'email': this.email,
-        'uid': FirebaseAuth.instance.currentUser.uid,
-        'reference': 0,
-        'profilepic': null
-      }).catchError((e) {
-        print(e);
-      });
+      print(FirebaseAuth.instance.currentUser.uid);
     } else {
       final snackBar = SnackBar(
         content: Text('Fill all the fields'),
         action: SnackBarAction(
           label: 'Close',
-          onPressed: () {
-            // Some code to undo the change.
-          },
+          onPressed: () {},
         ),
       );
-
-      // Find the ScaffoldMessenger in the widget tree
-      // and use it to show a SnackBar.
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   step3() async {
     await uploadimage();
+    var body = {
+      "name": this.name.toString(),
+      "phNum": this.number.toString(),
+      "join": DateTime.now().millisecondsSinceEpoch.toString(),
+      "uId": FirebaseAuth.instance.currentUser.uid.toString(),
+      "userState": "active",
+      "altNum": this.altnumber.toString(),
+      "eMail": this.email.toString(),
+      "t&a": accept.toString(),
+      "pic":imageLink.toString(),
+      // "name": this.name.toString(),
+      // "phNum": this.number.toString(),
+      // "join": DateTime.now().toString(),
+      // "uId": FirebaseAuth.instance.currentUser.uid.toString(),
+      // "userState": "active",
+      // "altNum": this.altnumber.toString(),
+      // "eMail": this.email.toString(),
+      // // "reference": 0.toString(),
+      // "pic": imageLink.toString(),
+      // "t&a": accept.toString()
+    };
+    await Server().postMethod(API.userRegister, body).catchError((e) {
+      print(e);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Fill all the fields'),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {},
+      ),
+    ));
     currentStep += 1;
   }
 
@@ -122,7 +116,7 @@ class StepperPersonal extends ControllerMVC {
   Future<void> profilePic() async {
     var front = await ImagePicker().getImage(
       source: ImageSource.camera,
-      imageQuality: 40,
+      imageQuality: 20,
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
@@ -138,11 +132,6 @@ class StepperPersonal extends ControllerMVC {
         .putFile(profilepic);
     print(uploadTask);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
-    imageLink3 = imageUrl.toString();
-    print(imageUrl);
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({'profilepic': imageLink3});
+    imageLink = imageUrl.toString();
   }
 }

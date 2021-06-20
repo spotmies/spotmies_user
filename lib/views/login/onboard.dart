@@ -288,7 +288,7 @@ class MainContent extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: FadeAnimation(
+            child: FadeAnimation(  
               0.5,
               Image.asset(
                 _list[index].image,

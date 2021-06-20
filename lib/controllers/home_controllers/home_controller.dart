@@ -1,4 +1,4 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,18 +9,18 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 class HomeController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
-FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+// FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   // location and place access
 List jobs = [
     'AC Service',
     'Computer',
     'TV Repair',
-    'development',
-    'tutor',
-    'beauty',
-    'photography',
-    'drivers',
-    'events',
+    'Development',
+    'Tutor',
+    'Beauty',
+    'Photography',
+    'Drivers',
+    'Events',
     'Electrician',
     'Carpentor',
     'Plumber',

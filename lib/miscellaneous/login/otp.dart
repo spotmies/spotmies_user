@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -11,6 +16,8 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends State<OTPScreen> {
+  // Timer _timer;
+  // int _start = 60;
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   String _verificationCode;
   final TextEditingController _pinPutController = TextEditingController();
@@ -25,90 +32,131 @@ class _OTPScreenState extends State<OTPScreen> {
     ),
   );
   @override
+  void initState() {
+    var timerProvider = Provider.of<TimeProvider>(context, listen: false);
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      timerProvider.updateTime();
+    });
+    super.initState();
+    _verifyPhone();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
+    // startTimer();
     return Scaffold(
-      backgroundColor: Colors.blue[800],
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.blue[900],
       key: _scaffoldkey,
-      // appBar: AppBar(
-      //   title: Text('OTP Verification'),
-      // ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            margin: EdgeInsets.only(top: 40),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 50,
-                  child: Center(
-                      child: Icon(
-                    Icons.message,
-                    color: Colors.blue[800],
-                    size: 40,
-                  )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: _hight * 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 50,
+                      child: Center(
+                          child: Icon(
+                        Icons.message,
+                        color: Colors.blue[900],
+                        size: 40,
+                      )),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Enter One Time Password You recieved to Verify',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Colors.white),
+                    ),
+                    Text(
+                      '+91 ${widget.phone}',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 20,
+              ),
+              Container(
+                height: _hight * 0.2,
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: PinPut(
+                    fieldsCount: 6,
+                    textStyle:
+                        const TextStyle(fontSize: 25.0, color: Colors.blueGrey),
+                    eachFieldWidth: _width * 0.1,
+                    eachFieldHeight: _hight * 0.08,
+                    focusNode: _pinPutFocusNode,
+                    controller: _pinPutController,
+                    submittedFieldDecoration: pinPutDecoration,
+                    selectedFieldDecoration: pinPutDecoration,
+                    followingFieldDecoration: pinPutDecoration,
+                    pinAnimationType: PinAnimationType.fade,
+                    onSubmit: (pin) async {
+                      try {
+                        await FirebaseAuth.instance
+                            .signInWithCredential(PhoneAuthProvider.credential(
+                                verificationId: _verificationCode,
+                                smsCode: pin))
+                            .then((value) async {
+                          if (value.user != null) {
+                            print(widget.phone);
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        StepperPersonalInfo()),
+                                (route) => false);
+                          }
+                        });
+                      } catch (e) {
+                        FocusScope.of(context).unfocus();
+                        // _scaffoldkey.currentState
+                        //     .showSnackBar(SnackBar(content: Text('invalid OTP')));
+                      }
+                    },
+                  ),
                 ),
-                Text(
-                  'Enter One Time Password You recieved to Verify',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.white),
-                ),
-                Text(
-                  '+91 ${widget.phone}',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: PinPut(
-              fieldsCount: 6,
-              textStyle:
-                  const TextStyle(fontSize: 25.0, color: Colors.blueGrey),
-              eachFieldWidth: 40.0,
-              eachFieldHeight: 55.0,
-              focusNode: _pinPutFocusNode,
-              controller: _pinPutController,
-              submittedFieldDecoration: pinPutDecoration,
-              selectedFieldDecoration: pinPutDecoration,
-              followingFieldDecoration: pinPutDecoration,
-              pinAnimationType: PinAnimationType.fade,
-              onSubmit: (pin) async {
-                try {
-                  await FirebaseAuth.instance
-                      .signInWithCredential(PhoneAuthProvider.credential(
-                          verificationId: _verificationCode, smsCode: pin))
-                      .then((value) async {
-                    if (value.user != null) {
-                      // if(FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser.uid).)
-                      print(widget.phone);
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StepperPersonalInfo(
-                                  //value: widget.phone,
-                                  )),
-                          (route) => false);
-                    }
-                  });
-                } catch (e) {
-                  FocusScope.of(context).unfocus();
-                  // _scaffoldkey.currentState
-                  //     .showSnackBar(SnackBar(content: Text('invalid OTP')));
-                }
-              },
-            ),
-          )
+          Container(
+            height: _hight * 0.3,
+            child: CircularPercentIndicator(
+                radius: 60,
+                lineWidth: 5,
+                animation: true,
+                animationDuration: 99999,
+                progressColor: Colors.white,
+                percent: 1.0,
+                backgroundColor: Colors.blue[900],
+                center: Consumer<TimeProvider>(builder: (context, data, child) {
+                  return Text(
+                    '${data.countDown}',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                        color: Colors.white),
+                  );
+                })),
+          ),
         ],
       ),
     );
@@ -145,172 +193,13 @@ class _OTPScreenState extends State<OTPScreen> {
             _verificationCode = verificationID;
           });
         },
-        timeout: Duration(seconds: 60));
+        timeout: Duration(seconds: 99));
   }
 
-  @override
-  void initState() {
-    // implement initstate
-    super.initState();
-    _verifyPhone();
-  }
+  // @override
+  // void initState() {
+  //   // implement initstate
+  //   super.initState();
+
+  // }
 }
-
-// class Terms extends StatefulWidget {
-//   final String value;
-//   Terms({this.value});
-//   @override
-//   _TermsState createState() => _TermsState(value);
-// }
-
-// class _TermsState extends State<Terms> {
-//   bool accept = false;
-//   String tca;
-
-//   String value;
-//   _TermsState(this.value);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Terms & Conditions',
-//           style: TextStyle(color: Colors.grey[800]),
-//         ),
-//         backgroundColor: Colors.grey[50],
-//         elevation: 1,
-//       ),
-//       backgroundColor: Colors.grey[50],
-//       body: Center(
-//         child: StreamBuilder(
-//             stream: FirebaseFirestore.instance
-//                 .collection('terms')
-//                 .doc('eXiU3vxjO7qeVObTqvmQ')
-//                 .snapshots(),
-//             builder: (context, snapshot) {
-//               if (!snapshot.hasData)
-//                 return Center(
-//                   child: CircularProgressIndicator(),
-//                 );
-//               var document = snapshot.data;
-//               return Container(
-//                   padding: EdgeInsets.all(30),
-//                   child: Container(
-//                     height: 600,
-//                     width: 350,
-//                     padding: EdgeInsets.all(10),
-//                     decoration: BoxDecoration(
-//                         color: Colors.white,
-//                         boxShadow: [
-//                           BoxShadow(
-//                             color: Colors.grey[300],
-//                             blurRadius: 1,
-//                             //spreadRadius: 2
-//                           ),
-//                         ],
-//                         borderRadius: BorderRadius.circular(15)),
-//                     child: ListView(children: [
-//                       Column(
-//                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text(
-//                             '1.' + document['1'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Text(
-//                             '2.' + document['2'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Text(
-//                             '3.' + document['3'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Text(
-//                             '4.' + document['4'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Text(
-//                             '5.' + document['5'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Text(
-//                             '6.' + document['6'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Text(
-//                             '7.' + document['7'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Text(
-//                             '8.' + document['8'],
-//                             style: TextStyle(fontSize: 20),
-//                           ),
-//                           Row(
-//                             children: [
-//                               Checkbox(
-//                                   value: accept,
-//                                   onChanged: (bool value) {
-//                                     setState(
-//                                       () {
-//                                         accept = value;
-//                                         if (accept == true) {
-//                                           tca = 'accepted';
-//                                         }
-//                                       },
-//                                     );
-//                                   }),
-//                               Text(
-//                                   'I agree to accept the terms and Conditions'),
-//                             ],
-//                           ),
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.end,
-//                             children: [
-//                               (accept == true)
-//                                   ? ElevatedButton(
-//                                       child: Text(
-//                                         'accept',
-//                                         style: TextStyle(color: Colors.white),
-//                                       ),
-//                                       //color: Colors.blue,
-//                                       onPressed: () {
-//                                         print(value);
-//                                         FirebaseFirestore.instance
-//                                             .collection('users')
-//                                             .doc(FirebaseAuth
-//                                                 .instance.currentUser.uid)
-//                                             .set({
-//                                           'joinedat': DateTime.now(),
-//                                           'name': null,
-//                                           'email': null,
-//                                           'profilepic': null,
-//                                           'phone': '+91$value',
-//                                           'altNum': null,
-//                                           'terms&Conditions': tca,
-//                                           'reference': 0,
-//                                           'uid': FirebaseAuth
-//                                               .instance.currentUser.uid
-//                                         });
-
-//                                         if (accept == true) {
-//                                           Navigator.pushAndRemoveUntil(
-//                                               context,
-//                                               MaterialPageRoute(
-//                                                   builder: (context) =>
-//                                                       PersonalInfo()),
-//                                               (route) => false);
-//                                         }
-//                                       })
-//                                   : Container(height: 10, color: Colors.white)
-//                             ],
-//                           )
-//                         ],
-//                       ),
-//                     ]),
-//                   ));
-//             }),
-//       ),
-//     );
-//   }
-// }
