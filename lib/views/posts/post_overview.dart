@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -39,131 +40,134 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-     
+       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: Consumer<OrderOverViewProvider>(builder: (context, data, child) {
         if (data.details == null) return Center(child: profileShimmer(context));
-        var d = data.details;            
-              List<String> images = List.from(d['media']);
+        var d = data.details;
+        List<String> images = List.from(d['media']);
+        final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
 
-              return CustomScrollView(
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                slivers: [
-                  SliverAppBar(
-                      backgroundColor: Colors.blue[900],
-                      stretch: true,
-                      pinned: true,
-                      snap: false,
-                      floating: true,
-                      expandedHeight: _hight * 0.5,
-                      flexibleSpace: FlexibleSpaceBar(
-                          stretchModes: <StretchMode>[
-                            StretchMode.zoomBackground,
-                            StretchMode.fadeTitle,
-                          ],
-                          title: Text(
-                              _postOverViewController.jobs.elementAt(d['job']),
-                              ),
-                          background: Container(
-                            width: _width * 1,
-                            color: Colors.black,
-                            child: GestureDetector(
-                              onTap: () {
-                                imageslider(images, _hight, _width);
-                              },
-                              child: Image.network(
-                                images.first,
-                                fit: BoxFit.cover,
-                              )
-                            ),
-                          ))),
-                  SliverList(
-                      delegate: SliverChildListDelegate([
-                    Container(
-                      padding: EdgeInsets.only(
-                          left: _width * 0.08, top: _width * 0.03),
-                      height: _hight * 0.07,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Orderid:',
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontWeight: FontWeight.bold)),
-                          Text(d['ordId']),
-                        ],
+        return CustomScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          slivers: [
+            SliverAppBar(
+                backgroundColor: Colors.blue[900],
+                stretch: true,
+                pinned: true,
+                snap: false,
+                floating: true,
+                expandedHeight: _hight * 0.5,
+                flexibleSpace: FlexibleSpaceBar(
+                    stretchModes: <StretchMode>[
+                      StretchMode.zoomBackground,
+                      StretchMode.fadeTitle,
+                    ],
+                    title: Text(
+                      _postOverViewController.jobs.elementAt(d['job']),
+                    ),
+                    background: Container(
+                      width: _width * 1,
+                      color: Colors.black,
+                      child: GestureDetector(
+                          onTap: () {
+                            imageslider(images, _hight, _width);
+                          },
+                          child: Image.network(
+                            images.first,
+                            fit: BoxFit.cover,
+                          )),
+                    ))),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              Container(
+                padding:
+                    EdgeInsets.only(left: _width * 0.08, top: _width * 0.03),
+                height: _hight * 0.07,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Orderid:',
+                        style: TextStyle(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.bold)),
+                    Text(d['ordId']),
+                  ],
+                ),
+              ),
+              Divider(
+                thickness: 4,
+                color: Colors.grey[200],
+              ),
+              Theme(
+                data: ThemeData(primaryColor: Colors.blue[900]),
+                child: Stepper(
+                    type: StepperType.vertical,
+                    currentStep: _postOverViewController.currentStep,
+                    onStepTapped: (int step) => setState(
+                        () => _postOverViewController.currentStep = step),
+                    controlsBuilder: (BuildContext context,
+                            {VoidCallback onStepContinue,
+                            VoidCallback onStepCancel}) =>
+                        Container(),
+                    steps: <Step>[
+                      Step(
+                        title: Text('Ordered'),
+                        content: Text(
+                          'Waiting to confirm order',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        isActive: d['ordstate'] == 'req',
+                        state: d['orderstate'] == 'req'
+                            ? StepState.complete
+                            : StepState.disabled,
                       ),
-                    ),
-                    Divider(
-                      thickness: 4,
-                      color: Colors.grey[200],
-                    ),
-                    Theme(
-                      data: ThemeData(primaryColor: Colors.blue[900]),
-                      child: Stepper(
-                      
-                          type: StepperType.vertical,
-                          currentStep: _postOverViewController.currentStep,
-                          onStepTapped: (int step) => setState(() =>
-                              _postOverViewController.currentStep = step),
-                          controlsBuilder: (BuildContext context,
-                                  {VoidCallback onStepContinue,
-                                  VoidCallback onStepCancel}) =>
-                              Container(),
-                          steps: <Step>[
-                            Step(
-                              title: Text('Ordered'),
-                              content: Text(
-                                'Waiting to confirm order',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                              isActive: d['ordstate'] == 'req',
-                              state: d['orderstate'] == 'req'
-                                  ? StepState.complete
-                                  : StepState.disabled,
+                      Step(
+                        title: new Text('Confirmed'),
+                        content: Column(
+                          children: [
+                            Text('Order ongoing',
+                                style: TextStyle(fontWeight: FontWeight.w600)),
+                            SizedBox(
+                              height: 5,
                             ),
-                            Step(
-                              title: new Text('Confirmed'),
-                              content: Column(
-                                children: [
-                                  Text('Order ongoing',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600)),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text('Conformed by technician',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey)),
-                                ],
-                              ),
-                              isActive: d['ordState'] == 'onGoing',
-                              state: d['ordState'] == 'onGoing'
-                                  ? StepState.complete
-                                  : StepState.disabled,
-                            ),
-                            Step(
-                              title: new Text('Completed'),
-                              content: Text('Order Completed',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.w600)),
-                              isActive: d['ordState'] == 'completed',
-                              state: d['ordState'] == 'completed'
-                                  ? StepState.complete
-                                  : StepState.disabled,
-                            ),
-                          ]),
-                    ),
-                    Divider(
-                      thickness: 4,
-                      color: Colors.grey[200],
-                    ),
+                            Text('Conformed by technician',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey)),
+                          ],
+                        ),
+                        isActive: d['ordState'] == 'onGoing',
+                        state: d['ordState'] == 'onGoing'
+                            ? StepState.complete
+                            : StepState.disabled,
+                      ),
+                      Step(
+                        title: new Text('Completed'),
+                        content: Text('Order Completed',
+                            style: TextStyle(fontWeight: FontWeight.w600)),
+                        isActive: d['ordState'] == 'completed',
+                        state: d['ordState'] == 'completed'
+                            ? StepState.complete
+                            : StepState.disabled,
+                      ),
+                    ]),
+              ),
+              Divider(
+                thickness: 4,
+                color: Colors.grey[200],
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
+                height: _hight * 0.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Container(
-                      padding: EdgeInsets.only(left: _width * 0.09),
-                      height: _hight * 0.1,
+                      width: _width*0.7,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,8 +178,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                   fontWeight: FontWeight.bold)),
                           Flexible(
                             child: Text(
-                             
-                               d['problem'],
+                              d['problem'],
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(color: Colors.grey[800]),
                             ),
@@ -183,79 +186,107 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         ],
                       ),
                     ),
-                    Divider(
-                      thickness: 4,
-                      color: Colors.grey[200],
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: _width * 0.09),
-                      height: _hight * 0.1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Amount quoted:',
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontWeight: FontWeight.bold)),
-                          Text('₹' + d['money'].toString(),
-                              style: TextStyle(
+                    _postOverViewController.editAttributes('problem', ordId,
+                        d['job'], d['money'], d['schedule'], coordinates),
+                  ],
+                ),
+              ),
+              Divider(
+                thickness: 4,
+                color: Colors.grey[200],
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
+                height: _hight * 0.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Amount quoted:',
+                            style: TextStyle(
                                 color: Colors.grey[700],
-                              )),
-                          // Text(d['ordId']),
-                        ],
-                      ),
+                                fontWeight: FontWeight.bold)),
+                        Text('₹' + d['money'].toString(),
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                            )),
+                        // Text(d['ordId']),
+                      ],
                     ),
-                    Divider(
-                      thickness: 4,
-                      color: Colors.grey[200],
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: _width * 0.09),
-                      height: _hight * 0.1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Schedule:',
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontWeight: FontWeight.bold)),
-                          Text(
-                              DateFormat('dd/MM/yyyy').format(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      d['schedule'])),
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                          ))
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      thickness: 4,
-                      color: Colors.grey[200],
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: _width * 0.09),
-                      height: _hight * 0.1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Service location:',
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontWeight: FontWeight.bold)),
-                          Text(d['loc'][0].toString(),
-                              style: TextStyle(
+                    _postOverViewController.editAttributes('amount', ordId,
+                        d['job'], d['money'], d['schedule'], coordinates),
+                  ],
+                ),
+              ),
+              Divider(
+                thickness: 4,
+                color: Colors.grey[200],
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
+                height: _hight * 0.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Schedule:',
+                            style: TextStyle(
                                 color: Colors.grey[700],
-                              ))
-                        ],
-                      ),
+                                fontWeight: FontWeight.bold)),
+                        Text(
+                            DateFormat('dd/MM/yyyy').format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    d['schedule'])),
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                            ))
+                      ],
                     ),
-                    d['ordstate'] == 'req'
-                    ?
-                    Container(
+                    _postOverViewController.editAttributes('Schedule', ordId,
+                        d['job'], d['money'], d['schedule'], coordinates),
+                  ],
+                ),
+              ),
+              Divider(
+                thickness: 4,
+                color: Colors.grey[200],
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
+                height: _hight * 0.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Service location:',
+                            style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.bold)),
+                        Text(d['loc'][0].toString()+','+d['loc'][1].toString(),
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                            ))
+                      ],
+                    ),
+                    _postOverViewController.editAttributes('location', ordId,
+                        d['job'], d['money'], d['schedule'], coordinates),
+                  ],
+                ),
+              ),
+              d['ordstate'] == 'req'
+                  ? Container(
                       color: Colors.blue[900],
                       child: IconButton(
                           onPressed: () {
@@ -277,8 +308,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             ],
                           )),
                     )
-                     :
-                    Container(
+                  : Container(
                       color: Colors.blue[900],
                       child: IconButton(
                           icon: Row(
@@ -296,12 +326,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           ),
                           onPressed: () {}),
                     ),
-                  ]))
-                ],
-              );
-            }),
-      );
-    
+            ])),
+        
+          ],
+        );
+      }),
+    );
   }
 
   rating() {

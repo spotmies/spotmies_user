@@ -1,14 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
-import 'package:spotmies/providers/orderOverviewProvider.dart';
-import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/views/home/ads/adedit.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';
@@ -70,17 +67,16 @@ class _PostListState extends StateMVC<PostList> {
               return ListView.builder(
                   itemCount: o.length,
                   itemBuilder: (BuildContext ctxt, int index) {
-                    final coordinates =
-                        Coordinates(o[index]['loc'][0], o[index]['loc'][1]);
-                    var addresses = Geocoder.local
-                        .findAddressesFromCoordinates(coordinates);
+                    // final coordinates =
+                    //     Coordinates(o[index]['loc'][0], o[index]['loc'][1]);
+                    // var addresses = Geocoder.local
+                    //     .findAddressesFromCoordinates(coordinates);
 
                     var orderid = o[index]['ordId'];
                     print(o[index]['ordId']);
 
                     // var firstAddress = addresses.first.locality;
                     return Container(
-                     
                       child: InkWell(
                         onTap: () {
                           //  OrderOverViewProvider().orderDetails(orderid);
@@ -164,14 +160,17 @@ class _PostListState extends StateMVC<PostList> {
                                               color: Colors.white,
                                               shape: BoxShape.rectangle,
                                             ),
-                                            child: (o[index]['media'] ==
-                                                    null)
-                                                ? Icon(Icons.engineering,color: Colors.blue[900],)
+                                            child: (o[index]['media'] == null)
+                                                ? Icon(
+                                                    Icons.engineering,
+                                                    color: Colors.blue[900],
+                                                  )
                                                 : Image.network(
                                                     o[index]['media'].first),
                                           ),
                                           Container(
                                             height: _hight * 0.07,
+                                            width: _width*0.6,
                                             padding: EdgeInsets.only(
                                                 left: _width * 0.06),
                                             child: Column(
@@ -423,444 +422,6 @@ class _PostListState extends StateMVC<PostList> {
                       padding: EdgeInsets.only(top: 10),
                     );
                   });
-              // StreamBuilder(
-              //   stream: _postsController.postStream,
-              //   builder: (BuildContext context,
-              //       AsyncSnapshot<QuerySnapshot> snapshot) {
-              //     if (!snapshot.hasData)
-              //       return Center(
-              //         child: CircularProgressIndicator(),
-              //       );
-              //     return Container(
-              //       height: _hight * 1,
-              //       width: _width * 1,
-              //       decoration: BoxDecoration(
-              //         color: Colors.white,
-              //       ),
-              //       child: ListView(
-              //         scrollDirection: Axis.vertical,
-              //         padding: EdgeInsets.all(15),
-              //         children: snapshot.data.docs.map((document) {
-              //           var orderid = document['orderid'];
-              //           List<String> images = List.from(document['media']);
-              //           return Column(children: [
-              //             Container(
-              //               decoration: BoxDecoration(boxShadow: [
-              //                 BoxShadow(
-              //                     color: Colors.grey[300],
-              //                     blurRadius: 5,
-              //                     spreadRadius: 5,
-              //                     offset: Offset(3, 3)),
-              //                 BoxShadow(
-              //                     color: Colors.grey[100],
-              //                     blurRadius: 5,
-              //                     spreadRadius: 5,
-              //                     offset: Offset(-3, -3))
-              //               ]),
-              //               child: InkWell(
-              //                 onTap: () {
-              //                   Navigator.of(context).push(MaterialPageRoute(
-              //                     builder: (context) =>
-              //                         PostOverView(value: orderid),
-              //                   ));
-              //                 },
-              //                 child: Stack(
-              //                     alignment: Alignment.bottomRight,
-              //                     children: [
-              //                       Container(
-              //                           height: _hight * 0.20,
-              //                           width: _width * 1,
-              //                           decoration: BoxDecoration(
-              //                             gradient: LinearGradient(
-              //                                 colors: [
-              //                                   Colors.blue[800],
-              //                                   Colors.blue[900]
-              //                                 ],
-              //                                 begin: FractionalOffset(0.0, 0.2),
-              //                                 end: FractionalOffset(0.4, 0.9),
-              //                                 stops: [0.0, 1.0],
-              //                                 tileMode: TileMode.clamp),
-              //                             borderRadius: BorderRadius.circular(15),
-              //                           ),
-              //                           child: Column(
-              //                             children: [
-              //                               Container(
-              //                                 height: _hight * 0.040,
-              //                                 width: _width * 0.88,
-              //                                 padding: EdgeInsets.only(left: 10),
-              //                                 child: Row(
-              //                                   mainAxisAlignment:
-              //                                       MainAxisAlignment
-              //                                           .spaceBetween,
-              //                                   children: [
-              //                                     Row(
-              //                                       children: [
-              //                                         Icon(
-              //                                           _postsController.icons
-              //                                               .elementAt(
-              //                                             document['orderstate'],
-              //                                           ),
-              //                                           color: Colors.white,
-              //                                           size: _width * 0.035,
-              //                                         ),
-              //                                         SizedBox(
-              //                                           width: _width * 0.01,
-              //                                         ),
-              //                                         Text(
-              //                                           _postsController.state
-              //                                               .elementAt(
-              //                                             document['orderstate'],
-              //                                           ),
-              //                                           style: TextStyle(
-              //                                               color: Colors.white,
-              //                                               fontWeight:
-              //                                                   FontWeight.bold,
-              //                                               fontSize:
-              //                                                   _width * 0.03),
-              //                                         ),
-              //                                       ],
-              //                                     ),
-              //                                     IconButton(
-              //                                         padding: EdgeInsets.only(
-              //                                             bottom: 0),
-              //                                         icon: Icon(
-              //                                           Icons.more_horiz,
-              //                                           color: Colors.white,
-              //                                           size: 30,
-              //                                         ),
-              //                                         onPressed: () {
-              //                                           // menu(orderid);
-              //                                           postmenu(orderid, _hight,
-              //                                               _width);
-              //                                         })
-              //                                   ],
-              //                                 ),
-              //                               ),
-              //                               // SizedBox(
-              //                               //   height: 5,
-              //                               // ),
-              //                               Container(
-              //                                 padding: EdgeInsets.only(left: 10),
-              //                                 child: Row(
-              //                                   children: [
-              //                                     Container(
-              //                                       width: _hight * 0.06,
-              //                                       height: _hight * 0.06,
-              //                                       decoration: BoxDecoration(
-              //                                           borderRadius:
-              //                                               BorderRadius.circular(
-              //                                                   10),
-              //                                           color: Colors.white,
-              //                                           shape: BoxShape.rectangle,
-              //                                           image: DecorationImage(
-              //                                             image: NetworkImage(
-              //                                                 images.first),
-              //                                           )),
-              //                                       // child: CircleAvatar(
-              //                                       //   backgroundColor: Colors.white,
-              //                                       //   backgroundImage:
-              //                                       //       NetworkImage(images.first),
-              //                                       // ),
-              //                                     ),
-              //                                     Container(
-              //                                       height: _hight * 0.07,
-              //                                       // color: Colors.amber,
-              //                                       padding: EdgeInsets.only(
-              //                                           left: _width * 0.06),
-              //                                       child: Column(
-              //                                         crossAxisAlignment:
-              //                                             CrossAxisAlignment
-              //                                                 .start,
-              //                                         mainAxisAlignment:
-              //                                             MainAxisAlignment
-              //                                                 .spaceEvenly,
-              //                                         children: [
-              //                                           Row(
-              //                                             children: [
-              //                                               Icon(
-              //                                                 Icons.work,
-              //                                                 color: Colors.white,
-              //                                                 size:
-              //                                                     _width * 0.035,
-              //                                               ),
-              //                                               SizedBox(
-              //                                                 width:
-              //                                                     _width * 0.01,
-              //                                               ),
-              //                                               Text(
-              //                                                 _postsController
-              //                                                     .jobs
-              //                                                     .elementAt(
-              //                                                   document['job'],
-              //                                                 ),
-              //                                                 style: TextStyle(
-              //                                                     color: Colors
-              //                                                         .white,
-              //                                                     fontWeight:
-              //                                                         FontWeight
-              //                                                             .bold,
-              //                                                     fontSize:
-              //                                                         _width *
-              //                                                             0.03),
-              //                                               ),
-              //                                             ],
-              //                                           ),
-              //                                           Text(
-              //                                             toBeginningOfSentenceCase(
-              //                                                 document[
-              //                                                     'problem']),
-              //                                             overflow: TextOverflow
-              //                                                 .ellipsis,
-              //                                             style: TextStyle(
-              //                                                 color: Colors.white,
-              //                                                 fontWeight:
-              //                                                     FontWeight
-              //                                                         .normal,
-              //                                                 fontSize:
-              //                                                     _width * 0.05),
-              //                                           )
-              //                                         ],
-              //                                       ),
-              //                                     ),
-              //                                   ],
-              //                                 ),
-              //                               ),
-              //                               // SizedBox(height: _hight*0.01,),
-              //                               Container(
-              //                                 padding: EdgeInsets.only(
-              //                                     left: 10, right: 10),
-              //                                 height: _hight * 0.08,
-              //                                 // color: Colors.amber,
-              //                                 child: Row(
-              //                                   children: [
-              //                                     Container(
-              //                                       width: _width * 0.2,
-              //                                       child: Column(
-              //                                         crossAxisAlignment:
-              //                                             CrossAxisAlignment
-              //                                                 .center,
-              //                                         mainAxisAlignment:
-              //                                             MainAxisAlignment
-              //                                                 .center,
-              //                                         children: [
-              //                                           // Text(document['scheduletime']),
-              //                                           Text(
-              //                                             // document['scheduledate'],
-              //                                             'Today',
-              //                                             style: TextStyle(
-              //                                                 color: Colors.white,
-              //                                                 fontWeight:
-              //                                                     FontWeight.bold,
-              //                                                 fontSize:
-              //                                                     _width * 0.03),
-              //                                           ),
-              //                                           Row(
-              //                                             mainAxisAlignment:
-              //                                                 MainAxisAlignment
-              //                                                     .center,
-              //                                             children: [
-              //                                               Icon(
-              //                                                 Icons.schedule,
-              //                                                 color: Colors.white,
-              //                                                 size:
-              //                                                     _width * 0.025,
-              //                                               ),
-              //                                               SizedBox(
-              //                                                 width:
-              //                                                     _width * 0.01,
-              //                                               ),
-              //                                               Text(
-              //                                                 'Schedule',
-              //                                                 style: TextStyle(
-              //                                                     color: Colors
-              //                                                         .white,
-              //                                                     fontWeight:
-              //                                                         FontWeight
-              //                                                             .bold,
-              //                                                     fontSize:
-              //                                                         _width *
-              //                                                             0.02),
-              //                                               ),
-              //                                             ],
-              //                                           )
-              //                                         ],
-              //                                       ),
-              //                                     ),
-              //                                     Container(
-              //                                       width: _width * 0.2,
-              //                                       child: Column(
-              //                                         crossAxisAlignment:
-              //                                             CrossAxisAlignment
-              //                                                 .center,
-              //                                         mainAxisAlignment:
-              //                                             MainAxisAlignment
-              //                                                 .center,
-              //                                         children: [
-              //                                           // Text(document['scheduletime']),
-              //                                           Text(
-              //                                             'Rs.' +
-              //                                                 document['money'],
-              //                                             style: TextStyle(
-              //                                                 color: Colors.white,
-              //                                                 fontWeight:
-              //                                                     FontWeight.bold,
-              //                                                 fontSize:
-              //                                                     _width * 0.03),
-              //                                           ),
-              //                                           Row(
-              //                                             mainAxisAlignment:
-              //                                                 MainAxisAlignment
-              //                                                     .center,
-              //                                             children: [
-              //                                               Icon(
-              //                                                 Icons
-              //                                                     .account_balance_wallet,
-              //                                                 color: Colors.white,
-              //                                                 size:
-              //                                                     _width * 0.025,
-              //                                               ),
-              //                                               SizedBox(
-              //                                                 width:
-              //                                                     _width * 0.01,
-              //                                               ),
-              //                                               Text(
-              //                                                 'Money',
-              //                                                 style: TextStyle(
-              //                                                     color: Colors
-              //                                                         .white,
-              //                                                     fontWeight:
-              //                                                         FontWeight
-              //                                                             .bold,
-              //                                                     fontSize:
-              //                                                         _width *
-              //                                                             0.02),
-              //                                               ),
-              //                                             ],
-              //                                           )
-              //                                         ],
-              //                                       ),
-              //                                     ),
-              //                                     Container(
-              //                                       width: _width * 0.25,
-              //                                       child: Column(
-              //                                         crossAxisAlignment:
-              //                                             CrossAxisAlignment
-              //                                                 .center,
-              //                                         mainAxisAlignment:
-              //                                             MainAxisAlignment
-              //                                                 .center,
-              //                                         children: [
-              //                                           // Text(document['scheduletime']),
-              //                                           Text(
-              //                                             document[
-              //                                                 'location.add1'],
-              //                                             overflow: TextOverflow
-              //                                                 .ellipsis,
-              //                                             style: TextStyle(
-              //                                                 color: Colors.white,
-              //                                                 fontWeight:
-              //                                                     FontWeight.bold,
-              //                                                 fontSize:
-              //                                                     _width * 0.03),
-              //                                           ),
-              //                                           Row(
-              //                                             mainAxisAlignment:
-              //                                                 MainAxisAlignment
-              //                                                     .center,
-              //                                             children: [
-              //                                               Icon(
-              //                                                 Icons.location_on,
-              //                                                 color: Colors.white,
-              //                                                 size:
-              //                                                     _width * 0.025,
-              //                                               ),
-              //                                               SizedBox(
-              //                                                 width:
-              //                                                     _width * 0.01,
-              //                                               ),
-              //                                               Text(
-              //                                                 'location',
-              //                                                 style: TextStyle(
-              //                                                     color: Colors
-              //                                                         .white,
-              //                                                     fontWeight:
-              //                                                         FontWeight
-              //                                                             .bold,
-              //                                                     fontSize:
-              //                                                         _width *
-              //                                                             0.02),
-              //                                               ),
-              //                                             ],
-              //                                           )
-              //                                         ],
-              //                                       ),
-              //                                     )
-              //                                   ],
-              //                                 ),
-              //                               ),
-              //                             ],
-              //                           )),
-              //                       Positioned(
-              //                           right: -25,
-              //                           bottom: -25,
-              //                           child: Container(
-              //                             padding: EdgeInsets.only(
-              //                               left: _width * 0.05,
-              //                               bottom: _width * 0.09,
-              //                             ),
-              //                             height: _hight * 0.15,
-              //                             width: _hight * 0.15,
-              //                             decoration: BoxDecoration(
-              //                               color: Colors.blue[900],
-              //                               shape: BoxShape.circle,
-              //                               boxShadow: [
-              //                                 BoxShadow(
-              //                                     blurRadius: 10,
-              //                                     color: Colors.indigo[700],
-              //                                     spreadRadius: 4)
-              //                               ],
-              //                             ),
-              //                             child: Column(
-              //                               mainAxisAlignment:
-              //                                   MainAxisAlignment.center,
-              //                               crossAxisAlignment:
-              //                                   CrossAxisAlignment.start,
-              //                               children: [
-              //                                 Container(
-              //                                   child: Column(
-              //                                     children: [
-              //                                       Text('4',
-              //                                           style: TextStyle(
-              //                                               color: Colors.white,
-              //                                               fontWeight:
-              //                                                   FontWeight.bold,
-              //                                               fontSize:
-              //                                                   _width * 0.05)),
-              //                                       Text('Responses',
-              //                                           style: TextStyle(
-              //                                               color: Colors.white,
-              //                                               fontWeight:
-              //                                                   FontWeight.bold,
-              //                                               fontSize:
-              //                                                   _width * 0.02))
-              //                                     ],
-              //                                   ),
-              //                                 ),
-              //                               ],
-              //                             ),
-              //                           ))
-              //                     ]),
-              //               ),
-              //             ),
-              //             SizedBox(
-              //               height: 10,
-              //             )
-              //           ]);
-              //         }).toList(),
-              //       ),
-              //     );
-              //   },
-              // );
             },
           ),
         ));
@@ -891,7 +452,6 @@ class _PostListState extends StateMVC<PostList> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -900,14 +460,6 @@ class _PostListState extends StateMVC<PostList> {
                         ));
                       },
                       child: Container(
-                        // decoration: BoxDecoration(
-                        //     shape: BoxShape.circle,
-                        //     boxShadow: [
-                        //       BoxShadow(
-                        //           color: Colors.grey[300],
-                        //           blurRadius: 10,
-                        //           spreadRadius: 5)
-                        //     ]),
                         child: CircleAvatar(
                           radius: width * 0.099,
                           backgroundColor: Colors.white,
@@ -987,19 +539,13 @@ class _PostListState extends StateMVC<PostList> {
                                       )),
                                   TextButton(
                                       onPressed: () {
-                                        FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(orderid)
-                                            .update({
-                                          'delete': true,
-                                        });
-                                        FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser.uid)
-                                            .collection('adpost')
-                                            .doc(orderid)
-                                            .delete();
+                                        String ordid =
+                                            API.deleteOrder + '$orderid';
+                                        Server().deleteMethod(
+                                            ordid);
+                                        _postsController.controller.getData(
+                                            );
+                                        Navigator.pop(context);
                                       },
                                       child: Text(
                                         'Delete',

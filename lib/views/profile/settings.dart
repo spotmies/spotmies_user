@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/profile_controllers/settings_controller.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/views/profile/profile_shimmer.dart';
 
 class Setting extends StatefulWidget {
   @override
@@ -13,6 +14,15 @@ class _SettingState extends StateMVC<Setting> {
   SettingsController _settingsController;
   _SettingState() : super(SettingsController()) {
     this._settingsController = controller;
+  }
+
+  @override
+  void initState() {
+    var details = Provider.of<UserDetailsProvider>(context, listen: false);
+
+    details.userDetails();
+
+    super.initState();
   }
 
   @override
@@ -35,149 +45,136 @@ class _SettingState extends StateMVC<Setting> {
         elevation: 0,
       ),
       backgroundColor: Colors.grey[100],
-      body: Center(
-          child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser.uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                var document = snapshot.data;
-                return Center(
-                    child: Container(
-                  padding: EdgeInsets.all(15),
-                  height: double.infinity,
-                  // width: 350,
-                  child: ListView(
-                    children: [
-                     Container(
-                        padding: EdgeInsets.all(20),
-                        height: _hight * 0.15,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: _width * 0.15,
-                              width: _width * 0.15,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.grey[100],
-                                child: ClipOval(
-                                  child: Center(
-                                    child: document['profilepic'] == null
-                                        ? Icon(
-                                            Icons.person,
-                                            color: Colors.blueGrey,
-                                            size: _width * 0.12,
-                                          )
-                                        : Image.network(
-                                            document['profilepic'],
-                                            fit: BoxFit.cover,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                          ),
+      body: Consumer<UserDetailsProvider>(builder: (context, data, child) {
+        if (data.user == null) return Center(child: profileShimmer(context));
+        var u = data.user;
+        return Center(
+            child: Container(
+          padding: EdgeInsets.all(15),
+          height: double.infinity,
+          // width: 350,
+          child: ListView(
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                height: _hight * 0.15,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: _width * 0.15,
+                      width: _width * 0.15,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[100],
+                        child: ClipOval(
+                          child: Center(
+                            child: u['pic'] == null
+                                ? Icon(
+                                    Icons.person,
+                                    color: Colors.blueGrey,
+                                    size: _width * 0.12,
+                                  )
+                                : Image.network(
+                                    u['pic'],
+                                    fit: BoxFit.cover,
+                                    width: MediaQuery.of(context).size.width,
                                   ),
-                                ),
-                              ),
-                            ),
-                            _settingsController.profilepic == null
-                                ? TextButton(
-                                    onPressed: () {
-                                      _settingsController.profilePic();
-                                    },
-                                    child: Text(
-                                      'Change',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.grey[700]),
-                                    ))
-                                : TextButton(
-                                    onPressed: () async {
-                                      await _settingsController.uploadprofile();
-                                    },
-                                    child: Text(
-                                      'Upload',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.grey[700]),
-                                    )),
-                          ],
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(20),
-                        height: 100,
-                        // width: 330,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          // boxShadow: kElevationToShadow[1]
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              document['email'],
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  emailUpdate(context);
-                                },
-                                child: Text(
-                                  'Change',
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[700]),
-                                ))
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(20),
-                        height: 100,
-                        // width: 330,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          // boxShadow: kElevationToShadow[1]
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              document['altnum'],
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  altNumUpdate(context);
-                                },
-                                child: Text(
-                                  'Change',
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.grey[700]),
-                                ))
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ));
-              })),
+                    ),
+                    _settingsController.profilepic == null
+                        ? TextButton(
+                            onPressed: () {
+                              _settingsController.profilePic();
+                            },
+                            child: Text(
+                              'Change',
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.grey[700]),
+                            ))
+                        : TextButton(
+                            onPressed: () async {
+                              await _settingsController.uploadprofile();
+                            },
+                            child: Text(
+                              'Upload',
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.grey[700]),
+                            )),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                height: 100,
+                // width: 330,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  // boxShadow: kElevationToShadow[1]
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      u['eMail'],
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          emailUpdate(context);
+                        },
+                        child: Text(
+                          'Change',
+                          style:
+                              TextStyle(fontSize: 18, color: Colors.grey[700]),
+                        ))
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                height: 100,
+                // width: 330,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  // boxShadow: kElevationToShadow[1]
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      u['altNum'].toString(),
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          // altNumUpdate(context);
+                        },
+                        child: Text(
+                          'Change',
+                          style:
+                              TextStyle(fontSize: 18, color: Colors.grey[700]),
+                        ))
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
+      }),
     );
   }
 

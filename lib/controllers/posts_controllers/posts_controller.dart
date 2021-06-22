@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/apiCalls/testController.dart';
 
 class PostsController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
+   final controller = TestController();
   List jobs = [
     'AC Service',
     'Computer',

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/profile_controllers/profile_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 
 class Profile extends StatefulWidget {
@@ -48,9 +47,7 @@ class _ProfileState extends StateMVC<Profile> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Consumer<UserDetailsProvider>(builder: (context, data, child) {
-          if (data.user == null)
-            return Center(
-                child: profileShimmer(context));
+          if (data.user == null) return Center(child: profileShimmer(context));
           var u = data.user;
           return Container(
             height: _hight * 1,
@@ -70,8 +67,7 @@ class _ProfileState extends StateMVC<Profile> {
                               blurRadius: 2,
                               spreadRadius: 2,
                               offset: Offset(4, 4)),
-                        ]
-                        ),
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -214,7 +210,9 @@ class _ProfileState extends StateMVC<Profile> {
                               Icons.edit,
                               color: Colors.indigo,
                             )),
-                        onPressed: () {}),
+                        onPressed: () {
+                          _profileController.editProfile();
+                        }),
                   )
                 ]),
                 Container(
@@ -271,7 +269,7 @@ class _ProfileState extends StateMVC<Profile> {
                                   _profileController.privacy();
                                 }
                                 if (index == 3) {
-                                  _profileController.settings();
+                                  _profileController.editProfile();
                                 }
                                 if (index == 4) {
                                   _profileController.help();
@@ -323,27 +321,3 @@ class _ProfileState extends StateMVC<Profile> {
     );
   }
 }
-
-
-
-  // FutureBuilder(
-            //     future: Server().getMethod(API.userDetails),
-            //     builder: (context, snapshot) {
-            //       if (snapshot.data == null)
-            //         return Center(child: CircularProgressIndicator());
-            //       var doc = jsonDecode(snapshot.data);
-            //       return Text(doc['name'].toString());
-            //     })
-            //Text(user['name'])
-            //     StreamProvider(
-            //   create: (_) => details.userDetails(),
-            //   initialData: 50,
-            //   child: Consumer<UserDetailsProvider>(
-            //     builder: (context, details, _) {
-            //       if (details == null) CircularProgressIndicator();
-            //       var u = details.user;
-
-            //       return Text(user['name']);
-            //     },
-            //   ),
-            // )

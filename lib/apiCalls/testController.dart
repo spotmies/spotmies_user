@@ -17,4 +17,11 @@ class TestController extends BaseController {
     if (response == null) return;
     print(response);
   }
+  //  void deleteData(ordid) async {
+  //   var request = {'message': 'Spotmies Sucks!!!'};
+  //   var response =
+  //       await Server().deleteMethod(ordid).catchError(handleError);
+  //   if (response == null) return;
+  //   print(response);
+  // }
 }

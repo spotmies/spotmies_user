@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +5,8 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:share/share.dart';
 import 'package:spotmies/controllers/profile_controllers/help.dart';
 import 'package:spotmies/controllers/profile_controllers/privacyPolicies.dart';
-import 'package:spotmies/miscellaneous/profile/settings.dart';
 import 'package:spotmies/views/login/loginpage.dart';
+import 'package:spotmies/views/profile/settings.dart';
 
 class ProfileController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
@@ -54,7 +53,7 @@ class ProfileController extends ControllerMVC {
   ];
   List routes = [];
 
-  settings() {
+  editProfile() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => Setting()));
   }
@@ -74,10 +73,24 @@ class ProfileController extends ControllerMVC {
         'https://play.google.com/store/apps/details?id=com.spotmiespartner');
   }
 
-  var profileSteam = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser.uid)
-      .snapshots();
+  Widget drawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          ListTile(
+            title: Text('0.0.1'),
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  // var profileSteam = FirebaseFirestore.instance
+  //     .collection('users')
+  //     .doc(FirebaseAuth.instance.currentUser.uid)
+  //     .snapshots();
 
   signout() async {
     await FirebaseAuth.instance.signOut().then((action) {

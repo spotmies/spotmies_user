@@ -8,22 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
-class SettingsController extends ControllerMVC{
+class SettingsController extends ControllerMVC {
+  var scaffoldkey = GlobalKey<ScaffoldState>();
 
-    var scaffoldkey = GlobalKey<ScaffoldState>();
-
-    String updatedEmail;
-String updatedob;
-String updatedNum;
-String updatedtempad;
-File profilepic;
+  String updatedEmail;
+  String updatedob;
+  String updatedNum;
+  String updatedtempad;
+  File profilepic;
   String imageLink1 = "";
-var updatePath = FirebaseFirestore.instance
-    .collection('users')
-    .doc(FirebaseAuth.instance.currentUser.uid);
+  var updatePath = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser.uid);
 
-
-    Future<void> profilePic() async {
+  Future<void> profilePic() async {
     var profile = await ImagePicker().getImage(
       source: ImageSource.camera,
       imageQuality: 40,
@@ -34,14 +32,12 @@ var updatePath = FirebaseFirestore.instance
     });
   }
 
-  
 //image upload function
   Future<void> uploadprofile() async {
     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
         .putFile(profilepic);
-    print('aaa');
     print(uploadTask);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink1 = imageUrl.toString();
@@ -52,5 +48,3 @@ var updatePath = FirebaseFirestore.instance
         .update({'profilepic': imageLink1});
   }
 }
-
-

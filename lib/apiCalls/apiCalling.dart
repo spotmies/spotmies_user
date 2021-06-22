@@ -10,7 +10,7 @@ class Server {
     var uri = Uri.https(API.host, api);
 
     try {
-      var response = await http.get(uri).timeout(Duration(seconds: 60));
+      var response = await http.get(uri).timeout(Duration(seconds: 30));
       return processResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection', uri.toString());
@@ -27,6 +27,36 @@ class Server {
       var response =
           await http.post(uri, body: body).timeout(Duration(seconds: 30));
 
+      return processResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection', uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          'API Not Responding in Time', uri.toString());
+    }
+  }
+
+  Future<dynamic> editMethod(String api, Map<String, dynamic> body) async {
+    var uri = Uri.https(API.host, api);
+    // var bodyData = json.encode(body);
+    try {
+      var response =
+          await http.put(uri, body: body).timeout(Duration(seconds: 30));
+
+      return processResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection', uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          'API Not Responding in Time', uri.toString());
+    }
+  }
+
+  Future<dynamic> deleteMethod(String api) async {
+    var uri = Uri.https(API.host, api);
+
+    try {
+      var response = await http.delete(uri).timeout(Duration(seconds: 30));
       return processResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection', uri.toString());

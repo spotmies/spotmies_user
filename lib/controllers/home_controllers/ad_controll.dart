@@ -90,34 +90,34 @@ class AdController extends ControllerMVC {
         .doc();
   }
 
-  Future servicePost() async {
-    try {
-      var response = await http.post(
-          Uri.https('spotmiesserver.herokuapp.com', 'api/order/Create-Ord'),
-          body: {
-            "problem": this.title,
-            "job": this.dropDownValue.toString(),
-            "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
-            "ordState": 0.toString(),
-            "join": DateTime.now().millisecondsSinceEpoch.toString(),
-            "schedule": pickedDate.millisecondsSinceEpoch.toString(),
-            "uId": FirebaseAuth.instance.currentUser.uid,
-            "money": this.money,
-            "loc.0": latitude.toString(),
-            "loc.1": longitude.toString(),
-            "media": imageLink.toString(),
-          });
+  // Future servicePost() async {
+  //   try {
+  //     var response = await http.post(
+  //         Uri.https('spotmiesserver.herokuapp.com', 'api/order/Create-Ord'),
+  //         body: {
+  //           "problem": this.title,
+  //           "job": this.dropDownValue.toString(),
+  //           "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
+  //           "ordState": 0.toString(),
+  //           "join": DateTime.now().millisecondsSinceEpoch.toString(),
+  //           "schedule": pickedDate.millisecondsSinceEpoch.toString(),
+  //           "uId": FirebaseAuth.instance.currentUser.uid,
+  //           "money": this.money,
+  //           "loc.0": latitude.toString(),
+  //           "loc.1": longitude.toString(),
+  //           "media": imageLink.toString(),
+  //         });
 
-      if (response.statusCode == 200) {
-        String responseString = response?.body;
-        print(responseString);
-        return dataModelFromJson(responseString);
-      } else
-        return null;
-    } catch (e) {
-      print(e);
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       String responseString = response?.body;
+  //       print(responseString);
+  //       return dataModelFromJson(responseString);
+  //     } else
+  //       return null;
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   //function for location
   void getCurrentLocation() async {

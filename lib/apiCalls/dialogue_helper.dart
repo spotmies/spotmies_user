@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class DialogueHelper {
   static void showErrorDialogue(
       {String title = 'Error', String description = 'Something went wrong'}) {
+    description== 'Something went wrong'?CircularProgressIndicator():
     Fluttertoast.showToast(
         msg: description,
         toastLength: Toast.LENGTH_LONG,
