@@ -354,6 +354,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextFormField(
+                  maxLength: 10,
                   onSaved: (item) =>
                       _stepperPersonalInfo.stepperPersonalModel.number,
                   keyboardType: TextInputType.phone,
@@ -369,6 +370,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     suffixIcon: Icon(Icons.dialpad),
                     //border: InputBorder.none,
                     contentPadding: EdgeInsets.all(20),
+                    counterText: "",
                   ),
                   validator: (value) {
                     if (value.isEmpty || value.length < 10) {
@@ -393,6 +395,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextFormField(
+                  maxLength: 10,
                   onSaved: (item) =>
                       _stepperPersonalInfo.stepperPersonalModel.altnumber,
                   keyboardType: TextInputType.phone,
@@ -408,6 +411,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     suffixIcon: Icon(Icons.dialpad),
                     //border: InputBorder.none,
                     contentPadding: EdgeInsets.all(20),
+                    counterText: "",
                   ),
                   validator: (value) {
                     if (value.isEmpty || value.length < 10) {
