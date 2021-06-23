@@ -42,6 +42,7 @@ class Server {
     try {
       var response =
           await http.put(uri, body: body).timeout(Duration(seconds: 30));
+      // print("45 $response");
 
       return processResponse(response);
     } on SocketException {
@@ -76,6 +77,8 @@ class Server {
       case 400:
         throw BadRequestException(
             utf8.decode(response.bodyBytes), response.request.url.toString());
+      case 404:
+        return null;
       case 401:
       case 403:
         throw UnAuthorizedException(

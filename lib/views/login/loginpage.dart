@@ -73,7 +73,6 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                   child: TextFormField(
                                     onSaved: (item) => _loginPageController
                                         .loginModel.loginnum,
-                                    
                                     decoration: InputDecoration(
                                       border: new OutlineInputBorder(
                                           borderSide: new BorderSide(
@@ -110,7 +109,6 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                       return null;
                                     },
                                     maxLength: 10,
-                                    
                                     keyboardAppearance: Brightness.dark,
                                     buildCounter: (BuildContext context,
                                             {int currentLength,

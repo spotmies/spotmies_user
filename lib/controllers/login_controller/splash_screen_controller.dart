@@ -15,6 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(Duration(seconds: 5), () {
+      // print("18 ${FirebaseAuth.instance.currentUser}");
       if (FirebaseAuth.instance.currentUser != null) {
         Navigator.pushAndRemoveUntil(
             context,
