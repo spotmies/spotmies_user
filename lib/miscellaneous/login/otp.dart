@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -117,13 +119,23 @@ class _OTPScreenState extends State<OTPScreen> {
                                 smsCode: pin))
                             .then((value) async {
                           if (value.user != null) {
-                            print(widget.phone);
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        StepperPersonalInfo()),
-                                (route) => false);
+                            // print("user already login");
+                            bool resp =
+                                await checkUserRegistered(value.user.uid);
+                            if (resp == false) {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          StepperPersonalInfo()),
+                                  (route) => false);
+                            } else {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GoogleNavBar()),
+                                  (route) => false);
+                            }
                           }
                         });
                       } catch (e) {
@@ -170,6 +182,8 @@ class _OTPScreenState extends State<OTPScreen> {
               .signInWithCredential(credential)
               .then((value) async {
             if (value.user != null) {
+              // print("user already login");
+              // checkUserRegistered(value.user.uid);
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

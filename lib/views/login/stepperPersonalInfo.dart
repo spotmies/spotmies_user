@@ -72,9 +72,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             width: _width * 0.35,
                             child: ElevatedButton(
                               onPressed: () async {
-                                CircularProgressIndicator(
-                                  
-                                );
+                                CircularProgressIndicator();
                                 await _stepperPersonalInfo.step3();
                                 await Navigator.pushAndRemoveUntil(
                                     context,
@@ -144,7 +142,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 subtitle: Text('Profile'),
                 content: Form(
                   key: _stepperPersonalInfo.formkey,
-                  child:step2(),
+                  child: step2(),
                 ),
                 isActive: _stepperPersonalInfo.currentStep >= 1,
                 state: _stepperPersonalInfo.currentStep >= 1
@@ -154,7 +152,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               Step(
                 title: Text('Step 3'),
                 subtitle: Text('Photo'),
-                content:step3(),
+                content: step3(),
                 isActive: _stepperPersonalInfo.currentStep >= 2,
                 state: _stepperPersonalInfo.currentStep >= 2
                     ? StepState.complete
@@ -165,397 +163,366 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     );
   }
 
-
-  Widget step1(){
-     final _hight = MediaQuery.of(context).size.height -
+  Widget step1() {
+    final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      height: _hight * 0.75,
-                      child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('terms')
-                              .doc('eXiU3vxjO7qeVObTqvmQ')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData)
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            var document = snapshot.data;
-                            return ListView(
-                                controller:
-                                    _stepperPersonalInfo.scrollController,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '1. ' + document['1'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        '2.' + document['2'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        '3.' + document['3'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        '4.' + document['4'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        '5.' + document['5'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        '6.' + document['6'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        '7.' + document['7'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        '8.' + document['8'],
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Checkbox(
-                                              activeColor: Colors.white,
-                                              checkColor: Colors.lightGreen,
-                                              value:
-                                                  _stepperPersonalInfo.accept,
-                                              onChanged: (bool value) {
-                                                setState(
-                                                  () {
-                                                    _stepperPersonalInfo
-                                                        .accept = value;
-                                                    if (_stepperPersonalInfo
-                                                            .accept ==
-                                                        true) {
-                                                      _stepperPersonalInfo.tca =
-                                                          'accepted';
-                                                    }
-                                                  },
-                                                );
-                                              }),
-                                          Text(
-                                              'I agree to accept the terms and Conditions',style: TextStyle(fontSize: _width*0.035),),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ]);
-                          }),
-                    ),
-                  ],
-                );
+      children: [
+        Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          height: _hight * 0.75,
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('terms')
+                  .doc('eXiU3vxjO7qeVObTqvmQ')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData)
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                var document = snapshot.data;
+                return ListView(
+                    controller: _stepperPersonalInfo.scrollController,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '1. ' + document['1'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '2.' + document['2'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '3.' + document['3'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '4.' + document['4'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '5.' + document['5'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '6.' + document['6'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '7.' + document['7'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            '8.' + document['8'],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                  activeColor: Colors.white,
+                                  checkColor: Colors.lightGreen,
+                                  value: _stepperPersonalInfo.accept,
+                                  onChanged: (bool value) {
+                                    setState(
+                                      () {
+                                        _stepperPersonalInfo.accept = value;
+                                        if (_stepperPersonalInfo.accept ==
+                                            true) {
+                                          _stepperPersonalInfo.tca = 'accepted';
+                                        }
+                                      },
+                                    );
+                                  }),
+                              Text(
+                                'I agree to accept the terms and Conditions',
+                                style: TextStyle(fontSize: _width * 0.035),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ]);
+              }),
+        ),
+      ],
+    );
   }
 
-  Widget step2(){
-     final _hight = MediaQuery.of(context).size.height -
+  Widget step2() {
+    final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return  Column(
-                    children: [
-                      Container(
-                        height: _hight * 0.75,
-                        child: ListView(
-                          children: [
-                            Container(
-                              // padding: EdgeInsets.all(10),
-                              height: _hight * 0.1,
-                              width: _width * 1,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: TextFormField(
-                                onSaved: (item) => _stepperPersonalInfo
-                                    .stepperPersonalModel.name,
-                                keyboardType: TextInputType.name,
-                                controller: _stepperPersonalInfo.nameTf,
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  hintStyle: TextStyle(
-                                      fontSize: 17, color: Colors.grey),
-                                  hintText: 'Name',
-                                  suffixIcon: Icon(Icons.person),
-                                  //border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(20),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Please Enter Your Name';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {
-                                  this._stepperPersonalInfo.name = value;
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Container(
-                              //padding: EdgeInsets.all(10),
-                              height: _hight * 0.1,
-                              width: _width * 1,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: TextFormField(
-                                onSaved: (item) => _stepperPersonalInfo
-                                    .stepperPersonalModel.email,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  hintStyle: TextStyle(
-                                      fontSize: 17, color: Colors.grey),
-                                  hintText: 'Email',
-                                  suffixIcon: Icon(Icons.email),
-                                  //border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(20),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty || !value.contains('@')) {
-                                    return 'Please Enter Valid Email';
-                                  }
-                                  return null;
-                                },
-                                controller: _stepperPersonalInfo.emailTf,
-                                onChanged: (value) {
-                                  this._stepperPersonalInfo.email = value;
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Container(
-                              //padding: EdgeInsets.all(10),
-                              height: _hight * 0.1,
-                              width: _width * 1,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: TextFormField(
-                                onSaved: (item) => _stepperPersonalInfo
-                                    .stepperPersonalModel.number,
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  hintStyle: TextStyle(
-                                      fontSize: 17, color: Colors.grey),
-                                  hintText: 'Mobile Number',
-                                  suffixIcon: Icon(Icons.dialpad),
-                                  //border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(20),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty || value.length < 10) {
-                                    return 'Please Enter Valid Mobile Number';
-                                  }
-                                  return null;
-                                },
-                                controller: _stepperPersonalInfo.numberTf,
-                                onChanged: (value) {
-                                  this._stepperPersonalInfo.number = value;
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Container(
-                              //padding: EdgeInsets.all(10),
-                              height: _hight * 0.1,
-                              width: _width * 1,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: TextFormField(
-                                onSaved: (item) => _stepperPersonalInfo
-                                    .stepperPersonalModel.altnumber,
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(15)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: Colors.white)),
-                                  hintStyle: TextStyle(
-                                      fontSize: 17, color: Colors.grey),
-                                  hintText: 'Alternative Mobile Number',
-                                  suffixIcon: Icon(Icons.dialpad),
-                                  //border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(20),
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty || value.length < 10) {
-                                    return 'Please Enter Valid Mobile Number';
-                                  }
-                                  return null;
-                                },
-                                controller: _stepperPersonalInfo.altnumberTf,
-                                onChanged: (value) {
-                                  this._stepperPersonalInfo.altnumber = value;
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
+    return Column(
+      children: [
+        Container(
+          height: _hight * 0.75,
+          child: ListView(
+            children: [
+              Container(
+                // padding: EdgeInsets.all(10),
+                height: _hight * 0.1,
+                width: _width * 1,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)),
+                child: TextFormField(
+                  onSaved: (item) =>
+                      _stepperPersonalInfo.stepperPersonalModel.name,
+                  keyboardType: TextInputType.name,
+                  controller: _stepperPersonalInfo.nameTf,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                    hintText: 'Name',
+                    suffixIcon: Icon(Icons.person),
+                    //border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(20),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please Enter Your Name';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    this._stepperPersonalInfo.name = value;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              Container(
+                //padding: EdgeInsets.all(10),
+                height: _hight * 0.1,
+                width: _width * 1,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)),
+                child: TextFormField(
+                  onSaved: (item) =>
+                      _stepperPersonalInfo.stepperPersonalModel.email,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                    hintText: 'Email',
+                    suffixIcon: Icon(Icons.email),
+                    //border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(20),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty || !value.contains('@')) {
+                      return 'Please Enter Valid Email';
+                    }
+                    return null;
+                  },
+                  controller: _stepperPersonalInfo.emailTf,
+                  onChanged: (value) {
+                    this._stepperPersonalInfo.email = value;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              Container(
+                //padding: EdgeInsets.all(10),
+                height: _hight * 0.1,
+                width: _width * 1,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)),
+                child: TextFormField(
+                  maxLength: 10,
+                  onSaved: (item) =>
+                      _stepperPersonalInfo.stepperPersonalModel.number,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                    hintText: 'Mobile Number',
+                    suffixIcon: Icon(Icons.dialpad),
+                    //border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(20),
+                    counterText: "",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty || value.length < 10) {
+                      return 'Please Enter Valid Mobile Number';
+                    }
+                    return null;
+                  },
+                  controller: _stepperPersonalInfo.numberTf,
+                  onChanged: (value) {
+                    this._stepperPersonalInfo.number = value;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 7,
+              ),
+              Container(
+                //padding: EdgeInsets.all(10),
+                height: _hight * 0.1,
+                width: _width * 1,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)),
+                child: TextFormField(
+                  maxLength: 10,
+                  onSaved: (item) =>
+                      _stepperPersonalInfo.stepperPersonalModel.altnumber,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                    hintText: 'Alternative Mobile Number',
+                    suffixIcon: Icon(Icons.dialpad),
+                    //border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(20),
+                    counterText: "",
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty || value.length < 10) {
+                      return 'Please Enter Valid Mobile Number';
+                    }
+                    return null;
+                  },
+                  controller: _stepperPersonalInfo.altnumberTf,
+                  onChanged: (value) {
+                    this._stepperPersonalInfo.altnumber = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
-  Widget step3(){
-     final _hight = MediaQuery.of(context).size.height -
+  Widget step3() {
+    final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     //final _width = MediaQuery.of(context).size.width;
-    return  Column(
-                  children: [
-                    Container(
-                      height: _hight * 0.75,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Profile Picture',
-                              style: TextStyle(fontSize: 25),
+    return Column(
+      children: [
+        Container(
+          height: _hight * 0.75,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(
+              'Profile Picture',
+              style: TextStyle(fontSize: 25),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                height: 220,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30)),
+                  // border: Border.all()
+                ),
+                child: CircleAvatar(
+                  child: Center(
+                    child: _stepperPersonalInfo.profilepic == null
+                        ? Icon(
+                            Icons.person,
+                            color: Colors.blueGrey,
+                            size: 200,
+                          )
+                        : Container(
+                            height: _hight * 0.27,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
                             ),
-                            SizedBox(
-                              height: 10,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  FileImage(_stepperPersonalInfo.profilepic),
+                              radius: 100,
                             ),
-                            Center(
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                height: 220,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30),
-                                      topRight: Radius.circular(30)),
-                                  // border: Border.all()
-                                ),
-                                child: CircleAvatar(
-                                  child: Center(
-                                    child:
-                                        _stepperPersonalInfo.profilepic == null
-                                            ? Icon(
-                                                Icons.person,
-                                                color: Colors.blueGrey,
-                                                size: 200,
-                                              )
-                                            : Container(
-                                                height: _hight * 0.27,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: CircleAvatar(
-                                                  backgroundImage: FileImage(
-                                                      _stepperPersonalInfo
-                                                          .profilepic),
-                                                  radius: 100,
-                                                ),
-                                              ),
-                                  ),
-                                  radius: 30,
-                                  backgroundColor: Colors.grey[100],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 40,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(30),
-                                    bottomRight: Radius.circular(30)),
-                                // border: Border.all()
-                              ),
-                              child: TextButton(
-                                  onPressed: () {
-                                    _stepperPersonalInfo.profilePic();
-                                  },
-                                  // icon: Icon(Icons.select_all),
-                                  child: Text(
-                                    'Choose Image',
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.grey),
-                                  )),
-                              // child: FlatButton(color:Colors.blue[700], onPressed: (){}, child: Text('Choose image')),
-                            ),
-                            SizedBox(
-                              height: 65,
-                            ),
-                            if (_stepperPersonalInfo.profilepic == null)
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                GoogleNavBar()),
-                                        (route) => false);
-                                  },
-                                  child: Text('Skip',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black)))
-                          ]),
-                    )
-                  ],
-                );
+                          ),
+                  ),
+                  radius: 30,
+                  backgroundColor: Colors.grey[100],
+                ),
+              ),
+            ),
+            Container(
+              height: 40,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30)),
+                // border: Border.all()
+              ),
+              child: TextButton(
+                  onPressed: () {
+                    _stepperPersonalInfo.profilePic();
+                  },
+                  // icon: Icon(Icons.select_all),
+                  child: Text(
+                    'Choose Image',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  )),
+              // child: FlatButton(color:Colors.blue[700], onPressed: (){}, child: Text('Choose image')),
+            ),
+            SizedBox(
+              height: 65,
+            ),
+            if (_stepperPersonalInfo.profilepic == null)
+              TextButton(
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => GoogleNavBar()),
+                        (route) => false);
+                  },
+                  child: Text('Skip',
+                      style: TextStyle(fontSize: 20, color: Colors.black)))
+          ]),
+        )
+      ],
+    );
   }
 }
