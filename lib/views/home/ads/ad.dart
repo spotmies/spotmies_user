@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/views/profile/profile_shimmer.dart';
 
 //path for adding post data
 
@@ -26,58 +29,71 @@ class _PostAdState extends StateMVC<PostAd> {
   String add3 = "";
 
   @override
+  void initState() {
+    var details = Provider.of<UserDetailsProvider>(context, listen: false);
+
+    details.userDetails();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      key: _adController.scaffoldkey,
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.grey[700]),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      backgroundColor: Colors.grey[50],
-      body: callmethod(_adController.wid, _hight, _width),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        height: _hight * 0.2,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            if (_adController.wid >= 2)
+    return Consumer<UserDetailsProvider>(builder: (context, data, child) {
+      if (data.user == null) return Center(child: profileShimmer(context));
+      var u = data.user;
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        key: _adController.scaffoldkey,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.grey[700]),
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
+        backgroundColor: Colors.grey[50],
+        body: callmethod(_adController.wid, _hight, _width),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Container(
+          height: _hight * 0.2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              if (_adController.wid >= 2)
+                FloatingActionButton.extended(
+                  heroTag: 'back',
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    _adController.widDec();
+                  },
+                  label: Text(
+                    '    Back    ',
+                    style: TextStyle(color: Colors.blue[900]),
+                  ),
+                ),
               FloatingActionButton.extended(
-                heroTag: 'back',
+                heroTag: 'next',
                 backgroundColor: Colors.white,
                 onPressed: () {
-                  _adController.widDec();
+                  _adController.wid == 1
+                      ? _adController.step1()
+                      : _adController.wid == 2
+                          ? _adController.step2()
+                          : _adController.step3(u['_id']);
                 },
                 label: Text(
-                  '    Back    ',
+                  _adController.wid != 3 ? '    Next    ' : 'Get Service',
                   style: TextStyle(color: Colors.blue[900]),
                 ),
-              ),
-            FloatingActionButton.extended(
-              heroTag: 'next',
-              backgroundColor: Colors.white,
-              onPressed: () {
-                _adController.wid == 1
-                    ? _adController.step1()
-                    : _adController.wid == 2
-                        ? _adController.step2()
-                        : _adController.step3();
-              },
-              label: Text(
-                _adController.wid != 3 ? '    Next    ' : 'Get Service',
-                style: TextStyle(color: Colors.blue[900]),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   callmethod(int wid, double _hight, double _width) {
@@ -174,7 +190,6 @@ class _PostAdState extends StateMVC<PostAd> {
                                             BorderRadius.circular(15)),
                                     child: DropdownButton(
                                       underline: SizedBox(),
-                                      
                                       value: _adController.dropDownValue,
                                       icon: Icon(
                                         Icons.arrow_drop_down_circle,
@@ -194,11 +209,14 @@ class _PostAdState extends StateMVC<PostAd> {
                                         9,
                                         10,
                                         11,
-                                      ].map<DropdownMenuItem<int>>((int jobFromFAB) {
+                                      ].map<DropdownMenuItem<int>>(
+                                          (int jobFromFAB) {
                                         return DropdownMenuItem<int>(
                                           value: jobFromFAB,
                                           child: Text(_adController.jobs
-                                              .elementAt(jobFromHome==null?jobFromFAB:jobFromHome)),
+                                              .elementAt(jobFromHome == null
+                                                  ? jobFromFAB
+                                                  : jobFromHome)),
                                         );
                                       }).toList(),
                                       onChanged: (newVal) {

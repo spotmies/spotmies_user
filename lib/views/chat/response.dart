@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:spotmies/views/chat/chatapp/chat_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
-
-
-
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Responsee extends StatefulWidget {
   @override
@@ -14,9 +11,37 @@ class Responsee extends StatefulWidget {
 }
 
 class _ResponseeState extends StateMVC<Responsee> {
-   ResponsiveController _responsiveController;
+  ResponsiveController _responsiveController;
   _ResponseeState() : super(ResponsiveController()) {
     this._responsiveController = controller;
+  }
+
+  IO.Socket socket;
+
+  void connect() {
+    // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
+    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+      "transports": ["websocket", "polling", "flashsocket"],
+      "autoConnect": false,
+    });
+
+    socket.onConnect((data) {
+      print("Connected");
+      socket.on("message", (msg) {
+        print(msg);
+      });
+    });
+    socket.connect();
+    print(socket.connected);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    var respons = Provider.of<GetResponseProvider>(context, listen: false);
+    respons.getResponse();
+    connect();
+    print('satish');
   }
 
   @override
@@ -26,45 +51,43 @@ class _ResponseeState extends StateMVC<Responsee> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-      key: _responsiveController.scaffoldkey,
-      //backgroundColor: Colors.blue[900],
-      body: StreamBuilder(
-          stream: _responsiveController.responsonseStrem,
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData)
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            return Container(
-              child: ListView(
+        key: _responsiveController.scaffoldkey,
+        body: Consumer<GetResponseProvider>(builder: (context, data, child) {
+          if (data.responseData == null)
+            return Center(child: CircularProgressIndicator());
+          var r = data.responseData;
+          var p = r[0]['pDetails'];
+
+          return Container(
+            child: ListView.builder(
+                itemCount: r.length,
                 scrollDirection: Axis.vertical,
                 padding: EdgeInsets.all(20),
-                children: snapshot.data.docs.map((document) {
-                  String msgid = document['msgid'];
-                  document['orderstate'] == null
-                      ? _responsiveController.shownotification()
-                      : print('object');
+                itemBuilder: (BuildContext ctxt, int index) {
+                  //String msgid = document['msgid'];
+                  // o['orderState'] == null
+                  //     ? _responsiveController.shownotification()
+                  //     : print('object');
                   return Column(
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ChatScreen(value: msgid),
-                          ));
-                          CircularProgressIndicator();
-                          FirebaseFirestore.instance
-                              .collection('messaging')
-                              .doc(document['msgid'])
-                              .update({
-                            'uname': 'name',
-                            'userid': FirebaseAuth.instance.currentUser.uid,
-                            'upic':
-                                'https://images.indulgexpress.com/uploads/user/imagelibrary/2020/1/25/original/MaheshBabuSourceInternet.jpg'
-                          });
+                          // Navigator.of(context).push(MaterialPageRoute(
+                          //   builder: (context) => ChatScreen(value: msgid),
+                          // ));
+                          // CircularProgressIndicator();
+                          // FirebaseFirestore.instance
+                          //     .collection('messaging')
+                          //     .doc(document['msgid'])
+                          //     .update({
+                          //   'uname': 'name',
+                          //   'userid': FirebaseAuth.instance.currentUser.uid,
+                          //   'upic':
+                          //       'https://images.indulgexpress.com/uploads/user/imagelibrary/2020/1/25/original/MaheshBabuSourceInternet.jpg'
+                          // });
                         },
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(10),
                           height: _hight * 0.2,
                           width: _width * 1,
                           decoration: BoxDecoration(
@@ -77,7 +100,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                 width: 10,
                               ),
                               CircleAvatar(
-                                backgroundImage: NetworkImage(document['ppic']),
+                                backgroundImage: NetworkImage(p['partnerPic']),
                               ),
                               SizedBox(
                                 width: 20,
@@ -86,21 +109,29 @@ class _ResponseeState extends StateMVC<Responsee> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    //'',
-                                    document['pname'] == null
+                                    //'Nani',
+                                    p['name'] == null
                                         ? 'technician'
-                                        : document['pname'].toString(),
+                                        : p['name'].toString(),
                                     style: TextStyle(
                                         fontSize: 18,
                                         decoration: TextDecoration.underline),
                                   ),
                                   Row(
                                     children: [
-                                      Text(document['job'].toString() + ' | ',
+                                      Text(
+                                          //"",
+                                          r[index]['orderDetails']['job']
+                                                  .toString() +
+                                              ' | ',
                                           style: TextStyle(fontSize: 8)),
                                       Row(
                                         children: [
-                                          Text(document['rating'].toString(),
+                                          Text(
+                                              (_responsiveController
+                                                          .avg(p['rate']) /
+                                                      20)
+                                                  .toString(),
                                               style: TextStyle(fontSize: 8)),
                                           Icon(
                                             Icons.star,
@@ -129,16 +160,22 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text('Money :   ' +
-                                                  document['pmoney']
-                                                      .toString()),
+                                              Text(
+                                                  'Money :   ' +
+                                                      r[index]['money']
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: _width * 0.02)),
                                               // SizedBox(
                                               //   width: 60,
                                               // ),
-                                              Text('Away :   ' +
-                                                  document['distance']
-                                                      .toString() +
-                                                  'KM'),
+                                              Text(
+                                                'Away :   ' +
+                                                    r[index]['loc'].toString() +
+                                                    'KM',
+                                                style: TextStyle(
+                                                    fontSize: _width * 0.02),
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -151,10 +188,18 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text('Time :   ' +
-                                                  document['scheduletime']),
-                                              Text('Date :   ' +
-                                                  document['scheduledate'])
+                                              Text(
+                                                  'Time :   ' +
+                                                      r[index]['schedule']
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: _width * 0.02)),
+                                              Text(
+                                                  'Date :   ' +
+                                                      r[index]['schedule']
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: _width * 0.02))
                                             ],
                                           ),
                                         ),
@@ -183,12 +228,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                       ),
                     ],
                   );
-                }).toList(),
-              ),
-            );
-          }),
-    );
+                }),
+          );
+        }));
   }
 }
-
-

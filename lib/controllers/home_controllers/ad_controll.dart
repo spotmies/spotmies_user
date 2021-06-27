@@ -256,8 +256,8 @@ class AdController extends ControllerMVC {
         : print('Step2');
   }
 
-  step3() {
-    wid <= 3 ? adbutton() : print('Step3');
+  step3(userDetails) {
+    wid <= 3 ? adbutton(userDetails) : print('Step3');
   }
 
   widDec() {
@@ -268,10 +268,9 @@ class AdController extends ControllerMVC {
         : print('Back');
   }
 
-  adbutton() async {
-   
+  adbutton(userDetails) async {
     await uploadimage();
-     String images = imageLink.toString();
+    String images = imageLink.toString();
     CircularProgressIndicator();
     var body = {
       "problem": this.title.toString(),
@@ -285,7 +284,9 @@ class AdController extends ControllerMVC {
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
       "media": images.substring(1, images.length - 1),
+      "uDetails": userDetails
     };
+    print(body);
     controller.postData();
     Server().postMethod(API.createOrder, body);
     Navigator.pop(context);

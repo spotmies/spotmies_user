@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/providers/mapsProvider.dart';
 import 'package:spotmies/providers/orderOverviewProvider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
@@ -25,6 +26,8 @@ void main() async {
           create: (context) => OrderOverViewProvider()),
        ChangeNotifierProvider<MapsProvider>(
           create: (context) => MapsProvider()),
+      ChangeNotifierProvider<GetResponseProvider>(
+          create: (context) => GetResponseProvider()),
     ], child: MyApp()));
   });
 }

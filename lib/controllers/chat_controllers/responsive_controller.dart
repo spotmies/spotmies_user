@@ -21,6 +21,18 @@ class ResponsiveController extends ControllerMVC {
       .snapshots();
 
 
+  avg(List<dynamic> args) {
+    var sum = 0;
+    var avg = args;
+
+    for (var i = 0; i < avg.length; i++) {
+      sum += avg[i];
+    }
+
+    return sum;
+  }
+
+
   void getDatails() async {
     QuerySnapshot getOrderDetails;
 

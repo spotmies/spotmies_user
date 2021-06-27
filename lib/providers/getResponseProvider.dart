@@ -6,21 +6,21 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 
-class GetOrdersProvider extends ChangeNotifier {
+class GetResponseProvider extends ChangeNotifier {
   final controller = TestController();
-  var orders;
+  var responseData;
   var local;
 
-  getOrders() async {
-    var response = await Server().getMethod(API.getOrders);
-    orders = jsonDecode(response);
+  getResponse() async {
+    var response = await Server().getMethod(API.reponse);
+    responseData = jsonDecode(response);
     controller.getData();
     notifyListeners();
   }
 
   localStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('orders', jsonEncode(orders));
+    prefs.setString('orders', jsonEncode(responseData));
   }
 
   localData() async {

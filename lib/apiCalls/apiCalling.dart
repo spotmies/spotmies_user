@@ -71,7 +71,7 @@ class Server {
     switch (response.statusCode) {
       case 200:
         var responseJson = utf8.decode(response.bodyBytes);
-        print(responseJson);
+        //print(responseJson);
         return responseJson;
         break;
       case 400:

@@ -67,6 +67,7 @@ class _PostListState extends StateMVC<PostList> {
               return ListView.builder(
                   itemCount: o.length,
                   itemBuilder: (BuildContext ctxt, int index) {
+                    List<String> images = List.from(o[index]['media']);
                     // final coordinates =
                     //     Coordinates(o[index]['loc'][0], o[index]['loc'][1]);
                     // var addresses = Geocoder.local
@@ -160,17 +161,16 @@ class _PostListState extends StateMVC<PostList> {
                                               color: Colors.white,
                                               shape: BoxShape.rectangle,
                                             ),
-                                            child: (o[index]['media'] == null)
+                                            child: (images.length == 0)
                                                 ? Icon(
                                                     Icons.engineering,
                                                     color: Colors.blue[900],
                                                   )
-                                                : Image.network(
-                                                    o[index]['media'].first),
+                                                : Image.network(images.first),
                                           ),
                                           Container(
                                             height: _hight * 0.07,
-                                            width: _width*0.6,
+                                            width: _width * 0.6,
                                             padding: EdgeInsets.only(
                                                 left: _width * 0.06),
                                             child: Column(
@@ -541,10 +541,8 @@ class _PostListState extends StateMVC<PostList> {
                                       onPressed: () {
                                         String ordid =
                                             API.deleteOrder + '$orderid';
-                                        Server().deleteMethod(
-                                            ordid);
-                                        _postsController.controller.getData(
-                                            );
+                                        Server().deleteMethod(ordid);
+                                        _postsController.controller.getData();
                                         Navigator.pop(context);
                                       },
                                       child: Text(
