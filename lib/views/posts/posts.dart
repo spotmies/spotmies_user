@@ -22,6 +22,11 @@ class _PostListState extends StateMVC<PostList> {
     this._postsController = controller;
   }
 
+  //var orders;
+  textedit(orders) {
+    return List.from(orders.reversed);
+  }
+
   @override
   void initState() {
     var orders = Provider.of<GetOrdersProvider>(context, listen: false);
@@ -61,7 +66,7 @@ class _PostListState extends StateMVC<PostList> {
             builder: (context, data, child) {
               if (data.orders == null)
                 return Center(child: profileShimmer(context));
-              var o = data.orders;
+              var o = textedit(data.orders);
 
               // print(o);
               return ListView.builder(

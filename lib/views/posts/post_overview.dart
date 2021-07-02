@@ -11,7 +11,7 @@ import 'package:spotmies/providers/orderOverviewProvider.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 
 class PostOverView extends StatefulWidget {
-  final String ordId;
+  final int ordId;
   PostOverView({this.ordId});
   @override
   _PostOverViewState createState() => _PostOverViewState(ordId);
@@ -22,7 +22,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   _PostOverViewState(this.ordId) : super(PostOverViewController()) {
     this._postOverViewController = controller;
   }
-  String ordId;
+  int ordId;
   // _PostOverViewState(this.value);
   // int _currentStep = 0;
 
@@ -40,7 +40,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-       resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: Consumer<OrderOverViewProvider>(builder: (context, data, child) {
         if (data.details == null) return Center(child: profileShimmer(context));
@@ -74,10 +74,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           onTap: () {
                             imageslider(images, _hight, _width);
                           },
-                          child: Image.network(
-                            images.first,
-                            fit: BoxFit.cover,
-                          )),
+                          child:  (images.length == 0)
+                              ? Icon(Icons.tungsten_rounded,color: Colors.amber,size: _width*0.5,)
+                              : Image.network(
+                                  images.first,
+                                  fit: BoxFit.cover,
+                                )),
                     ))),
             SliverList(
                 delegate: SliverChildListDelegate([
@@ -93,7 +95,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         style: TextStyle(
                             color: Colors.grey[700],
                             fontWeight: FontWeight.bold)),
-                    Text(d['ordId']),
+                    Text(d['ordId'].toString()),
                   ],
                 ),
               ),
@@ -167,7 +169,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: _width*0.7,
+                      width: _width * 0.7,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,8 +188,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         ],
                       ),
                     ),
-                    _postOverViewController.editAttributes('problem', ordId,
-                        d['job'], d['money'], d['schedule'], coordinates),
+                    _postOverViewController.editAttributes(
+                        'problem',
+                        ordId.toString(),
+                        d['job'],
+                        d['money'],
+                        d['schedule'],
+                        coordinates),
                   ],
                 ),
               ),
@@ -217,8 +224,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         // Text(d['ordId']),
                       ],
                     ),
-                    _postOverViewController.editAttributes('amount', ordId,
-                        d['job'], d['money'], d['schedule'], coordinates),
+                    _postOverViewController.editAttributes(
+                        'amount',
+                        ordId.toString(),
+                        d['job'],
+                        d['money'],
+                        d['schedule'],
+                        coordinates),
                   ],
                 ),
               ),
@@ -250,8 +262,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             ))
                       ],
                     ),
-                    _postOverViewController.editAttributes('Schedule', ordId,
-                        d['job'], d['money'], d['schedule'], coordinates),
+                    _postOverViewController.editAttributes(
+                        'Schedule',
+                        ordId.toString(),
+                        d['job'],
+                        d['money'],
+                        d['schedule'],
+                        coordinates),
                   ],
                 ),
               ),
@@ -274,14 +291,22 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             style: TextStyle(
                                 color: Colors.grey[700],
                                 fontWeight: FontWeight.bold)),
-                        Text(d['loc'][0].toString()+','+d['loc'][1].toString(),
+                        Text(
+                            d['loc'][0].toString() +
+                                ',' +
+                                d['loc'][1].toString(),
                             style: TextStyle(
                               color: Colors.grey[700],
                             ))
                       ],
                     ),
-                    _postOverViewController.editAttributes('location', ordId,
-                        d['job'], d['money'], d['schedule'], coordinates),
+                    _postOverViewController.editAttributes(
+                        'location',
+                        ordId.toString(),
+                        d['job'],
+                        d['money'],
+                        d['schedule'],
+                        coordinates),
                   ],
                 ),
               ),
@@ -327,7 +352,6 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           onPressed: () {}),
                     ),
             ])),
-        
           ],
         );
       }),

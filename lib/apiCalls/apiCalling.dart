@@ -27,7 +27,8 @@ class Server {
       var response =
           await http.post(uri, body: body).timeout(Duration(seconds: 30));
 
-      return processResponse(response);
+      // return processResponse(response);
+      return response;
     } on SocketException {
       throw FetchDataException('No Internet Connection', uri.toString());
     } on TimeoutException {

@@ -15,6 +15,7 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 import 'package:spotmies/miscellaneous/apimodel.dart';
 import 'package:spotmies/models/admodel.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 
 class AdController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
@@ -180,6 +181,7 @@ class AdController extends ControllerMVC {
     TimeOfDay t = await showTimePicker(
       context: context,
       initialTime: pickedTime,
+      
     );
     if (t != null) {
       setState(() {
@@ -286,10 +288,18 @@ class AdController extends ControllerMVC {
       "media": images.substring(1, images.length - 1),
       "uDetails": userDetails
     };
-    print(body);
-    controller.postData();
-    Server().postMethod(API.createOrder, body);
-    Navigator.pop(context);
+    // print(body);
+    // controller.postData();
+    Server().postMethod(API.createOrder, body).then((response) {
+      if (response.statusCode == 200) {
+        snackbar(context, 'Published');
+        Navigator.pop(context);
+      }
+      if (response.statusCode == 400) {
+        snackbar(context, 'Bad Request');
+      }
+    });
+    //Navigator.pop(context);
   }
 
   buttonFromHome() async {

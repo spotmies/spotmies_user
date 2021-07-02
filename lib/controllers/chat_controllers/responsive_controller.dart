@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,13 +12,23 @@ class ResponsiveController extends ControllerMVC {
   var pid;
   String value;
 
-  var responsonseStrem = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser.uid)
-      .collection('response')
-      .where('orderstate', isEqualTo: 0)
-      .snapshots();
+  List jobs = [
+    'AC Service',
+    'Computer',
+    'TV Repair',
+    'development',
+    'tutor',
+    'beauty',
+    'photography',
+    'drivers',
+    'events',
+    'Electrician',
+    'Carpentor',
+    'Plumber',
+  ];
 
+
+//rating average function
 
   avg(List<dynamic> args) {
     var sum = 0;
@@ -30,19 +39,6 @@ class ResponsiveController extends ControllerMVC {
     }
 
     return sum;
-  }
-
-
-  void getDatails() async {
-    QuerySnapshot getOrderDetails;
-
-    getOrderDetails = await FirebaseFirestore.instance
-        .collection('partner')
-        .doc()
-        .collection('profileInfo')
-        .get();
-
-    partnerid = getOrderDetails.docs[0]['userid'];
   }
 
   @override

@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.2"
-  args:
-    dependency: transitive
-    description:
-      name: args
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   async:
     dependency: transitive
     description:
@@ -527,13 +520,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  rikulo_commons:
-    dependency: transitive
-    description:
-      name: rikulo_commons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.3"
   share:
     dependency: "direct main"
     description:
@@ -602,13 +588,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  socket_io:
-    dependency: "direct main"
-    description:
-      name: socket_io
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   socket_io_client:
     dependency: "direct main"
     description:
@@ -644,13 +623,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.5+8"
-  stream:
-    dependency: transitive
-    description:
-      name: stream
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
   stream_channel:
     dependency: transitive
     description:
@@ -756,24 +728,10 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  uuid:
-    dependency: transitive
-    description:
-      name: uuid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.4"
   vector_math:
     dependency: transitive
     description:
       name: vector_math
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
-  web_socket_channel:
-    dependency: "direct main"
-    description:
-      name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"

@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,23 +24,53 @@ void main() async {
           create: (context) => UserDetailsProvider()),
       ChangeNotifierProvider<GetOrdersProvider>(
           create: (context) => GetOrdersProvider()),
-       ChangeNotifierProvider<OrderOverViewProvider>(
+      ChangeNotifierProvider<OrderOverViewProvider>(
           create: (context) => OrderOverViewProvider()),
-       ChangeNotifierProvider<MapsProvider>(
-          create: (context) => MapsProvider()),
+      ChangeNotifierProvider<MapsProvider>(create: (context) => MapsProvider()),
       ChangeNotifierProvider<GetResponseProvider>(
           create: (context) => GetResponseProvider()),
     ], child: MyApp()));
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  IO.Socket socket;
+  @override
+  void initState() {
+    connect();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
+
+  void connect() {
+    // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
+    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+      "transports": ["websocket", "polling", "flashsocket"],
+      "autoConnect": false,
+    });
+
+    socket.onConnect((data) {
+      print("Connected");
+      socket.on("message", (msg) {
+        print(msg);
+      });
+    });
+    socket.connect();
+    //  socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+  }
 }
+
+
 
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   // If you're going to use other Firebase services in the background, such as Firestore,

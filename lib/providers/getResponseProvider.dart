@@ -11,8 +11,22 @@ class GetResponseProvider extends ChangeNotifier {
   var responseData;
   var local;
 
+  responseInfo(status) async {
+    if (status == false) {
+      await localData();
+    }
+    if (status == true) {
+      await getResponse();
+      await localStore();
+      await localData();
+      print('done all');
+    }
+  }
+
   getResponse() async {
-    var response = await Server().getMethod(API.reponse);
+    var response = await Server().getMethod(API.reponse).catchError((e) {
+      print(e);
+    });
     responseData = jsonDecode(response);
     controller.getData();
     notifyListeners();
@@ -20,14 +34,15 @@ class GetResponseProvider extends ChangeNotifier {
 
   localStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('orders', jsonEncode(responseData));
+    prefs.setString('orders', jsonEncode(responseData)).catchError((e) {
+      print(e);
+    });
   }
 
   localData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String orderData = prefs.getString('orders');
-    Map<String, dynamic> details =
-        jsonDecode(orderData) as Map<String, dynamic>;
+    List<dynamic> details = local == null ? jsonDecode(orderData) : local;
     local = details;
   }
 }
