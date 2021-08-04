@@ -11,24 +11,72 @@ class LocationGet extends StatefulWidget {
 }
 
 class _LocationGetState extends State<LocationGet> {
-  List coor = [
-    {17.836985, 83.698589},
-    {17.885985, 83.698589},
-    {17.836985, 83.612389}
-  ];
+  // List coor = [
+  //   {17.836985, 83.698589},
+  //   {17.885985, 83.698589},
+  //   {17.836985, 83.612389}
+  // ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          child: Padding(
-            padding: EdgeInsets.all(40.0),
-            child: Text(function().toString()),
-          ),
-        );
-      },
-    ));
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          child: Text("click"),
+          onPressed: function,
+        ),
+      )
+      //   ListView.builder(
+      //   itemBuilder: (BuildContext context, int index) {
+      //     return Container(
+      //       child: Padding(
+      //         padding: EdgeInsets.all(40.0),
+      //         child: Text(function().toString()),
+      //       ),
+      //     );
+      //   },
+
+      // )
+      ,
+    );
   }
+}
+
+checkCity(target) {
+  var vizagArray = [
+    "Visakhapatnam",
+    "visakhapatnam",
+    "VISAKHAPATNAM",
+    "Vizag",
+    "vizag",
+    "VIZAG",
+    "Vishakhapatnam",
+    "vishakhapatnam"
+  ];
+  var add = target.first;
+  for (var item in vizagArray) {
+    // print("<<<${add.subAdminArea}>>>");
+    if (add.locality != null) {
+      if (add.locality.contains(item)) {
+        return true;
+      }
+    }
+    if (add.subLocality != null) {
+      if (add.subLocality.contains(item)) return true;
+    }
+    if (add.addressLine != null) {
+      if (add.addressLine.contains(item)) return true;
+    }
+    if (add.subAdminArea != null) {
+      if (add.subAdminArea.contains(item)) return true;
+    }
+    if (add.adminArea != null) {
+      if (add.adminArea.contains(item)) return true;
+    }
+    if (add.subThoroughfare != null) {
+      if (add.subThoroughfare.contains(item)) return true;
+    }
+  }
+  return false;
 }
 
 function() async {
@@ -47,36 +95,61 @@ function() async {
   var f;
   var g;
   var h;
+  var k;
+  var l;
+  var m;
+  var n;
+
   List loc = [];
   // final coordinates = new Coordinates(21.10, 45.50);
   // var address = await Geocoder.local.findAddressesFromCoordinates(coordinates);
   // var firstAddress = address.first.addressLine;
-
-  for (var j = startLat; j < endLat; j += 0.01000) {
-    for (var i = startLong; i < endLong; i += 0.01000) {
+  var prevAddress;
+  int counter = 0;
+  for (var j = startLat; j < endLat; j += 0.20000) {
+    for (var i = startLong; i < endLong; i += 0.20000) {
       valstr1 = j;
       valstr2 = i;
+      print("$valstr1 : $valstr2");
       coor = Coordinates(valstr1, valstr2);
       var address = await Geocoder.local.findAddressesFromCoordinates(coor);
-      a = address.first.subLocality;
-      b = address.first.locality;
-      c = address.first.coordinates;
-      d = address.first.addressLine.toLowerCase();
-      e = address.first.subAdminArea;
-      f = address.first.postalCode;
-      g = address.first.adminArea;
-      h = address.first.subThoroughfare;
+      if (prevAddress == null) prevAddress = address;
+      if (address.first.addressLine.toLowerCase() !=
+          prevAddress.first.addressLine.toLowerCase()) {
+        // print("$valstr1 : $valstr2");
+        print("new address");
+        a = address.first.subLocality;
+        b = address.first.locality;
+        c = address.first.coordinates;
+        d = address.first.addressLine.toLowerCase();
+        e = address.first.subAdminArea;
+        f = address.first.postalCode;
+        g = address.first.adminArea;
+        h = address.first.subThoroughfare;
+        k = address.first.featureName;
+        l = address.first.thoroughfare;
 
-      var val = {
-        "locality": "$d",
-        "postalCode": "$f",
-        "loclity": "$b",
-        "coordinates": "$c"
-      };
+        var val = {
+          "subLocality": "$a",
+          "locality": "$b",
+          "coordinates": "$c",
+          "addressLine": "$d",
+          "subAdminArea": "$e",
+          "postalCode": "$f",
+          "adminArea": "$g",
+          "subThoroughfare": "$h",
+          "featureName": "$k",
+          "thoroughfare": "$l",
+        };
+        if (checkCity(address)) {
+          loc.add(val.toString());
+          counter += 1;
+        }
 
-      // loc.add(val.toString());
-
-      log(val.toString());
+        log(val.toString());
+        prevAddress = address;
+      } else
+        print("equall>>");
 
       // log(a.toString());
       // log(b.toString());
@@ -98,6 +171,8 @@ function() async {
 
     }
   }
+  if (counter == loc.length) print("locy>>> $loc");
+
   // log(firstAddress);
   // return '${valstr1.substring(0, 9)},${valstr2.substring(0, 9)}';
   return '';
