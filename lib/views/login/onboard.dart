@@ -59,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                           builder: (context) => LoginPageScreen()));
                                 });
                               }
-                            });
+                            });  
                           },
                         ),
                         SizedBox(

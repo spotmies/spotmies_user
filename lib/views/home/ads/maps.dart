@@ -5,8 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Maps extends StatefulWidget {
-  String ordId;
-  String coordinates;
+  final String ordId;
+  final String coordinates;
   Maps({this.ordId, this.coordinates});
   @override
   _MapsState createState() => _MapsState(ordId, coordinates);
@@ -93,7 +93,7 @@ class _MapsState extends State<Maps> {
             },
             initialCameraPosition: CameraPosition(
                 target: LatLng(
-                    //17.356, 21.654
+                    // 17.968, 83.111
                     position.latitude,
                     position.longitude),
                 zoom: 15),

@@ -30,22 +30,25 @@ class _ChatState extends State<Chat> {
                 style: TextStyle(
                     color: Colors.grey.shade800, fontWeight: FontWeight.bold)),
             actions: [
-             
-              Icon(Icons.person,color: Colors.grey[800],)
+              Icon(
+                Icons.person,
+                color: Colors.grey[800],
+              )
             ],
             backgroundColor: Colors.white,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(_hight * 0.09),
               child: Container(
-                height: _hight*0.06,
-                padding: EdgeInsets.only(left:0,right: 0,bottom: 5),
-                child: TabBar(
+                height: _hight * 0.06,
+                padding: EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                child:
+                TabBar(
                     unselectedLabelColor: Colors.grey[700],
-                    
+
                     indicatorSize: TabBarIndicatorSize.label,
                     indicatorWeight: 0,
                     indicator: BoxDecoration(
-                       
+
                         borderRadius: BorderRadius.circular(50),
                         color: Colors.blue[900]),
                     tabs: [

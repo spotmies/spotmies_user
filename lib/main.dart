@@ -1,16 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/providers/mapsProvider.dart';
 import 'package:spotmies/providers/orderOverviewProvider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/locationPrint.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +48,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: LocationGet());
   }
 
   void connect() {

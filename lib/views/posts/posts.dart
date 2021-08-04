@@ -445,7 +445,7 @@ class _PostListState extends StateMVC<PostList> {
           child: Center(
             child: Column(
               children: [
-                Text('SELECT MENU',
+                Text('SELECT MENU', 
                     style: TextStyle(
                         color: Colors.grey[800],
                         fontSize: width * 0.04,
