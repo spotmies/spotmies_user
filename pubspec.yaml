@@ -58,6 +58,8 @@ dependencies:
   shared_preferences: ^2.0.6
   # socket_io:
   socket_io_client: ^1.0.1
+  flutter_svg:
+  dotted_border:
   # socket_io_client: 2.0.0-beta.4
   # socket_io_client: ^2.0.0-beta.4
   # web_socket_channel: ^2.1.0
@@ -91,13 +93,37 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/1.png
-    - lib/assets/2.png
-    - lib/assets/3.png
-    - lib/assets/4.png
-    - lib/assets/5.png
-    - lib/assets/6.svg
-    - lib/assets/7.png
+    - assets/1.png
+    - assets/2.png
+    - assets/3.png
+    - assets/4.png
+    - assets/5.png
+    - assets/6.svg
+    - assets/7.png
+    - assets/images/
+    - assets/icons/
+    - assets/intro.svg
+    - assets/introBook.svg
+    - assets/share.svg
+    - assets/promo.svg
+    - assets/exit.svg
+    - assets/settings.svg
+    - assets/edit.svg
+    - assets/like.svg
+    - assets/help.svg
+    - assets/history.svg
+    - assets/getQuotes.svg
+    - assets/getService.svg
+    - assets/setLocation.svg
+    - assets/uploadPic.svg
+    - assets/fliming.svg
+    - assets/barber.svg
+    - assets/design.svg
+    - assets/domestic.svg
+    - assets/education.svg
+    - assets/software.svg
+    - assets/tradesman.svg
+    - assets/success.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

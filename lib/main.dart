@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/providers/mapsProvider.dart';
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: LocationGet());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 
   void connect() {
