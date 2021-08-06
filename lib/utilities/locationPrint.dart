@@ -225,7 +225,8 @@ class _LocationGetState extends State<LocationGet> {
     var address = await Geocoder.local.findAddressesFromCoordinates(coor);
     print(address.first.locality);
     setState(() {
-      getPlace = address.first.locality.toString();
+      getPlace =
+          "${address.first.subLocality.toString()}, ${address.first.locality.toString()}";
     });
   }
 
@@ -267,112 +268,110 @@ class _LocationGetState extends State<LocationGet> {
       body: Center(
         child: Container(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: placeNamController,
-                    decoration: InputDecoration(
-                      helperText: "vizag",
-                      border: UnderlineInputBorder(),
-                      labelText: 'enter location to search',
+            child: Container(
+              padding: EdgeInsets.only(left: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    child: TextFormField(
+                      controller: placeNamController,
+                      decoration: InputDecoration(
+                        helperText: "vizag",
+                        border: UnderlineInputBorder(),
+                        labelText: 'enter location to search',
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: startLatController,
-                    decoration: InputDecoration(
-                      helperText: "17.538455",
-                      border: UnderlineInputBorder(),
-                      labelText: 'starting latitude',
+                  Container(
+                    child: TextFormField(
+                      controller: startLatController,
+                      decoration: InputDecoration(
+                        helperText: "17.538455",
+                        border: UnderlineInputBorder(),
+                        labelText: 'starting latitude',
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: startLongController,
-                    decoration: InputDecoration(
-                      helperText: "83.087737",
-                      border: UnderlineInputBorder(),
-                      labelText: 'starting logitude',
+                  Container(
+                    child: TextFormField(
+                      controller: startLongController,
+                      decoration: InputDecoration(
+                        helperText: "83.087737",
+                        border: UnderlineInputBorder(),
+                        labelText: 'starting logitude',
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: endLatController,
-                    decoration: InputDecoration(
-                      helperText: "17.934493",
-                      border: UnderlineInputBorder(),
-                      labelText: 'ending latitude',
+                  Container(
+                    child: TextFormField(
+                      controller: endLatController,
+                      decoration: InputDecoration(
+                        helperText: "17.934493",
+                        border: UnderlineInputBorder(),
+                        labelText: 'ending latitude',
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: endLongController,
-                    decoration: InputDecoration(
-                      helperText: "83.41598",
-                      border: UnderlineInputBorder(),
-                      labelText: 'ending logitude',
+                  Container(
+                    child: TextFormField(
+                      controller: endLongController,
+                      decoration: InputDecoration(
+                        helperText: "83.41598",
+                        border: UnderlineInputBorder(),
+                        labelText: 'ending logitude',
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: offsetController,
-                    decoration: InputDecoration(
-                      helperText: "0.00002",
-                      border: UnderlineInputBorder(),
-                      labelText: 'offset',
+                  Container(
+                    child: TextFormField(
+                      controller: offsetController,
+                      decoration: InputDecoration(
+                        helperText: "0.00002",
+                        border: UnderlineInputBorder(),
+                        labelText: 'offset',
+                      ),
                     ),
                   ),
-                ),
-                Wrap(
-                  children: [
-                    Text("no of loc: ${loopCount.toString()}"),
-                    Text("  geocode : $placeGeocode"),
-                    Text("plac : $getPlace")
-                  ],
-                ),
-                Wrap(
-                  alignment: WrapAlignment.spaceAround,
-                  spacing: 3.0,
-                  children: [
-                    ElevatedButton(
-                      child: Text("Load locations"),
-                      onPressed: () async {
-                        await function();
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text("no of locs"),
-                      onPressed: () async {
-                        await findNumberOfLocation();
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text("forward"),
-                      onPressed: () async {
-                        await forwardGeocode();
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text("reverse"),
-                      onPressed: () async {
-                        await findLocationName();
-                      },
-                    ),
-                  ],
-                )
-              ],
+                  Wrap(
+                    children: [
+                      Text("no of loc: ${loopCount.toString()}"),
+                      Text("  geocode : $placeGeocode"),
+                      Text("plac : $getPlace")
+                    ],
+                  ),
+                  Wrap(
+                    alignment: WrapAlignment.spaceAround,
+                    spacing: 3.0,
+                    children: [
+                      ElevatedButton(
+                        child: Text("Load locations"),
+                        onPressed: () async {
+                          await function();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("no of locs"),
+                        onPressed: () async {
+                          await findNumberOfLocation();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("forward"),
+                        onPressed: () async {
+                          await forwardGeocode();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("reverse"),
+                        onPressed: () async {
+                          await findLocationName();
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
