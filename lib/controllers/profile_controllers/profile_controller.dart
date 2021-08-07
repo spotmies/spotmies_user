@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:share/share.dart';
 import 'package:spotmies/controllers/profile_controllers/help.dart';
-import 'package:spotmies/controllers/profile_controllers/privacyPolicies.dart';
+import 'package:spotmies/views/profile/privacyPolicies.dart';
 import 'package:spotmies/views/login/loginpage.dart';
 import 'package:spotmies/views/profile/settings.dart';
 

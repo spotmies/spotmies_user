@@ -107,7 +107,7 @@ class _ServicesState extends State<Services> {
     if (value == 0) {
       return Container(
         height: _hight,
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(0),
         child: ListView(
           children: [
             Container(
@@ -169,30 +169,7 @@ class _ServicesState extends State<Services> {
                   context, 'Corparate Services', _width, _hight, software),
             ),
 
-            // Container(
-            //   child:
-            //       servicelistBuilder(context, 'Beauty', _width, _hight, beauty),
-            // ),
-            // Container(
-            //   child: servicelistBuilder(
-            //       context, 'Domestic', _width, _hight, tradesman),
-            // ),
-            // Container(
-            //   child: servicelistBuilder(
-            //       context, 'Software', _width, _hight, software),
-            // ),
-            // Container(
-            //   child: servicelistBuilder(
-            //       context, 'Designing', _width, _hight, tradesman),
-            // ),
-            // Container(
-            //   child: servicelistBuilder(
-            //       context, 'Education', _width, _hight, tradesman),
-            // ),
-            // Container(
-            //   child: servicelistBuilder(
-            //       context, 'Filming', _width, _hight, tradesman),
-            // ),
+           
           ],
         ),
       );

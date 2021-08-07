@@ -12,9 +12,11 @@ Widget servicelistBuilder(
   List<Map<String, Object>> buildData,
 ) {
   return Container(
-    padding: EdgeInsets.all(15),
+    padding: EdgeInsets.all(width * 0.04),
     height: hight * 0.20,
-    margin: EdgeInsets.only(top: 15),
+    margin: EdgeInsets.only(
+      top: 15,
+    ),
     decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [

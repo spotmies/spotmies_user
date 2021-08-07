@@ -6,6 +6,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/controllers/home_controllers/home_controller.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/home/ServiceListVertical.dart';
+import 'package:spotmies/views/home/searchJobs/search.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -63,7 +64,10 @@ class _HomeState extends StateMVC<Home> {
           ),
           title: Container(
             width: _width * 0.5,
-            child: TextButton(
+            child: InkWell(
+              onTap: () async {
+                await _homeController.getAddressofLocation();
+              },
               child: Text(
                   _homeController.add2 == null
                       ? 'seethammadhara'
@@ -75,9 +79,6 @@ class _HomeState extends StateMVC<Home> {
                     fontWeight: FontWeight.bold,
                     color: Colors.indigo[900],
                   )),
-              onPressed: () async {
-                await _homeController.getAddressofLocation();
-              },
             ),
           ),
           actions: [
@@ -90,8 +91,8 @@ class _HomeState extends StateMVC<Home> {
                     //   context: context,
                     //   delegate: CustomDelegate(),
                     // );
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => FilterLocalListPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => FilterLocalListPage()));
                     // FilterLocalListPage();
                   },
                   icon: Icon(

@@ -41,7 +41,7 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                         ),
                         Container(
                             height: _hight * 0.35,
-                            child: Image.asset('lib/assets/7.png')),
+                            child: Image.asset('assets/7.png')),
                         SizedBox(
                           height: 10,
                         ),
