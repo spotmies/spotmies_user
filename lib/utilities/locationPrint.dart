@@ -96,7 +96,7 @@ class _LocationGetState extends State<LocationGet> {
   }
 
   Future<dynamic> getMethod() async {
-    var uri = Uri.http("192.168.0.173:4000", "/api/stamp");
+    var uri = Uri.http(API.host, "/api/stamp");
     print("url>> $uri");
 
     try {
@@ -108,21 +108,36 @@ class _LocationGetState extends State<LocationGet> {
   }
 
   Future<dynamic> postMethod(String api, var body) async {
-    var uri = Uri.http(API.localHost, api);
-    print("body $body");
+    var uri = Uri.http(API.host, api);
+    print("body$uri $body");
     var bodyData = json.encode(body);
-    var newdata = {"data": bodyData};
+    var newdata = {"data": bodyData.toString()};
     try {
       var response = await http.post(uri, body: newdata);
 
-      print("response>> $response");
+      // print("response>> $response");
+      // log('message');
+      log(response.statusCode.toString());
+      // log(jsonDecode(response.body).toString());
+      var retriveData = jsonDecode(response.body);
+      // log('message');
+      // log(retriveData['coordinates.latitude'].toString());
+      // log(retriveData['coordinates']['logitude'].toString());
+      if (response.statusCode == 200) {
+        log("loop again");
+        function(
+            newLat: retriveData['coordinates']['latitude'],
+            newLong: retriveData['coordinates']['logitude']);
+      }
+
       return response;
     } catch (e) {
       print("error>> $e");
     }
   }
 
-  function() async {
+  function({double newLat, double newLong}) async {
+    print(" new lat $newLat");
     var startLat = 17.538455;
     var startLong = 83.087737;
     var endLat = 17.934493;
@@ -155,9 +170,10 @@ class _LocationGetState extends State<LocationGet> {
     var offsetCont = double.parse(offsetController.text) > 0.00002
         ? double.parse(offsetController.text)
         : defaultOffset;
-    for (var j = startLatCont; j < endLatCont; j += offsetCont) {
-      for (var i = startLongCont; i < endLongCont; i += offsetCont) {
-        loopCount += 1;
+    for (var j = newLat ?? startLatCont; j < endLatCont; j += offsetCont) {
+      log("value j ${j.toString()}");
+      for (var i = newLong ?? startLongCont; i < endLongCont; i += offsetCont) {
+        // loopCount += 1;
         valstr1 = j;
         valstr2 = i;
         // print("$valstr1 : $valstr2");
@@ -193,25 +209,41 @@ class _LocationGetState extends State<LocationGet> {
           };
           if (checkCity(address)) {
             loc.add(nullRectifier(val));
+            log(val.toString());
             counter += 1;
+            setState(() {
+              loopCount = loopCount + 1;
+            });
           }
-          if (loopCount % 5 == 0) {
-            print("loopCount >> $loopCount");
-          }
+          // if (loopCount % 5 == 0) {
+          //   print("loopCount >> $loopCount");
+          // }
           prevAddress = address;
+        }
+
+        if (counter == 5) {
+          print("locy>>> $loc");
+
+          // await getMethod();
+          await postMethod("/api/geocode/newgeocode", loc);
+          return;
         }
       }
     }
-    setState(() {
-      loopCount = loopCount;
-    });
-
-    if (counter == loc.length) {
-      print("locy>>> $loc");
-      // await getMethod();
-      // var response = await postMethod("/api/geocode/newgeocode", loc);
-      // print("response2 >> $response");
+    if (loc.length < 5 && loc.length != 0) {
+      print("remaining geocodes $loc");
+      await postMethod("/api/geocode/newgeocode", loc);
+      return;
     }
+    // if (counter == loc.length) {
+    //   print("locy>>> $loc");
+
+    //   // await getMethod();
+    //   await postMethod("/api/geocode/newgeocode", loc);
+    // }
+    setState(() {
+      loopCount = loopCount + counter;
+    });
 
     // log(firstAddress);
     // return '${valstr1.substring(0, 9)},${valstr2.substring(0, 9)}';
@@ -230,24 +262,87 @@ class _LocationGetState extends State<LocationGet> {
     });
   }
 
-  findNumberOfLocation() {
-    var startLatCont = double.parse(startLatController.text);
-    var startLongCont = double.parse(startLongController.text);
-    var endLatCont = double.parse(endLatController.text);
-    var endLongCont = double.parse(endLongController.text);
+  findNumberOfLocation() async {
+    var startLat = 17.538455;
+    var startLong = 83.087737;
+    var endLat = 17.934493;
+    var endLong = 83.41598;
+    double defaultOffset = 0.02000;
+    var valstr1;
+    var valstr2;
+    var coor;
+    var a;
+    var b;
+    var c;
+    var d;
+    var e;
+    var f;
+    var g;
+    var h;
+    var k;
+    var l;
+    var m;
+    var n;
+
+    List loc = [];
+    var prevAddress;
+
+    var startLatCont = double.parse(startLatController.text) ?? startLat;
+    var startLongCont = double.parse(startLongController.text) ?? startLong;
+    var endLatCont = double.parse(endLatController.text) ?? endLat;
+    var endLongCont = double.parse(endLongController.text) ?? endLong;
     var offsetCont = double.parse(offsetController.text) > 0.00002
         ? double.parse(offsetController.text)
-        : 0.2;
-    var count = 0;
+        : defaultOffset;
     for (var j = startLatCont; j < endLatCont; j += offsetCont) {
+      log("value j ${j.toString()}");
       for (var i = startLongCont; i < endLongCont; i += offsetCont) {
-        count += 1;
+        // loopCount += 1;
+        valstr1 = j;
+        valstr2 = i;
+        // print("$valstr1 : $valstr2");
+        coor = Coordinates(valstr1, valstr2);
+        var address = await Geocoder.local.findAddressesFromCoordinates(coor);
+        if (prevAddress == null) prevAddress = address;
+        if (address.first.addressLine.toLowerCase() !=
+            prevAddress.first.addressLine.toLowerCase()) {
+          // print("$valstr1 : $valstr2");
+          // print("new address");
+          a = address.first.subLocality;
+          b = address.first.locality;
+          c = address.first.coordinates;
+          d = address.first.addressLine.toLowerCase();
+          e = address.first.subAdminArea;
+          f = address.first.postalCode;
+          g = address.first.adminArea;
+          h = address.first.subThoroughfare;
+          k = address.first.featureName;
+          l = address.first.thoroughfare;
+
+          var val = {
+            "subLocality": "$a",
+            "locality": "$b",
+            "coordinates": {"latitude": c.latitude, "logitude": c.longitude},
+            "addressLine": "$d",
+            "subAdminArea": "$e",
+            "postalCode": "$f",
+            "adminArea": "$g",
+            "subThoroughfare": "$h",
+            "featureName": "$k",
+            "thoroughfare": "$l",
+          };
+          if (checkCity(address)) {
+            loc.add(nullRectifier(val));
+            log(val.toString());
+            setState(() {
+              loopCount = loopCount + 1;
+            });
+          }
+
+          prevAddress = address;
+        }
       }
     }
-    print("count val $count");
-    setState(() {
-      loopCount = count;
-    });
   }
 
   forwardGeocode() async {
@@ -368,6 +463,13 @@ class _LocationGetState extends State<LocationGet> {
                           await findLocationName();
                         },
                       ),
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              loopCount = 0;
+                            });
+                          },
+                          child: Text("reset count"))
                     ],
                   )
                 ],
