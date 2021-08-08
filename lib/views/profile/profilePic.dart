@@ -10,7 +10,7 @@ Widget profilePic(BuildContext context, upic) {
     child: Stack(children: [
       ClipOval(
         child: Image.network(upic,
-            height: _width * 0.4, width: _width * 0.4, fit: BoxFit.fill),
+            height: _width * 0.3, width: _width * 0.3, fit: BoxFit.fill),
       ),
       Positioned(
           bottom: 0,
@@ -32,6 +32,6 @@ Widget profilePic(BuildContext context, upic) {
             ),
           ))
     ]),
-    radius: _width * 0.2,
+    radius: _width * 0.15,
   );
 }

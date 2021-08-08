@@ -9,6 +9,7 @@ class ElevatedButtonWidget extends StatefulWidget {
   final double minWidth;
   final double height;
   final Color borderSideColor;
+  final double elevation;
   final TextStyle style;
   final Widget leadingIcon;
   final Widget trailingIcon;
@@ -18,6 +19,7 @@ class ElevatedButtonWidget extends StatefulWidget {
 
   ElevatedButtonWidget({
     this.bgColor,
+    this.elevation,
     this.textColor,
     this.buttonName,
     this.borderRadius,
@@ -49,15 +51,17 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
             return widget.onClick();
           },
           style: ButtonStyle(
+              
               backgroundColor: MaterialStateProperty.all(
                 widget.bgColor ?? Colors.blue,
               ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(widget.borderRadius ?? 0),
-                      side: BorderSide(
-                          color: widget.borderSideColor ?? Colors.white)))),
+                borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
+                side: BorderSide(
+                    color:
+                        widget.borderSideColor ?? Colors.transparent)
+              ))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -73,7 +77,6 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
     );
   }
 }
-
 
 Widget buildLeadingIcon(Widget leadingIcon) {
   if (leadingIcon != null) {
