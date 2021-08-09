@@ -23,11 +23,13 @@ class _LocationGetState extends State<LocationGet> {
   final endLatController = new TextEditingController(text: "17.934493");
   final startLongController = new TextEditingController(text: "83.087737");
   final endLongController = new TextEditingController(text: "83.41598");
-  final offsetController = new TextEditingController(text: "0.2");
+  final offsetController = new TextEditingController(text: "0.002");
   final placeNamController = new TextEditingController(text: "visakhapatnam");
   int loopCount = 0;
   var placeGeocode;
   String getPlace;
+  bool loading = false;
+  
   checkCity(target) {
     var vizagArray = [
       "Visakhapatnam",
@@ -67,6 +69,22 @@ class _LocationGetState extends State<LocationGet> {
   }
 
   nullRectifier(address) {
+    bool isNumericUsingRegularExpression(var string) {
+      if(string==null)return false;
+  final numericRegex = 
+    RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$');
+
+  return numericRegex.hasMatch(string);
+}
+
+bool isDouble(var s) {
+ if (s == null) {
+   return false;
+ }
+ return double.tryParse(s) != null;
+}
+
+
     var posibleNulls = [
       "null",
       "Unnamed Road",
@@ -92,6 +110,18 @@ class _LocationGetState extends State<LocationGet> {
         filteredAddress['addressLine'] = addressLineArray.join(',');
       }
     }
+    //remove null value from address
+    filteredAddress.removeWhere((key, value) =>  value == null || value=="null" || value=="Null");
+    print("runtype ${filteredAddress['postalCode']} ${filteredAddress['postalCode'].runtimeType}");
+    if(!isNumericUsingRegularExpression(filteredAddress['postalCode'])){
+      filteredAddress.remove('postalCode');
+    }
+    // if(!isDouble(filteredAddress['coordinates']['latitude'])){
+    //   filteredAddress.remove('coordinates');
+    // }
+    // if(!isDouble(filteredAddress['coordinates']['logitude'])){
+    //   filteredAddress.remove('coordinates');
+    // }
     return filteredAddress;
   }
 
@@ -108,7 +138,8 @@ class _LocationGetState extends State<LocationGet> {
   }
 
   Future<dynamic> postMethod(String api, var body) async {
-    var uri = Uri.http(API.host, api);
+    var uri = Uri.http(API.localHost, api);
+    print("api hitting....");
     print("body$uri $body");
     var bodyData = json.encode(body);
     var newdata = {"data": bodyData.toString()};
@@ -125,6 +156,10 @@ class _LocationGetState extends State<LocationGet> {
       // log(retriveData['coordinates']['logitude'].toString());
       if (response.statusCode == 200) {
         log("loop again");
+        setState(() {
+          startLatController.text = retriveData['coordinates']['latitude'].toString();
+          startLongController.text = retriveData['coordinates']['logitude'].toString();
+        });
         function(
             newLat: retriveData['coordinates']['latitude'],
             newLong: retriveData['coordinates']['logitude']);
@@ -221,7 +256,7 @@ class _LocationGetState extends State<LocationGet> {
           prevAddress = address;
         }
 
-        if (counter == 5) {
+        if (counter == 20) {
           print("locy>>> $loc");
 
           // await getMethod();
@@ -230,7 +265,7 @@ class _LocationGetState extends State<LocationGet> {
         }
       }
     }
-    if (loc.length < 5 && loc.length != 0) {
+    if (loc.length < 20 && loc.length != 0) {
       print("remaining geocodes $loc");
       await postMethod("/api/geocode/newgeocode", loc);
       return;
@@ -440,27 +475,59 @@ class _LocationGetState extends State<LocationGet> {
                     spacing: 3.0,
                     children: [
                       ElevatedButton(
-                        child: Text("Load locations"),
+                        child: !loading ?Text("Load locations"):Text("Load..."),
                         onPressed: () async {
-                          await function();
+                         if(!loading){ 
+                             setState(() {
+                           loading = true;
+                         });
+                           await function();
+                         setState(() {
+                           loading = false;
+                         });
+                         }
                         },
                       ),
                       ElevatedButton(
-                        child: Text("no of locs"),
+                        child: !loading ? Text("no of locs"):Text("Load..."),
                         onPressed: () async {
+                          if(!loading){ 
+                             setState(() {
+                           loading = true;
+                         });
                           await findNumberOfLocation();
+                            setState(() {
+                           loading = false;
+                         });
+                         }
                         },
                       ),
                       ElevatedButton(
-                        child: Text("forward"),
+                        child: !loading ?Text("forward"):Text("Load..."),
                         onPressed: () async {
+                              if(!loading){ 
+                             setState(() {
+                           loading = true;
+                         });
                           await forwardGeocode();
+                            setState(() {
+                           loading = false;
+                         });
+                         }
                         },
                       ),
                       ElevatedButton(
-                        child: Text("reverse"),
+                        child: !loading ? Text("reverse"):Text("Load..."),
                         onPressed: () async {
+                              if(!loading){ 
+                             setState(() {
+                           loading = true;
+                         });
                           await findLocationName();
+                              setState(() {
+                           loading = false;
+                         });
+                         }
                         },
                       ),
                       ElevatedButton(
@@ -469,7 +536,15 @@ class _LocationGetState extends State<LocationGet> {
                               loopCount = 0;
                             });
                           },
-                          child: Text("reset count"))
+                          child: !loading ? Text("reset count"):Text("Load...")),
+                          ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                             startLatController.text = "17.538455";
+                             startLongController.text = "83.087737";
+                            });
+                          },
+                          child: !loading ? Text("reset cord"):Text("Load..."))
                     ],
                   )
                 ],
