@@ -41,8 +41,8 @@ class _ChatState extends State<Chat> {
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(_hight * 0.09),
               child: Container(
-                // height: _hight * 0.06,
-                // padding: EdgeInsets.only(left: 0, right: 0, bottom: 10),
+                // height: _hight * 0.08,
+                // padding: EdgeInsets.only(left: 0, right: 0, bottom: 0),
                 child: TabBar(
                     unselectedLabelColor: Colors.grey[700],
                     indicatorSize: TabBarIndicatorSize.tab,
@@ -51,7 +51,7 @@ class _ChatState extends State<Chat> {
                     // indicatorWeight: 0,
                     // indicator: BoxDecoration(
                     //     borderRadius: BorderRadius.circular(5),
-                    //     color: Colors.grey[100]),
+                    //     color: Colors.indigo[50]),
                     tabs: [
                       Tab(
                         icon: Container(

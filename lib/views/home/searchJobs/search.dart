@@ -75,7 +75,7 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
       );
 
   void searchBook(String query) {
-    final books = allJobs.where((job) {
+    final jobs = allJobs.where((job) {
       final titleLower = job.job.toLowerCase();
       final authorLower = job.canDoWorks.toLowerCase();
       final searchLower = query.toLowerCase();
@@ -86,7 +86,7 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
 
     setState(() {
       this.query = query;
-      this.jobs = books;
+      this.jobs = jobs;
     });
   }
 }

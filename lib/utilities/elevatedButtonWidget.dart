@@ -51,17 +51,17 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
             return widget.onClick();
           },
           style: ButtonStyle(
-              
+              elevation: MaterialStateProperty.all(widget.elevation ?? 0.0),
               backgroundColor: MaterialStateProperty.all(
                 widget.bgColor ?? Colors.blue,
               ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
-                side: BorderSide(
-                    color:
-                        widget.borderSideColor ?? Colors.transparent)
-              ))),
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadius ?? 0),
+                      side: BorderSide(
+                          color:
+                              widget.borderSideColor ?? Colors.transparent)))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

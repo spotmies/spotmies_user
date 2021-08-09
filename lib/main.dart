@@ -10,7 +10,6 @@ import 'package:spotmies/providers/mapsProvider.dart';
 import 'package:spotmies/providers/orderOverviewProvider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
-import 'package:spotmies/utilities/locationPrint.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
