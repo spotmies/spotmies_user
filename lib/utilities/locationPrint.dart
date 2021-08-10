@@ -29,7 +29,7 @@ class _LocationGetState extends State<LocationGet> {
   var placeGeocode;
   String getPlace;
   bool loading = false;
-  
+
   checkCity(target) {
     var vizagArray = [
       "Visakhapatnam",
@@ -70,20 +70,18 @@ class _LocationGetState extends State<LocationGet> {
 
   nullRectifier(address) {
     bool isNumericUsingRegularExpression(var string) {
-      if(string==null)return false;
-  final numericRegex = 
-    RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$');
+      if (string == null) return false;
+      final numericRegex = RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$');
 
-  return numericRegex.hasMatch(string);
-}
+      return numericRegex.hasMatch(string);
+    }
 
-bool isDouble(var s) {
- if (s == null) {
-   return false;
- }
- return double.tryParse(s) != null;
-}
-
+    bool isDouble(var s) {
+      if (s == null) {
+        return false;
+      }
+      return double.tryParse(s) != null;
+    }
 
     var posibleNulls = [
       "null",
@@ -111,9 +109,11 @@ bool isDouble(var s) {
       }
     }
     //remove null value from address
-    filteredAddress.removeWhere((key, value) =>  value == null || value=="null" || value=="Null");
-    print("runtype ${filteredAddress['postalCode']} ${filteredAddress['postalCode'].runtimeType}");
-    if(!isNumericUsingRegularExpression(filteredAddress['postalCode'])){
+    filteredAddress.removeWhere(
+        (key, value) => value == null || value == "null" || value == "Null");
+    print(
+        "runtype ${filteredAddress['postalCode']} ${filteredAddress['postalCode'].runtimeType}");
+    if (!isNumericUsingRegularExpression(filteredAddress['postalCode'])) {
       filteredAddress.remove('postalCode');
     }
     // if(!isDouble(filteredAddress['coordinates']['latitude'])){
@@ -157,8 +157,10 @@ bool isDouble(var s) {
       if (response.statusCode == 200) {
         log("loop again");
         setState(() {
-          startLatController.text = retriveData['coordinates']['latitude'].toString();
-          startLongController.text = retriveData['coordinates']['logitude'].toString();
+          startLatController.text =
+              retriveData['coordinates']['latitude'].toString();
+          startLongController.text =
+              retriveData['coordinates']['logitude'].toString();
         });
         function(
             newLat: retriveData['coordinates']['latitude'],
@@ -256,7 +258,7 @@ bool isDouble(var s) {
           prevAddress = address;
         }
 
-        if (counter == 20) {
+        if (counter == 40) {
           print("locy>>> $loc");
 
           // await getMethod();
@@ -265,7 +267,7 @@ bool isDouble(var s) {
         }
       }
     }
-    if (loc.length < 20 && loc.length != 0) {
+    if (loc.length < 40 && loc.length != 0) {
       print("remaining geocodes $loc");
       await postMethod("/api/geocode/newgeocode", loc);
       return;
@@ -475,59 +477,60 @@ bool isDouble(var s) {
                     spacing: 3.0,
                     children: [
                       ElevatedButton(
-                        child: !loading ?Text("Load locations"):Text("Load..."),
+                        child:
+                            !loading ? Text("Load locations") : Text("Load..."),
                         onPressed: () async {
-                         if(!loading){ 
-                             setState(() {
-                           loading = true;
-                         });
-                           await function();
-                         setState(() {
-                           loading = false;
-                         });
-                         }
-                        },
-                      ),
-                      ElevatedButton(
-                        child: !loading ? Text("no of locs"):Text("Load..."),
-                        onPressed: () async {
-                          if(!loading){ 
-                             setState(() {
-                           loading = true;
-                         });
-                          await findNumberOfLocation();
+                          if (!loading) {
                             setState(() {
-                           loading = false;
-                         });
-                         }
-                        },
-                      ),
-                      ElevatedButton(
-                        child: !loading ?Text("forward"):Text("Load..."),
-                        onPressed: () async {
-                              if(!loading){ 
-                             setState(() {
-                           loading = true;
-                         });
-                          await forwardGeocode();
+                              loading = true;
+                            });
+                            await function();
                             setState(() {
-                           loading = false;
-                         });
-                         }
+                              loading = false;
+                            });
+                          }
                         },
                       ),
                       ElevatedButton(
-                        child: !loading ? Text("reverse"):Text("Load..."),
+                        child: !loading ? Text("no of locs") : Text("Load..."),
                         onPressed: () async {
-                              if(!loading){ 
-                             setState(() {
-                           loading = true;
-                         });
-                          await findLocationName();
-                              setState(() {
-                           loading = false;
-                         });
-                         }
+                          if (!loading) {
+                            setState(() {
+                              loading = true;
+                            });
+                            await findNumberOfLocation();
+                            setState(() {
+                              loading = false;
+                            });
+                          }
+                        },
+                      ),
+                      ElevatedButton(
+                        child: !loading ? Text("forward") : Text("Load..."),
+                        onPressed: () async {
+                          if (!loading) {
+                            setState(() {
+                              loading = true;
+                            });
+                            await forwardGeocode();
+                            setState(() {
+                              loading = false;
+                            });
+                          }
+                        },
+                      ),
+                      ElevatedButton(
+                        child: !loading ? Text("reverse") : Text("Load..."),
+                        onPressed: () async {
+                          if (!loading) {
+                            setState(() {
+                              loading = true;
+                            });
+                            await findLocationName();
+                            setState(() {
+                              loading = false;
+                            });
+                          }
                         },
                       ),
                       ElevatedButton(
@@ -536,15 +539,17 @@ bool isDouble(var s) {
                               loopCount = 0;
                             });
                           },
-                          child: !loading ? Text("reset count"):Text("Load...")),
-                          ElevatedButton(
+                          child:
+                              !loading ? Text("reset count") : Text("Load...")),
+                      ElevatedButton(
                           onPressed: () {
                             setState(() {
-                             startLatController.text = "17.538455";
-                             startLongController.text = "83.087737";
+                              startLatController.text = "17.538455";
+                              startLongController.text = "83.087737";
                             });
                           },
-                          child: !loading ? Text("reset cord"):Text("Load..."))
+                          child:
+                              !loading ? Text("reset cord") : Text("Load..."))
                     ],
                   )
                 ],
