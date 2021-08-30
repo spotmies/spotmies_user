@@ -5,12 +5,14 @@ class SearchWidget extends StatefulWidget {
   final String text;
   final ValueChanged<String> onChanged;
   final String hintText;
+  final IconData icon;
 
   const SearchWidget({
     Key key,
     @required this.text,
     @required this.onChanged,
     @required this.hintText,
+    this.icon
   }) : super(key: key);
 
   @override
@@ -63,7 +65,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       FocusScope.of(context).requestFocus(FocusNode());
                     },
                   )
-                : Icon(Icons.home_repair_service, color: style.color),
+                : Icon(widget.icon ?? Icons.home_repair_service, color: style.color),
             hintText: widget.hintText,
             hintStyle: style,
             border: InputBorder.none,

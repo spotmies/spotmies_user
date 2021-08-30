@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Maps extends StatefulWidget {
   final String ordId;
-  final String coordinates;
+  final Map coordinates;
   Maps({this.ordId, this.coordinates});
   @override
   _MapsState createState() => _MapsState(ordId, coordinates);
@@ -15,7 +15,7 @@ class Maps extends StatefulWidget {
 class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
   String ordId;
-  String coordinates;
+  Map coordinates;
   _MapsState(this.ordId, this.coordinates);
   var formkey = GlobalKey<FormState>();
   var scaffoldkey = GlobalKey<ScaffoldState>();
@@ -31,7 +31,7 @@ class _MapsState extends State<Maps> {
         markerId: markerId,
         position: LatLng(lat, long),
         draggable: true,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         infoWindow: InfoWindow(snippet: 'Address'));
     setState(() {
       markers[markerId] = _marker;
@@ -55,8 +55,10 @@ class _MapsState extends State<Maps> {
   @override
   Widget build(BuildContext context) {
     if (position == null)
-      return Center(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     return Scaffold(
       key: scaffoldkey,
@@ -80,23 +82,24 @@ class _MapsState extends State<Maps> {
               });
               bottomSheet();
             },
-            // myLocationButtonEnabled: true,
-
+            // mapType: MapType.satellite,
             buildingsEnabled: true,
             compassEnabled: true,
             trafficEnabled: true,
-            // myLocationButtonEnabled: true,
+            myLocationButtonEnabled: true,
+            
             onMapCreated: (GoogleMapController controller) {
               setState(() {
                 googleMapController = controller;
               });
             },
             initialCameraPosition: CameraPosition(
-                target: LatLng(
-                    // 17.968, 83.111
-                    position.latitude,
-                    position.longitude),
-                zoom: 15),
+                target: coordinates != null
+                    ? LatLng(coordinates['latitude'], coordinates['logitude'])
+                    : LatLng(
+                        position.latitude,
+                        position.longitude),
+                zoom: 17),
             markers: Set<Marker>.of(markers.values),
           ),
         ]),
