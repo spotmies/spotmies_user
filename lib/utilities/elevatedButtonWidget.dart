@@ -15,6 +15,7 @@ class ElevatedButtonWidget extends StatefulWidget {
   final double textSize;
   final VoidCallback onClick;
   final FontWeight textStyle;
+  final double elevation;
 
   ElevatedButtonWidget({
     this.bgColor,
@@ -30,6 +31,7 @@ class ElevatedButtonWidget extends StatefulWidget {
     this.textSize,
     this.textStyle,
     this.onClick,
+    this.elevation,
   });
 
   @override
@@ -46,9 +48,10 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
           borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
       child: ElevatedButton(
           onPressed: () {
-            return widget.onClick();
+            return widget.onClick() ;
           },
           style: ButtonStyle(
+            elevation: MaterialStateProperty.all(widget.elevation ?? 0),
               backgroundColor: MaterialStateProperty.all(
                 widget.bgColor ?? Colors.blue,
               ),
@@ -59,7 +62,7 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
                       side: BorderSide(
                           color: widget.borderSideColor ?? Colors.white)))),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               buildLeadingIcon(widget.leadingIcon),
               Text(

@@ -8,6 +8,8 @@ class TextWidget extends StatelessWidget {
   final Color color;
   final String family;
   final double lSpace;
+  final flow;
+  final TextAlign align;
 
   TextWidget(
       {this.text,
@@ -15,21 +17,20 @@ class TextWidget extends StatelessWidget {
       this.color,
       this.weight,
       this.family,
+      this.align,
+      this.flow,
       this.lSpace});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: GoogleFonts.josefinSans(
-        letterSpacing: lSpace ?? 0,
-        fontSize: size ?? 14,
-        color: color ?? Colors.black,
-        fontWeight: weight ?? FontWeight.normal,
-
-      )
-      
-     
-    );
+    return Text(text,
+        overflow:flow?? TextOverflow.ellipsis,
+        textAlign: align ?? TextAlign.justify,
+        style: GoogleFonts.josefinSans(
+          letterSpacing: lSpace ?? 0,
+          fontSize: size ?? 14,
+          color: color ?? Colors.black,
+          fontWeight: weight ?? FontWeight.normal,
+        ));
   }
 }

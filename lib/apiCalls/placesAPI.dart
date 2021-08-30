@@ -9,10 +9,12 @@ class PlacesApi {
     final url =
         Uri.parse('https://spotmiesserver.herokuapp.com/api/geocode/all');
     final response = await http.get(url);
+    // List data  = json.decode(response.body);
 
     if (response.statusCode == 200) {
       final List geoLocations = json.decode(response.body);
       log('API Hit');
+      log(geoLocations.toString());
 
       return geoLocations.map((json) => Places.fromJson(json)).where((geo) {
         final subLocality = geo.subLocality.toLowerCase();

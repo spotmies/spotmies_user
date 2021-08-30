@@ -1,8 +1,11 @@
 
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
-import 'package:spotmies/views/home/ads/maps.dart';
 import 'package:spotmies/views/maps/offLine_placesModel.dart';
 import 'package:spotmies/views/maps/onLine_placesSearch.dart';
 
@@ -36,7 +39,7 @@ class _DummyState extends State<Dummy> {
               ),
               borderSideColor: Colors.indigo[50],
               onClick: () async {
-                await places();
+                places();
 
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => OfflinePlaceSearch()));
@@ -69,22 +72,31 @@ class _DummyState extends State<Dummy> {
 }
 
 places() async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // var response = await Server().getMethod(API.places);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var response = await Server().getMethod(API.places);
+  var loc = jsonDecode(response);
+  // log(loc[1]['coordinates']['latitude'].toString());
+  // final List geoLocations = json.decode(response.body);
+  prefs.setString('places', jsonEncode(loc));
+  
+  // var geoLocations = prefs.getString('places');
+  // final places = jsonDecode(geoLocations);
+  // log(places[10].toString());
   // if (response.statusCode == 200) {
   //    var list = (json.decode(response.body) as List)
   //         .map((data) => new Places.fromJson(data))
   //         .toList();
+  //     // log(list.toString());
      
   //   } else {
   //     throw Exception('Failed to load photos');
   //   }
-  // prefs.setString('places', jsonEncode(response));
+  // prefs.setString('places', jsonEncode(response.body));
 
   //  var mpd = prefs.getString('places');
-  //  log(jsonDecode(mpd));
-  // Map<String,dynamic> place = jsonDecode(mpd) as Map<String, dynamic>;;
-  //  log(place.toString());
+  // //  log(jsonDecode(mpd.toString()));
+  // Map<String,dynamic> place = jsonDecode(mpd.toString()) as Map<String, dynamic>;
+  //  print(place.toString());
 }
 
 

@@ -14,12 +14,17 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 import 'package:spotmies/models/admodel.dart';
 import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
+import 'package:video_player/video_player.dart';
 
 class AdController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
   TextEditingController problem = TextEditingController();
   final controller = TestController();
+
+  // int currentStep = 0;
+  GlobalKey<PageSliderState> sliderKey = GlobalKey();
 
   // String service;
   String title;
@@ -30,7 +35,7 @@ class AdController extends ControllerMVC {
   // String state;
   // String adtime;
   // File _profilepic;
-  List<File> profilepic = [];
+  List<File> serviceImages = [];
   bool uploading = false;
   double val = 0;
 
@@ -61,6 +66,7 @@ class AdController extends ControllerMVC {
   var docc;
   var wid = 1;
   List jobs = [
+    'Select',
     'AC Service',
     'Computer',
     'TV Repair',
@@ -179,7 +185,6 @@ class AdController extends ControllerMVC {
     TimeOfDay t = await showTimePicker(
       context: context,
       initialTime: pickedTime,
-      
     );
     if (t != null) {
       setState(() {
@@ -196,10 +201,23 @@ class AdController extends ControllerMVC {
         imageQuality: 10,
         preferredCameraDevice: CameraDevice.rear);
     setState(() {
-      profilepic.add(File(pickedFile?.path));
+      serviceImages.add(File(pickedFile?.path));
     });
     if (pickedFile.path == null) retrieveLostData();
   }
+
+  File serviceVideo;
+  final picker = ImagePicker();
+  VideoPlayerController videoPlayerController;
+
+  pickVideo() async {
+    PickedFile pickedFile = await picker.getVideo(source: ImageSource.camera);
+     serviceVideo = File(pickedFile.path); 
+    videoPlayerController = VideoPlayerController.file(serviceVideo)..initialize().then((_) {
+      setState(() { });
+      videoPlayerController.play();
+    });
+}
 
   Future<void> retrieveLostData() async {
     final LostData response = await ImagePicker().getLostData();
@@ -208,7 +226,7 @@ class AdController extends ControllerMVC {
     }
     if (response.file != null) {
       setState(() {
-        profilepic.add(File(response.file.path));
+        serviceImages.add(File(response.file.path));
       });
     } else {
       print(response.file);
@@ -216,12 +234,12 @@ class AdController extends ControllerMVC {
   }
 
 //image upload function
-  Future<void> uploadimage() async {
+  Future<void> uploadServiceMedia() async {
     int i = 1;
 
-    for (var img in profilepic) {
+    for (var img in serviceImages) {
       setState(() {
-        val = i / profilepic.length;
+        val = i / serviceImages.length;
       });
       var postImageRef = FirebaseStorage.instance.ref().child('adImages');
       UploadTask uploadTask =
@@ -234,42 +252,41 @@ class AdController extends ControllerMVC {
     }
   }
 
-  step1() {
-    wid <= 1
-        ? setState(() {
-            if (longitude != '' || pickedTime != null) {
-              wid = wid + 1;
-            }
-          })
-        : print('Step2');
+  step2() {
+    setState(() {
+      if (longitude != '' || pickedTime != null) {
+        wid = wid + 1;
+      }
+    });
   }
 
-  step2() {
-    wid <= 2
-        ? setState(() {
-            if (formkey.currentState.validate()) {
-              formkey.currentState.save();
+  step1() {
+    if (dropDownValue == 0) {
+      snackbar(context, 'Please Send Job Field');
+    }
+    setState(() {
+      if (formkey.currentState.validate() && dropDownValue != 0) {
+        formkey.currentState.save();
 
-              wid = wid + 1;
-            }
-          })
-        : print('Step2');
+        sliderKey.currentState.next();
+      }
+    });
   }
 
   step3(userDetails) {
-    wid <= 3 ? adbutton(userDetails) : print('Step3');
+    adbutton(userDetails);
   }
 
-  widDec() {
-    wid >= 1
-        ? setState(() {
-            wid = wid - 1;
-          })
-        : print('Back');
-  }
+  // widDec() {
+  //   wid >= 1
+  //       ? setState(() {
+  //           wid = wid - 1;
+  //         })
+  //       : print('Back');
+  // }
 
   adbutton(userDetails) async {
-    await uploadimage();
+    await uploadServiceMedia();
     String images = imageLink.toString();
     CircularProgressIndicator();
     var body = {
@@ -302,7 +319,7 @@ class AdController extends ControllerMVC {
 
   buttonFromHome() async {
     docid();
-    await uploadimage();
+    await uploadServiceMedia();
     var orderid = await docc.id;
     await FirebaseFirestore.instance
         .collection('users')

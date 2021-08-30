@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
-import 'package:spotmies/views/profile/profile_shimmer.dart';
+import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/fonts.dart';
+import 'package:spotmies/utilities/progressIndicator.dart';
+import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/home/ads/maps.dart';
+import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 
 //path for adding post data
 
@@ -44,67 +50,99 @@ class _PostAdState extends StateMVC<PostAd> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<UserDetailsProvider>(builder: (context, data, child) {
-      if (data.user == null) return Center(child: profileShimmer(context));
+      if (data.user == null) return circleProgress();
       var u = data.user;
       return Scaffold(
-        resizeToAvoidBottomInset: false,
-        key: _adController.scaffoldkey,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.grey[700]),
+          resizeToAvoidBottomInset: false,
+          key: _adController.scaffoldkey,
           backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-        backgroundColor: Colors.grey[50],
-        body: callmethod(_adController.wid, _hight, _width),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          height: _hight * 0.2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              if (_adController.wid >= 2)
-                FloatingActionButton.extended(
-                  heroTag: 'back',
-                  backgroundColor: Colors.white,
-                  onPressed: () {
-                    _adController.widDec();
-                  },
-                  label: Text(
-                    '    Back    ',
-                    style: TextStyle(color: Colors.blue[900]),
-                  ),
-                ),
-              FloatingActionButton.extended(
-                heroTag: 'next',
-                backgroundColor: Colors.white,
-                onPressed: () {
-                  _adController.wid == 1
-                      ? _adController.step1()
-                      : _adController.wid == 2
-                          ? _adController.step2()
-                          : _adController.step3(u['_id']);
-                },
-                label: Text(
-                  _adController.wid != 3 ? '    Next    ' : 'Get Service',
-                  style: TextStyle(color: Colors.blue[900]),
-                ),
-              )
-            ],
-          ),
-        ),
-      );
+          body: SafeArea(
+              child: Column(children: [
+            PageSlider(key: _adController.sliderKey, pages: [
+              Container(height: _hight * 1.08, child: ad2(_hight, _width)),
+              Container(height: _hight * 1.08, child: ad1(_hight, _width)),
+              Container(height: _hight * 1.08, child: ad3(_hight, _width)),
+            ]),
+          ]))
+          // callmethod(_adController.wid, _hight, _width),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          // floatingActionButton: Container(
+          //   height: _hight * 0.2,
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //     children: [
+          //       if (_adController.wid >= 2)
+          //         FloatingActionButton.extended(
+          //           heroTag: 'back',
+          //           backgroundColor: Colors.white,
+          //           onPressed: () {
+          //             _adController.widDec();
+          //           },
+          //           label: Text(
+          //             '    Back    ',
+          //             style: TextStyle(color: Colors.blue[900]),
+          //           ),
+          //         ),
+          //       FloatingActionButton.extended(
+          //         heroTag: 'next',
+          //         backgroundColor: Colors.white,
+          //         onPressed: () {
+          //           _adController.wid == 1
+          //               ? _adController.step1()
+          //               : _adController.wid == 2
+          //                   ? _adController.step2()
+          //                   : _adController.step3(u['_id']);
+          //         },
+          //         label: Text(
+          //           _adController.wid != 3 ? '    Next    ' : 'Get Service',
+          //           style: TextStyle(color: Colors.blue[900]),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
+          );
     });
   }
 
-  callmethod(int wid, double _hight, double _width) {
+  // callmethod(int wid, double _hight, double _width) {
+  //   return Container(
+  //     child: wid == 1
+  //         ? ad1(_hight, _width)
+  //         : wid == 2
+  //             ? ad2(_hight, _width)
+  //             : wid == 3
+  //                 ? ad3(_hight, _width)
+  //                 : Center(child: CircularProgressIndicator()),
+  //   );
+  // }
+
+  steps(
+    int step,
+    double width,
+  ) {
     return Container(
-      child: wid == 1
-          ? ad1(_hight, _width)
-          : wid == 2
-              ? ad2(_hight, _width)
-              : wid == 3
-                  ? ad3(_hight, _width)
-                  : Center(child: CircularProgressIndicator()),
+      width: width * 0.3,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircleAvatar(
+            radius: step == 1 ? width * 0.015 : width * 0.01,
+            backgroundColor:
+                step == 1 ? Colors.indigo[900] : Colors.indigo[100],
+          ),
+          CircleAvatar(
+            radius: step == 2 ? width * 0.015 : width * 0.01,
+            backgroundColor:
+                step == 2 ? Colors.indigo[900] : Colors.indigo[100],
+          ),
+          CircleAvatar(
+            radius: step == 3 ? width * 0.015 : width * 0.01,
+            backgroundColor:
+                step == 3 ? Colors.indigo[900] : Colors.indigo[100],
+          )
+        ],
+      ),
     );
   }
 
@@ -116,217 +154,322 @@ class _PostAdState extends StateMVC<PostAd> {
             top: hight * 0.05,
           ),
           width: width * 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[400],
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                          offset: Offset(3, 6)),
-                      BoxShadow(
-                          color: Colors.grey[100],
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                          offset: Offset(-3, -3))
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30)),
-                height: hight * 0.6,
-                width: width * 0.9,
-                padding: EdgeInsets.only(top: hight * 0.03),
-                child: Form(
-                  key: _adController.formkey,
-                  child: ListView(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(
-                              bottom: width * 0.05,
-                            ),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15)),
-                            height: hight * 0.1,
-                            width: width * 0.8,
-                            child: Center(
-                              child: Text('Step 2/3'),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                                left: width * 0.03, right: width * 0.03),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(15)),
-                            height: hight * 0.12,
-                            width: width * 0.8,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Category:',
-                                    style: TextStyle(
-                                        fontSize: width * 0.05,
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.w500)),
-                                Flexible(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                        left: width * 0.03,
-                                        right: width * 0.03),
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Colors.grey[300],
-                                              blurRadius: 2,
-                                              spreadRadius: 2)
-                                        ],
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: DropdownButton(
-                                      underline: SizedBox(),
-                                      value: _adController.dropDownValue,
-                                      icon: Icon(
-                                        Icons.arrow_drop_down_circle,
-                                        size: width * 0.06,
-                                        color: Colors.blue[900],
-                                      ),
-                                      items: <int>[
-                                        0,
-                                        1,
-                                        2,
-                                        3,
-                                        4,
-                                        5,
-                                        6,
-                                        7,
-                                        8,
-                                        9,
-                                        10,
-                                        11,
-                                      ].map<DropdownMenuItem<int>>(
-                                          (int jobFromFAB) {
-                                        return DropdownMenuItem<int>(
-                                          value: jobFromFAB,
-                                          child: Text(_adController.jobs
-                                              .elementAt(jobFromHome == null
-                                                  ? jobFromFAB
-                                                  : jobFromHome)),
-                                        );
-                                      }).toList(),
-                                      onChanged: (newVal) {
-                                        setState(() {
-                                          _adController.dropDownValue = newVal;
-                                        });
-                                      },
+          child: Container(
+            height: hight * 1,
+            width: width,
+            padding: EdgeInsets.only(top: hight * 0.03),
+            child: Form(
+              key: _adController.formkey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      bottom: width * 0.05,
+                    ),
+                    height: hight * 0.1,
+                    width: width * 0.8,
+                    child: Center(
+                      child: steps(1, width),
+                    ),
+                  ),
+                  Container(
+                    height: hight * 0.7,
+                    width: width * 0.87,
+                    child: ListView(
+                      children: [
+                        Container(
+                            height: hight * 0.15,
+                            child: SvgPicture.asset('assets/like.svg')),
+                        SizedBox(
+                          height: hight * 0.022,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: width * 0.03, right: width * 0.03),
+                          height: hight * 0.12,
+                          width: width * 0.8,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextWidget(
+                                text: 'Category:',
+                                color: Colors.grey[900],
+                                size: width * 0.05,
+                                weight: FontWeight.w600,
+                              ),
+                              Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      left: width * 0.03, right: width * 0.03),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey[300],
+                                            blurRadius: 3,
+                                            spreadRadius: 1)
+                                      ],
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: DropdownButton(
+                                    underline: SizedBox(),
+                                    value: _adController.dropDownValue,
+                                    icon: Icon(
+                                      Icons.arrow_drop_down_circle,
+                                      size: width * 0.06,
+                                      color: Colors.blue[900],
                                     ),
+                                    items: <int>[
+                                      0,
+                                      1,
+                                      2,
+                                      3,
+                                      4,
+                                      5,
+                                      6,
+                                      7,
+                                      8,
+                                      9,
+                                      10,
+                                      11,
+                                    ].map<DropdownMenuItem<int>>(
+                                        (int jobFromFAB) {
+                                      return DropdownMenuItem<int>(
+                                          value: jobFromFAB,
+                                          child: TextWidget(
+                                            text: _adController.jobs.elementAt(
+                                              jobFromHome == null
+                                                  ? jobFromFAB
+                                                  : jobFromHome,
+                                            ),
+                                            color: Colors.grey[900],
+                                            size: width * 0.04,
+                                            weight: FontWeight.w500,
+                                          ));
+                                    }).toList(),
+                                    onChanged: (newVal) {
+                                      setState(() {
+                                        _adController.dropDownValue = newVal;
+                                      });
+                                    },
                                   ),
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey[300],
+                                    blurRadius: 3,
+                                    spreadRadius: 1)
                               ],
-                            ),
-                          ),
-                          Divider(
-                            thickness: hight * 0.01,
-                            color: Colors.white,
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                                left: width * 0.03,
-                                right: width * 0.03,
-                                top: width * 0.03),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(15)),
-                            height: hight * 0.12,
-                            width: width * 0.8,
-                            child: TextFormField(
-                              controller: _adController.problem,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please discribe your problem';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.name,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
-                                    borderSide: BorderSide(
-                                        width: 1, color: Colors.grey[100])),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
-                                    borderSide: BorderSide(
-                                        width: 1, color: Colors.grey[100])),
-                                hintStyle: TextStyle(fontSize: 17),
-                                hintText: 'Problem',
-                                suffixIcon: Icon(
-                                  Icons.error_outline_rounded,
-                                  color: Colors.blue[900],
-                                ),
-                                contentPadding: EdgeInsets.only(
-                                    left: hight * 0.03, top: hight * 0.06),
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(15)),
+                          height: hight * 0.087,
+                          width: width * 0.8,
+                          child: TextFormField(
+                            controller: _adController.problem,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please discribe your problem';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.indigo[50])),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey[200])),
+                              hintStyle: fonts(width * 0.05, FontWeight.w400,
+                                  Colors.grey[500]),
+                              hintText: 'Problem',
+                              suffixIcon: Icon(
+                                Icons.error_outline_rounded,
+                                color: Colors.indigo[900],
                               ),
-                              onChanged: (value) {
-                                this._adController.title = value;
-                              },
+                              contentPadding: EdgeInsets.only(
+                                  left: hight * 0.03, top: hight * 0.06),
                             ),
+                            onChanged: (value) {
+                              this._adController.title = value;
+                            },
                           ),
-                          Divider(
-                            thickness: hight * 0.01,
-                            color: Colors.white,
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                                left: width * 0.03,
-                                right: width * 0.03,
-                                top: width * 0.03),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(15)),
-                            height: hight * 0.12,
-                            width: width * 0.8,
-                            child: TextFormField(
-                              keyboardType: TextInputType.phone,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
-                                    borderSide: BorderSide(
-                                        width: 1, color: Colors.grey[100])),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
-                                    borderSide: BorderSide(
-                                        width: 1, color: Colors.grey[100])),
-                                hintStyle: TextStyle(fontSize: 17),
-                                hintText: 'Money',
-                                suffixIcon: Icon(
-                                  Icons.account_balance_wallet,
-                                  color: Colors.blue[900],
-                                ),
-                                //border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(
-                                    left: hight * 0.03, top: hight * 0.06),
+                        ),
+                        SizedBox(
+                          height: hight * 0.022,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey[300],
+                                    blurRadius: 3,
+                                    spreadRadius: 1)
+                              ],
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(15)),
+                          height: hight * 0.087,
+                          width: width * 0.8,
+                          child: TextFormField(
+                            keyboardType: TextInputType.phone,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please assumed money';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.indigo[900])),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey[200])),
+                              hintStyle: fonts(width * 0.05, FontWeight.w400,
+                                  Colors.grey[500]),
+                              hintText: 'Money',
+                              suffixIcon: Icon(
+                                Icons.account_balance_wallet,
+                                color: Colors.indigo[900],
                               ),
-                              onChanged: (value) {
-                                this._adController.money = value;
-                              },
+                              //border: InputBorder.none,
+                              contentPadding: EdgeInsets.only(
+                                  left: hight * 0.03, top: hight * 0.06),
                             ),
+                            onChanged: (value) {
+                              this._adController.money = value;
+                            },
                           ),
-                        ],
-                      )
-                    ],
+                        ),
+                        SizedBox(
+                          height: hight * 0.022,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            await _adController.pickDate(context);
+                            await _adController.picktime(context);
+                          },
+                          child: Container(
+                              padding: EdgeInsets.only(
+                                  left: width * 0.03,
+                                  right: width * 0.03,
+                                  top: width * 0.03),
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey[300],
+                                        blurRadius: 3,
+                                        spreadRadius: 1)
+                                  ],
+                                  color: Colors.grey[50],
+                                  borderRadius: BorderRadius.circular(15)),
+                              height: hight * 0.12,
+                              width: width * 0.8,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      TextWidget(
+                                        text: 'Schedule:',
+                                        color: Colors.grey[900],
+                                        size: width * 0.05,
+                                        weight: FontWeight.w600,
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    height: hight * 0.07,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        TextWidget(
+                                          text: 'Date:  ' +
+                                              DateFormat('dd MMM yyyy').format(
+                                                  (DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          (_adController
+                                                              .pickedDate
+                                                              .millisecondsSinceEpoch)))),
+                                          color: Colors.grey[900],
+                                          size: width * 0.04,
+                                          weight: FontWeight.w500,
+                                        ),
+                                        TextWidget(
+                                          text:
+                                              'Time:${_adController.pickedTime.format(context)}',
+                                          color: Colors.grey[900],
+                                          size: width * 0.04,
+                                          weight: FontWeight.w500,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  Container(
+                    height: hight * 0.1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ElevatedButtonWidget(
+                          onClick: () {
+                            _adController.sliderKey.currentState.previous();
+                          },
+                          buttonName: 'Back',
+                          bgColor: Colors.indigo[50],
+                          textColor: Colors.indigo[900],
+                          height: hight * 0.05,
+                          minWidth: width * 0.30,
+                          textSize: hight * 0.02,
+                          leadingIcon: Icon(
+                            Icons.arrow_back_ios,
+                            size: hight * 0.015,
+                            color: Colors.indigo[900],
+                          ),
+                          borderRadius: 10.0,
+                        ),
+                        ElevatedButtonWidget(
+                          onClick: () async {
+                            await _adController.step1();
+                          },
+                          buttonName: 'Next',
+                          bgColor: Colors.indigo[900],
+                          textColor: Colors.white,
+                          height: hight * 0.05,
+                          minWidth: width * 0.60,
+                          textSize: hight * 0.02,
+                          trailingIcon: Icon(
+                            Icons.arrow_forward_ios,
+                            size: hight * 0.015,
+                          ),
+                          borderRadius: 10.0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -341,23 +484,230 @@ class _PostAdState extends StateMVC<PostAd> {
             top: hight * 0.05,
           ),
           width: width * 1,
+          child: Container(
+            height: hight * 1,
+            width: width,
+            padding: EdgeInsets.only(top: hight * 0.03),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: width * 0.05,
+                  ),
+                  height: hight * 0.1,
+                  width: width * 0.8,
+                  child: Center(
+                    child: steps(2, width),
+                  ),
+                ),
+                Container(
+                  height: hight * 0.7,
+                  width: width * 0.87,
+                  child: ListView(
+                    children: [
+                      Container(
+                          height: hight * 0.15,
+                          child: SvgPicture.asset('assets/like.svg')),
+                      SizedBox(
+                        height: hight * 0.022,
+                      ),
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                          ),
+                          height: hight * 0.47,
+                          width: width * 0.8,
+                          child: Column(
+                            children: [
+                              Container(
+                                  child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        return !_adController.uploading
+                                            ? _adController.chooseImage()
+                                            : null;
+                                      },
+                                      icon: Icon(Icons.camera)),
+                                  IconButton(
+                                      onPressed: () {
+                                        _adController.pickVideo();
+                                      },
+                                      icon: Icon(Icons.video_camera_back)),
+                                  IconButton(
+                                      onPressed: () {}, icon: Icon(Icons.mic))
+                                ],
+                              )),
+                              SizedBox(
+                                height: hight * 0.022,
+                              ),
+                              _adController.serviceImages.length == 0
+                                  ? Container(
+                                      height: hight * 0.35,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                              icon: Icon(
+                                                Icons.perm_camera_mic,
+                                                size: 45,
+                                                // color: Colors.grey,
+                                              ),
+                                              onPressed: () {}),
+                                          SizedBox(
+                                            height: hight * 0.05,
+                                          ),
+                                          TextWidget(
+                                            text:
+                                                'Let us know your problem by uploading \n Image/Video/Audio',
+                                            size: width * 0.05,
+                                            align: TextAlign.center,
+                                            weight: FontWeight.w600,
+                                            // lSpace: 1,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Container(
+                                          height: hight * 0.22,
+                                          width: width * 1,
+                                          child: GridView.builder(
+                                              itemCount: _adController
+                                                      .serviceImages.length +
+                                                  1,
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisSpacing: 3.5,
+                                                      crossAxisSpacing: 3.5,
+                                                      crossAxisCount: 4),
+                                              itemBuilder: (context, index) {
+                                                return index == 0
+                                                    ? Center(
+                                                        child: IconButton(
+                                                            icon:
+                                                                Icon(Icons.add),
+                                                            onPressed: () {
+                                                              return !_adController
+                                                                      .uploading
+                                                                  ? _adController
+                                                                      .chooseImage()
+                                                                  : null;
+                                                            }),
+                                                      )
+                                                    : Stack(children: [
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              image: DecorationImage(
+                                                                  image: FileImage(
+                                                                      _adController
+                                                                              .serviceImages[
+                                                                          index -
+                                                                              1]),
+                                                                  fit: BoxFit
+                                                                      .cover)),
+                                                        ),
+                                                        Positioned(
+                                                            right: 0,
+                                                            top: 0,
+                                                            child: InkWell(
+                                                                onTap: () {
+                                                                  _adController
+                                                                      .serviceImages
+                                                                      .removeAt(
+                                                                          index -
+                                                                              1);
+
+                                                                  refresh();
+                                                                },
+                                                                child: Icon(
+                                                                  Icons.close,
+                                                                  size: width *
+                                                                      0.05,
+                                                                  color: Colors
+                                                                      .white,
+                                                                )))
+                                                      ]);
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: hight * 0.1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButtonWidget(
+                        onClick: () {
+                          _adController.sliderKey.currentState.previous();
+                        },
+                        buttonName: 'Back',
+                        bgColor: Colors.indigo[50],
+                        textColor: Colors.indigo[900],
+                        height: hight * 0.05,
+                        minWidth: width * 0.30,
+                        textSize: hight * 0.02,
+                        leadingIcon: Icon(
+                          Icons.arrow_back_ios,
+                          size: hight * 0.015,
+                          color: Colors.indigo[900],
+                        ),
+                        borderRadius: 10.0,
+                      ),
+                      ElevatedButtonWidget(
+                        onClick: () async {
+                          await _adController.step1();
+                        },
+                        buttonName: 'Next',
+                        bgColor: Colors.indigo[900],
+                        textColor: Colors.white,
+                        height: hight * 0.05,
+                        minWidth: width * 0.60,
+                        textSize: hight * 0.02,
+                        trailingIcon: Icon(
+                          Icons.arrow_forward_ios,
+                          size: hight * 0.015,
+                        ),
+                        borderRadius: 10.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget ad4(double hight, double width) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(
+            top: hight * 0.05,
+          ),
+          width: width * 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[400],
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                          offset: Offset(3, 6)),
-                      BoxShadow(
-                          color: Colors.grey[100],
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                          offset: Offset(-3, -3))
-                    ],
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30)),
                 height: hight * 0.6,
@@ -377,65 +727,8 @@ class _PostAdState extends StateMVC<PostAd> {
                           height: hight * 0.1,
                           width: width * 0.8,
                           child: Center(
-                            child: Text('Step 1/3'),
+                            child: steps(1, width),
                           ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            await _adController.pickDate(context);
-                            await _adController.picktime(context);
-                          },
-                          child: Container(
-                              padding: EdgeInsets.only(
-                                  left: width * 0.03,
-                                  right: width * 0.03,
-                                  top: width * 0.03),
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[100],
-                                  borderRadius: BorderRadius.circular(15)),
-                              height: hight * 0.12,
-                              width: width * 0.8,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Set Schedule:',
-                                        style: TextStyle(
-                                            fontSize: width * 0.05,
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: hight * 0.07,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                            'Date:  ' +
-                                                DateFormat('dd MMM yyyy')
-                                                    .format((DateTime
-                                                        .fromMillisecondsSinceEpoch(
-                                                            (_adController
-                                                                .pickedDate
-                                                                .millisecondsSinceEpoch)))),
-                                            //'Date:  ${_adController.pickedDate.millisecondsSinceEpoch}',
-                                            style: TextStyle(fontSize: 15)),
-                                        Text(
-                                            'Time:${_adController.pickedTime.format(context)}',
-                                            style: TextStyle(fontSize: 15))
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        ),
-                        Divider(
-                          thickness: 10,
-                          color: Colors.white,
                         ),
                         InkWell(
                           onTap: () {
@@ -528,6 +821,182 @@ class _PostAdState extends StateMVC<PostAd> {
   }
 
   Widget ad3(double hight, double width) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(
+            top: hight * 0.05,
+          ),
+          width: width * 1,
+          child: Container(
+            height: hight * 1,
+            width: width,
+            padding: EdgeInsets.only(top: hight * 0.03),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: width * 0.05,
+                  ),
+                  height: hight * 0.1,
+                  width: width * 0.8,
+                  child: Center(
+                    child: steps(3, width),
+                  ),
+                ),
+                Container(
+                  height: hight * 0.75,
+                  width: width * 0.87,
+                  child: ListView(
+                    children: [
+                      // Container(
+                      //     height: hight * 0.15,
+                      //     child: SvgPicture.asset('assets/like.svg')),
+                      // SizedBox(
+                      //   height: hight * 0.022,
+                      // ),
+
+                      // SizedBox(
+                      //   height: hight * 0.022,
+                      // ),
+                      TextWidget(
+                        text: 'Choose Service Location',
+                        size: width * 0.06,
+                        align: TextAlign.center,
+                        weight: FontWeight.w500,
+                      ),
+                      SizedBox(
+                        height: hight * 0.022,
+                      ),
+                      Container(
+                        height: hight * 0.3,
+                        child: Maps(),
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              blurRadius: 5,
+                              spreadRadius: 2)
+                        ]),
+                      ),
+                      SizedBox(
+                        height: hight * 0.022,
+                      ),
+
+                      Container(
+                        height: hight * 0.3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    TextWidget(
+                                        text: _adController.latitude + ","),
+                                    TextWidget(text: _adController.longitude),
+                                  ],
+                                ),
+                                TextWidget(
+                                  text: _adController.add2,
+                                  size: width * 0.04,
+                                  flow: TextOverflow.visible,
+                                  weight: FontWeight.w500,
+                                ),
+                                SizedBox(
+                                  height: hight * 0.03,
+                                ),
+                              ],
+                            ),
+                            Container(
+                              height: hight * 0.1,
+                              width: width,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButtonWidget(
+                                    buttonName: 'My Location',
+                                    bgColor: Colors.transparent,
+                                    borderSideColor: Colors.indigo[900],
+                                    textSize: width * 0.035,
+                                    borderRadius: 15.0,
+                                    onClick: () {
+                                      _adController.getCurrentLocation();
+                                      _adController.getAddressofLocation();
+                                    },
+                                    height: hight * 0.07,
+                                    minWidth: width * 0.35,
+                                  ),
+                                  ElevatedButtonWidget(
+                                    buttonName: 'Change Location',
+                                    bgColor: Colors.transparent,
+                                    borderSideColor: Colors.indigo[900],
+                                    borderRadius: 15.0,
+                                    textSize: width * 0.035,
+                                    height: hight * 0.07,
+                                    minWidth: width * 0.35,
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: hight * 0.1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButtonWidget(
+                        onClick: () {
+                          _adController.sliderKey.currentState.previous();
+                        },
+                        buttonName: 'Back',
+                        bgColor: Colors.indigo[50],
+                        textColor: Colors.indigo[900],
+                        height: hight * 0.05,
+                        minWidth: width * 0.30,
+                        textSize: hight * 0.02,
+                        leadingIcon: Icon(
+                          Icons.arrow_back_ios,
+                          size: hight * 0.015,
+                          color: Colors.indigo[900],
+                        ),
+                        borderRadius: 10.0,
+                      ),
+                      ElevatedButtonWidget(
+                        onClick: () async {
+                          await _adController.step1();
+                        },
+                        buttonName: 'Finish',
+                        bgColor: Colors.indigo[900],
+                        textColor: Colors.white,
+                        height: hight * 0.05,
+                        minWidth: width * 0.60,
+                        textSize: hight * 0.02,
+                        trailingIcon: Icon(
+                          Icons.arrow_forward_ios,
+                          size: hight * 0.015,
+                        ),
+                        borderRadius: 10.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget ad5(double hight, double width) {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.only(
@@ -598,7 +1067,7 @@ class _PostAdState extends StateMVC<PostAd> {
                               SizedBox(
                                 height: 10,
                               ),
-                              _adController.profilepic == null
+                              _adController.serviceImages == null
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -624,7 +1093,7 @@ class _PostAdState extends StateMVC<PostAd> {
                                           width: width * 1,
                                           child: GridView.builder(
                                               itemCount: _adController
-                                                      .profilepic.length +
+                                                      .serviceImages.length +
                                                   1,
                                               gridDelegate:
                                                   SliverGridDelegateWithFixedCrossAxisCount(
@@ -652,7 +1121,7 @@ class _PostAdState extends StateMVC<PostAd> {
                                                               decoration: BoxDecoration(
                                                                   image: DecorationImage(
                                                                       image: FileImage(_adController
-                                                                              .profilepic[
+                                                                              .serviceImages[
                                                                           index -
                                                                               1]),
                                                                       fit: BoxFit
@@ -672,7 +1141,7 @@ class _PostAdState extends StateMVC<PostAd> {
                                                                   onPressed:
                                                                       () async {
                                                                     _adController
-                                                                        .profilepic
+                                                                        .serviceImages
                                                                         .removeAt(
                                                                             0);
 
