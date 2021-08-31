@@ -84,6 +84,7 @@ class _RecentChatsState extends State<RecentChats> {
               child: Consumer<ChatProvider>(
                 builder: (context, data, child) {
                   List chatList = data.getChatList2();
+
                   // log(chatList[0].toString());
                   if (chatList.length < 1) {
                     return Center(
