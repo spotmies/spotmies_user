@@ -17,5 +17,7 @@ class API {
   static var report = '/api/partner/report'; //put
   static var editPersonalInfo = '/api/user/users/$uid'; //put
   static var reponse = '/api/response/user/$uid';
+  static var localHost = '192.168.0.173:4000';
   static var places = '/api/geocode/all';
+  static var userChatsList = '/api/chat/user/$uid';
 }
