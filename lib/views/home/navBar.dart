@@ -50,7 +50,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
-          color: Colors.amber,
+          // color: Colors.amber,
           width: double.infinity,
           height: double.infinity,
           child: _widgetOptions.elementAt(_selectedIndex),
@@ -72,6 +72,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
             );
           },
           backgroundColor: Colors.white,
+          
           activeIndex: _selectedIndex,
           splashColor: Colors.grey[200],
           splashSpeedInMilliseconds: 300,
@@ -83,7 +84,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
         ),
         floatingActionButton: FloatingActionButton(
           elevation: 8,
-          backgroundColor: Colors.blue[900],
+          backgroundColor: Colors.indigo[800],
           child: Icon(Icons.engineering, color: Colors.white),
           onPressed: () {
             Navigator.push(

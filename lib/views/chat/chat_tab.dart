@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies/views/chat/chatapp/chat_page.dart';
 import 'package:spotmies/views/chat/response.dart';
 
@@ -26,43 +27,47 @@ class _ChatState extends State<Chat> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Responses',
-                style: TextStyle(
-                    color: Colors.grey.shade800, fontWeight: FontWeight.bold)),
-            actions: [
-              Icon(
-                Icons.person,
-                color: Colors.grey[800],
-              )
-            ],
+            toolbarHeight: _hight * 0.09,
+            // title: Text('Responses',
+            //     style: TextStyle(
+            //         color: Colors.grey.shade800, fontWeight: FontWeight.bold)),
+            // actions: [
+            //   Icon(
+            //     Icons.person,
+            //     color: Colors.grey[800],
+            //   )
+            // ],
             backgroundColor: Colors.white,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(_hight * 0.09),
               child: Container(
-                height: _hight * 0.06,
-                padding: EdgeInsets.only(left: 0, right: 0, bottom: 5),
-                child:
-                TabBar(
+                // height: _hight * 0.08,
+                // padding: EdgeInsets.only(left: 0, right: 0, bottom: 0),
+                child: TabBar(
                     unselectedLabelColor: Colors.grey[700],
-
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorWeight: 0,
-                    indicator: BoxDecoration(
-
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.blue[900]),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorColor: Colors.indigo[900],
+                    // indicatorPadding: EdgeInsets.all(10),
+                    // indicatorWeight: 0,
+                    // indicator: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(5),
+                    //     color: Colors.indigo[50]),
                     tabs: [
                       Tab(
                         icon: Container(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.workspaces_filled),
+                                // Icon(Icons.workspaces_filled),
                                 SizedBox(
                                   width: _width * 0.02,
                                 ),
                                 Text(
-                                  'Quotes',
+                                  'Responses',
+                                  style: GoogleFonts.josefinSans(
+                                      color: Colors.indigo[900],
+                                      fontSize: _width * 0.04,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ]),
                         ),
@@ -72,12 +77,16 @@ class _ChatState extends State<Chat> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.mark_chat_read),
+                              // Icon(Icons.mark_chat_read),
                               SizedBox(
                                 width: _width * 0.02,
                               ),
                               Text(
                                 'Chat',
+                                style: GoogleFonts.josefinSans(
+                                    color: Colors.indigo[900],
+                                    fontSize: _width * 0.04,
+                                    fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),

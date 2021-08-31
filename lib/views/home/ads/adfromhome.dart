@@ -291,7 +291,7 @@ class _PostAdFromHomeState extends StateMVC<PostAdFromHome> {
                         SizedBox(
                           height: 10,
                         ),
-                        _adController.profilepic == null
+                        _adController.serviceImages == null
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -316,7 +316,7 @@ class _PostAdFromHomeState extends StateMVC<PostAdFromHome> {
                                     width: _width * 1,
                                     child: GridView.builder(
                                         itemCount:
-                                            _adController.profilepic.length + 1,
+                                            _adController.serviceImages.length + 1,
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
                                                 crossAxisCount: 5),
@@ -342,7 +342,7 @@ class _PostAdFromHomeState extends StateMVC<PostAdFromHome> {
                                                             image: DecorationImage(
                                                                 image: FileImage(
                                                                     _adController
-                                                                            .profilepic[
+                                                                            .serviceImages[
                                                                         index -
                                                                             1]),
                                                                 fit: BoxFit
@@ -362,7 +362,7 @@ class _PostAdFromHomeState extends StateMVC<PostAdFromHome> {
                                                             onPressed:
                                                                 () async {
                                                               _adController
-                                                                  .profilepic
+                                                                  .serviceImages
                                                                   .removeAt(0);
 
                                                               refresh();
