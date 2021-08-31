@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 
@@ -26,17 +27,21 @@ class ChatProvider extends ChangeNotifier {
     var sender = jsonDecode(value['object']);
     sender = sender['sender'];
     log("$msgId $currentMsgId $sender");
-    List<dynamic> allChats = chatList;
+    var allChats = chatList;
     for (int i = 0; i < allChats.length; i++) {
       if (allChats[i]['msgId'] == msgId) {
         allChats[i]['msgs'].add(value['object']);
+        allChats[i]['lastModified'] =
+            int.parse(DateTime.now().millisecondsSinceEpoch.toString());
         if (sender == "user") {
           allChats[i]['uState'] = 0;
         }
         if (msgId != currentMsgId) {
           allChats[i]['uCount'] = allChats[i]['uCount'] + 1;
         }
-
+        allChats.sort((a, b) {
+          return b['lastModified'].compareTo(a['lastModified']);
+        });
         chatList = allChats;
         break;
       }
