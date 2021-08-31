@@ -87,6 +87,29 @@ class _PersonalChatState extends State<PersonalChat> {
     // scrollToBottom();
   }
 
+  dateCompare(msg1, msg2) {
+    var time1 = msg1;
+    var time2 = msg2;
+    if (time1.runtimeType != int) time1 = int.parse(time1);
+    if (time2.runtimeType != int) time2 = int.parse(time2);
+    var ct =
+        DateFormat('dd').format(DateTime.fromMillisecondsSinceEpoch(time1));
+    var pt =
+        DateFormat('dd').format(DateTime.fromMillisecondsSinceEpoch(time2));
+    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
+    var daypast =
+        DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(time1));
+    if (ct != pt) {
+      return (daypast == daynow
+          ? 'Today'
+          : (DateFormat('dd MMM yyyy')
+              .format(DateTime.fromMillisecondsSinceEpoch(time1))));
+    } else {
+      return "false";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
@@ -114,6 +137,8 @@ class _PersonalChatState extends State<PersonalChat> {
                             ? data.getMsgCount()
                             : messages.length,
                         itemBuilder: (BuildContext context, int index) {
+                          Map rawMsgDataprev = jsonDecode(
+                              messages[(messages.length - 1) - (index + 1)]);
                           Map rawMsgData = jsonDecode(
                               messages[(messages.length - 1) - index]);
                           String message = rawMsgData['msg'];
@@ -125,77 +150,130 @@ class _PersonalChatState extends State<PersonalChat> {
                                 left: sender != "user" ? 10 : 0,
                                 bottom: 5,
                                 right: sender != "user" ? 0 : 10),
-                            child: Row(
-                              mainAxisAlignment: sender != "user"
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.end,
+                            child: Column(
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                Row(
+                                  mainAxisAlignment: sender != "user"
+                                      ? MainAxisAlignment.start
+                                      : MainAxisAlignment.end,
                                   children: [
-                                    Container(
-                                      constraints: BoxConstraints(
-                                          minHeight: _hight * 0.05,
-                                          minWidth: 30,
-                                          maxWidth: _width * 0.55),
-                                      decoration: BoxDecoration(
-                                          color: sender != "user"
-                                              ? Colors.white
-                                              : Colors.blueGrey[500],
-                                          border: Border.all(
-                                              color: Colors.blueGrey[500],
-                                              width: 0.3),
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15),
-                                              bottomRight: Radius.circular(
-                                                  sender != "user" ? 15 : 0),
-                                              bottomLeft: Radius.circular(
-                                                  sender == "user" ? 15 : 0))),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 10, top: 10, right: 10),
-                                              alignment: Alignment.centerLeft,
-                                              child: type == "text"
-                                                  ? TextWid(
-                                                      text:
-                                                          toBeginningOfSentenceCase(
-                                                              message),
-                                                      maxlines: 200,
-                                                      lSpace: 1.5,
-                                                      color: sender == "user"
-                                                          ? Colors.white
-                                                          : Colors.grey[900],
-                                                    )
-                                                  : type != "audio"
-                                                      ? Image.network(message)
-                                                      : type != "video"
-                                                          ? Text('audio')
-                                                          : Text('video')),
-                                          Container(
-                                            padding: EdgeInsets.only(
-                                                right: 10, top: 5),
-                                            alignment: Alignment.centerRight,
-                                            child: TextWid(
-                                              text: getTime(rawMsgData['time']),
-                                              size: _width * 0.03,
-                                              color: sender == "user"
-                                                  ? Colors.grey[50]
-                                                  : Colors.grey[500],
-                                              weight: FontWeight.w600,
-                                            ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          constraints: BoxConstraints(
+                                              minHeight: _hight * 0.05,
+                                              minWidth: 30,
+                                              maxWidth: _width * 0.50),
+                                          decoration: BoxDecoration(
+                                              color: sender != "user"
+                                                  ? Colors.white
+                                                  : Colors.blueGrey[500],
+                                              border: Border.all(
+                                                  color: Colors.blueGrey[500],
+                                                  width: 0.3),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(15),
+                                                  topRight: Radius.circular(15),
+                                                  bottomRight: Radius.circular(
+                                                      sender != "user"
+                                                          ? 15
+                                                          : 0),
+                                                  bottomLeft: Radius.circular(
+                                                      sender == "user"
+                                                          ? 15
+                                                          : 0))),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 10,
+                                                      top: 10,
+                                                      right: 10),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: type == "text"
+                                                      ? TextWid(
+                                                          text:
+                                                              toBeginningOfSentenceCase(
+                                                                  message),
+                                                          maxlines: 200,
+                                                          lSpace: 1.5,
+                                                          color: sender ==
+                                                                  "user"
+                                                              ? Colors.white
+                                                              : Colors
+                                                                  .grey[900],
+                                                        )
+                                                      : type != "audio"
+                                                          ? Image.network(
+                                                              message)
+                                                          : type != "video"
+                                                              ? Text('audio')
+                                                              : Text('video')),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 10, top: 5),
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: TextWid(
+                                                  text: getTime(
+                                                      rawMsgData['time']),
+                                                  size: _width * 0.03,
+                                                  color: sender == "user"
+                                                      ? Colors.grey[50]
+                                                      : Colors.grey[500],
+                                                  weight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        //
+
+                                        Visibility(
+                                          visible:
+                                              index == 0 && sender == "user",
+                                          child: readReciept(
+                                              _width, targetChat['uState']),
+                                        )
+                                      ],
                                     ),
-                                    Visibility(
-                                      visible: index == 0 && sender == "user",
-                                      child: readReciept(
-                                          _width, targetChat['uState']),
-                                    )
                                   ],
+                                ),
+                                Visibility(
+                                  visible: dateCompare(rawMsgData['time'],
+                                          rawMsgDataprev['time']) !=
+                                      "false",
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(top: 30, bottom: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey[900],
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          padding: EdgeInsets.only(
+                                              right: 20,
+                                              left: 20,
+                                              top: 7,
+                                              bottom: 7),
+                                          alignment: Alignment.center,
+                                          child: TextWid(
+                                            text: dateCompare(
+                                                rawMsgData['time'],
+                                                rawMsgDataprev['time']),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
