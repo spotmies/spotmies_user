@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies/views/chat/chatapp/chat_list.dart';
 import 'package:spotmies/views/chat/chatapp/chat_page.dart';
 import 'package:spotmies/views/chat/response.dart';
 
@@ -14,7 +15,7 @@ class _ChatState extends State<Chat> {
       child: Responsee(),
     ),
     Center(
-      child: ChatHome(),
+      child: ChatList(),
     ),
   ];
   @override

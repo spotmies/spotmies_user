@@ -1,10 +1,18 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
+import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
 import 'package:spotmies/views/posts/posts.dart';
 import 'package:spotmies/views/profile/profile.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() => runApp(GoogleNavBar());
 
@@ -14,8 +22,15 @@ class GoogleNavBar extends StatefulWidget {
 }
 
 class _GoogleNavBarState extends State<GoogleNavBar> {
+  ChatProvider chatProvider;
   int _selectedIndex = 0;
 
+  List icons = [
+    Icons.home,
+    Icons.chat,
+    Icons.home_repair_service,
+    Icons.person
+  ];
   static List<Widget> _widgetOptions = <Widget>[
     Center(
       child: Home(),
@@ -37,12 +52,88 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     });
   }
 
-  List icons = [
-    Icons.home,
-    Icons.chat,
-    Icons.home_repair_service,
-    Icons.person
-  ];
+  getChatList() async {
+    var chatList = await getChatListFromDb();
+    // log('chatlist $chatList ');
+    chatProvider.setChatList(chatList);
+  }
+
+  StreamController _chatResponse;
+
+  Stream stream;
+
+  IO.Socket socket;
+
+  void socketResponse() {
+    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+      "transports": ["websocket", "polling", "flashsocket"],
+      "autoConnect": false,
+    });
+    socket.onConnect((data) {
+      print("Connected");
+      socket.on("message", (msg) {
+        print(msg);
+      });
+    });
+    socket.connect();
+    socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+    socket.on('recieveNewMessage', (socket) {
+      _chatResponse.add(socket);
+    });
+    socket.on("chatReadReceipt", (data) {
+      chatProvider.chatReadReceipt(data['object']['msgId']);
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    getChatList();
+
+    _chatResponse = StreamController();
+
+    stream = _chatResponse.stream.asBroadcastStream();
+
+    socketResponse();
+    stream.listen((event) {
+      chatProvider.addnewMessage(event);
+    });
+
+    chatProvider.addListener(() {
+      log("event");
+      var newMessageObject = chatProvider.newMessagetemp();
+      if (chatProvider.getReadyToSend() == false) {
+        log(chatProvider.getReadyToSend().toString());
+        return;
+      }
+
+      if (newMessageObject.length > 0) {
+        log("sending");
+        chatProvider.setReadyToSend(false);
+        for (int i = 0; i < newMessageObject.length; i++) {
+          var item = newMessageObject[i];
+
+          log("new msg $item");
+          socket.emitWithAck('sendNewMessageCallback', item,
+              ack: (var callback) {
+            if (callback == 'success') {
+              print('working Fine');
+              if (i == newMessageObject.length - 1) {
+                log("clear msg queue");
+                var msgId = item['target']['msgId'];
+                chatProvider.clearMessageQueue(msgId);
+              }
+              // chatProvider.addnewMessage(item);
+            } else {
+              log('notSuccess');
+            }
+          });
+        }
+        log("loop end");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +171,6 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
             );
           },
           backgroundColor: Colors.white,
-          
           activeIndex: _selectedIndex,
           splashColor: Colors.grey[200],
           splashSpeedInMilliseconds: 300,

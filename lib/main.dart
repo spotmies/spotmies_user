@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
+import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/providers/mapsProvider.dart';
@@ -21,6 +22,7 @@ void main() async {
       ChangeNotifierProvider<TimeProvider>(create: (context) => TimeProvider()),
       ChangeNotifierProvider<UserDetailsProvider>(
           create: (context) => UserDetailsProvider()),
+      ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider()),
       ChangeNotifierProvider<GetOrdersProvider>(
           create: (context) => GetOrdersProvider()),
       ChangeNotifierProvider<OrderOverViewProvider>(
