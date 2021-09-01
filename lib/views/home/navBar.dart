@@ -63,10 +63,18 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  icons[index],
-                  size: 24,
-                  color: color,
+                Stack(
+                  children: [
+                    Icon(
+                      icons[index],
+                      size: 24,
+                      color: color,
+                    ),
+                   if(index==1) Positioned(
+                      right: 0,
+                      top: 0,
+                      child: CircleAvatar(radius: 4,backgroundColor: Colors.greenAccent,))
+                  ],
                 ),
               ],
             );

@@ -59,8 +59,8 @@ class _PostAdState extends StateMVC<PostAd> {
           body: SafeArea(
               child: Column(children: [
             PageSlider(key: _adController.sliderKey, pages: [
-              Container(height: _hight * 1.08, child: ad2(_hight, _width)),
               Container(height: _hight * 1.08, child: ad1(_hight, _width)),
+              Container(height: _hight * 1.08, child: ad2(_hight, _width)),
               Container(height: _hight * 1.08, child: ad3(_hight, _width)),
             ]),
           ]))
@@ -146,7 +146,7 @@ class _PostAdState extends StateMVC<PostAd> {
     );
   }
 
-  Widget ad2(double hight, double width) {
+  Widget ad1(double hight, double width) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -476,7 +476,7 @@ class _PostAdState extends StateMVC<PostAd> {
     );
   }
 
-  Widget ad1(double hight, double width) {
+  Widget ad2(double hight, double width) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -695,130 +695,7 @@ class _PostAdState extends StateMVC<PostAd> {
     );
   }
 
-  Widget ad4(double hight, double width) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(
-            top: hight * 0.05,
-          ),
-          width: width * 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30)),
-                height: hight * 0.6,
-                width: width * 0.9,
-                padding: EdgeInsets.only(top: hight * 0.03),
-                child: ListView(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(
-                            bottom: width * 0.05,
-                          ),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)),
-                          height: hight * 0.1,
-                          width: width * 0.8,
-                          child: Center(
-                            child: steps(1, width),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            _adController.getCurrentLocation();
-                            _adController.getAddressofLocation();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.only(
-                                left: width * 0.03,
-                                right: width * 0.03,
-                                top: width * 0.03),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(15)),
-                            height: hight * 0.25,
-                            width: width * 0.8,
-                            child: Container(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Location:',
-                                        style: TextStyle(
-                                            fontSize: width * 0.05,
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(_adController.latitude),
-                                          Text(_adController.longitude),
-                                        ],
-                                      ),
-                                      Text(
-                                        _adController.add2,
-                                      ),
-                                      // SizedBox(height: hight * 0.015),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          _adController.getCurrentLocation();
-                                          _adController.getAddressofLocation();
-                                        },
-                                        icon: Icon(
-                                          Icons.gps_fixed,
-                                          color: Colors.blue[900],
-                                        ),
-                                        label: Text(
-                                          'Get Location',
-                                          style: TextStyle(
-                                              color: Colors.blue[900]),
-                                        ),
-                                        style: ButtonStyle(
-                                          elevation:
-                                              MaterialStateProperty.all(0),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  Colors.grey[100]),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  
 
   Widget ad3(double hight, double width) {
     return Scaffold(
@@ -994,180 +871,306 @@ class _PostAdState extends StateMVC<PostAd> {
         ),
       ),
     );
-  }
+  }}
 
-  Widget ad5(double hight, double width) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(
-          top: hight * 0.05,
-        ),
-        width: width * 1,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                    color: Colors.grey[400],
-                    blurRadius: 8,
-                    spreadRadius: 2,
-                    offset: Offset(3, 6)),
-                BoxShadow(
-                    color: Colors.grey[100],
-                    blurRadius: 8,
-                    spreadRadius: 2,
-                    offset: Offset(-3, -3))
-              ], color: Colors.white, borderRadius: BorderRadius.circular(30)),
-              height: hight * 0.6,
-              width: width * 0.9,
-              padding: EdgeInsets.only(top: hight * 0.03),
-              child: ListView(
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(
-                          bottom: width * 0.05,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15)),
-                        height: hight * 0.08,
-                        width: width * 0.8,
-                        child: Center(
-                          child: Text('Step 3/3'),
-                        ),
-                      ),
-                      Center(
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              left: width * 0.03,
-                              right: width * 0.03,
-                              top: width * 0.03),
-                          decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(15)),
-                          height: hight * 0.47,
-                          width: width * 0.8,
-                          child: Column(
-                            children: [
-                              Container(
-                                  child: Row(
-                                children: [
-                                  Text(
-                                    'Upload images/Video/Voice:',
-                                    style: TextStyle(
-                                        fontSize: width * 0.05,
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              )),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              _adController.serviceImages == null
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        IconButton(
-                                            icon: Icon(
-                                              Icons.cloud_upload_outlined,
-                                              size: 45,
-                                              color: Colors.grey,
-                                            ),
-                                            onPressed: () {}),
-                                        SizedBox(
-                                          height: 7,
-                                        ),
-                                        Text(
-                                            'Let us know your problem by uploading image')
-                                      ],
-                                    )
-                                  : Column(
-                                      children: [
-                                        Container(
-                                          height: hight * 0.22,
-                                          width: width * 1,
-                                          child: GridView.builder(
-                                              itemCount: _adController
-                                                      .serviceImages.length +
-                                                  1,
-                                              gridDelegate:
-                                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 5),
-                                              itemBuilder: (context, index) {
-                                                return index == 0
-                                                    ? Center(
-                                                        child: IconButton(
-                                                            icon:
-                                                                Icon(Icons.add),
-                                                            onPressed: () =>
-                                                                !_adController
-                                                                        .uploading
-                                                                    ? _adController
-                                                                        .chooseImage()
-                                                                    : null),
-                                                      )
-                                                    : Stack(
-                                                        alignment:
-                                                            Alignment.topRight,
-                                                        children: [
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .all(6),
-                                                              decoration: BoxDecoration(
-                                                                  image: DecorationImage(
-                                                                      image: FileImage(_adController
-                                                                              .serviceImages[
-                                                                          index -
-                                                                              1]),
-                                                                      fit: BoxFit
-                                                                          .cover)),
-                                                            ),
-                                                            Positioned(
-                                                              left: 37.0,
-                                                              bottom: 37.0,
-                                                              child: IconButton(
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .remove_circle,
-                                                                    color: Colors
-                                                                            .redAccent[
-                                                                        200],
-                                                                  ),
-                                                                  onPressed:
-                                                                      () async {
-                                                                    _adController
-                                                                        .serviceImages
-                                                                        .removeAt(
-                                                                            0);
 
-                                                                    refresh();
-                                                                  }),
-                                                            ),
-                                                          ]);
-                                              }),
-                                        ),
-                                      ],
-                                    ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   Widget ad4(double hight, double width) {
+//     return Scaffold(
+//       body: SingleChildScrollView(
+//         child: Container(
+//           padding: EdgeInsets.only(
+//             top: hight * 0.05,
+//           ),
+//           width: width * 1,
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.start,
+//             children: [
+//               Container(
+//                 decoration: BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.circular(30)),
+//                 height: hight * 0.6,
+//                 width: width * 0.9,
+//                 padding: EdgeInsets.only(top: hight * 0.03),
+//                 child: ListView(
+//                   children: [
+//                     Column(
+//                       children: [
+//                         Container(
+//                           padding: EdgeInsets.only(
+//                             bottom: width * 0.05,
+//                           ),
+//                           decoration: BoxDecoration(
+//                               color: Colors.white,
+//                               borderRadius: BorderRadius.circular(15)),
+//                           height: hight * 0.1,
+//                           width: width * 0.8,
+//                           child: Center(
+//                             child: steps(1, width),
+//                           ),
+//                         ),
+//                         InkWell(
+//                           onTap: () {
+//                             _adController.getCurrentLocation();
+//                             _adController.getAddressofLocation();
+//                           },
+//                           child: Container(
+//                             padding: EdgeInsets.only(
+//                                 left: width * 0.03,
+//                                 right: width * 0.03,
+//                                 top: width * 0.03),
+//                             decoration: BoxDecoration(
+//                                 color: Colors.grey[100],
+//                                 borderRadius: BorderRadius.circular(15)),
+//                             height: hight * 0.25,
+//                             width: width * 0.8,
+//                             child: Container(
+//                               child: Column(
+//                                 mainAxisAlignment:
+//                                     MainAxisAlignment.spaceBetween,
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   Column(
+//                                     mainAxisAlignment:
+//                                         MainAxisAlignment.spaceEvenly,
+//                                     crossAxisAlignment:
+//                                         CrossAxisAlignment.start,
+//                                     children: [
+//                                       Text(
+//                                         'Location:',
+//                                         style: TextStyle(
+//                                             fontSize: width * 0.05,
+//                                             color: Colors.grey[700],
+//                                             fontWeight: FontWeight.w500),
+//                                       ),
+//                                       Row(
+//                                         children: [
+//                                           Text(_adController.latitude),
+//                                           Text(_adController.longitude),
+//                                         ],
+//                                       ),
+//                                       Text(
+//                                         _adController.add2,
+//                                       ),
+//                                       // SizedBox(height: hight * 0.015),
+//                                     ],
+//                                   ),
+//                                   Row(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       ElevatedButton.icon(
+//                                         onPressed: () {
+//                                           _adController.getCurrentLocation();
+//                                           _adController.getAddressofLocation();
+//                                         },
+//                                         icon: Icon(
+//                                           Icons.gps_fixed,
+//                                           color: Colors.blue[900],
+//                                         ),
+//                                         label: Text(
+//                                           'Get Location',
+//                                           style: TextStyle(
+//                                               color: Colors.blue[900]),
+//                                         ),
+//                                         style: ButtonStyle(
+//                                           elevation:
+//                                               MaterialStateProperty.all(0),
+//                                           backgroundColor:
+//                                               MaterialStateProperty.all(
+//                                                   Colors.grey[100]),
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   )
+//                                 ],
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     )
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget ad5(double hight, double width) {
+//     return SingleChildScrollView(
+//       child: Container(
+//         padding: EdgeInsets.only(
+//           top: hight * 0.05,
+//         ),
+//         width: width * 1,
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//             Container(
+//               decoration: BoxDecoration(boxShadow: [
+//                 BoxShadow(
+//                     color: Colors.grey[400],
+//                     blurRadius: 8,
+//                     spreadRadius: 2,
+//                     offset: Offset(3, 6)),
+//                 BoxShadow(
+//                     color: Colors.grey[100],
+//                     blurRadius: 8,
+//                     spreadRadius: 2,
+//                     offset: Offset(-3, -3))
+//               ], color: Colors.white, borderRadius: BorderRadius.circular(30)),
+//               height: hight * 0.6,
+//               width: width * 0.9,
+//               padding: EdgeInsets.only(top: hight * 0.03),
+//               child: ListView(
+//                 children: [
+//                   Column(
+//                     children: [
+//                       Container(
+//                         padding: EdgeInsets.only(
+//                           bottom: width * 0.05,
+//                         ),
+//                         decoration: BoxDecoration(
+//                             color: Colors.white,
+//                             borderRadius: BorderRadius.circular(15)),
+//                         height: hight * 0.08,
+//                         width: width * 0.8,
+//                         child: Center(
+//                           child: Text('Step 3/3'),
+//                         ),
+//                       ),
+//                       Center(
+//                         child: Container(
+//                           padding: EdgeInsets.only(
+//                               left: width * 0.03,
+//                               right: width * 0.03,
+//                               top: width * 0.03),
+//                           decoration: BoxDecoration(
+//                               color: Colors.grey[100],
+//                               borderRadius: BorderRadius.circular(15)),
+//                           height: hight * 0.47,
+//                           width: width * 0.8,
+//                           child: Column(
+//                             children: [
+//                               Container(
+//                                   child: Row(
+//                                 children: [
+//                                   Text(
+//                                     'Upload images/Video/Voice:',
+//                                     style: TextStyle(
+//                                         fontSize: width * 0.05,
+//                                         color: Colors.grey[700],
+//                                         fontWeight: FontWeight.w500),
+//                                   ),
+//                                 ],
+//                               )),
+//                               SizedBox(
+//                                 height: 10,
+//                               ),
+//                               _adController.serviceImages == null
+//                                   ? Column(
+//                                       mainAxisAlignment:
+//                                           MainAxisAlignment.center,
+//                                       children: [
+//                                         IconButton(
+//                                             icon: Icon(
+//                                               Icons.cloud_upload_outlined,
+//                                               size: 45,
+//                                               color: Colors.grey,
+//                                             ),
+//                                             onPressed: () {}),
+//                                         SizedBox(
+//                                           height: 7,
+//                                         ),
+//                                         Text(
+//                                             'Let us know your problem by uploading image')
+//                                       ],
+//                                     )
+//                                   : Column(
+//                                       children: [
+//                                         Container(
+//                                           height: hight * 0.22,
+//                                           width: width * 1,
+//                                           child: GridView.builder(
+//                                               itemCount: _adController
+//                                                       .serviceImages.length +
+//                                                   1,
+//                                               gridDelegate:
+//                                                   SliverGridDelegateWithFixedCrossAxisCount(
+//                                                       crossAxisCount: 5),
+//                                               itemBuilder: (context, index) {
+//                                                 return index == 0
+//                                                     ? Center(
+//                                                         child: IconButton(
+//                                                             icon:
+//                                                                 Icon(Icons.add),
+//                                                             onPressed: () =>
+//                                                                 !_adController
+//                                                                         .uploading
+//                                                                     ? _adController
+//                                                                         .chooseImage()
+//                                                                     : null),
+//                                                       )
+//                                                     : Stack(
+//                                                         alignment:
+//                                                             Alignment.topRight,
+//                                                         children: [
+//                                                             Container(
+//                                                               margin: EdgeInsets
+//                                                                   .all(6),
+//                                                               decoration: BoxDecoration(
+//                                                                   image: DecorationImage(
+//                                                                       image: FileImage(_adController
+//                                                                               .serviceImages[
+//                                                                           index -
+//                                                                               1]),
+//                                                                       fit: BoxFit
+//                                                                           .cover)),
+//                                                             ),
+//                                                             Positioned(
+//                                                               left: 37.0,
+//                                                               bottom: 37.0,
+//                                                               child: IconButton(
+//                                                                   icon: Icon(
+//                                                                     Icons
+//                                                                         .remove_circle,
+//                                                                     color: Colors
+//                                                                             .redAccent[
+//                                                                         200],
+//                                                                   ),
+//                                                                   onPressed:
+//                                                                       () async {
+//                                                                     _adController
+//                                                                         .serviceImages
+//                                                                         .removeAt(
+//                                                                             0);
+
+//                                                                     refresh();
+//                                                                   }),
+//                                                             ),
+//                                                           ]);
+//                                               }),
+//                                         ),
+//                                       ],
+//                                     ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   )
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 // Center(
 //         child: Container(
