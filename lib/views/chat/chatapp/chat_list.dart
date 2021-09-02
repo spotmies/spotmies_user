@@ -57,8 +57,13 @@ class _RecentChatsState extends State<RecentChats> {
     super.initState();
   }
 
-  cardOnClick(msgId, msgId2) {
+  cardOnClick(msgId, msgId2, readReceiptObj) {
     log("$msgId $msgId2");
+    if (readReceiptObj != "" &&
+        chatProvider.getChatDetailsByMsgId(msgId)['uCount'] > 0) {
+      log("readdd////////////////////");
+      chatProvider.setReadReceipt(readReceiptObj);
+    }
     chatProvider.setMsgCount(20);
     chatProvider.resetMessageCount(msgId);
     chatProvider.setMsgId(msgId2);
@@ -110,6 +115,8 @@ class _RecentChatsState extends State<RecentChats> {
                         getTime(lastMessage['time']),
                         chatList[index]['msgId'],
                         count,
+                        chatList[index]['uId'],
+                        chatList[index]['pId'],
                         callBack: cardOnClick,
                       );
                     },
@@ -132,8 +139,10 @@ class ChatListCard extends StatefulWidget {
   final String msgId;
   final int count;
   final Function callBack;
+  final String uId;
+  final String pId;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
-      this.msgId, this.count,
+      this.msgId, this.count, this.uId, this.pId,
       {this.callBack});
 
   @override
@@ -149,14 +158,21 @@ class _ChatListCardState extends State<ChatListCard> {
     final _width = MediaQuery.of(context).size.width;
     return ListTile(
         onTap: () async {
-          widget.callBack(widget.msgId, widget.msgId);
+          Map readReceiptobject = {
+            "uId": widget.uId,
+            "pId": widget.pId,
+            "msgId": widget.msgId,
+            "sender": "user",
+            "status": 3
+          };
+          widget.callBack(widget.msgId, widget.msgId, readReceiptobject);
           //navigate strore msg count value
 
           final count = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
           log("fback $count");
 
-          widget.callBack(widget.msgId, "");
+          widget.callBack(widget.msgId, "", "");
         },
         title: TextWid(
             text: widget.name,

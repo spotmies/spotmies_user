@@ -323,7 +323,8 @@ class _PersonalChatState extends State<PersonalChat> {
         case 1:
           return Icons.done;
         case 2:
-          return Icons.watch_later;
+        case 3:
+          return Icons.done_all;
 
           break;
         default:
@@ -339,7 +340,7 @@ class _PersonalChatState extends State<PersonalChat> {
           // Icons.done,
           // Icons.done_all,
           // Icons.watch_later,
-          color: Colors.grey[400],
+          color: status == 3 ? Colors.blue : Colors.grey[400],
           size: _width * 0.05,
         ));
   }

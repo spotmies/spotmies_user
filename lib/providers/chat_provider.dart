@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
   var sendMessageQueue = [];
+  List<dynamic> readReceipts = [];
   bool readyToSend = true;
   String currentMsgId = "";
   bool scrollEvent = false;
@@ -19,6 +20,10 @@ class ChatProvider extends ChangeNotifier {
   }
 
   getChatList2() => chatList;
+  getChatDetailsByMsgId(msgId) {
+    int index = chatList.indexWhere((element) => element['msgId'] == msgId);
+    return chatList[index];
+  }
 
   newMessagetemp() => sendMessageQueue;
 
@@ -35,6 +40,19 @@ class ChatProvider extends ChangeNotifier {
             int.parse(DateTime.now().millisecondsSinceEpoch.toString());
         if (sender == "user") {
           allChats[i]['uState'] = 0;
+        } else {
+          //read receipt code
+          log("read receipt provider");
+
+          //this means message recieved or read by end user
+          Map object = {
+            "uId": allChats[i]['uId'],
+            "pId": allChats[i]['pId'],
+            "msgId": allChats[i]['msgId'],
+            "sender": "user",
+            "status": currentMsgId == msgId ? 3 : 2
+          };
+          setReadReceipt(object);
         }
         if (msgId != currentMsgId) {
           allChats[i]['uCount'] = allChats[i]['uCount'] + 1;
@@ -71,8 +89,8 @@ class ChatProvider extends ChangeNotifier {
         ['uState'] = status;
   }
 
-  chatReadReceipt(msgId) {
-    readReceipt(msgId, 2);
+  chatReadReceipt(msgId, status) {
+    readReceipt(msgId, status ?? 2);
     notifyListeners();
   }
 
@@ -115,4 +133,14 @@ class ChatProvider extends ChangeNotifier {
   setReadyToSend(state) {
     readyToSend = state;
   }
+
+  setReadReceipt(payload) {
+    if (payload == "clear")
+      readReceipts.clear();
+    else
+      readReceipts.add(payload);
+    notifyListeners();
+  }
+
+  getReadReceipt() => readReceipts;
 }

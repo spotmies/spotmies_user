@@ -80,8 +80,8 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     socket.on('recieveNewMessage', (socket) {
       _chatResponse.add(socket);
     });
-    socket.on("chatReadReceipt", (data) {
-      chatProvider.chatReadReceipt(data['object']['msgId']);
+    socket.on("recieveReadReciept", (data) {
+      chatProvider.chatReadReceipt(data['msgId'], data['status']);
     });
   }
 
@@ -106,6 +106,11 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       if (chatProvider.getReadyToSend() == false) {
         log(chatProvider.getReadyToSend().toString());
         return;
+      }
+      if (chatProvider.getReadReceipt().length > 0) {
+        log("readReceipt evewnt");
+        socket.emit("sendReadReciept", chatProvider.getReadReceipt()[0]);
+        chatProvider.setReadReceipt("clear");
       }
 
       if (newMessageObject.length > 0) {
@@ -161,10 +166,14 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
                       size: 24,
                       color: color,
                     ),
-                   if(index==1) Positioned(
-                      right: 0,
-                      top: 0,
-                      child: CircleAvatar(radius: 4,backgroundColor: Colors.greenAccent,))
+                    if (index == 1)
+                      Positioned(
+                          right: 0,
+                          top: 0,
+                          child: CircleAvatar(
+                            radius: 4,
+                            backgroundColor: Colors.greenAccent,
+                          ))
                   ],
                 ),
               ],
