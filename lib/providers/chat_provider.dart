@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
-  var sendMessageQueue = [];
+  List<dynamic> sendMessageQueue = [];
   List<dynamic> readReceipts = [];
   bool readyToSend = true;
   String currentMsgId = "";
@@ -16,6 +16,7 @@ class ChatProvider extends ChangeNotifier {
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
+    confirmReceiveAllMessages();
     notifyListeners();
   }
 
@@ -66,6 +67,24 @@ class ChatProvider extends ChangeNotifier {
     }
     scrollEvent = !scrollEvent;
     notifyListeners();
+  }
+
+  confirmReceiveAllMessages() {
+    log("confirmall messages ${chatList.length}");
+    for (int i = 0; i < chatList.length; i++) {
+      if (chatList[i]['uCount'] > 0 && chatList[i]['pState'] < 2) {
+        log("confirmed");
+        Map object = {
+          "uId": chatList[i]['uId'],
+          "pId": chatList[i]['pId'],
+          "msgId": chatList[i]['msgId'],
+          "sender": "user",
+          "status": 2
+        };
+
+        readReceipts.add(object);
+      }
+    }
   }
 
   resetMessageCount(msgId) {
