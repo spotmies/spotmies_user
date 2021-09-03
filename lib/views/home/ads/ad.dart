@@ -57,13 +57,15 @@ class _PostAdState extends StateMVC<PostAd> {
           key: _adController.scaffoldkey,
           backgroundColor: Colors.white,
           body: SafeArea(
-              child: Column(children: [
-            PageSlider(key: _adController.sliderKey, pages: [
-              Container(height: _hight * 1.08, child: ad1(_hight, _width)),
-              Container(height: _hight * 1.08, child: ad2(_hight, _width)),
-              Container(height: _hight * 1.08, child: ad3(_hight, _width)),
+              child: SingleChildScrollView(
+            child: Column(children: [
+              PageSlider(key: _adController.sliderKey, pages: [
+                Container(height: _hight * 1.08, child: ad1(_hight, _width)),
+                Container(height: _hight * 1.08, child: ad2(_hight, _width)),
+                Container(height: _hight * 1.08, child: ad3(_hight, _width)),
+              ]),
             ]),
-          ]))
+          ))
           // callmethod(_adController.wid, _hight, _width),
           // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           // floatingActionButton: Container(
@@ -695,8 +697,6 @@ class _PostAdState extends StateMVC<PostAd> {
     );
   }
 
-  
-
   Widget ad3(double hight, double width) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -871,7 +871,8 @@ class _PostAdState extends StateMVC<PostAd> {
         ),
       ),
     );
-  }}
+  }
+}
 
 
 //   Widget ad4(double hight, double width) {

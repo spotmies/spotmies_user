@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
@@ -23,8 +24,7 @@ class GoogleNavBar extends StatefulWidget {
 
 class _GoogleNavBarState extends State<GoogleNavBar> {
   ChatProvider chatProvider;
-  int _selectedIndex = 0;
-
+  UniversalProvider universalProvider;
   List icons = [
     Icons.home,
     Icons.chat,
@@ -45,12 +45,6 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       child: Profile(),
     ),
   ];
-
-  setBottomBarIndex(index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   getChatList() async {
     var chatList = await getChatListFromDb();
@@ -79,6 +73,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
     socket.on('recieveNewMessage', (socket) {
       _chatResponse.add(socket);
+      universalProvider.setChatBadge();
     });
     socket.on("recieveReadReciept", (data) {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
@@ -89,6 +84,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
   initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    universalProvider = Provider.of<UniversalProvider>(context, listen: false);
     getChatList();
 
     _chatResponse = StreamController();
@@ -142,63 +138,72 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    log("redering nav bars");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(
-          // color: Colors.amber,
-          width: double.infinity,
-          height: double.infinity,
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-          itemCount: icons.length,
-          tabBuilder: (int index, bool isActive) {
-            final color = isActive ? Colors.grey[800] : Colors.grey;
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  children: [
-                    Icon(
-                      icons[index],
-                      size: 24,
-                      color: color,
-                    ),
-                    if (index == 1)
-                      Positioned(
-                          right: 0,
-                          top: 0,
-                          child: CircleAvatar(
-                            radius: 4,
-                            backgroundColor: Colors.greenAccent,
-                          ))
-                  ],
-                ),
-              ],
-            );
-          },
-          backgroundColor: Colors.white,
-          activeIndex: _selectedIndex,
-          splashColor: Colors.grey[200],
-          splashSpeedInMilliseconds: 300,
-          notchSmoothness: NotchSmoothness.softEdge,
-          gapLocation: GapLocation.center,
-          leftCornerRadius: 32,
-          rightCornerRadius: 32,
-          onTap: (index) => setState(() => _selectedIndex = index),
-        ),
-        floatingActionButton: FloatingActionButton(
-          elevation: 8,
-          backgroundColor: Colors.indigo[800],
-          child: Icon(Icons.engineering, color: Colors.white),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PostAd()));
-          },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      home: Consumer<UniversalProvider>(
+        builder: (context, data, child) {
+          return Scaffold(
+            body: Container(
+              // color: Colors.amber,
+              width: double.infinity,
+              height: double.infinity,
+              child: _widgetOptions.elementAt(data.getCurrentPage),
+            ),
+            bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+                itemCount: icons.length,
+                tabBuilder: (int index, bool isActive) {
+                  final color = isActive ? Colors.grey[800] : Colors.grey;
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Stack(
+                        children: [
+                          Icon(
+                            icons[index],
+                            size: 24,
+                            color: color,
+                          ),
+                          if (index == 1)
+                            Positioned(
+                                right: 0,
+                                top: 0,
+                                child: CircleAvatar(
+                                  radius: 5,
+                                  backgroundColor: data.getChatBadge
+                                      ? Colors.indigo[800]
+                                      : Colors.transparent,
+                                ))
+                        ],
+                      ),
+                    ],
+                  );
+                },
+                backgroundColor: Colors.white,
+                activeIndex: data.getCurrentPage,
+                splashColor: Colors.grey[200],
+                splashSpeedInMilliseconds: 300,
+                notchSmoothness: NotchSmoothness.softEdge,
+                gapLocation: GapLocation.center,
+                leftCornerRadius: 32,
+                rightCornerRadius: 32,
+                onTap: (index) {
+                  data.setCurrentPage(index);
+                }),
+            floatingActionButton: FloatingActionButton(
+              elevation: 8,
+              backgroundColor: Colors.indigo[800],
+              child: Icon(Icons.engineering, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => PostAd()));
+              },
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+          );
+        },
       ),
     );
   }
