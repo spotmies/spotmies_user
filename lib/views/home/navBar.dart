@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
+import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/posts/posts.dart';
 import 'package:spotmies/views/profile/profile.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
@@ -72,6 +74,20 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
     socket.on('recieveNewMessage', (socket) {
+      var typeCheck = socket['target']['type'];
+      if (typeCheck == "call") {
+        log("======== incoming call ===========");
+        var newTarget = socket['target'];
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => MyCalling(
+                uId: newTarget['uId'],
+                pId: newTarget['pId'],
+                msgId: newTarget['msgId'],
+                ordId: newTarget['ordId'],
+                isIncoming: true,
+                roomId: newTarget['roomId'])));
+      }
+
       _chatResponse.add(socket);
       universalProvider.setChatBadge();
     });

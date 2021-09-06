@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/reusable_widgets/chat_input_field.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
@@ -193,7 +194,8 @@ class _PersonalChatState extends State<PersonalChat> {
                                                       right: 10),
                                                   alignment:
                                                       Alignment.centerLeft,
-                                                  child: type == "text"
+                                                  child: type == "text" ||
+                                                          type == "call"
                                                       ? TextWid(
                                                           text:
                                                               toBeginningOfSentenceCase(
@@ -366,7 +368,16 @@ class _PersonalChatState extends State<PersonalChat> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MyCalling(
+                      msgId: widget.msgId,
+                      ordId: targetChat['ordId'],
+                      uId: FirebaseAuth.instance.currentUser.uid,
+                      pId: targetChat['pId'],
+                      isIncoming: false,
+                    )));
+          },
           icon: Icon(
             Icons.phone,
             color: Colors.grey[900],
