@@ -35,7 +35,7 @@ class _CallingUiState extends State<CallingUi> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          widget.image != "" //need to put url validator
+          Uri.parse(widget.image).isAbsolute //need to put url validator
               ? Image.network(
                   widget.image,
                   fit: BoxFit.cover,

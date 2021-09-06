@@ -31,12 +31,13 @@ class MyCalling extends StatefulWidget {
 class _MyCallingState extends State<MyCalling> {
   ChatProvider chatProvider;
   Signaling signaling = Signaling();
-  RTCVideoRenderer _localRenderer = RTCVideoRenderer();
-  RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
+  RTCVideoRenderer _localRenderer;
+  RTCVideoRenderer _remoteRenderer;
   String roomId;
   TextEditingController textEditingController = TextEditingController(text: '');
 
   Future<void> createRoomId() async {
+    await signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     roomId = await signaling.createRoom(_remoteRenderer);
     log("room is is $roomId");
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
@@ -66,19 +67,31 @@ class _MyCallingState extends State<MyCalling> {
   Future<void> handUpCall() async {
     log("===== handUp call =======");
     await signaling.hangUp(_localRenderer);
+    chatProvider.setAcceptCall(true);
     Navigator.pop(context);
   }
 
-  void joinOnRoom() {
+  Future<void> joinOnRoom() async {
+    await signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     log("joing call////");
     signaling.joinRoom(
       widget.roomId,
       _remoteRenderer,
     );
+    chatProvider.setAcceptCall(false);
+  }
+
+  bool changeScreen() {
+    if (widget.isIncoming && chatProvider.getAcceptCall) return true;
+    if (chatProvider.getAcceptCall) return false;
+    return true;
   }
 
   @override
   void initState() {
+    log("call initstate >>>>>>>>>>>>>");
+    _localRenderer = RTCVideoRenderer();
+    _remoteRenderer = RTCVideoRenderer();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     _localRenderer.initialize();
     _remoteRenderer.initialize();
@@ -87,7 +100,7 @@ class _MyCallingState extends State<MyCalling> {
       _remoteRenderer.srcObject = stream;
       setState(() {});
     });
-    signaling.openUserMedia(_localRenderer, _remoteRenderer);
+    signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     if (!widget.isIncoming) {
       createRoomId();
     }
@@ -100,17 +113,23 @@ class _MyCallingState extends State<MyCalling> {
     log("====== disporse =======");
     _localRenderer.dispose();
     _remoteRenderer.dispose();
+    chatProvider.setAcceptCall(true);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     log("=========== Render calling ==============");
-    return CallingUi(
-      isInComingScreen: widget.isIncoming,
-      onHangUp: handUpCall,
-      onAccept: joinOnRoom,
-    );
+    return Consumer<ChatProvider>(builder: (context, data, child) {
+      Map pDetails = data.getPdetailsByMsgId(widget.msgId);
+      return CallingUi(
+        isInComingScreen: changeScreen(),
+        onHangUp: handUpCall,
+        onAccept: joinOnRoom,
+        name: pDetails['name'],
+        image: pDetails['partnerPic'],
+      );
+    });
     // Scaffold(
     //   appBar: AppBar(
     //     title: Text("Welcome to Flutter Explained - WebRTC"),

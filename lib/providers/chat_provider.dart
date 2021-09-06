@@ -13,6 +13,8 @@ class ChatProvider extends ChangeNotifier {
   bool scrollEvent = false;
   int msgCount = 20;
   bool enableFoat = true;
+
+  bool acceptCalls = true;
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
@@ -85,6 +87,12 @@ class ChatProvider extends ChangeNotifier {
         readReceipts.add(object);
       }
     }
+  }
+
+  getPdetailsByMsgId(msgId) {
+    int index = chatList.indexWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    return chatList[index]['pDetails'];
   }
 
   resetMessageCount(msgId) {
@@ -162,4 +170,10 @@ class ChatProvider extends ChangeNotifier {
   }
 
   getReadReceipt() => readReceipts;
+
+  bool get getAcceptCall => acceptCalls;
+  void setAcceptCall(state) {
+    acceptCalls = state;
+    notifyListeners();
+  }
 }

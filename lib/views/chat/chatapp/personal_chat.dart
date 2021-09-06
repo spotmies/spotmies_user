@@ -393,7 +393,7 @@ class _PersonalChatState extends State<PersonalChat> {
             children: [
               ProfilePic(
                 name: partner['name'],
-                profile: partner['pic'],
+                profile: partner['partnerPic'],
                 status: false,
                 bgColor: Colors.blueGrey[600],
                 size: width * 0.045,
