@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/views/call_ui/components/rounded_button.dart';
 
 import '../constants.dart';
@@ -28,110 +30,150 @@ class CallingUi extends StatefulWidget {
 }
 
 class _CallingUiState extends State<CallingUi> {
+  ChatProvider chatProvider;
+  String screenType = '';
+  callStatus(state) {
+    switch (state) {
+      case 0:
+        return "connecting...";
+      case 1:
+        return "Calling...";
+      case 2:
+        return "Ringing...";
+      case 3:
+        return "Connected";
+      case 6:
+        return "Terminated....";
+        break;
+      default:
+        return "connecting...";
+    }
+  }
+
+  @override
+  initState() {
+    setState(() {
+      screenType = widget.isInComingScreen ? "incoming" : "outgoing";
+    });
+    super.initState();
+  }
+
+  changeScreen(screenName) {
+    setState(() {
+      screenType = screenName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Uri.parse(widget.image).isAbsolute //need to put url validator
-              ? Image.network(
-                  widget.image,
-                  fit: BoxFit.cover,
-                )
-              : Image.asset(
-                  "assets/images/full_image.png",
-                  fit: BoxFit.cover,
-                ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline3
-                        .copyWith(color: Colors.white),
-                  ),
-                  VerticalSpacing(of: 10),
-                  Text(
-                    !widget.isInComingScreen
-                        ? "Duration 12:00 ".toUpperCase()
-                        : "INCOMING CALL.....",
-                    style: TextStyle(color: Colors.white60),
-                  ),
-                  Spacer(),
-                  Visibility(
-                    visible: !widget.isInComingScreen,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RoundedButton(
-                          press: () {
-                            widget.onMic();
-                          },
-                          color: Colors.white,
-                          iconColor: Colors.black,
-                          iconSrc: "assets/icons/Icon Mic.svg",
-                        ),
-                        RoundedButton(
-                          press: () {
-                            widget.onHangUp();
-                          },
-                          color: kRedColor,
-                          iconColor: Colors.white,
-                          iconSrc: "assets/icons/call_end.svg",
-                        ),
-                        RoundedButton(
-                          press: () {
-                            widget.onSpeaker();
-                          },
-                          color: Colors.white,
-                          iconColor: Colors.black,
-                          iconSrc: "assets/icons/Icon Volume.svg",
-                        ),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                    visible: widget.isInComingScreen,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        RoundedButton(
-                          press: () {
-                            widget.onAccept();
-                          },
-                          color: Colors.green,
-                          iconColor: Colors.white,
-                          iconSrc: "assets/icons/call_accept.svg",
-                        ),
-                        RoundedButton(
-                          press: () {
-                            widget.onReject();
-                          },
-                          color: Colors.red,
-                          iconColor: Colors.white,
-                          iconSrc: "assets/icons/call_end.svg",
-                        ),
-                      ],
-                    ),
+      body: Consumer<ChatProvider>(builder: (context, data, child) {
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Uri.parse(widget.image).isAbsolute //need to put url validator
+                ? Image.network(
+                    widget.image,
+                    fit: BoxFit.cover,
                   )
-                ],
+                : Image.asset(
+                    "assets/images/full_image.png",
+                    fit: BoxFit.cover,
+                  ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.3),
               ),
             ),
-          )
-        ],
-      ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3
+                          .copyWith(color: Colors.white),
+                    ),
+                    VerticalSpacing(of: 10),
+                    Text(
+                      screenType == "outgoing"
+                          ? "Duration ${data.duration}   ${callStatus(data.getCallStatus)}"
+                              .toUpperCase()
+                          : "INCOMING CALL.....",
+                      style: TextStyle(color: Colors.white60),
+                    ),
+                    Spacer(),
+                    Visibility(
+                      visible: screenType == "outgoing",
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          RoundedButton(
+                            press: () {
+                              widget.onMic();
+                            },
+                            color: Colors.white,
+                            iconColor: Colors.black,
+                            iconSrc: "assets/icons/Icon Mic.svg",
+                          ),
+                          RoundedButton(
+                            press: () {
+                              widget.onHangUp();
+                              Navigator.pop(context);
+                            },
+                            color: kRedColor,
+                            iconColor: Colors.white,
+                            iconSrc: "assets/icons/call_end.svg",
+                          ),
+                          RoundedButton(
+                            press: () {
+                              widget.onSpeaker();
+                            },
+                            color: Colors.white,
+                            iconColor: Colors.black,
+                            iconSrc: "assets/icons/Icon Volume.svg",
+                          ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: screenType == "incoming",
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          RoundedButton(
+                            press: () {
+                              changeScreen("outgoing");
+                              widget.onAccept();
+                            },
+                            color: Colors.green,
+                            iconColor: Colors.white,
+                            iconSrc: "assets/icons/call_accept.svg",
+                          ),
+                          RoundedButton(
+                            press: () {
+                              widget.onReject();
+                              Navigator.pop(context);
+                            },
+                            color: Colors.red,
+                            iconColor: Colors.white,
+                            iconSrc: "assets/icons/call_end.svg",
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        );
+      }),
     );
   }
 }

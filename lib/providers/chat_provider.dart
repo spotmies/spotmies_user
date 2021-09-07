@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,16 @@ class ChatProvider extends ChangeNotifier {
   int msgCount = 20;
   bool enableFoat = true;
 
+  //calling variables
+  bool terminateCall = false;
   bool acceptCalls = true;
+  int callDuration = 0;
+  int callInitTimeOut = 15;
+  bool stopTimer = false;
+
+  int callStatus = 0; // 0- connecting or new connection 1-calling 2- ringing
+  //3- connected 4- rejected 5- not lifted 6- call failed or disconnected
+
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
@@ -43,6 +52,7 @@ class ChatProvider extends ChangeNotifier {
             int.parse(DateTime.now().millisecondsSinceEpoch.toString());
         if (sender == "user") {
           allChats[i]['uState'] = 0;
+          callStatus = 0;
         } else {
           //read receipt code
           log("read receipt provider");
@@ -118,6 +128,7 @@ class ChatProvider extends ChangeNotifier {
 
   chatReadReceipt(msgId, status) {
     readReceipt(msgId, status ?? 2);
+    callStatus = status == 3 ? 2 : status;
     notifyListeners();
   }
 
@@ -174,6 +185,69 @@ class ChatProvider extends ChangeNotifier {
   bool get getAcceptCall => acceptCalls;
   void setAcceptCall(state) {
     acceptCalls = state;
+    notifyListeners();
+  }
+
+  int get duration => callDuration;
+
+  void startCallDuration() {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      callDuration++;
+      notifyListeners();
+      if (callStatus != 3) {
+        // callDuration = 0;
+        timer.cancel();
+      }
+    });
+  }
+
+  void resetDuration() {
+    callDuration = 0;
+  }
+
+  int get getCallStatus => callStatus;
+
+  void setCallStatus(state) {
+    callStatus = state ?? 0;
+    notifyListeners();
+  }
+
+  void resetCallInitTimeout() {
+    callInitTimeOut = 15;
+  }
+
+  void setStopTimer() {
+    stopTimer = true;
+    notifyListeners();
+  }
+
+  void startCallTimeout() {
+    log("timer started");
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      callInitTimeOut--;
+      if (callInitTimeOut < 1) notifyListeners();
+      if (!acceptCalls || stopTimer) {
+        timer.cancel();
+        stopTimer = false;
+        log("timer stopped");
+      }
+    });
+  }
+
+  int get callTimeout => callInitTimeOut;
+
+  void resetAllCallingVariables() {
+    acceptCalls = true;
+    callDuration = 0;
+    callInitTimeOut = 15;
+    stopTimer = false;
+    callStatus = 0;
+    notifyListeners();
+  }
+
+  get getTerminateCall => terminateCall;
+  void setTerminateCall(state) {
+    terminateCall = state ?? true;
     notifyListeners();
   }
 }

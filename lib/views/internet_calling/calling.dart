@@ -34,11 +34,14 @@ class _MyCallingState extends State<MyCalling> {
   RTCVideoRenderer _localRenderer;
   RTCVideoRenderer _remoteRenderer;
   String roomId;
+  bool timerFlag = true;
+  bool callDisconnectFlag = true;
   TextEditingController textEditingController = TextEditingController(text: '');
 
   Future<void> createRoomId() async {
     await signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     roomId = await signaling.createRoom(_remoteRenderer);
+    chatProvider.setAcceptCall(false);
     log("room is is $roomId");
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     Map<String, String> msgData = {
@@ -64,11 +67,23 @@ class _MyCallingState extends State<MyCalling> {
     setState(() {});
   }
 
+  Future<void> rejectCall() async {
+    log('call rejected');
+    chatProvider.resetDuration();
+    chatProvider.setAcceptCall(true);
+    chatProvider.resetCallInitTimeout();
+    chatProvider.setStopTimer();
+    chatProvider.setTerminateCall(true);
+  }
+
   Future<void> handUpCall() async {
+    chatProvider.setCallStatus(0);
     log("===== handUp call =======");
     await signaling.hangUp(_localRenderer);
     chatProvider.setAcceptCall(true);
-    Navigator.pop(context);
+    chatProvider.resetCallInitTimeout();
+    chatProvider.resetDuration();
+    chatProvider.setTerminateCall(true);
   }
 
   Future<void> joinOnRoom() async {
@@ -79,12 +94,6 @@ class _MyCallingState extends State<MyCalling> {
       _remoteRenderer,
     );
     chatProvider.setAcceptCall(false);
-  }
-
-  bool changeScreen() {
-    if (widget.isIncoming && chatProvider.getAcceptCall) return true;
-    if (chatProvider.getAcceptCall) return false;
-    return true;
   }
 
   @override
@@ -104,6 +113,13 @@ class _MyCallingState extends State<MyCalling> {
     if (!widget.isIncoming) {
       createRoomId();
     }
+    chatProvider.addListener(() {
+      int callState = chatProvider.getCallStatus;
+      if (callState == 3 && timerFlag) {
+        timerFlag = false;
+        chatProvider.startCallDuration();
+      }
+    });
 
     super.initState();
   }
@@ -113,7 +129,7 @@ class _MyCallingState extends State<MyCalling> {
     log("====== disporse =======");
     _localRenderer.dispose();
     _remoteRenderer.dispose();
-    chatProvider.setAcceptCall(true);
+    //  chatProvider.setAcceptCall(true);
     super.dispose();
   }
 
@@ -121,99 +137,16 @@ class _MyCallingState extends State<MyCalling> {
   Widget build(BuildContext context) {
     log("=========== Render calling ==============");
     return Consumer<ChatProvider>(builder: (context, data, child) {
+      if (data.callTimeout == 0) rejectCall();
       Map pDetails = data.getPdetailsByMsgId(widget.msgId);
       return CallingUi(
-        isInComingScreen: changeScreen(),
+        isInComingScreen: widget.isIncoming,
         onHangUp: handUpCall,
         onAccept: joinOnRoom,
+        onReject: rejectCall,
         name: pDetails['name'],
         image: pDetails['partnerPic'],
       );
     });
-    // Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("Welcome to Flutter Explained - WebRTC"),
-    //   ),
-    //   body: Column(
-    //     children: [
-    //       SizedBox(height: 8),
-    //       SingleChildScrollView(
-    //         scrollDirection: Axis.horizontal,
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: [
-    //             ElevatedButton(
-    //               onPressed: () {
-    //                 signaling.openUserMedia(_localRenderer, _remoteRenderer);
-    //               },
-    //               child: Text("Open camera & microphone"),
-    //             ),
-    //             SizedBox(
-    //               width: 8,
-    //             ),
-    //             ElevatedButton(
-    //               onPressed: () async {
-    //                 roomId = await signaling.createRoom(_remoteRenderer);
-    //                 textEditingController.text = roomId;
-    //                 setState(() {});
-    //               },
-    //               child: Text("Create room"),
-    //             ),
-    //             SizedBox(
-    //               width: 8,
-    //             ),
-    //             ElevatedButton(
-    //               onPressed: () {
-    //                 // Add roomId
-    //                 signaling.joinRoom(
-    //                   textEditingController.text,
-    //                   _remoteRenderer,
-    //                 );
-    //               },
-    //               child: Text("Join room"),
-    //             ),
-    //             SizedBox(
-    //               width: 8,
-    //             ),
-    //             ElevatedButton(
-    //               onPressed: () {
-    //                 signaling.hangUp(_localRenderer);
-    //               },
-    //               child: Text("Hangup"),
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //       SizedBox(height: 8),
-    //       Expanded(
-    //         child: Padding(
-    //           padding: const EdgeInsets.all(8.0),
-    //           child: Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: [
-    //               Expanded(child: RTCVideoView(_localRenderer, mirror: true)),
-    //               Expanded(child: RTCVideoView(_remoteRenderer)),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       Padding(
-    //         padding: const EdgeInsets.all(8.0),
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: [
-    //             Text("Join the following Room: "),
-    //             Flexible(
-    //               child: TextFormField(
-    //                 controller: textEditingController,
-    //               ),
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //       SizedBox(height: 8)
-    //     ],
-    //   ),
-    // );
   }
 }

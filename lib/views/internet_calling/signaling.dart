@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/chat_provider.dart';
 
 typedef void StreamStateCallback(MediaStream stream);
 
@@ -26,6 +28,7 @@ class Signaling {
   String currentRoomText;
   StreamStateCallback onAddRemoteStream;
   BuildContext context;
+  ChatProvider chatProvider;
 
   Future<String> createRoom(RTCVideoRenderer remoteRenderer) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -37,7 +40,7 @@ class Signaling {
 
     registerPeerConnectionListeners();
     log("local strm $localStream");
-    localStream.getTracks().forEach((track) {
+    localStream?.getTracks()?.forEach((track) {
       peerConnection?.addTrack(track, localStream);
     });
 
@@ -187,6 +190,8 @@ class Signaling {
   Future<void> openUserMedia(RTCVideoRenderer localVideo,
       RTCVideoRenderer remoteVideo, BuildContext contextt) async {
     context = contextt;
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+
     var stream = await navigator.mediaDevices.getUserMedia({'audio': true});
 
     localVideo.srcObject = stream;
@@ -230,9 +235,16 @@ class Signaling {
     peerConnection?.onConnectionState = (RTCPeerConnectionState state) {
       log('Connection state change: $state');
       if (state == RTCPeerConnectionState.RTCPeerConnectionStateDisconnected ||
-          state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {
+          state == RTCPeerConnectionState.RTCPeerConnectionStateFailed ||
+          state == RTCPeerConnectionState.RTCPeerConnectionStateClosed) {
         log("connection diconted");
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        if (chatProvider.getCallStatus != 0) chatProvider.setCallStatus(6);
+      }
+      if (state == RTCPeerConnectionState.RTCPeerConnectionStateConnected) {
+        //call connected
+        log("=============     call connected       ================");
+        chatProvider.setCallStatus(3);
       }
     };
 
