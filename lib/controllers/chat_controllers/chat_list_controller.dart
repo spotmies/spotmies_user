@@ -9,3 +9,11 @@ getChatListFromDb() async {
   chat = jsonDecode(response);
   return chat;
 }
+
+getResponseListFromDB() async {
+  var response = await Server().getMethod(API.reponse).catchError((e) {
+    print(e);
+  });
+  var responseDecode = jsonDecode(response);
+  return responseDecode;
+}

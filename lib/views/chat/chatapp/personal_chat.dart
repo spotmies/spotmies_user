@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -111,6 +112,21 @@ class _PersonalChatState extends State<PersonalChat> {
     }
   }
 
+  getDate(stamp) {
+    int timeStamp = stamp.runtimeType == String ? int.parse(stamp) : stamp;
+    log(timeStamp.runtimeType.toString());
+    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
+        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
+    var daypast = DateFormat('EEE')
+        .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
+    if (daypast == daynow) {
+      return "Today";
+    } else {
+      return DateFormat('dd MMM yyyy')
+          .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
@@ -122,6 +138,12 @@ class _PersonalChatState extends State<PersonalChat> {
         appBar: _buildAppBar(context, _hight, _width),
         body: Container(
           child: Column(children: [
+            // Container(
+            //     alignment: Alignment.center,
+            //     child: TextWid(
+            //       text: "New chat created",
+            //       size: 24,
+            //     )),
             Expanded(
               child: Container(
                 child: Consumer<ChatProvider>(
@@ -138,10 +160,18 @@ class _PersonalChatState extends State<PersonalChat> {
                             ? data.getMsgCount()
                             : messages.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Map rawMsgDataprev = jsonDecode(
-                              messages[(messages.length - 1) - (index + 1)]);
                           Map rawMsgData = jsonDecode(
                               messages[(messages.length - 1) - index]);
+                          // Map rawMsgDataprev = rawMsgData;
+
+                          Map rawMsgDataprev;
+                          if (index == messages.length - 1) {
+                            rawMsgDataprev = rawMsgData;
+                          } else {
+                            rawMsgDataprev = jsonDecode(
+                                messages[(messages.length - 1) - (index + 1)]);
+                          }
+
                           String message = rawMsgData['msg'];
                           String sender = rawMsgData['sender'];
                           String type = rawMsgData['type'];
@@ -153,10 +183,48 @@ class _PersonalChatState extends State<PersonalChat> {
                                 right: sender != "user" ? 0 : 10),
                             child: Column(
                               children: [
+                                Visibility(
+                                  visible: dateCompare(rawMsgData['time'],
+                                              rawMsgDataprev['time']) !=
+                                          "false" ||
+                                      index == messages.length - 1,
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(top: 30, bottom: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey[900],
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          padding: EdgeInsets.only(
+                                              right: 20,
+                                              left: 20,
+                                              top: 7,
+                                              bottom: 7),
+                                          alignment: Alignment.center,
+                                          child: TextWid(
+                                            text: index == messages.length - 1
+                                                ? getDate(rawMsgData['time'])
+                                                : dateCompare(
+                                                    rawMsgData['time'],
+                                                    rawMsgDataprev['time']),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 Row(
-                                  mainAxisAlignment: sender != "user"
-                                      ? MainAxisAlignment.start
-                                      : MainAxisAlignment.end,
+                                  mainAxisAlignment: sender == "user"
+                                      ? MainAxisAlignment.end
+                                      : sender == "partner"
+                                          ? MainAxisAlignment.start
+                                          : MainAxisAlignment.center,
                                   children: [
                                     Column(
                                       crossAxisAlignment:
@@ -243,39 +311,6 @@ class _PersonalChatState extends State<PersonalChat> {
                                       ],
                                     ),
                                   ],
-                                ),
-                                Visibility(
-                                  visible: dateCompare(rawMsgData['time'],
-                                          rawMsgDataprev['time']) !=
-                                      "false",
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.only(top: 30, bottom: 30),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[900],
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.only(
-                                              right: 20,
-                                              left: 20,
-                                              top: 7,
-                                              bottom: 7),
-                                          alignment: Alignment.center,
-                                          child: TextWid(
-                                            text: dateCompare(
-                                                rawMsgData['time'],
-                                                rawMsgDataprev['time']),
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),

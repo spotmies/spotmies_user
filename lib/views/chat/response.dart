@@ -1,12 +1,9 @@
-import 'dart:async';
-import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
-import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'package:spotmies/providers/responses_provider.dart';
 
 class Responsee extends StatefulWidget {
   @override
@@ -15,52 +12,21 @@ class Responsee extends StatefulWidget {
 
 class _ResponseeState extends StateMVC<Responsee> {
   ResponsiveController _responsiveController;
+  ResponsesProvider responseProvider;
   _ResponseeState() : super(ResponsiveController()) {
     this._responsiveController = controller;
   }
 
-  StreamController _socketResponse;
-
-  Stream stream;
-
-  textedit() {
-    return List.from(res.reversed);
-  }
-
-  var res;
-
-  IO.Socket socket;
-
-  void socketResponse() {
-    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
-      "transports": ["websocket", "polling", "flashsocket"],
-      "autoConnect": false,
-    });
-    socket.onConnect((data) {
-      print("Connected");
-      socket.on("message", (msg) {
-        print(msg);
-      });
-    });
-    socket.connect();
-    socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
-    socket.on('newResponse', (socket) {
-      _socketResponse.add(socket);
-    });
+  void chatWithPatner(responseData) {
+    //need display circular indicator with z index
+    _responsiveController.chatWithpatner(responseData);
   }
 
   @override
   void initState() {
     super.initState();
-    var respons = Provider.of<GetResponseProvider>(context, listen: false);
-    _socketResponse = StreamController();
 
-    stream = _socketResponse.stream.asBroadcastStream();
-    respons.responseInfo(_socketResponse == null ? false : true);
-    socketResponse();
-    stream.listen((event) {
-      log(event.toString());
-    });
+    responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
   }
 
   @override
@@ -69,207 +35,177 @@ class _ResponseeState extends StateMVC<Responsee> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    refresh();
+    // refresh();
     return Scaffold(
         key: _responsiveController.scaffoldkey,
-        body: StreamBuilder<Object>(
-            stream: stream,
-            builder: (context, snapshot) {
-              if (snapshot.data != null) res.add(snapshot.data);
-              return Consumer<GetResponseProvider>(
-                  builder: (context, data, child) {
-                if (data.local == null)
-                  return Center(child: CircularProgressIndicator());
-                res = data.local;
-                var p = res[0]['pDetails'];
-                var r = textedit();
-                return Container(
-                  child: ListView.builder(
-                      itemCount: r.length,
-                      scrollDirection: Axis.vertical,
-                      padding: EdgeInsets.all(20),
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        //String msgid = document['msgid'];
-                        // o['orderState'] == null
-                        //     ? _responsiveController.shownotification()
-                        //     : print('object');
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //   builder: (context) => ChatScreen(value: msgid),
-                                // ));
-                                // CircularProgressIndicator();
-                                // FirebaseFirestore.instance
-                                //     .collection('messaging')
-                                //     .doc(document['msgid'])
-                                //     .update({
-                                //   'uname': 'name',
-                                //   'userid': FirebaseAuth.instance.currentUser.uid,
-                                //   'upic':
-                                //       'https://images.indulgexpress.com/uploads/user/imagelibrary/2020/1/25/original/MaheshBabuSourceInternet.jpg'
-                                // });
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(10),
-                                height: _hight * 0.2,
-                                width: _width * 1,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    boxShadow: kElevationToShadow[0]),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(p['partnerPic']),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+        body: Consumer<ResponsesProvider>(builder: (context, data, child) {
+          List listResponse = data.getResponsesList;
+          return Container(
+            child: ListView.builder(
+                itemCount: listResponse.length,
+                scrollDirection: Axis.vertical,
+                padding: EdgeInsets.all(20),
+                itemBuilder: (BuildContext ctxt, int index) {
+                  var responseData = listResponse[index];
+                  var ord = responseData['orderDetails'];
+                  var pDetails = responseData['pDetails'];
+
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          height: _hight * 0.2,
+                          width: _width * 1,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: kElevationToShadow[0]),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(pDetails['partnerPic']),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    pDetails['name'] == null
+                                        ? 'technician'
+                                        : pDetails['name'].toString(),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          //"",
+                                          _responsiveController.jobs
+                                                  .elementAt(ord['job'])
+                                                  .toString() +
+                                              ' | ',
+                                          style: TextStyle(fontSize: 8)),
+                                      Row(
+                                        children: [
+                                          Text("",
+                                              // (_responsiveController.avg(
+                                              //             pDetails['rate']) /
+                                              //         20)
+                                              //     .toString(),
+                                              style: TextStyle(fontSize: 8)),
+                                          Icon(
+                                            Icons.star,
+                                            size: 8,
+                                            color: Colors.amber,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: _width * 0.635,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(
-                                          //'Nani',
-                                          p['name'] == null
-                                              ? 'technician'
-                                              : p['name'].toString(),
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              decoration:
-                                                  TextDecoration.underline),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                                //"",
-                                                _responsiveController.jobs
-                                              .elementAt(r[index]['orderDetails']['job'])
-                                                
-                                                        .toString() +
-                                                    ' | ',
-                                                style: TextStyle(fontSize: 8)),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    (_responsiveController.avg(
-                                                                p['rate']) /
-                                                            20)
-                                                        .toString(),
-                                                    style:
-                                                        TextStyle(fontSize: 8)),
-                                                Icon(
-                                                  Icons.star,
-                                                  size: 8,
-                                                  color: Colors.amber,
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
                                         Container(
-                                          width: _width * 0.635,
-                                          child: Row(
+                                          width: _width * 0.3,
+                                          height: _hight * 0.05,
+                                          child: Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Container(
-                                                width: _width * 0.3,
-                                                height: _hight * 0.05,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        'Money :   ' +
-                                                            r[index]['money']
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                _width * 0.02)),
-                                                    // SizedBox(
-                                                    //   width: 60,
-                                                    // ),
-                                                    Text(
-                                                      'Away :   ' +
-                                                          r[index]['loc']
-                                                              .toString() +
-                                                          'KM',
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              _width * 0.02),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                width: _width * 0.3,
-                                                height: _hight * 0.05,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        'Time :   ' +
-                                                            r[index]['schedule']
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                _width * 0.02)),
-                                                    Text(
-                                                        'Date :   ' +
-                                                            r[index]['schedule']
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                _width * 0.02))
-                                                  ],
-                                                ),
+                                              Text(
+                                                  'Money :   ' +
+                                                      responseData['money']
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: _width * 0.02)),
+                                              // SizedBox(
+                                              //   width: 60,
+                                              // ),
+                                              Text(
+                                                'Away :   ' +
+                                                    responseData['loc']
+                                                        .toString() +
+                                                    'KM',
+                                                style: TextStyle(
+                                                    fontSize: _width * 0.02),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
                                         Container(
-                                          width: _width * 0.63,
-                                          alignment: Alignment.center,
-                                          child: Text('Tap to chat',
-                                              style: TextStyle(
-                                                color: Colors.grey[300],
-                                              )),
+                                          width: _width * 0.3,
+                                          height: _hight * 0.05,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  'Time :   ' +
+                                                      responseData['schedule']
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: _width * 0.02)),
+                                              Text(
+                                                  'Date :   ' +
+                                                      responseData['schedule']
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      fontSize: _width * 0.02))
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      chatWithPatner(responseData);
+                                    },
+                                    child: Container(
+                                      width: _width * 0.63,
+                                      alignment: Alignment.center,
+                                      child: Text('Tap to chat',
+                                          style: TextStyle(
+                                            color: Colors.grey[300],
+                                          )),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        );
-                      }),
-                );
-              });
-            }));
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  );
+                }),
+          );
+        }));
   }
 }
 

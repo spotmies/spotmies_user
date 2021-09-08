@@ -37,6 +37,11 @@ class ChatProvider extends ChangeNotifier {
     return chatList[index];
   }
 
+  void addNewchat(chat) {
+    chatList.add(chat);
+    notifyListeners();
+  }
+
   newMessagetemp() => sendMessageQueue;
 
   addnewMessage(value) {

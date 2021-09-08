@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
 import 'package:spotmies/views/home/home.dart';
@@ -26,6 +27,7 @@ class GoogleNavBar extends StatefulWidget {
 
 class _GoogleNavBarState extends State<GoogleNavBar> {
   ChatProvider chatProvider;
+  ResponsesProvider responseProvider;
   UniversalProvider universalProvider;
   List icons = [
     Icons.home,
@@ -48,10 +50,11 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     ),
   ];
 
-  getChatList() async {
+  hitAllApis() async {
     var chatList = await getChatListFromDb();
-    // log('chatlist $chatList ');
     chatProvider.setChatList(chatList);
+    var responsesList = await getResponseListFromDB();
+    responseProvider.setResponsesList(responsesList);
   }
 
   StreamController _chatResponse;
@@ -102,7 +105,8 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
-    getChatList();
+    responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    hitAllApis();
 
     _chatResponse = StreamController();
 
