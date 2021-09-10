@@ -104,6 +104,9 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     socket.on("recieveReadReciept", (data) {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
     });
+    socket.on("newResponse", (data) {
+      responseProvider.addNewResponse(data);
+    });
   }
 
   @override
