@@ -10,10 +10,13 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/models/chat_models/create_chat_model.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 
 class ResponsiveController extends ControllerMVC {
   ChatProvider chatProvider;
+  ResponsesProvider responseProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -54,6 +57,7 @@ class ResponsiveController extends ControllerMVC {
   void initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     //address
 
     //for notifications
@@ -65,7 +69,42 @@ class ResponsiveController extends ControllerMVC {
 
   FlutterLocalNotificationsPlugin localNotifications;
 
+  acceptOrRejectResponse(responseData, responseType) async {
+    if (responseProvider.getLoader) return;
+    //enable loader
+    responseProvider.setLoader(true);
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    Map<String, dynamic> body = {};
+    if (responseType == "accept") {
+      body["responseType"] = responseType.toString();
+      body["ordId"] = responseData['orderDetails']['ordId'].toString();
+      body["pId"] = responseData['pId'].toString();
+      body["uId"] = responseData['orderDetails']['uId'].toString();
+      body["ordState"] = "onGoing".toString();
+      body["acceptBy"] = "user".toString();
+      body["acceptAt"] = timestamp.toString();
+      body["acceptResponse"] = responseData['_id'].toString();
+      body["pDetails"] = responseData['pDetails']['_id'].toString();
+    } else if (responseType == "reject") {
+      body["responseType"] = responseType.toString();
+      body["acceptResponse"] = responseData['_id'].toString();
+    } else {
+      snackbar(context, "Something went wrong");
+      //disable loader
+      responseProvider.setLoader(false);
+    }
+    var response = await Server().postMethod(API.confirmDeclineOrder, body);
+    responseProvider.setLoader(false);
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      responseProvider.removeResponseById(responseData['responseId']);
+      snackbar(context, "Request succeed");
+    } else {
+      snackbar(context, "Unable to process request please try again later");
+    }
+  }
+
   Future chatWithpatner(responseData) async {
+    if (responseProvider.getLoader) return;
     String ordId = responseData['ordId'].toString();
     String pId = responseData['pId'].toString();
     List chatList = chatProvider.getChatList2();

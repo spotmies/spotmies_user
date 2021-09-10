@@ -21,4 +21,5 @@ class API {
   static var places = '/api/geocode/all';
   static var userChatsList = '/api/chat/user/$uid';
   static var createNewChat = '/api/chat/createNewChatRoom';
+  static var confirmDeclineOrder = '/api/order/stateChange';
 }
