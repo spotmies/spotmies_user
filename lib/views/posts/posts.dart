@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +13,7 @@ import 'package:spotmies/views/home/ads/adedit.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class PostList extends StatefulWidget {
   @override
@@ -18,20 +22,14 @@ class PostList extends StatefulWidget {
 
 class _PostListState extends StateMVC<PostList> {
   PostsController _postsController;
+  GetOrdersProvider ordersProvider;
   _PostListState() : super(PostsController()) {
     this._postsController = controller;
   }
 
-  //var orders;
-  textedit(orders) {
-    return List.from(orders.reversed);
-  }
-
   @override
   void initState() {
-    var orders = Provider.of<GetOrdersProvider>(context, listen: false);
-
-    orders.getOrders();
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
 
     super.initState();
   }
@@ -64,11 +62,16 @@ class _PostListState extends StateMVC<PostList> {
           ),
           child: Consumer<GetOrdersProvider>(
             builder: (context, data, child) {
-              if (data.orders == null)
-                return Center(child: profileShimmer(context));
-              var o = textedit(data.orders);
+              var o = data.getOrdersList;
+              if (o.length < 1)
+                return Center(
+                  child: TextWid(
+                    text: "No Orders",
+                    size: 30,
+                  ),
+                );
+              if (data.getLoader) return Center(child: profileShimmer(context));
 
-              // print(o);
               return ListView.builder(
                   itemCount: o.length,
                   itemBuilder: (BuildContext ctxt, int index) {
@@ -445,7 +448,7 @@ class _PostListState extends StateMVC<PostList> {
           child: Center(
             child: Column(
               children: [
-                Text('SELECT MENU', 
+                Text('SELECT MENU',
                     style: TextStyle(
                         color: Colors.grey[800],
                         fontSize: width * 0.04,
@@ -543,11 +546,16 @@ class _PostListState extends StateMVC<PostList> {
                                             fontWeight: FontWeight.bold),
                                       )),
                                   TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        ordersProvider.setLoader(true);
                                         String ordid =
                                             API.deleteOrder + '$orderid';
-                                        Server().deleteMethod(ordid);
-                                        _postsController.controller.getData();
+                                        var response =
+                                            await Server().deleteMethod(ordid);
+                                        response = jsonDecode(response);
+                                        ordersProvider
+                                            .removeOrderById(response['ordId']);
+                                        ordersProvider.setLoader(false);
                                         Navigator.pop(context);
                                       },
                                       child: Text(

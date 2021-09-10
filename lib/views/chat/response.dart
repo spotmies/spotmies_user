@@ -41,11 +41,17 @@ class _ResponseeState extends StateMVC<Responsee> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    // refresh();
     return Scaffold(
         key: _responsiveController.scaffoldkey,
         body: Consumer<ResponsesProvider>(builder: (context, data, child) {
           List listResponse = data.getResponsesList;
+          if (listResponse.length < 1)
+            return Center(
+              child: TextWid(
+                text: "No Responses",
+                size: 30,
+              ),
+            );
           return Stack(children: [
             Container(
               child: ListView.builder(

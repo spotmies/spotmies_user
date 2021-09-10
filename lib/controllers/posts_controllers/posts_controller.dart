@@ -1,13 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 
 class PostsController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
-   final controller = TestController();
+  final controller = TestController();
+  GetOrdersProvider ordersProvider;
   List jobs = [
     'AC Service',
     'Computer',
@@ -20,6 +25,12 @@ class PostsController extends ControllerMVC {
     'Events'
   ];
   List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
+  @override
+  void initState() {
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+
+    super.initState();
+  }
 
   orderStateText(String orderState) {
     switch (orderState) {
@@ -79,9 +90,12 @@ class PostsController extends ControllerMVC {
     return Text(addresses.first.locality.toString());
   }
 
-  var postStream = FirebaseFirestore.instance
-      .collection('users')
-      .doc(FirebaseAuth.instance.currentUser.uid)
-      .collection('adpost')
-      .snapshots();
+  getOrderFromDB() async {
+    var response = await Server().getMethod(API.getOrders);
+
+    var ordersList = jsonDecode(response);
+    ordersProvider.setOrdersList(ordersList);
+
+    snackbar(context, "Unable to fetch Orders please Try again");
+  }
 }

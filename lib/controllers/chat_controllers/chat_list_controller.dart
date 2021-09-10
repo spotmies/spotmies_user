@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
@@ -11,9 +12,14 @@ getChatListFromDb() async {
 }
 
 getResponseListFromDB() async {
-  var response = await Server().getMethod(API.reponse).catchError((e) {
-    print(e);
-  });
+  var response = await Server().getMethod(API.reponse);
+  // log("${response.statusCode} $response");
   var responseDecode = jsonDecode(response);
   return responseDecode;
+}
+
+getOrderFromDB() async {
+  var response = await Server().getMethod(API.getOrders);
+  var ordersList = jsonDecode(response);
+  return ordersList;
 }

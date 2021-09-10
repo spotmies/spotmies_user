@@ -6,7 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
+import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
@@ -28,6 +30,8 @@ class GoogleNavBar extends StatefulWidget {
 class _GoogleNavBarState extends State<GoogleNavBar> {
   ChatProvider chatProvider;
   ResponsesProvider responseProvider;
+  GetOrdersProvider ordersProvider;
+
   UniversalProvider universalProvider;
   List icons = [
     Icons.home,
@@ -55,6 +59,8 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     chatProvider.setChatList(chatList);
     var responsesList = await getResponseListFromDB();
     responseProvider.setResponsesList(responsesList);
+    var ordersList = await getOrderFromDB();
+    ordersProvider.setOrdersList(ordersList);
   }
 
   StreamController _chatResponse;
@@ -106,6 +112,8 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+
     hitAllApis();
 
     _chatResponse = StreamController();
