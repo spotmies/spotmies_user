@@ -69,6 +69,13 @@ class ResponsiveController extends ControllerMVC {
 
   FlutterLocalNotificationsPlugin localNotifications;
 
+  Future fetchNewResponses() async {
+    dynamic response = await Server().getMethod(API.reponse);
+    dynamic responseDecode = jsonDecode(response);
+    log("$responseDecode");
+    responseProvider.setResponsesList(responseDecode);
+  }
+
   acceptOrRejectResponse(responseData, responseType) async {
     if (responseProvider.getLoader) return;
     //enable loader
