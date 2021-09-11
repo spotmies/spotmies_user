@@ -1,17 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
-import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
@@ -57,14 +56,13 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
   ];
 
   hitAllApis() async {
-    var responsesList = await getResponseListFromDB();
+    dynamic responsesList = await getResponseListFromDB();
     responseProvider.setResponsesList(responsesList);
-    var ordersList = await getOrderFromDB();
-    ordersProvider.setOrdersList(ordersList);
+
     dynamic user = await getUserDetailsFromDB();
     profileProvider.setUser(user);
-
-    var chatList = await getChatListFromDb();
+    ordersProvider.setOrdersList(user['orders']);
+    dynamic chatList = await getChatListFromDb();
     chatProvider.setChatList(chatList);
   }
 
@@ -111,6 +109,9 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     });
     socket.on("newResponse", (data) {
       responseProvider.addNewResponse(data);
+      if (data['isAccepted']) {
+        snackbar(context, "Accepted your request visit my order for more info");
+      }
     });
   }
 
