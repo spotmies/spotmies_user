@@ -23,6 +23,8 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends StateMVC<Profile> {
   ProfileController _profileController;
+  UserDetailsProvider profileProvider;
+
   _ProfileState() : super(ProfileController()) {
     this._profileController = controller;
   }
@@ -52,17 +54,12 @@ class _ProfileState extends StateMVC<Profile> {
 
   @override
   void initState() {
-    var details = Provider.of<UserDetailsProvider>(context, listen: false);
-
-    details.userDetails();
-
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // var response = Server().getMethod(API.userDetails);
-    // var user = jsonDecode(response.toString());
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
@@ -99,8 +96,10 @@ class _ProfileState extends StateMVC<Profile> {
       body: Container(
         // height: _hight * 0.7,
         child: Consumer<UserDetailsProvider>(builder: (context, data, child) {
-          if (data.user == null) return Center(child: profileShimmer(context));
-          var u = data.user;
+          var u = data.getUser;
+          if (data.getLoader || u == null)
+            return Center(child: profileShimmer(context));
+
           return ListView(
             children: [
               profilePic(context, u['pic']),

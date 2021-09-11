@@ -8,6 +8,7 @@ import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart
 
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class Responsee extends StatefulWidget {
@@ -45,6 +46,7 @@ class _ResponseeState extends StateMVC<Responsee> {
         key: _responsiveController.scaffoldkey,
         body: Consumer<ResponsesProvider>(builder: (context, data, child) {
           List listResponse = data.getResponsesList;
+          if (data.loader) return Center(child: profileShimmer(context));
           if (listResponse.length < 1)
             return Center(
               child: TextWid(
@@ -277,14 +279,14 @@ class _ResponseeState extends StateMVC<Responsee> {
                     );
                   }),
             ),
-            Visibility(
-              visible: data.loader,
-              child: Positioned.fill(
-                  child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
-                child: Center(child: CircularProgressIndicator()),
-              )),
-            ),
+            // Visibility(
+            //   visible: data.loader,
+            //   child: Positioned.fill(
+            //       child: BackdropFilter(
+            //     filter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
+            //     child: Center(child: CircularProgressIndicator()),
+            //   )),
+            // ),
           ]);
         }));
   }

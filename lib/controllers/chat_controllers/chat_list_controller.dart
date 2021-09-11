@@ -23,3 +23,9 @@ getOrderFromDB() async {
   var ordersList = jsonDecode(response);
   return ordersList;
 }
+
+getUserDetailsFromDB() async {
+  var response = await Server().getMethod(API.userDetails);
+  dynamic user = jsonDecode(response);
+  return user;
+}

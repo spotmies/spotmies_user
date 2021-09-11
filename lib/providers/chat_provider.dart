@@ -13,6 +13,7 @@ class ChatProvider extends ChangeNotifier {
   bool scrollEvent = false;
   int msgCount = 20;
   bool enableFoat = true;
+  bool loader = true;
 
   //calling variables
   bool terminateCall = false;
@@ -24,10 +25,16 @@ class ChatProvider extends ChangeNotifier {
   int callStatus = 0; // 0- connecting or new connection 1-calling 2- ringing
   //3- connected 4- rejected 5- not lifted 6- call failed or disconnected
 
+  bool get getLoader => loader;
+  void setLoader(state) {
+    loader = state;
+  }
+
   setChatList(var list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
     confirmReceiveAllMessages();
+    loader = false;
     notifyListeners();
   }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ResponsesProvider extends ChangeNotifier {
   List responsesList = [];
-  bool loader = false;
+  bool loader = true;
 
   List get getResponsesList => responsesList;
 
@@ -14,7 +14,9 @@ class ResponsesProvider extends ChangeNotifier {
 
   void setResponsesList(list) {
     responsesList = list;
+
     sortListByTime();
+    loader = false;
     notifyListeners();
   }
 

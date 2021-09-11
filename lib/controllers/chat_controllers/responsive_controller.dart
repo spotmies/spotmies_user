@@ -105,6 +105,7 @@ class ResponsiveController extends ControllerMVC {
 
   Future chatWithpatner(responseData) async {
     if (responseProvider.getLoader) return;
+
     String ordId = responseData['ordId'].toString();
     String pId = responseData['pId'].toString();
     List chatList = chatProvider.getChatList2();
@@ -113,6 +114,7 @@ class ResponsiveController extends ControllerMVC {
         element['pId'].toString() == pId);
     log("index $index");
     if (index < 0) {
+      responseProvider.setLoader(true);
       //this means there is no previous chat with this partner about this post
       //create new chat here
       log("creating new chat room");
@@ -129,6 +131,7 @@ class ResponsiveController extends ControllerMVC {
         "orderDetails": responseData['orderDetails']['_id']
       };
       var response = await Server().postMethod(API.createNewChat, newChatObj);
+      responseProvider.setLoader(false);
       if (response.statusCode == 200) {
         log("success ${jsonDecode(response.body)}");
         var newChat = jsonDecode(response.body);

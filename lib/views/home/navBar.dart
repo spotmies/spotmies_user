@@ -11,6 +11,7 @@ import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
@@ -31,6 +32,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
   ChatProvider chatProvider;
   ResponsesProvider responseProvider;
   GetOrdersProvider ordersProvider;
+  UserDetailsProvider profileProvider;
 
   UniversalProvider universalProvider;
   List icons = [
@@ -55,12 +57,15 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
   ];
 
   hitAllApis() async {
-    var chatList = await getChatListFromDb();
-    chatProvider.setChatList(chatList);
     var responsesList = await getResponseListFromDB();
     responseProvider.setResponsesList(responsesList);
     var ordersList = await getOrderFromDB();
     ordersProvider.setOrdersList(ordersList);
+    dynamic user = await getUserDetailsFromDB();
+    profileProvider.setUser(user);
+
+    var chatList = await getChatListFromDb();
+    chatProvider.setChatList(chatList);
   }
 
   StreamController _chatResponse;
@@ -116,6 +121,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
 
     hitAllApis();
 

@@ -63,6 +63,7 @@ class _PostListState extends StateMVC<PostList> {
           child: Consumer<GetOrdersProvider>(
             builder: (context, data, child) {
               var o = data.getOrdersList;
+              if (data.getLoader) return Center(child: profileShimmer(context));
               if (o.length < 1)
                 return Center(
                   child: TextWid(
@@ -70,7 +71,6 @@ class _PostListState extends StateMVC<PostList> {
                     size: 30,
                   ),
                 );
-              if (data.getLoader) return Center(child: profileShimmer(context));
 
               return ListView.builder(
                   itemCount: o.length,
