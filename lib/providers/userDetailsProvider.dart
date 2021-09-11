@@ -7,7 +7,22 @@ import 'package:spotmies/apiCalls/testController.dart';
 
 class UserDetailsProvider extends ChangeNotifier {
   final controller = TestController();
-  var user;
+  dynamic user;
+  bool loader = true;
+
+  bool get getLoader => loader;
+  void setLoader(state) {
+    loader = state;
+    notifyListeners();
+  }
+
+  void setUser(uDetails) {
+    user = uDetails;
+    loader = false;
+    notifyListeners();
+  }
+
+  dynamic get getUser => user;
 
   userDetails() async {
     var response = await Server().getMethod(API.userDetails);

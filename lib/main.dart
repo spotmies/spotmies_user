@@ -9,6 +9,7 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/providers/mapsProvider.dart';
 import 'package:spotmies/providers/orderOverviewProvider.dart';
+import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
@@ -26,6 +27,8 @@ void main() async {
       ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider()),
       ChangeNotifierProvider<UniversalProvider>(
           create: (context) => UniversalProvider()),
+      ChangeNotifierProvider<ResponsesProvider>(
+          create: (context) => ResponsesProvider()),
       ChangeNotifierProvider<GetOrdersProvider>(
           create: (context) => GetOrdersProvider()),
       ChangeNotifierProvider<OrderOverViewProvider>(

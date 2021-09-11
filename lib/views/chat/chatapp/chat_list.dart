@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
+import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -90,7 +91,8 @@ class _RecentChatsState extends State<RecentChats> {
                 builder: (context, data, child) {
                   List chatList = data.getChatList2();
 
-                  // log(chatList[0].toString());
+                  if (data.getLoader)
+                    return Center(child: profileShimmer(context));
                   if (chatList.length < 1) {
                     return Center(
                         child: TextWid(

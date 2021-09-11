@@ -20,4 +20,6 @@ class API {
   static var localHost = '192.168.0.173:4000';
   static var places = '/api/geocode/all';
   static var userChatsList = '/api/chat/user/$uid';
+  static var createNewChat = '/api/chat/createNewChatRoom';
+  static var confirmDeclineOrder = '/api/order/stateChange';
 }

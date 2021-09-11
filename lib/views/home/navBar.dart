@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/ads/ad.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
@@ -26,6 +29,10 @@ class GoogleNavBar extends StatefulWidget {
 
 class _GoogleNavBarState extends State<GoogleNavBar> {
   ChatProvider chatProvider;
+  ResponsesProvider responseProvider;
+  GetOrdersProvider ordersProvider;
+  UserDetailsProvider profileProvider;
+
   UniversalProvider universalProvider;
   List icons = [
     Icons.home,
@@ -48,9 +55,14 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     ),
   ];
 
-  getChatList() async {
-    var chatList = await getChatListFromDb();
-    // log('chatlist $chatList ');
+  hitAllApis() async {
+    dynamic responsesList = await getResponseListFromDB();
+    responseProvider.setResponsesList(responsesList);
+
+    dynamic user = await getUserDetailsFromDB();
+    profileProvider.setUser(user);
+    ordersProvider.setOrdersList(user['orders']);
+    dynamic chatList = await getChatListFromDb();
     chatProvider.setChatList(chatList);
   }
 
@@ -95,6 +107,12 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     socket.on("recieveReadReciept", (data) {
       chatProvider.chatReadReceipt(data['msgId'], data['status']);
     });
+    socket.on("newResponse", (data) {
+      responseProvider.addNewResponse(data);
+      if (data['isAccepted']) {
+        snackbar(context, "Accepted your request visit my order for more info");
+      }
+    });
   }
 
   @override
@@ -102,7 +120,11 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
-    getChatList();
+    responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+
+    hitAllApis();
 
     _chatResponse = StreamController();
 
