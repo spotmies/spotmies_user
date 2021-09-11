@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/reusable_widgets/chat_input_field.dart';
@@ -21,7 +21,11 @@ class PersonalChat extends StatefulWidget {
   _PersonalChatState createState() => _PersonalChatState();
 }
 
-class _PersonalChatState extends State<PersonalChat> {
+class _PersonalChatState extends StateMVC<PersonalChat> {
+  ChatController _chatController;
+  _PersonalChatState() : super(ChatController()) {
+    this._chatController = controller;
+  }
   ChatProvider chatProvider;
   ScrollController _scrollController = ScrollController();
   List chatList = [];
@@ -58,73 +62,8 @@ class _PersonalChatState extends State<PersonalChat> {
     });
   }
 
-  getTargetChat(list, msgId) {
-    List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
-
-    return currentChatData[0];
-  }
-
   sendMessageHandler(value) {
-    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    Map<String, String> msgData = {
-      'msg': value.toString(),
-      'time': timestamp,
-      'sender': 'user',
-      'type': 'text'
-    };
-    Map<String, dynamic> target = {
-      'pId': targetChat['pId'],
-      // 'uId': "FtaZm2dasvN7cL9UumTG98ksk6I3",
-      'uId': FirebaseAuth.instance.currentUser.uid,
-      'msgId': widget.msgId,
-      'ordId': targetChat['ordId'],
-      // 'ordId': "2"
-    };
-    Map<String, Object> sendPayload = {
-      "object": jsonEncode(msgData),
-      "target": target
-    };
-    chatProvider.addnewMessage(sendPayload);
-    chatProvider.setSendMessage(sendPayload);
-    // scrollToBottom();
-  }
-
-  dateCompare(msg1, msg2) {
-    var time1 = msg1;
-    var time2 = msg2;
-    if (time1.runtimeType != int) time1 = int.parse(time1);
-    if (time2.runtimeType != int) time2 = int.parse(time2);
-    var ct =
-        DateFormat('dd').format(DateTime.fromMillisecondsSinceEpoch(time1));
-    var pt =
-        DateFormat('dd').format(DateTime.fromMillisecondsSinceEpoch(time2));
-    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
-        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
-    var daypast =
-        DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(time1));
-    if (ct != pt) {
-      return (daypast == daynow
-          ? 'Today'
-          : (DateFormat('dd MMM yyyy')
-              .format(DateTime.fromMillisecondsSinceEpoch(time1))));
-    } else {
-      return "false";
-    }
-  }
-
-  getDate(stamp) {
-    int timeStamp = stamp.runtimeType == String ? int.parse(stamp) : stamp;
-    log(timeStamp.runtimeType.toString());
-    var daynow = DateFormat('EEE').format(DateTime.fromMillisecondsSinceEpoch(
-        int.parse(DateTime.now().millisecondsSinceEpoch.toString())));
-    var daypast = DateFormat('EEE')
-        .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
-    if (daypast == daynow) {
-      return "Today";
-    } else {
-      return DateFormat('dd MMM yyyy')
-          .format(DateTime.fromMillisecondsSinceEpoch(timeStamp));
-    }
+    _chatController.sendMessageHandler(widget.msgId, targetChat, value);
   }
 
   @override
@@ -135,6 +74,7 @@ class _PersonalChatState extends State<PersonalChat> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
+        key: _chatController.scaffoldkey,
         appBar: _buildAppBar(context, _hight, _width),
         body: Container(
           child: Column(children: [
@@ -149,7 +89,8 @@ class _PersonalChatState extends State<PersonalChat> {
                 child: Consumer<ChatProvider>(
                   builder: (context, data, child) {
                     chatList = data.getChatList2();
-                    targetChat = getTargetChat(chatList, widget.msgId);
+                    targetChat =
+                        _chatController.getTargetChat(chatList, widget.msgId);
                     partner = targetChat['uDetails'];
                     List messages = targetChat['msgs'];
                     // if (data.getScroll() || !data.getScroll()) scrollToBottom();
@@ -184,7 +125,8 @@ class _PersonalChatState extends State<PersonalChat> {
                             child: Column(
                               children: [
                                 Visibility(
-                                  visible: dateCompare(rawMsgData['time'],
+                                  visible: _chatController.dateCompare(
+                                              rawMsgData['time'],
                                               rawMsgDataprev['time']) !=
                                           "false" ||
                                       index == messages.length - 1,
@@ -208,8 +150,9 @@ class _PersonalChatState extends State<PersonalChat> {
                                           alignment: Alignment.center,
                                           child: TextWid(
                                             text: index == messages.length - 1
-                                                ? getDate(rawMsgData['time'])
-                                                : dateCompare(
+                                                ? _chatController
+                                                    .getDate(rawMsgData['time'])
+                                                : _chatController.dateCompare(
                                                     rawMsgData['time'],
                                                     rawMsgDataprev['time']),
                                             color: Colors.white,
@@ -422,7 +365,7 @@ class _PersonalChatState extends State<PersonalChat> {
       title: Consumer<ChatProvider>(
         builder: (context, data, child) {
           chatList = data.getChatList2();
-          targetChat = getTargetChat(chatList, widget.msgId);
+          targetChat = _chatController.getTargetChat(chatList, widget.msgId);
           partner = targetChat['pDetails'];
           return Row(
             children: [

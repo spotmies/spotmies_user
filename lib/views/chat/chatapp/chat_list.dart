@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
 import 'package:provider/provider.dart';
+import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
@@ -16,39 +18,11 @@ class ChatList extends StatefulWidget {
   _ChatListState createState() => _ChatListState();
 }
 
-class _ChatListState extends State<ChatList> {
-  @override
-  void initState() {
-    super.initState();
-    log("chatlist inti>>>>>>");
+class _ChatListState extends StateMVC<ChatList> {
+  ChatController _chatController;
+  _ChatListState() : super(ChatController()) {
+    this._chatController = controller;
   }
-
-  @override
-  Widget build(BuildContext context) {
-    // final _hight = MediaQuery.of(context).size.height -
-    //     MediaQuery.of(context).padding.top -
-    //     kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: TextWid(
-            text: 'My Conversations',
-            size: _width * 0.045,
-            weight: FontWeight.w600,
-          )),
-      body: Container(child: RecentChats()),
-    );
-  }
-}
-
-class RecentChats extends StatefulWidget {
-  @override
-  _RecentChatsState createState() => _RecentChatsState();
-}
-
-class _RecentChatsState extends State<RecentChats> {
   ChatProvider chatProvider;
   @override
   void initState() {
@@ -58,77 +32,83 @@ class _RecentChatsState extends State<RecentChats> {
     super.initState();
   }
 
-  cardOnClick(msgId, msgId2, readReceiptObj) {
-    log("$msgId $msgId2");
-    if (readReceiptObj != "" &&
-        chatProvider.getChatDetailsByMsgId(msgId)['uCount'] > 0) {
-      log("readdd////////////////////");
-      chatProvider.setReadReceipt(readReceiptObj);
-    }
-    chatProvider.setMsgCount(20);
-    chatProvider.resetMessageCount(msgId);
-    chatProvider.setMsgId(msgId2);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _width = MediaQuery.of(context).size.width;
     print('======render chatList screen =======');
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5.0),
-                topRight: Radius.circular(30.0),
-              ),
-              child: Consumer<ChatProvider>(
-                builder: (context, data, child) {
-                  List chatList = data.getChatList2();
+    return Scaffold(
+      // appBar: AppBar(
+      //     backgroundColor: Colors.white,
+      //     elevation: 0,
+      //     title: TextWid(
+      //       text: 'My Conversations',
+      //       size: _width * 0.045,
+      //       weight: FontWeight.w600,
+      //     )),
+      key: _chatController.scaffoldkey,
+      body: Container(
+        padding: EdgeInsets.only(top: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5.0),
+                    topRight: Radius.circular(30.0),
+                  ),
+                  child: Consumer<ChatProvider>(
+                    builder: (context, data, child) {
+                      List chatList = data.getChatList2();
 
-                  if (data.getLoader)
-                    return Center(child: profileShimmer(context));
-                  if (chatList.length < 1) {
-                    return Center(
-                        child: TextWid(
-                      text: "No Chats Available",
-                      size: 30,
-                    ));
-                  }
-                  return ListView.builder(
-                    itemCount: chatList?.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Map user = chatList[index]['pDetails'];
-                      List messages = chatList[index]['msgs'];
-                      int count = chatList[index]['uCount'];
-                      log("count $count");
+                      if (data.getLoader)
+                        return Center(child: profileShimmer(context));
+                      if (chatList.length < 1) {
+                        return Center(
+                            child: TextWid(
+                          text: "No Chats Available",
+                          size: 30,
+                        ));
+                      }
+                      return RefreshIndicator(
+                        onRefresh: _chatController.fetchNewChatList,
+                        child: ListView.builder(
+                          itemCount: chatList?.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            Map user = chatList[index]['pDetails'];
+                            List messages = chatList[index]['msgs'];
+                            int count = chatList[index]['uCount'];
+                            log("count $count");
 
-                      var lastMessage = jsonDecode(messages.last);
+                            var lastMessage = jsonDecode(messages.last);
 
-                      return ChatListCard(
-                        user['partnerPic'],
-                        user['name'],
-                        lastMessage['msg'].toString(),
-                        getTime(lastMessage['time']),
-                        chatList[index]['msgId'],
-                        count,
-                        chatList[index]['uId'],
-                        chatList[index]['pId'],
-                        callBack: cardOnClick,
+                            return ChatListCard(
+                              user['partnerPic'],
+                              user['name'],
+                              lastMessage['msg'].toString(),
+                              getTime(lastMessage['time']),
+                              chatList[index]['msgId'],
+                              count,
+                              chatList[index]['uId'],
+                              chatList[index]['pId'],
+                              callBack: _chatController.cardOnClick,
+                            );
+                          },
+                        ),
                       );
                     },
-                  );
-                },
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -154,9 +134,6 @@ class ChatListCard extends StatefulWidget {
 class _ChatListCardState extends State<ChatListCard> {
   @override
   Widget build(BuildContext context) {
-    // final _hight = MediaQuery.of(context).size.height -
-    //     MediaQuery.of(context).padding.top -
-    //     kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return ListTile(
         onTap: () async {
