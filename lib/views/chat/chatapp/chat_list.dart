@@ -171,13 +171,13 @@ class _ChatListCardState extends State<ChatListCard> {
         trailing: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            TextWid(
-                text: widget.time,
-                size: _width * 0.035,
-                weight: FontWeight.w600,
-                color: widget.count > 0 ? Colors.black : Colors.grey[700]),
-            SizedBox(
-              height: 10,
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: 5),
+              child: TextWid(
+                  text: widget.time,
+                  size: _width * 0.035,
+                  weight: FontWeight.w600,
+                  color: widget.count > 0 ? Colors.black : Colors.grey[700]),
             ),
             widget.count > 0
                 ? Container(
@@ -185,20 +185,18 @@ class _ChatListCardState extends State<ChatListCard> {
                     height: _width * 0.055,
                     margin: EdgeInsets.only(right: _width * 0.035),
                     decoration: BoxDecoration(
-                        color: Colors.greenAccent,
+                        color: Colors.indigo[900],
                         borderRadius: BorderRadius.circular(30.0)),
                     alignment: Alignment.center,
-                    child: Center(
-                      child: TextWid(
-                          text: widget.count.toString(),
-                          size: _width * 0.03,
-                          weight: FontWeight.w900,
-                          color: Colors.blueGrey[700]),
-                    ),
+                    child: TextWid(
+                        text: widget.count.toString(),
+                        size: _width * 0.03,
+                        weight: FontWeight.w900,
+                        color: Colors.blueGrey[50]),
                   )
                 : Container(
                     width: 40.0,
-                    height: 20.0,
+                    // height: 20.0,
                   ),
           ],
         ));

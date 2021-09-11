@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
+import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/chat_input_field.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
@@ -66,6 +67,36 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     _chatController.sendMessageHandler(widget.msgId, targetChat, value);
   }
 
+  List options = [
+    {
+      "name": "view order",
+      "icon": Icons.remove_red_eye,
+      "onPress": () {
+        print("view order");
+      }
+    },
+    {
+      "name": "Partner details",
+      "icon": Icons.account_circle,
+      "onPress": () {
+        print("Partner details");
+      }
+    },
+    {
+      "name": "Disable chat",
+      "icon": Icons.block,
+      "onPress": () {
+        print("Disable chat");
+      }
+    },
+    {
+      "name": "Delete chat",
+      "icon": Icons.delete_forever,
+      "onPress": () {
+        print("Delete chat");
+      }
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
@@ -338,13 +369,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             color: Colors.black,
           )),
       actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.read_more,
-            color: Colors.grey[900],
-          ),
-        ),
+        // IconButton(
+        //   onPressed: () {},
+        //   icon: Icon(
+        //     Icons.read_more,
+        //     color: Colors.grey[900],
+        //   ),
+        // ),
         IconButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
@@ -361,6 +392,16 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             color: Colors.grey[900],
           ),
         ),
+        IconButton(
+            padding: EdgeInsets.only(bottom: 0),
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.grey[900],
+            ),
+            onPressed: () {
+              bottomOptionsMenu(context,
+                  options: options, menuTitle: "More options");
+            })
       ],
       title: Consumer<ChatProvider>(
         builder: (context, data, child) {
