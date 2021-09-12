@@ -82,11 +82,27 @@ class ChatController extends ControllerMVC {
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
-      "target": target
+      "target": target,
+      "socketName": "sendNewMessageCallback".toString()
     };
     chatProvider.addnewMessage(sendPayload);
     chatProvider.setSendMessage(sendPayload);
     // scrollToBottom();
+  }
+
+  disableOrDeleteChat(targetChat, {typeOfAction: "disable"}) {
+    Map<String, Object> sendPayload = {
+      "uId": targetChat['uId'],
+      "pId": targetChat['pId'],
+      "msgId": targetChat['msgId'],
+      "ordId": targetChat['ordId'],
+      "sender": "user",
+      "type": typeOfAction,
+      "socketName": "chatStream"
+    };
+
+    chatProvider.setSendMessage(sendPayload);
+    // chatProvider.disableChatByMsgId(targetChat['msgId']);
   }
 
   getDate(stamp) {

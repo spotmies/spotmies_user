@@ -67,34 +67,33 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     _chatController.sendMessageHandler(widget.msgId, targetChat, value);
   }
 
+  disableChat() {
+    print("disable chat");
+    _chatController.disableOrDeleteChat(targetChat, typeOfAction: "disable");
+  }
+
+  deleteChat() {
+    print("delete chat");
+    _chatController.disableOrDeleteChat(targetChat, typeOfAction: "delete");
+    Navigator.pop(context, false);
+  }
+
   List options = [
     {
       "name": "view order",
       "icon": Icons.remove_red_eye,
-      "onPress": () {
-        print("view order");
-      }
     },
     {
       "name": "Partner details",
       "icon": Icons.account_circle,
-      "onPress": () {
-        print("Partner details");
-      }
     },
     {
       "name": "Disable chat",
       "icon": Icons.block,
-      "onPress": () {
-        print("Disable chat");
-      }
     },
     {
       "name": "Delete chat",
       "icon": Icons.delete_forever,
-      "onPress": () {
-        print("Delete chat");
-      }
     },
   ];
   @override
@@ -107,196 +106,179 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     return Scaffold(
         key: _chatController.scaffoldkey,
         appBar: _buildAppBar(context, _hight, _width),
-        body: Container(
-          child: Column(children: [
-            // Container(
-            //     alignment: Alignment.center,
-            //     child: TextWid(
-            //       text: "New chat created",
-            //       size: 24,
-            //     )),
-            Expanded(
-              child: Container(
-                child: Consumer<ChatProvider>(
-                  builder: (context, data, child) {
-                    chatList = data.getChatList2();
-                    targetChat =
-                        _chatController.getTargetChat(chatList, widget.msgId);
-                    partner = targetChat['uDetails'];
-                    List messages = targetChat['msgs'];
-                    // if (data.getScroll() || !data.getScroll()) scrollToBottom();
-                    return ListView.builder(
-                        reverse: true,
-                        controller: _scrollController,
-                        itemCount: data.getMsgCount() < messages.length
-                            ? data.getMsgCount()
-                            : messages.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Map rawMsgData = jsonDecode(
-                              messages[(messages.length - 1) - index]);
-                          // Map rawMsgDataprev = rawMsgData;
+        body: Consumer<ChatProvider>(builder: (context, data, child) {
+          chatList = data.getChatList2();
+          targetChat = _chatController.getTargetChat(chatList, widget.msgId);
+          partner = targetChat['uDetails'];
+          List messages = targetChat['msgs'];
+          return Container(
+            child: Column(children: [
+              Expanded(
+                child: Container(
+                  child: ListView.builder(
+                      reverse: true,
+                      controller: _scrollController,
+                      itemCount: data.getMsgCount() < messages.length
+                          ? data.getMsgCount()
+                          : messages.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Map rawMsgData =
+                            jsonDecode(messages[(messages.length - 1) - index]);
+                        // Map rawMsgDataprev = rawMsgData;
 
-                          Map rawMsgDataprev;
-                          if (index == messages.length - 1) {
-                            rawMsgDataprev = rawMsgData;
-                          } else {
-                            rawMsgDataprev = jsonDecode(
-                                messages[(messages.length - 1) - (index + 1)]);
-                          }
+                        Map rawMsgDataprev;
+                        if (index == messages.length - 1) {
+                          rawMsgDataprev = rawMsgData;
+                        } else {
+                          rawMsgDataprev = jsonDecode(
+                              messages[(messages.length - 1) - (index + 1)]);
+                        }
 
-                          String message = rawMsgData['msg'];
-                          String sender = rawMsgData['sender'];
-                          String type = rawMsgData['type'];
+                        String message = rawMsgData['msg'];
+                        String sender = rawMsgData['sender'];
+                        String type = rawMsgData['type'];
 
-                          return Container(
-                            padding: EdgeInsets.only(
-                                left: sender != "user" ? 10 : 0,
-                                bottom: 5,
-                                right: sender != "user" ? 0 : 10),
-                            child: Column(
-                              children: [
-                                Visibility(
-                                  visible: _chatController.dateCompare(
-                                              rawMsgData['time'],
-                                              rawMsgDataprev['time']) !=
-                                          "false" ||
-                                      index == messages.length - 1,
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.only(top: 30, bottom: 30),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[900],
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.only(
-                                              right: 20,
-                                              left: 20,
-                                              top: 7,
-                                              bottom: 7),
-                                          alignment: Alignment.center,
-                                          child: TextWid(
-                                            text: index == messages.length - 1
-                                                ? _chatController
-                                                    .getDate(rawMsgData['time'])
-                                                : _chatController.dateCompare(
-                                                    rawMsgData['time'],
-                                                    rawMsgDataprev['time']),
-                                            color: Colors.white,
-                                          ),
+                        return Container(
+                          padding: EdgeInsets.only(
+                              left: sender != "user" ? 10 : 0,
+                              bottom: 5,
+                              right: sender != "user" ? 0 : 10),
+                          child: Column(
+                            children: [
+                              Visibility(
+                                visible: _chatController.dateCompare(
+                                            rawMsgData['time'],
+                                            rawMsgDataprev['time']) !=
+                                        "false" ||
+                                    index == messages.length - 1,
+                                child: Container(
+                                  padding: EdgeInsets.only(top: 30, bottom: 30),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[900],
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        padding: EdgeInsets.only(
+                                            right: 20,
+                                            left: 20,
+                                            top: 7,
+                                            bottom: 7),
+                                        alignment: Alignment.center,
+                                        child: TextWid(
+                                          text: index == messages.length - 1
+                                              ? _chatController
+                                                  .getDate(rawMsgData['time'])
+                                              : _chatController.dateCompare(
+                                                  rawMsgData['time'],
+                                                  rawMsgDataprev['time']),
+                                          color: Colors.white,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: sender == "user"
-                                      ? MainAxisAlignment.end
-                                      : sender == "partner"
-                                          ? MainAxisAlignment.start
-                                          : MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          constraints: BoxConstraints(
-                                              minHeight: _hight * 0.05,
-                                              minWidth: 30,
-                                              maxWidth: _width * 0.50),
-                                          decoration: BoxDecoration(
-                                              color: sender != "user"
-                                                  ? Colors.white
-                                                  : Colors.blueGrey[500],
-                                              border: Border.all(
-                                                  color: Colors.blueGrey[500],
-                                                  width: 0.3),
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(15),
-                                                  topRight: Radius.circular(15),
-                                                  bottomRight: Radius.circular(
-                                                      sender != "user"
-                                                          ? 15
-                                                          : 0),
-                                                  bottomLeft: Radius.circular(
-                                                      sender == "user"
-                                                          ? 15
-                                                          : 0))),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: 10,
-                                                      top: 10,
-                                                      right: 10),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: type == "text" ||
-                                                          type == "call"
-                                                      ? TextWid(
-                                                          text:
-                                                              toBeginningOfSentenceCase(
-                                                                  message),
-                                                          maxlines: 200,
-                                                          lSpace: 1.5,
-                                                          color: sender ==
-                                                                  "user"
-                                                              ? Colors.white
-                                                              : Colors
-                                                                  .grey[900],
-                                                        )
-                                                      : type != "audio"
-                                                          ? Image.network(
-                                                              message)
-                                                          : type != "video"
-                                                              ? Text('audio')
-                                                              : Text('video')),
-                                              Container(
+                              ),
+                              Row(
+                                mainAxisAlignment: sender == "user"
+                                    ? MainAxisAlignment.end
+                                    : sender == "partner"
+                                        ? MainAxisAlignment.start
+                                        : MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        constraints: BoxConstraints(
+                                            minHeight: _hight * 0.05,
+                                            minWidth: 30,
+                                            maxWidth: _width * 0.50),
+                                        decoration: BoxDecoration(
+                                            color: sender != "user"
+                                                ? Colors.white
+                                                : Colors.blueGrey[500],
+                                            border: Border.all(
+                                                color: Colors.blueGrey[500],
+                                                width: 0.3),
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15),
+                                                bottomRight: Radius.circular(
+                                                    sender != "user" ? 15 : 0),
+                                                bottomLeft: Radius.circular(
+                                                    sender == "user"
+                                                        ? 15
+                                                        : 0))),
+                                        child: Column(
+                                          children: [
+                                            Container(
                                                 padding: EdgeInsets.only(
-                                                    right: 10, top: 5),
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: TextWid(
-                                                  text: getTime(
-                                                      rawMsgData['time']),
-                                                  size: _width * 0.03,
-                                                  color: sender == "user"
-                                                      ? Colors.grey[50]
-                                                      : Colors.grey[500],
-                                                  weight: FontWeight.w600,
-                                                ),
+                                                    left: 10,
+                                                    top: 10,
+                                                    right: 10),
+                                                alignment: Alignment.centerLeft,
+                                                child: type == "text" ||
+                                                        type == "call"
+                                                    ? TextWid(
+                                                        text:
+                                                            toBeginningOfSentenceCase(
+                                                                message),
+                                                        maxlines: 200,
+                                                        lSpace: 1.5,
+                                                        color: sender == "user"
+                                                            ? Colors.white
+                                                            : Colors.grey[900],
+                                                      )
+                                                    : type != "audio"
+                                                        ? Image.network(message)
+                                                        : type != "video"
+                                                            ? Text('audio')
+                                                            : Text('video')),
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  right: 10, top: 5),
+                                              alignment: Alignment.centerRight,
+                                              child: TextWid(
+                                                text:
+                                                    getTime(rawMsgData['time']),
+                                                size: _width * 0.03,
+                                                color: sender == "user"
+                                                    ? Colors.grey[50]
+                                                    : Colors.grey[500],
+                                                weight: FontWeight.w600,
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                        //
+                                      ),
+                                      //
 
-                                        Visibility(
-                                          visible:
-                                              index == 0 && sender == "user",
-                                          child: readReciept(
-                                              _width, targetChat['uState']),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                  },
+                                      Visibility(
+                                        visible: index == 0 && sender == "user",
+                                        child: readReciept(
+                                            _width, targetChat['uState']),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
                 ),
               ),
-            ),
-            chatInputField(sendMessageHandler, context, _hight, _width)
-          ]),
-        ),
+              targetChat['cBuild'] == 1
+                  ? chatInputField(sendMessageHandler, context, _hight, _width)
+                  : Container(
+                      child: TextWid(text: "You can't Message any More"),
+                    )
+            ]),
+          );
+        }),
         floatingActionButton: Container(
           height: _hight * 0.2,
           padding: EdgeInsets.only(bottom: _hight * 0.1),
@@ -400,7 +382,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             ),
             onPressed: () {
               bottomOptionsMenu(context,
-                  options: options, menuTitle: "More options");
+                  options: options,
+                  menuTitle: "More options",
+                  option3Click: disableChat,
+                  option4Click: deleteChat);
             })
       ],
       title: Consumer<ChatProvider>(

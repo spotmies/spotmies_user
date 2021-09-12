@@ -149,22 +149,34 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       }
 
       if (newMessageObject.length > 0) {
-        log("sending");
+        log("sending $newMessageObject");
         chatProvider.setReadyToSend(false);
         for (int i = 0; i < newMessageObject.length; i++) {
-          var item = newMessageObject[i];
-
-          log("new msg $item");
-          socket.emitWithAck('sendNewMessageCallback', item,
+          var payLoad = newMessageObject[i];
+          socket.emitWithAck(newMessageObject[i]['socketName'], payLoad,
               ack: (var callback) {
             if (callback == 'success') {
               print('working Fine');
-              if (i == newMessageObject.length - 1) {
-                log("clear msg queue");
-                var msgId = item['target']['msgId'];
-                chatProvider.clearMessageQueue(msgId);
+              switch (newMessageObject[i]['socketName']) {
+                case "sendNewMessageCallback":
+                  if (i == newMessageObject.length - 1) {
+                    log("clear msg queue");
+                    var msgId = payLoad['target']['msgId'];
+                    chatProvider.clearMessageQueue(msgId);
+                  }
+                  break;
+                case "chatStream":
+                  if (i == newMessageObject.length - 1) {
+                    chatProvider.clearMessageQueue2();
+                  }
+                  if (payLoad['type'] == "disable") {
+                    chatProvider.disableChatByMsgId(payLoad['msgId']);
+                  } else if (payLoad['type'] == "delete") {
+                    chatProvider.deleteChatByMsgId(payLoad['msgId']);
+                  }
+                  break;
+                default:
               }
-              // chatProvider.addnewMessage(item);
             } else {
               log('notSuccess');
             }

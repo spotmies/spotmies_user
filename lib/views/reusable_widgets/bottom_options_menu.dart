@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
-bottomOptionsMenu(context, {menuTitle = "Menu", options}) {
+bottomOptionsMenu(context,
+    {menuTitle = "Menu",
+    options,
+    option1Click,
+    option2Click,
+    option3Click,
+    option4Click}) {
   final _width = MediaQuery.of(context).size.width;
   final _height = MediaQuery.of(context).size.height;
 
@@ -37,7 +43,24 @@ bottomOptionsMenu(context, {menuTitle = "Menu", options}) {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          options[index]['onPress']();
+                          switch (index) {
+                            case 0:
+                              if (option1Click != null) option1Click();
+                              break;
+                            case 1:
+                              if (option2Click != null) option2Click();
+                              break;
+                            case 2:
+                              if (option3Click != null) option3Click();
+                              break;
+                            case 3:
+                              if (option4Click != null) option4Click();
+                              break;
+
+                              break;
+                            default:
+                          }
+                          Navigator.pop(context);
                         },
                         child: Container(
                           // padding: EdgeInsets.only(right: 20),

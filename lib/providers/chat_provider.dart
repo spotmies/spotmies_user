@@ -152,6 +152,24 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  clearMessageQueue2() {
+    sendMessageQueue.clear();
+    notifyListeners();
+  }
+
+  deleteChatByMsgId(msgId) {
+    chatList.removeWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    notifyListeners();
+  }
+
+  disableChatByMsgId(msgId) {
+    chatList[chatList.indexWhere(
+            (element) => element['msgId'].toString() == msgId.toString())]
+        ['cBuild'] = 0;
+    notifyListeners();
+  }
+
   setScroll() {
     scrollEvent = !scrollEvent;
     notifyListeners();
