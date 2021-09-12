@@ -90,12 +90,12 @@ class PostsController extends ControllerMVC {
     return Text(addresses.first.locality.toString());
   }
 
-  getOrderFromDB() async {
+  Future getOrderFromDB() async {
     var response = await Server().getMethod(API.getOrders);
 
     var ordersList = jsonDecode(response);
     ordersProvider.setOrdersList(ordersList);
 
-    snackbar(context, "Unable to fetch Orders please Try again");
+    snackbar(context, "sync with new changes");
   }
 }

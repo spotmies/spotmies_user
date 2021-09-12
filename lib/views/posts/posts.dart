@@ -72,364 +72,382 @@ class _PostListState extends StateMVC<PostList> {
                   ),
                 );
 
-              return ListView.builder(
-                  itemCount: o.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    List<String> images = List.from(o[index]['media']);
-                    // final coordinates =
-                    //     Coordinates(o[index]['loc'][0], o[index]['loc'][1]);
-                    // var addresses = Geocoder.local
-                    //     .findAddressesFromCoordinates(coordinates);
+              return RefreshIndicator(
+                onRefresh: _postsController.getOrderFromDB,
+                child: ListView.builder(
+                    itemCount: o.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      List<String> images = List.from(o[index]['media']);
+                      // final coordinates =
+                      //     Coordinates(o[index]['loc'][0], o[index]['loc'][1]);
+                      // var addresses = Geocoder.local
+                      //     .findAddressesFromCoordinates(coordinates);
 
-                    var orderid = o[index]['ordId'];
-                    print(o[index]['ordId']);
+                      var orderid = o[index]['ordId'];
+                      print(o[index]['ordId']);
 
-                    // var firstAddress = addresses.first.locality;
-                    return Container(
-                      child: InkWell(
-                        onTap: () {
-                          //  OrderOverViewProvider().orderDetails(orderid);
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PostOverView(ordId: orderid),
-                          ));
-                        },
-                        child: Stack(
-                          children: [
-                            Container(
-                                height: _hight * 0.20,
-                                width: _width * 1,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        Colors.blue[800],
-                                        Colors.blue[900]
-                                      ],
-                                      begin: FractionalOffset(0.0, 0.2),
-                                      end: FractionalOffset(0.4, 0.9),
-                                      stops: [0.0, 1.0],
-                                      tileMode: TileMode.clamp),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: _hight * 0.040,
-                                      width: _width * 0.88,
-                                      padding: EdgeInsets.only(left: 0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                _postsController.orderStateIcon(
-                                                    o[index]['ordState']),
-                                                color: Colors.white,
-                                                size: _width * 0.035,
-                                              ),
-                                              SizedBox(
-                                                width: _width * 0.01,
-                                              ),
-                                              Text(
-                                                _postsController.orderStateText(
-                                                    o[index]['ordState']),
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: _width * 0.03),
-                                              ),
-                                            ],
-                                          ),
-                                          IconButton(
-                                              padding:
-                                                  EdgeInsets.only(bottom: 0),
-                                              icon: Icon(
-                                                Icons.more_horiz,
-                                                color: Colors.white,
-                                                size: 30,
-                                              ),
-                                              onPressed: () {
-                                                postmenu(
-                                                    orderid, _hight, _width);
-                                              })
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            width: _hight * 0.06,
-                                            height: _hight * 0.06,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.white,
-                                              shape: BoxShape.rectangle,
-                                            ),
-                                            child: (images.length == 0)
-                                                ? Icon(
-                                                    Icons.engineering,
-                                                    color: Colors.blue[900],
-                                                  )
-                                                : Image.network(images.first),
-                                          ),
-                                          Container(
-                                            height: _hight * 0.07,
-                                            width: _width * 0.6,
-                                            padding: EdgeInsets.only(
-                                                left: _width * 0.06),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.work,
-                                                      color: Colors.white,
-                                                      size: _width * 0.035,
-                                                    ),
-                                                    SizedBox(
-                                                      width: _width * 0.01,
-                                                    ),
-                                                    Text(
-                                                      _postsController.jobs
-                                                          .elementAt(
-                                                        o[index]['job'],
-                                                      ),
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              _width * 0.03),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Text(
-                                                  toBeginningOfSentenceCase(
-                                                      o[index]['problem']),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: _width * 0.05),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      height: _hight * 0.08,
-                                      // color: Colors.amber,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            width: _width * 0.2,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  DateFormat('dd/MM/yyyy')
-                                                      .format(DateTime
-                                                          .fromMillisecondsSinceEpoch(
-                                                              o[index][
-                                                                  'schedule'])),
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: _width * 0.03),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.schedule,
-                                                      color: Colors.white,
-                                                      size: _width * 0.025,
-                                                    ),
-                                                    SizedBox(
-                                                      width: _width * 0.01,
-                                                    ),
-                                                    Text(
-                                                      'Schedule',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              _width * 0.02),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            width: _width * 0.2,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                // Text(document['scheduletime']),
-                                                Text(
-                                                  'Rs.' +
-                                                      o[index]['money']
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: _width * 0.03),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .account_balance_wallet,
-                                                      color: Colors.white,
-                                                      size: _width * 0.025,
-                                                    ),
-                                                    SizedBox(
-                                                      width: _width * 0.01,
-                                                    ),
-                                                    Text(
-                                                      'Money',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              _width * 0.02),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            width: _width * 0.25,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                // Text(document['scheduletime']),
-                                                Text(
-                                                  'Visakhaptnam',
-                                                  // _postsController
-                                                  //     .getAddressofLocation(
-                                                  //         addresses),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: _width * 0.03),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.location_on,
-                                                      color: Colors.white,
-                                                      size: _width * 0.025,
-                                                    ),
-                                                    SizedBox(
-                                                      width: _width * 0.01,
-                                                    ),
-                                                    Text(
-                                                      'location',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              _width * 0.02),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                            Positioned(
-                                right: -25,
-                                bottom: -25,
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    left: _width * 0.05,
-                                    bottom: _width * 0.09,
-                                  ),
-                                  height: _hight * 0.15,
-                                  width: _hight * 0.15,
+                      // var firstAddress = addresses.first.locality;
+                      return Container(
+                        child: InkWell(
+                          onTap: () {
+                            //  OrderOverViewProvider().orderDetails(orderid);
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  PostOverView(ordId: orderid),
+                            ));
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                  height: _hight * 0.20,
+                                  width: _width * 1,
                                   decoration: BoxDecoration(
-                                    color: Colors.blue[900],
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 10,
-                                          color: Colors.indigo[700],
-                                          spreadRadius: 4)
-                                    ],
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Colors.blue[800],
+                                          Colors.blue[900]
+                                        ],
+                                        begin: FractionalOffset(0.0, 0.2),
+                                        end: FractionalOffset(0.4, 0.9),
+                                        stops: [0.0, 1.0],
+                                        tileMode: TileMode.clamp),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
-                                        child: Column(
+                                        height: _hight * 0.040,
+                                        width: _width * 0.88,
+                                        padding: EdgeInsets.only(left: 0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text('4',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: _width * 0.05)),
-                                            Text('Responses',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: _width * 0.02))
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  _postsController
+                                                      .orderStateIcon(
+                                                          o[index]['ordState']),
+                                                  color: Colors.white,
+                                                  size: _width * 0.035,
+                                                ),
+                                                SizedBox(
+                                                  width: _width * 0.01,
+                                                ),
+                                                Text(
+                                                  _postsController
+                                                      .orderStateText(
+                                                          o[index]['ordState']),
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: _width * 0.03),
+                                                ),
+                                              ],
+                                            ),
+                                            IconButton(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 0),
+                                                icon: Icon(
+                                                  Icons.more_horiz,
+                                                  color: Colors.white,
+                                                  size: 30,
+                                                ),
+                                                onPressed: () {
+                                                  postmenu(
+                                                      orderid, _hight, _width);
+                                                })
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: _hight * 0.06,
+                                              height: _hight * 0.06,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.white,
+                                                shape: BoxShape.rectangle,
+                                              ),
+                                              child: (images.length == 0)
+                                                  ? Icon(
+                                                      Icons.engineering,
+                                                      color: Colors.blue[900],
+                                                    )
+                                                  : Image.network(images.first),
+                                            ),
+                                            Container(
+                                              height: _hight * 0.07,
+                                              width: _width * 0.6,
+                                              padding: EdgeInsets.only(
+                                                  left: _width * 0.06),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.work,
+                                                        color: Colors.white,
+                                                        size: _width * 0.035,
+                                                      ),
+                                                      SizedBox(
+                                                        width: _width * 0.01,
+                                                      ),
+                                                      Text(
+                                                        _postsController.jobs
+                                                            .elementAt(
+                                                          o[index]['job'],
+                                                        ),
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                _width * 0.03),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    toBeginningOfSentenceCase(
+                                                        o[index]['problem']),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize:
+                                                            _width * 0.05),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        height: _hight * 0.08,
+                                        // color: Colors.amber,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: _width * 0.2,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    DateFormat('dd/MM/yyyy')
+                                                        .format(DateTime
+                                                            .fromMillisecondsSinceEpoch(o[
+                                                                    index]
+                                                                ['schedule'])),
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            _width * 0.03),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.schedule,
+                                                        color: Colors.white,
+                                                        size: _width * 0.025,
+                                                      ),
+                                                      SizedBox(
+                                                        width: _width * 0.01,
+                                                      ),
+                                                      Text(
+                                                        'Schedule',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                _width * 0.02),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              width: _width * 0.2,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  // Text(document['scheduletime']),
+                                                  Text(
+                                                    'Rs.' +
+                                                        o[index]['money']
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            _width * 0.03),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .account_balance_wallet,
+                                                        color: Colors.white,
+                                                        size: _width * 0.025,
+                                                      ),
+                                                      SizedBox(
+                                                        width: _width * 0.01,
+                                                      ),
+                                                      Text(
+                                                        'Money',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                _width * 0.02),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              width: _width * 0.25,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  // Text(document['scheduletime']),
+                                                  Text(
+                                                    'Visakhaptnam',
+                                                    // _postsController
+                                                    //     .getAddressofLocation(
+                                                    //         addresses),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            _width * 0.03),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.location_on,
+                                                        color: Colors.white,
+                                                        size: _width * 0.025,
+                                                      ),
+                                                      SizedBox(
+                                                        width: _width * 0.01,
+                                                      ),
+                                                      Text(
+                                                        'location',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                _width * 0.02),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            )
                                           ],
                                         ),
                                       ),
                                     ],
-                                  ),
-                                ))
-                          ],
+                                  )),
+                              Positioned(
+                                  right: -25,
+                                  bottom: -25,
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                      left: _width * 0.05,
+                                      bottom: _width * 0.09,
+                                    ),
+                                    height: _hight * 0.15,
+                                    width: _hight * 0.15,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue[900],
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 10,
+                                            color: Colors.indigo[700],
+                                            spreadRadius: 4)
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Column(
+                                            children: [
+                                              Text('4',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: _width * 0.05)),
+                                              Text('Responses',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: _width * 0.02))
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                            ],
+                          ),
                         ),
-                      ),
-                      padding: EdgeInsets.only(top: 10),
-                    );
-                  });
+                        padding: EdgeInsets.only(top: 10),
+                      );
+                    }),
+              );
             },
           ),
         ));
