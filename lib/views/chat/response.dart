@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart
 
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -66,6 +68,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                       var responseData = listResponse[index];
                       var ord = responseData['orderDetails'];
                       var pDetails = responseData['pDetails'];
+                      var uDetails = responseData['uDetails'];
+                      log(uDetails.toString());
 
                       return Column(
                         children: [
@@ -275,6 +279,35 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               ),
                                             ),
                                           ],
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyCalling(
+                                                        ordId: responseData[
+                                                                'ordId']
+                                                            .toString(),
+                                                        uId: FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            .uid
+                                                            .toString(),
+                                                        pId: responseData['pId']
+                                                            .toString(),
+                                                        isIncoming: false,
+                                                        name: pDetails['name']
+                                                            .toString(),
+                                                        profile: pDetails[
+                                                                'partnerPic']
+                                                            .toString(),
+                                                      )));
+                                        },
+                                        icon: Icon(
+                                          Icons.phone,
+                                          color: Colors.grey[900],
                                         ),
                                       ),
                                     ],

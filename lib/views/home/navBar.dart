@@ -97,6 +97,8 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
                 pId: newTarget['pId'],
                 msgId: newTarget['msgId'],
                 ordId: newTarget['ordId'],
+                name: newTarget['incomingName'],
+                profile: newTarget['incomingProfile'],
                 isIncoming: true,
                 roomId: newTarget['roomId'])));
       }
@@ -160,9 +162,15 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
               switch (newMessageObject[i]['socketName']) {
                 case "sendNewMessageCallback":
                   if (i == newMessageObject.length - 1) {
-                    log("clear msg queue");
                     var msgId = payLoad['target']['msgId'];
-                    chatProvider.clearMessageQueue(msgId);
+                    log("clear msg queue $msgId !!!!");
+                    if (msgId == null || msgId == "" || msgId.isEmpty) {
+                      log("empty msg id $msgId");
+                      chatProvider.clearMessageQueue2();
+                    } else {
+                      log("proper msg id $msgId");
+                      chatProvider.clearMessageQueue(msgId);
+                    }
                   }
                   break;
                 case "chatStream":
