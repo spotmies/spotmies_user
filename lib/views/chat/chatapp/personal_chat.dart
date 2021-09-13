@@ -24,6 +24,7 @@ class PersonalChat extends StatefulWidget {
 
 class _PersonalChatState extends StateMVC<PersonalChat> {
   ChatController _chatController;
+
   _PersonalChatState() : super(ChatController()) {
     this._chatController = controller;
   }
@@ -32,6 +33,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   List chatList = [];
   Map targetChat = {};
   Map partner = {};
+  Map userDetails = {};
   int msgCount = 20;
   void scrollToBottom() {
     Timer(
@@ -44,7 +46,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   void initState() {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -103,15 +104,17 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        key: _chatController.scaffoldkey,
-        appBar: _buildAppBar(context, _hight, _width),
-        body: Consumer<ChatProvider>(builder: (context, data, child) {
-          chatList = data.getChatList2();
-          targetChat = _chatController.getTargetChat(chatList, widget.msgId);
-          partner = targetChat['uDetails'];
-          List messages = targetChat['msgs'];
-          return Container(
+    return Consumer<ChatProvider>(builder: (context, data, child) {
+      chatList = data.getChatList2();
+      targetChat = _chatController.getTargetChat(chatList, widget.msgId);
+      userDetails = targetChat['uDetails'];
+      partner = targetChat['pDetails'];
+
+      List messages = targetChat['msgs'];
+      return Scaffold(
+          key: _chatController.scaffoldkey,
+          appBar: _buildAppBar(context, _hight, _width),
+          body: Container(
             child: Column(children: [
               Expanded(
                 child: Container(
@@ -277,35 +280,36 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       child: TextWid(text: "You can't Message any More"),
                     )
             ]),
-          );
-        }),
-        floatingActionButton: Container(
-          height: _hight * 0.2,
-          padding: EdgeInsets.only(bottom: _hight * 0.1),
-          child: Consumer<ChatProvider>(
-            builder: (context, data, child) {
-              return data.getFloat()
-                  ? FloatingActionButton(
-                      elevation: 0,
-                      mini: true,
-                      backgroundColor: Colors.white,
-                      onPressed: () {
-                        scrollToBottom();
-
-                        // _scrollController
-                        //     .jumpTo(_scrollController.position.maxScrollExtent);
-                      },
-                      child: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.blue[900],
-                        size: _width * 0.07,
-                      ),
-                    )
-                  : Container();
-            },
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
+          // }),
+          floatingActionButton: Container(
+            height: _hight * 0.2,
+            padding: EdgeInsets.only(bottom: _hight * 0.1),
+            child: Consumer<ChatProvider>(
+              builder: (context, data, child) {
+                return data.getFloat()
+                    ? FloatingActionButton(
+                        elevation: 0,
+                        mini: true,
+                        backgroundColor: Colors.white,
+                        onPressed: () {
+                          scrollToBottom();
+
+                          // _scrollController
+                          //     .jumpTo(_scrollController.position.maxScrollExtent);
+                        },
+                        child: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.blue[900],
+                          size: _width * 0.07,
+                        ),
+                      )
+                    : Container();
+              },
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
+    });
   }
 
   Container readReciept(double _width, status) {
@@ -367,6 +371,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       uId: FirebaseAuth.instance.currentUser.uid,
                       pId: targetChat['pId'],
                       isIncoming: false,
+                      name: partner['name'],
+                      profile: partner['partnerPic'],
                     )));
           },
           icon: Icon(
@@ -388,40 +394,33 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                   option4Click: deleteChat);
             })
       ],
-      title: Consumer<ChatProvider>(
-        builder: (context, data, child) {
-          chatList = data.getChatList2();
-          targetChat = _chatController.getTargetChat(chatList, widget.msgId);
-          partner = targetChat['pDetails'];
-          return Row(
-            children: [
-              ProfilePic(
-                name: partner['name'],
-                profile: partner['partnerPic'],
-                status: false,
-                bgColor: Colors.blueGrey[600],
-                size: width * 0.045,
+      title: Row(
+        children: [
+          ProfilePic(
+            name: partner['name'],
+            profile: partner['partnerPic'],
+            status: false,
+            bgColor: Colors.blueGrey[600],
+            size: width * 0.045,
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Expanded(
+              child: TextWid(
+            text: partner['name'] ?? "Spotmies User",
+            size: width * 0.058,
+            weight: FontWeight.w600,
+          )
+              // Text(
+              //   user['name'] ?? "Unknown",
+              //   maxLines: 1,
+              //   style: TextStyle(
+              //     fontWeight: FontWeight.w600,
+              //   ),
+              // ),
               ),
-              SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                  child: TextWid(
-                text: partner['name'] ?? "Spotmies User",
-                size: width * 0.058,
-                weight: FontWeight.w600,
-              )
-                  // Text(
-                  //   user['name'] ?? "Unknown",
-                  //   maxLines: 1,
-                  //   style: TextStyle(
-                  //     fontWeight: FontWeight.w600,
-                  //   ),
-                  // ),
-                  ),
-            ],
-          );
-        },
+        ],
       ),
     );
   }
