@@ -46,7 +46,6 @@ dependencies:
   google_maps_flutter: ^2.0.1
   material_floating_search_bar: ^0.3.4
   percent_indicator: ^3.0.1
-  # otp_count_down: ^1.0.6
   animated_bottom_navigation_bar: ^0.3.2  
   mvc_pattern: ^5.1.0
   carousel_slider: ^3.0.0
@@ -56,15 +55,11 @@ dependencies:
   fluttertoast: ^8.0.7
   shimmer: ^2.0.0
   shared_preferences: ^2.0.6
-  # socket_io:
   socket_io_client: ^1.0.1
   flutter_svg:
   dotted_border:
   video_player: ^2.1.14
   flutter_webrtc:  ^0.6.5
-  # socket_io_client: 2.0.0-beta.4
-  # socket_io_client: ^2.0.0-beta.4
-  # web_socket_channel: ^2.1.0
   
 
   
