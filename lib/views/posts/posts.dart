@@ -124,7 +124,6 @@ class _PostListState extends StateMVC<PostList> {
                                     padding: EdgeInsets.only(left: 5, right: 5),
                                     child: Column(
                                       children: [
-                                        
                                         Container(
                                           height: _hight * 0.08,
                                           padding: const EdgeInsets.only(
@@ -149,8 +148,9 @@ class _PostListState extends StateMVC<PostList> {
                                                     weight: FontWeight.w600,
                                                   ),
                                                   Container(
+                                                    padding: EdgeInsets.only(
+                                                        right: 5, left: 5),
                                                     height: _hight * 0.032,
-                                                    width: _width * 0.25,
                                                     decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius:
@@ -374,9 +374,12 @@ class _PostListState extends StateMVC<PostList> {
           child: Center(
             child: Column(
               children: [
-
-                TextWidget(text: 'Select Menu',size: width * 0.04, color: Colors.grey[900],weight: FontWeight.w600,),
-               
+                TextWidget(
+                  text: 'Select Menu',
+                  size: width * 0.04,
+                  color: Colors.grey[900],
+                  weight: FontWeight.w600,
+                ),
                 Divider(
                   thickness: width * 0.005,
                   indent: width * 0.15,
@@ -405,8 +408,11 @@ class _PostListState extends StateMVC<PostList> {
                               SizedBox(
                                 height: hight * 0.01,
                               ),
-                              TextWidget(text: 'View', color: Colors.grey[900],weight: FontWeight.w600,)
-                             
+                              TextWidget(
+                                text: 'View',
+                                color: Colors.grey[900],
+                                weight: FontWeight.w600,
+                              )
                             ],
                           ),
                         ),
@@ -432,7 +438,11 @@ class _PostListState extends StateMVC<PostList> {
                               SizedBox(
                                 height: hight * 0.01,
                               ),
-                             TextWidget(text: 'Edit', color: Colors.grey[900],weight: FontWeight.w600,)
+                              TextWidget(
+                                text: 'Edit',
+                                color: Colors.grey[900],
+                                weight: FontWeight.w600,
+                              )
                             ],
                           ),
                         ),
@@ -497,7 +507,11 @@ class _PostListState extends StateMVC<PostList> {
                               SizedBox(
                                 height: hight * 0.01,
                               ),
-                             TextWidget(text: 'Delete', color: Colors.grey[900],weight: FontWeight.w600,)
+                              TextWidget(
+                                text: 'Delete',
+                                color: Colors.grey[900],
+                                weight: FontWeight.w600,
+                              )
                             ],
                           ),
                         ),
@@ -521,7 +535,11 @@ class _PostListState extends StateMVC<PostList> {
                               SizedBox(
                                 height: hight * 0.01,
                               ),
-                              TextWidget(text: 'Close', color: Colors.grey[900],weight: FontWeight.w600,)
+                              TextWidget(
+                                text: 'Close',
+                                color: Colors.grey[900],
+                                weight: FontWeight.w600,
+                              )
                             ],
                           ),
                         ),
