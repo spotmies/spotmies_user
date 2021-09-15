@@ -1,8 +1,16 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
+import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/internet_calling/calling.dart';
 
-Future partnerDetailsSummury(BuildContext context, double hight, double width) {
+Future partnerDetailsSummury(BuildContext context, double hight, double width,
+    pDetails, ResponsiveController _responsiveController, responseData, chatWithPatner) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -13,6 +21,7 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width) {
         ),
       ),
       builder: (BuildContext context) {
+        log(pDetails.toString());
         return Container(
           height: hight * 0.33,
           child: Column(
@@ -25,10 +34,10 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width) {
                       CircleAvatar(
                         radius: hight * 0.06,
                         child: ClipOval(
-                          child: Image.network(
-                              "https://pbs.twimg.com/media/Ey0G0DYU8AEr1D5.jpg",
+                          child: Image.network(pDetails['partnerPic'],
                               width: width * 0.4,
-                              fit: BoxFit.fill),
+                              height: width * 0.4,
+                              fit: BoxFit.fitHeight),
                         ),
                       ),
                       SizedBox(
@@ -45,26 +54,34 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width) {
                               children: [
                                 Row(
                                   children: [
-                                    Text(
-                                      'Satish Kumar Saride',
-                                      style: fonts(width * 0.04,
-                                          FontWeight.w600, Colors.grey[900]),
-                                    ),
+                                    TextWidget(
+                                      text: toBeginningOfSentenceCase(
+                                        pDetails['name'],
+                                      ),
+                                      size: width * 0.04,
+                                      weight: FontWeight.w600,
+                                      color: Colors.grey[900],
+                                    )
                                   ],
                                 ),
                                 Container(
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Interial Designer | ',
-                                        style: fonts(width * 0.025,
-                                            FontWeight.w600, Colors.grey[700]),
+                                      TextWidget(
+                                        text: _responsiveController.jobs
+                                                .elementAt(pDetails['job']) +
+                                            ' | ',
+                                        size: width * 0.025,
+                                        weight: FontWeight.w600,
+                                        color: Colors.grey[700],
                                       ),
-                                      Text(
-                                        'Rating:4.5',
-                                        style: fonts(width * 0.025,
-                                            FontWeight.w600, Colors.grey[700]),
+                                      TextWidget(
+                                        // text: pDetails['rate'][0].toString(),
+                                        text: '4.5',
+                                        size: width * 0.025,
+                                        weight: FontWeight.w600,
+                                        color: Colors.grey[700],
                                       ),
                                       Icon(
                                         Icons.star,
@@ -121,47 +138,68 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: width * 0.06,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.call,
-                          color: Colors.grey[900],
-                          size: width * 0.05,
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MyCalling(
+                                ordId: responseData['ordId'].toString(),
+                                uId: FirebaseAuth.instance.currentUser.uid
+                                    .toString(),
+                                pId: responseData['pId'].toString(),
+                                isIncoming: false,
+                                name: pDetails['name'].toString(),
+                                profile: pDetails['partnerPic'].toString(),
+                              )));
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: width * 0.06,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.call,
+                            color: Colors.grey[900],
+                            size: width * 0.05,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: hight * 0.01,
-                      ),
-                      Text(
-                        'Call',
-                        style: fonts(
-                            width * 0.04, FontWeight.w600, Colors.grey[900]),
-                      ),
-                    ],
+                        SizedBox(
+                          height: hight * 0.01,
+                        ),
+                        TextWidget(
+                          text: 'Call',
+                          size: width * 0.04,
+                          weight: FontWeight.w600,
+                          color: Colors.grey[900],
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: width * 0.06,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.chat_bubble,
-                          color: Colors.grey[900],
-                          size: width * 0.05,
+                  InkWell(
+                    onTap: () {
+                       chatWithPatner(responseData);
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: width * 0.06,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.chat_bubble,
+                            color: Colors.grey[900],
+                            size: width * 0.05,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: hight * 0.01,
-                      ),
-                      Text(
-                        'Message',
-                        style: fonts(
-                            width * 0.04, FontWeight.w600, Colors.grey[900]),
-                      ),
-                    ],
+                        SizedBox(
+                          height: hight * 0.01,
+                        ),
+                        TextWidget(
+                          text: 'Message',
+                          size: width * 0.04,
+                          weight: FontWeight.w600,
+                          color: Colors.grey[900],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
