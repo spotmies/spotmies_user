@@ -64,6 +64,21 @@ class _CallingUiState extends State<CallingUi> {
     });
   }
 
+  String formatedTime(int secTime) {
+    String getParsedTime(String time) {
+      if (time.length <= 1) return "0$time";
+      return time;
+    }
+
+    int min = secTime ~/ 60;
+    int sec = secTime % 60;
+
+    String parsedTime =
+        getParsedTime(min.toString()) + ":" + getParsedTime(sec.toString());
+
+    return parsedTime;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -102,7 +117,7 @@ class _CallingUiState extends State<CallingUi> {
                     VerticalSpacing(of: 10),
                     Text(
                       screenType == "outgoing"
-                          ? "Duration ${data.duration}   ${callStatus(data.getCallStatus)}"
+                          ? "Duration ${formatedTime(data.duration)}   ${callStatus(data.getCallStatus)}"
                               .toUpperCase()
                           : "INCOMING CALL.....",
                       style: TextStyle(color: Colors.white60),
