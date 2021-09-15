@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,7 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 import 'package:spotmies/models/admodel.dart';
+import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:video_player/video_player.dart';
@@ -65,6 +67,7 @@ class AdController extends ControllerMVC {
   String add3 = "";
   var docc;
   var wid = 1;
+  bool isUploading = false;
   List jobs = [
     'Select',
     'AC Service',
@@ -211,13 +214,17 @@ class AdController extends ControllerMVC {
   VideoPlayerController videoPlayerController;
 
   pickVideo() async {
-    PickedFile pickedFile = await picker.getVideo(source: ImageSource.camera);
-     serviceVideo = File(pickedFile.path); 
-    videoPlayerController = VideoPlayerController.file(serviceVideo)..initialize().then((_) {
-      setState(() { });
-      videoPlayerController.play();
-    });
-}
+    PickedFile pickedFile = await picker.getVideo(
+        source: ImageSource.camera, maxDuration: Duration(seconds: 10));
+    serviceVideo = File(pickedFile.path);
+    videoPlayerController = VideoPlayerController.file(serviceVideo)
+      ..initialize().then((_) {
+        setState(() {
+          serviceImages.add(serviceVideo);
+        });
+        videoPlayerController.play();
+      });
+  }
 
   Future<void> retrieveLostData() async {
     final LostData response = await ImagePicker().getLostData();
@@ -252,13 +259,13 @@ class AdController extends ControllerMVC {
     }
   }
 
-  step2() {
-    setState(() {
-      if (longitude != '' || pickedTime != null) {
-        wid = wid + 1;
-      }
-    });
-  }
+  // step2() {
+  //   setState(() {
+  //     if (longitude != '' || pickedTime != null) {
+  //       wid = wid + 1;
+  //     }
+  //   });
+  // }
 
   step1() {
     if (dropDownValue == 0) {
@@ -289,23 +296,28 @@ class AdController extends ControllerMVC {
     await uploadServiceMedia();
     String images = imageLink.toString();
     CircularProgressIndicator();
+    // log(userDetails.toString());
+    // var ud = userDetails["_id"].toString();
     var body = {
       "problem": this.title.toString(),
       "job": this.dropDownValue.toString(),
       "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
-      "ordState": 'req',
+      "ordState": "req",
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       "schedule": pickedDate.millisecondsSinceEpoch.toString(),
       "uId": FirebaseAuth.instance.currentUser.uid.toString(),
-      "money": this.money.toString(),
+      if (this.money != null) "money": this.money,
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
-      "media": images.substring(1, images.length - 1),
-      "uDetails": userDetails
+      // "media": images.substring(1, images.length - 1).toString(),
+      "media": imageLink.toString(),
+      "uDetails": userDetails["_id"].toString()
     };
-    // print(body);
+    log(body.toString());
     // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
+      log(response.body.toString());
+      log(response.statusCode.toString());
       if (response.statusCode == 200) {
         snackbar(context, 'Published');
         Navigator.pop(context);
@@ -313,8 +325,11 @@ class AdController extends ControllerMVC {
       if (response.statusCode == 400) {
         snackbar(context, 'Bad Request');
       }
+      // if (response.statusCode == null) {
+      //   circleProgress();
+      // }
     });
-    //Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   buttonFromHome() async {
