@@ -8,9 +8,12 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
 
 import 'package:spotmies/providers/responses_provider.dart';
-import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
+import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class Responsee extends StatefulWidget {
@@ -60,6 +63,8 @@ class _ResponseeState extends StateMVC<Responsee> {
             Container(
               child: RefreshIndicator(
                 onRefresh: _responsiveController.fetchNewResponses,
+                color: Colors.white,
+                backgroundColor: Colors.indigo[900],
                 child: ListView.builder(
                     itemCount: listResponse.length,
                     scrollDirection: Axis.vertical,
@@ -76,242 +81,158 @@ class _ResponseeState extends StateMVC<Responsee> {
                           InkWell(
                             onTap: () {},
                             child: Container(
-                              padding: EdgeInsets.all(10),
-                              height: _hight * 0.2,
+                              padding: EdgeInsets.only(bottom: 10),
+                              height: _hight * 0.3,
                               width: _width * 1,
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  boxShadow: kElevationToShadow[0]),
-                              child: Row(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey[200],
+                                        blurRadius: 2,
+                                        spreadRadius: 2)
+                                  ]),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(pDetails['partnerPic']),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        pDetails['name'] == null
-                                            ? 'technician'
-                                            : pDetails['name'].toString(),
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            decoration:
-                                                TextDecoration.underline),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                              //"",
-                                              _responsiveController.jobs
-                                                      .elementAt(ord['job'])
-                                                      .toString() +
-                                                  ' | ',
-                                              style: TextStyle(fontSize: 8)),
-                                          Row(
-                                            children: [
-                                              Text("",
-                                                  // (_responsiveController.avg(
-                                                  //             pDetails['rate']) /
-                                                  //         20)
-                                                  //     .toString(),
-                                                  style:
-                                                      TextStyle(fontSize: 8)),
-                                              Icon(
-                                                Icons.star,
-                                                size: 8,
-                                                color: Colors.amber,
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: _width * 0.635,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Container(
-                                              width: _width * 0.3,
-                                              height: _hight * 0.05,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                      'Money :   ' +
-                                                          responseData['money']
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              _width * 0.02)),
-                                                  // SizedBox(
-                                                  //   width: 60,
-                                                  // ),
-                                                  Text(
-                                                    'Away :   ' +
-                                                        responseData['loc']
-                                                            .toString() +
-                                                        'KM',
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            _width * 0.02),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              width: _width * 0.3,
-                                              height: _hight * 0.05,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                      'Time :   ' +
-                                                          responseData[
-                                                                  'schedule']
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              _width * 0.02)),
-                                                  Text(
-                                                      'Date :   ' +
-                                                          responseData[
-                                                                  'schedule']
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              _width * 0.02))
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: _width * 0.63,
-                                        child: Row(
+                                  Container(
+                                    height: _hight * 0.1,
+                                    padding: EdgeInsets.only(
+                                        left: 10, right: 10, top: 10),
+                                    alignment: Alignment.topCenter,
+                                    decoration: BoxDecoration(
+                                      color: Colors.indigo[50],
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20)),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Visibility(
-                                              visible:
-                                                  responseData['isAccepted'],
-                                              child: Container(
-                                                  child: TextWid(
-                                                      text:
-                                                          "Partner accepted you service request")),
+                                            TextWidget(
+                                              text: _responsiveController.jobs
+                                                  .elementAt(ord['job']),
+                                              color: Colors.indigo[900],
+                                              size: _width * 0.035,
+                                              weight: FontWeight.w500,
+                                              lSpace: 0.2,
                                             ),
-                                            Visibility(
-                                              visible:
-                                                  !responseData['isAccepted'],
-                                              child: InkWell(
-                                                onTap: () {
-                                                  _responsiveController
-                                                      .acceptOrRejectResponse(
-                                                          responseData,
-                                                          "reject");
+                                            IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: BoxConstraints(),
+                                                onPressed: () {
+                                                  partnerDetailsSummury(
+                                                      context, _hight, _width,pDetails,_responsiveController,responseData, chatWithPatner);
+                                                       
                                                 },
-                                                child: Container(
-                                                  // width: _width * 0.63,
-                                                  alignment: Alignment.center,
-                                                  child: Text('Reject',
-                                                      style: TextStyle(
-                                                        color: Colors.grey[300],
-                                                      )),
-                                                ),
-                                              ),
+                                                icon: Icon(
+                                                  Icons.more_horiz,
+                                                  size: _width * 0.06,
+                                                  color: Colors.indigo[900],
+                                                ))
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: _width * 0.015,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              Icons.schedule,
+                                              color: Colors.indigo[900],
+                                              size: _width * 0.045,
                                             ),
-                                            Visibility(
-                                              visible:
-                                                  !responseData['isAccepted'],
-                                              child: InkWell(
-                                                onTap: () {
-                                                  _responsiveController
-                                                      .acceptOrRejectResponse(
-                                                          responseData,
-                                                          "accept");
-                                                },
-                                                child: Container(
-                                                  // width: _width * 0.63,
-                                                  alignment: Alignment.center,
-                                                  child: Text('Accept',
-                                                      style: TextStyle(
-                                                        color: Colors.grey[300],
-                                                      )),
-                                                ),
-                                              ),
+                                            SizedBox(
+                                              width: _width * 0.015,
                                             ),
-                                            InkWell(
-                                              onTap: () {
-                                                chatWithPatner(responseData);
-                                              },
-                                              child: Container(
-                                                // width: _width * 0.63,
-                                                alignment: Alignment.center,
-                                                child: Text('Tap to chat',
-                                                    style: TextStyle(
-                                                      color: Colors.grey[300],
-                                                    )),
-                                              ),
+                                            TextWidget(
+                                              text: getDate(ord['schedule']) +
+                                                  ' - ' +
+                                                  getTime(ord['schedule']),
+                                              color: Colors.indigo[900],
+                                              weight: FontWeight.w600,
+                                              size: _width * 0.045,
                                             ),
                                           ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(15),
+                                        child: CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              pDetails['partnerPic'],),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: _width * 0.35,
+                                        child: TextWidget(
+                                          text: ord['problem'],
+                                          flow: TextOverflow.visible,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: _width * 0.08,
+                                        child: TextWidget(
+                                          text:
+                                              responseData['money'].toString(),
+                                          flow: TextOverflow.visible,
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyCalling(
-                                                        ordId: responseData[
-                                                                'ordId']
-                                                            .toString(),
-                                                        uId: FirebaseAuth
-                                                            .instance
-                                                            .currentUser
-                                                            .uid
-                                                            .toString(),
-                                                        pId: responseData['pId']
-                                                            .toString(),
-                                                        isIncoming: false,
-                                                        name: pDetails['name']
-                                                            .toString(),
-                                                        profile: pDetails[
-                                                                'partnerPic']
-                                                            .toString(),
-                                                      )));
-                                        },
-                                        icon: Icon(
-                                          Icons.phone,
-                                          color: Colors.grey[900],
-                                        ),
-                                      ),
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            Icons.info,
+                                            color: Colors.grey,
+                                            size: _width * 0.05,
+                                          ))
                                     ],
                                   ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      ElevatedButtonWidget(
+                                        minWidth: _width * 0.3,
+                                        height: _hight * 0.045,
+                                        bgColor: Colors.indigo[50],
+                                        buttonName: 'Decline',
+                                        textColor: Colors.grey[900],
+                                        borderRadius: 15.0,
+                                        textSize: _width * 0.04,
+                                        borderSideColor: Colors.indigo[50],
+                                        onClick: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      ElevatedButtonWidget(
+                                        minWidth: _width * 0.5,
+                                        height: _hight * 0.045,
+                                        bgColor: Colors.indigo[900],
+                                        buttonName: 'Accept',
+                                        textColor: Colors.white,
+                                        borderRadius: 15.0,
+                                        textSize: _width * 0.04,
+                                        borderSideColor: Colors.indigo[900],
+                                      )
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -336,6 +257,10 @@ class _ResponseeState extends StateMVC<Responsee> {
         }));
   }
 }
+
+
+
+
 
   // return StreamBuilder(
                 //   stream: stream,
@@ -382,3 +307,116 @@ class _ResponseeState extends StateMVC<Responsee> {
 
 //     print(socket.connected);
 //   }
+
+
+
+
+
+// Container(
+//                                             width: _width * 0.63,
+//                                             child: Column(
+//                                               mainAxisAlignment:
+//                                                   MainAxisAlignment
+//                                                       .spaceBetween,
+//                                               children: [
+//                                                 Visibility(
+//                                                   visible: responseData[
+//                                                       'isAccepted'],
+//                                                   child: Container(
+//                                                       child: TextWid(
+//                                                           text:
+//                                                               "Partner accepted you service request")),
+//                                                 ),
+//                                                 Visibility(
+//                                                   visible: !responseData[
+//                                                       'isAccepted'],
+//                                                   child: InkWell(
+//                                                     onTap: () {
+//                                                       _responsiveController
+//                                                           .acceptOrRejectResponse(
+//                                                               responseData,
+//                                                               "reject");
+//                                                     },
+//                                                     child: Container(
+//                                                       // width: _width * 0.63,
+//                                                       alignment:
+//                                                           Alignment.center,
+//                                                       child: Text('Reject',
+//                                                           style: TextStyle(
+//                                                             color: Colors
+//                                                                 .grey[300],
+//                                                           )),
+//                                                     ),
+//                                                   ),
+//                                                 ),
+//                                                 Visibility(
+//                                                   visible: !responseData[
+//                                                       'isAccepted'],
+//                                                   child: InkWell(
+//                                                     onTap: () {
+//                                                       _responsiveController
+//                                                           .acceptOrRejectResponse(
+//                                                               responseData,
+//                                                               "accept");
+//                                                     },
+//                                                     child: Container(
+//                                                       // width: _width * 0.63,
+//                                                       alignment:
+//                                                           Alignment.center,
+//                                                       child: Text('Accept',
+//                                                           style: TextStyle(
+//                                                             color: Colors
+//                                                                 .grey[300],
+//                                                           )),
+//                                                     ),
+//                                                   ),
+//                                                 ),
+//                                                 InkWell(
+//                                                   onTap: () {
+//                                                     chatWithPatner(
+//                                                         responseData);
+//                                                   },
+//                                                   child: Container(
+//                                                     // width: _width * 0.63,
+//                                                     alignment: Alignment.center,
+//                                                     child: Text('Tap to chat',
+//                                                         style: TextStyle(
+//                                                           color:
+//                                                               Colors.grey[300],
+//                                                         )),
+//                                                   ),
+//                                                 ),
+//                                               ],
+//                                             ),
+//                                           ),
+//                                           IconButton(
+//                                             onPressed: () {
+//                                               Navigator.of(context).push(
+//                                                   MaterialPageRoute(
+//                                                       builder: (context) =>
+//                                                           MyCalling(
+//                                                             ordId: responseData[
+//                                                                     'ordId']
+//                                                                 .toString(),
+//                                                             uId: FirebaseAuth
+//                                                                 .instance
+//                                                                 .currentUser
+//                                                                 .uid
+//                                                                 .toString(),
+//                                                             pId: responseData[
+//                                                                     'pId']
+//                                                                 .toString(),
+//                                                             isIncoming: false,
+//                                                             name:
+//                                                                 pDetails['name']
+//                                                                     .toString(),
+//                                                             profile: pDetails[
+//                                                                     'partnerPic']
+//                                                                 .toString(),
+//                                                           )));
+//                                             },
+//                                             icon: Icon(
+//                                               Icons.phone,
+//                                               color: Colors.grey[900],
+//                                             ),
+//                                           ),
