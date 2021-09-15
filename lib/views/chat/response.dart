@@ -1,17 +1,14 @@
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
-
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
-import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -79,7 +76,16 @@ class _ResponseeState extends StateMVC<Responsee> {
                       return Column(
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              partnerDetailsSummury(
+                                  context,
+                                  _hight,
+                                  _width,
+                                  pDetails,
+                                  _responsiveController,
+                                  responseData,
+                                  chatWithPatner);
+                            },
                             child: Container(
                               padding: EdgeInsets.only(bottom: 10),
                               height: _hight * 0.3,
@@ -129,11 +135,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             IconButton(
                                                 padding: EdgeInsets.zero,
                                                 constraints: BoxConstraints(),
-                                                onPressed: () {
-                                                  partnerDetailsSummury(
-                                                      context, _hight, _width,pDetails,_responsiveController,responseData, chatWithPatner);
-                                                       
-                                                },
+                                                onPressed: () {},
                                                 icon: Icon(
                                                   Icons.more_horiz,
                                                   size: _width * 0.06,
@@ -177,7 +179,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                                         padding: EdgeInsets.all(15),
                                         child: CircleAvatar(
                                           backgroundImage: NetworkImage(
-                                              pDetails['partnerPic'],),
+                                            pDetails['partnerPic'],
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -187,12 +190,17 @@ class _ResponseeState extends StateMVC<Responsee> {
                                           flow: TextOverflow.visible,
                                         ),
                                       ),
-                                      Container(
-                                        width: _width * 0.08,
-                                        child: TextWidget(
-                                          text:
-                                              responseData['money'].toString(),
-                                          flow: TextOverflow.visible,
+                                      Visibility(
+                                        visible:
+                                            responseData['money'] != null ||
+                                                ord['money'] != null,
+                                        child: Container(
+                                          // width: _width * 0.08,
+                                          child: TextWidget(
+                                            text:
+                                                "₹ ${responseData['money'] ?? ord['money']}",
+                                            flow: TextOverflow.visible,
+                                          ),
                                         ),
                                       ),
                                       IconButton(
@@ -204,35 +212,68 @@ class _ResponseeState extends StateMVC<Responsee> {
                                           ))
                                     ],
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      ElevatedButtonWidget(
-                                        minWidth: _width * 0.3,
-                                        height: _hight * 0.045,
-                                        bgColor: Colors.indigo[50],
-                                        buttonName: 'Decline',
-                                        textColor: Colors.grey[900],
-                                        borderRadius: 15.0,
-                                        textSize: _width * 0.04,
-                                        borderSideColor: Colors.indigo[50],
-                                        onClick: () {
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                      ElevatedButtonWidget(
-                                        minWidth: _width * 0.5,
-                                        height: _hight * 0.045,
-                                        bgColor: Colors.indigo[900],
-                                        buttonName: 'Accept',
-                                        textColor: Colors.white,
-                                        borderRadius: 15.0,
-                                        textSize: _width * 0.04,
-                                        borderSideColor: Colors.indigo[900],
-                                      )
-                                    ],
-                                  )
+                                  responseData['isAccepted']
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                              Container(
+                                                padding:
+                                                    EdgeInsets.only(left: 20),
+                                                child: Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.green[700],
+                                                  size: _width * 0.056,
+                                                ),
+                                              ),
+                                              Container(
+                                                  padding:
+                                                      EdgeInsets.only(left: 10),
+                                                  child: TextWid(
+                                                    text:
+                                                        "Partner accepted your order",
+                                                    size: _width * 0.04,
+                                                    weight: FontWeight.bold,
+                                                  ))
+                                            ])
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            ElevatedButtonWidget(
+                                              minWidth: _width * 0.3,
+                                              height: _hight * 0.045,
+                                              bgColor: Colors.indigo[50],
+                                              buttonName: 'Decline',
+                                              textColor: Colors.grey[900],
+                                              borderRadius: 15.0,
+                                              textSize: _width * 0.04,
+                                              borderSideColor:
+                                                  Colors.indigo[50],
+                                              onClick: () {
+                                                _responsiveController
+                                                    .acceptOrRejectResponse(
+                                                        responseData, "reject");
+                                              },
+                                            ),
+                                            ElevatedButtonWidget(
+                                              minWidth: _width * 0.5,
+                                              height: _hight * 0.045,
+                                              bgColor: Colors.indigo[900],
+                                              buttonName: 'Accept',
+                                              textColor: Colors.white,
+                                              borderRadius: 15.0,
+                                              textSize: _width * 0.04,
+                                              borderSideColor:
+                                                  Colors.indigo[900],
+                                              onClick: () {
+                                                _responsiveController
+                                                    .acceptOrRejectResponse(
+                                                        responseData, "accept");
+                                              },
+                                            )
+                                          ],
+                                        )
                                 ],
                               ),
                             ),
@@ -354,10 +395,10 @@ class _ResponseeState extends StateMVC<Responsee> {
 //                                                       'isAccepted'],
 //                                                   child: InkWell(
 //                                                     onTap: () {
-//                                                       _responsiveController
-//                                                           .acceptOrRejectResponse(
-//                                                               responseData,
-//                                                               "accept");
+                                                      // _responsiveController
+                                                      //     .acceptOrRejectResponse(
+                                                      //         responseData,
+                                                      //         "accept");
 //                                                     },
 //                                                     child: Container(
 //                                                       // width: _width * 0.63,
