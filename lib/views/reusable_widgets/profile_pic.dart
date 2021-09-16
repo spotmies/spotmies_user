@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class ProfilePic extends StatelessWidget {
@@ -8,6 +9,8 @@ class ProfilePic extends StatelessWidget {
       @required this.name,
       @required this.bgColor,
       this.size,
+      this.badgeIcon,
+      this.onClick,
       this.status = true})
       : super(key: key);
 
@@ -16,6 +19,8 @@ class ProfilePic extends StatelessWidget {
   final bool status;
   final Color bgColor;
   final double size;
+  final Icon badgeIcon;
+  final Callback onClick;
   Widget _activeIcon(double hight, double width) {
     if (status) {
       return ClipRRect(
@@ -45,7 +50,7 @@ class ProfilePic extends StatelessWidget {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Container(
-      child: profile != null
+      child: Uri.parse(profile).isAbsolute
           ? Stack(
               children: [
                 CircleAvatar(
@@ -75,10 +80,15 @@ class ProfilePic extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: _activeIcon(_hight, _width),
+                InkWell(
+                  onTap: () {
+                    onClick != null ? onClick() : null;
+                  },
+                  child: Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: badgeIcon ?? _activeIcon(_hight, _width),
+                  ),
                 ),
               ],
             ),
