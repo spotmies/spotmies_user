@@ -287,6 +287,8 @@ class AdController extends ControllerMVC {
   }
 
   step3(userDetails) {
+    isUploading = true;
+    refresh();
     adbutton(userDetails);
   }
 
@@ -323,21 +325,23 @@ class AdController extends ControllerMVC {
     log(body.toString());
     // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
-      log(response.body.toString());
-      log(response.statusCode.toString());
       if (response.statusCode == 200) {
+        isUploading = false;
+        refresh();
         snackbar(context, 'Published');
         ordersProvider.addNewOrder(jsonDecode(response.body));
         Navigator.pop(context);
       }
       if (response.statusCode == 400) {
+        isUploading = false;
+        refresh();
+        snackbar(context, 'Bad Request');
+      } if (response.statusCode == 404) {
+        isUploading = false;
+        refresh();
         snackbar(context, 'Bad Request');
       }
-      // if (response.statusCode == null) {
-      //   circleProgress();
-      // }
     });
-    // Navigator.pop(context);
   }
 
   buttonFromHome() async {
