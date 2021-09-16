@@ -12,6 +12,7 @@ import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/ads/maps.dart';
+import 'package:spotmies/views/maps/onLine_placesSearch.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
@@ -57,6 +58,7 @@ class _PostAdState extends StateMVC<PostAd> {
       var user = data.user;
       if (data.getLoader || user == null)
         return Center(child: profileShimmer(context));
+      if(_adController.isUploading) return circleProgress();
       return Scaffold(
           resizeToAvoidBottomInset: false,
           key: _adController.scaffoldkey,
@@ -67,62 +69,13 @@ class _PostAdState extends StateMVC<PostAd> {
               PageSlider(key: _adController.sliderKey, pages: [
                 Container(height: _hight * 1.08, child: ad1(_hight, _width)),
                 Container(height: _hight * 1.08, child: ad2(_hight, _width)),
-                Container(height: _hight * 1.08, child: ad3(_hight, _width,user)),
+                Container(
+                    height: _hight * 1.08, child: ad3(_hight, _width, user)),
               ]),
             ]),
-          ))
-          // callmethod(_adController.wid, _hight, _width),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          // floatingActionButton: Container(
-          //   height: _hight * 0.2,
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //     children: [
-          //       if (_adController.wid >= 2)
-          //         FloatingActionButton.extended(
-          //           heroTag: 'back',
-          //           backgroundColor: Colors.white,
-          //           onPressed: () {
-          //             _adController.widDec();
-          //           },
-          //           label: Text(
-          //             '    Back    ',
-          //             style: TextStyle(color: Colors.blue[900]),
-          //           ),
-          //         ),
-          //       FloatingActionButton.extended(
-          //         heroTag: 'next',
-          //         backgroundColor: Colors.white,
-          //         onPressed: () {
-          //           _adController.wid == 1
-          //               ? _adController.step1()
-          //               : _adController.wid == 2
-          //                   ? _adController.step2()
-          //                   : _adController.step3(u['_id']);
-          //         },
-          //         label: Text(
-          //           _adController.wid != 3 ? '    Next    ' : 'Get Service',
-          //           style: TextStyle(color: Colors.blue[900]),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
-          );
+          )));
     });
   }
-
-  // callmethod(int wid, double _hight, double _width) {
-  //   return Container(
-  //     child: wid == 1
-  //         ? ad1(_hight, _width)
-  //         : wid == 2
-  //             ? ad2(_hight, _width)
-  //             : wid == 3
-  //                 ? ad3(_hight, _width)
-  //                 : Center(child: CircularProgressIndicator()),
-  //   );
-  // }
 
   steps(
     int step,
@@ -547,9 +500,12 @@ class _PostAdState extends StateMVC<PostAd> {
                                       icon: Icon(Icons.video_camera_back)),
                                   IconButton(
                                       onPressed: () {
-                                        log(_adController.serviceImages.toString());
-                                        audioRecoder(context, hight, width, _adController);
-                                      }, icon: Icon(Icons.mic))
+                                        log(_adController.serviceImages
+                                            .toString());
+                                        audioRecoder(context, hight, width,
+                                            _adController);
+                                      },
+                                      icon: Icon(Icons.mic))
                                 ],
                               )),
                               SizedBox(
@@ -598,6 +554,7 @@ class _PostAdState extends StateMVC<PostAd> {
                                                       crossAxisSpacing: 3.5,
                                                       crossAxisCount: 4),
                                               itemBuilder: (context, index) {
+                                                // String type =  _adController.serviceImages[index].toString();
                                                 return index == 0
                                                     ? Center(
                                                         child: IconButton(
@@ -612,8 +569,6 @@ class _PostAdState extends StateMVC<PostAd> {
                                                             }),
                                                       )
                                                     : Stack(children: [
-
-                                                    
                                                         Container(
                                                           decoration: BoxDecoration(
                                                               image: DecorationImage(
@@ -636,7 +591,8 @@ class _PostAdState extends StateMVC<PostAd> {
                                                                           index -
                                                                               1);
 
-                                                               _adController.refresh();
+                                                                  _adController
+                                                                      .refresh();
                                                                 },
                                                                 child: Icon(
                                                                   Icons.close,
@@ -812,6 +768,13 @@ class _PostAdState extends StateMVC<PostAd> {
                                     textSize: width * 0.035,
                                     height: hight * 0.07,
                                     minWidth: width * 0.35,
+                                    onClick: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OnlinePlaceSearch()));
+                                    },
                                   )
                                 ],
                               ),
@@ -847,6 +810,7 @@ class _PostAdState extends StateMVC<PostAd> {
                       ),
                       ElevatedButtonWidget(
                         onClick: () async {
+                          
                           await _adController.step3(user);
                         },
                         buttonName: 'Finish',

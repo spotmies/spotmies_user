@@ -281,6 +281,8 @@ class AdController extends ControllerMVC {
   }
 
   step3(userDetails) {
+    isUploading = true;
+    refresh();
     adbutton(userDetails);
   }
 
@@ -309,27 +311,26 @@ class AdController extends ControllerMVC {
       if (this.money != null) "money": this.money,
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
-      // "media": images.substring(1, images.length - 1).toString(),
       "media": imageLink.toString(),
       "uDetails": userDetails["_id"].toString()
     };
-    log(body.toString());
-    // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
-      log(response.body.toString());
-      log(response.statusCode.toString());
       if (response.statusCode == 200) {
+        isUploading = false;
+        refresh();
         snackbar(context, 'Published');
         Navigator.pop(context);
       }
       if (response.statusCode == 400) {
+        isUploading = false;
+        refresh();
+        snackbar(context, 'Bad Request');
+      } if (response.statusCode == 404) {
+        isUploading = false;
+        refresh();
         snackbar(context, 'Bad Request');
       }
-      // if (response.statusCode == null) {
-      //   circleProgress();
-      // }
     });
-    // Navigator.pop(context);
   }
 
   buttonFromHome() async {
