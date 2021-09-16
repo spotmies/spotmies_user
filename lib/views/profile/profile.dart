@@ -95,6 +95,8 @@ class _ProfileState extends StateMVC<Profile> {
         //  "pic": ""
       };
       print(body);
+      profileProvider.setLoader(true);
+      Navigator.pop(context);
       var resp = await _profileController.updateProfileDetails(body);
       if (resp != false) {
         log(resp.toString());
