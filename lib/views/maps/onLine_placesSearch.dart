@@ -7,7 +7,7 @@ import 'package:spotmies/apiCalls/placesAPI.dart';
 import 'package:spotmies/models/placesModel.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
-import 'package:spotmies/views/home/ads/maps.dart';
+import 'package:spotmies/views/maps/maps.dart';
 
 class OnlinePlaceSearch extends StatefulWidget {
   @override

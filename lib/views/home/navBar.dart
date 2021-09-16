@@ -11,7 +11,7 @@ import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
-import 'package:spotmies/views/home/ads/ad.dart';
+import 'package:spotmies/views/home/ads/adpost.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';

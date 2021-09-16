@@ -17,7 +17,6 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 import 'package:spotmies/models/admodel.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
-import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:video_player/video_player.dart';

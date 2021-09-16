@@ -2,14 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textFormFieldWidget.dart';
-import 'package:spotmies/views/profile/profile.dart';
-import 'package:spotmies/views/profile/profilePic.dart';
 
 Future editDetails(BuildContext context, {details}) {
   final _width = MediaQuery.of(context).size.width;
