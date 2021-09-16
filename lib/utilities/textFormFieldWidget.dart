@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 class TextFieldWidget extends StatefulWidget {
@@ -27,6 +28,8 @@ class TextFieldWidget extends StatefulWidget {
   final String parametersValidate;
   final int maxLength;
   final int maxLines;
+  final String label;
+  final List<TextInputFormatter> formatter;
 
   TextFieldWidget(
       {this.text,
@@ -53,7 +56,9 @@ class TextFieldWidget extends StatefulWidget {
       this.errorBorderRadius,
       this.focusErrorRadius,
       this.prefixColor,
-      this.prefix});
+      this.prefix,
+      this.label,
+      this.formatter});
 
   @override
   _TextFieldWidgetState createState() => _TextFieldWidgetState();
@@ -63,8 +68,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: widget.formatter,
       controller: widget.controller,
       decoration: InputDecoration(
+        counterText: '',
         border: new OutlineInputBorder(
             borderSide:
                 new BorderSide(color: widget.bordercolor ?? Colors.white),
@@ -99,6 +106,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             widget.hintWeight ?? FontWeight.w500,
             widget.hintColor ?? Colors.grey),
         hintText: widget.hint ?? '',
+        labelText: widget.label,
       ),
       autofocus: true,
       maxLines: widget.maxLines,

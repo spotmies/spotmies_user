@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,10 +11,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 import 'package:spotmies/models/admodel.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
@@ -24,6 +27,7 @@ class AdController extends ControllerMVC {
   var formkey = GlobalKey<FormState>();
   TextEditingController problem = TextEditingController();
   final controller = TestController();
+  GetOrdersProvider ordersProvider;
 
   // int currentStep = 0;
   GlobalKey<PageSliderState> sliderKey = GlobalKey();
@@ -149,6 +153,8 @@ class AdController extends ControllerMVC {
   @override
   void initState() {
     super.initState();
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+
     getAddressofLocation();
     pickedDate = DateTime.now();
     pickedTime = TimeOfDay.now();
@@ -311,14 +317,19 @@ class AdController extends ControllerMVC {
       if (this.money != null) "money": this.money,
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
-      "media": imageLink.toString(),
       "uDetails": userDetails["_id"].toString()
     };
+    for (var i = 0; i < imageLink.length; i++) {
+      body["media.$i"] = imageLink[i];
+    }
+    log(body.toString());
+    // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
       if (response.statusCode == 200) {
         isUploading = false;
         refresh();
         snackbar(context, 'Published');
+        ordersProvider.addNewOrder(jsonDecode(response.body));
         Navigator.pop(context);
       }
       if (response.statusCode == 400) {
