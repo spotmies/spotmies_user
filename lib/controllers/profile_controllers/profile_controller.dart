@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:share/share.dart';
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/controllers/profile_controllers/help.dart';
 import 'package:spotmies/views/profile/privacyPolicies.dart';
 import 'package:spotmies/views/login/loginpage.dart';
@@ -71,6 +75,12 @@ class ProfileController extends ControllerMVC {
   share() {
     return Share.share(
         'https://play.google.com/store/apps/details?id=com.spotmiespartner');
+  }
+
+  updateProfileDetails(body) async {
+    var response = await Server().editMethod(API.editPersonalInfo, body);
+    response = jsonDecode(response);
+    return response;
   }
 
   Widget drawer() {

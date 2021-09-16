@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies/views/profile/editDetailsBS.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
-Widget profilePic(BuildContext context, upic) {
+Widget profilePic(BuildContext context, upic, name, {onClick}) {
   final _width = MediaQuery.of(context).size.width;
   final _hight = MediaQuery.of(context).size.height -
       MediaQuery.of(context).padding.top -
@@ -9,8 +10,20 @@ Widget profilePic(BuildContext context, upic) {
   return CircleAvatar(
     child: Stack(children: [
       ClipOval(
-        child: Image.network(upic,
-            height: _width * 0.4, width: _width * 0.4, fit: BoxFit.fill),
+        child: Uri.parse(upic).isAbsolute
+            ? Image.network(upic,
+                height: _width * 0.4, width: _width * 0.4, fit: BoxFit.fill)
+            : Container(
+                height: _width * 0.4,
+                width: _width * 0.4,
+                alignment: Alignment.center,
+                child: TextWid(
+                  text: "${name[0] ?? "J"}",
+                  size: 30,
+                  weight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
       ),
       Positioned(
           bottom: 0,
@@ -20,7 +33,7 @@ Widget profilePic(BuildContext context, upic) {
             shape: CircleBorder(),
             child: InkWell(
               onTap: () {
-                editDetails(context, _hight, _width);
+                onClick();
               },
               child: CircleAvatar(
                 backgroundColor: Colors.white,
