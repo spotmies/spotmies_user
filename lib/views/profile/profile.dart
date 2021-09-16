@@ -94,7 +94,6 @@ class _ProfileState extends StateMVC<Profile> {
         ],
       ),
       body: Container(
-        // height: _hight * 0.7,
         child: Consumer<UserDetailsProvider>(builder: (context, data, child) {
           var u = data.getUser;
           if (data.getLoader || u == null)

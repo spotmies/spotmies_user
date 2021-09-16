@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +12,8 @@ import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/ads/maps.dart';
+import 'package:spotmies/views/profile/profile_shimmer.dart';
+import 'package:spotmies/views/reusable_widgets/audio.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 
 //path for adding post data
@@ -34,12 +38,11 @@ class _PostAdState extends StateMVC<PostAd> {
   String add2 = "";
   String add3 = "";
 
+  UserDetailsProvider uDetailsProvider;
+
   @override
   void initState() {
-    var details = Provider.of<UserDetailsProvider>(context, listen: false);
-
-    details.userDetails();
-
+    uDetailsProvider = Provider.of<UserDetailsProvider>(context, listen: false);
     super.initState();
   }
 
@@ -50,8 +53,10 @@ class _PostAdState extends StateMVC<PostAd> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<UserDetailsProvider>(builder: (context, data, child) {
-      if (data.user == null) return circleProgress();
-      var u = data.user;
+      // if (data.user == null) return circleProgress();
+      var user = data.user;
+      if (data.getLoader || user == null)
+        return Center(child: profileShimmer(context));
       return Scaffold(
           resizeToAvoidBottomInset: false,
           key: _adController.scaffoldkey,
@@ -62,7 +67,7 @@ class _PostAdState extends StateMVC<PostAd> {
               PageSlider(key: _adController.sliderKey, pages: [
                 Container(height: _hight * 1.08, child: ad1(_hight, _width)),
                 Container(height: _hight * 1.08, child: ad2(_hight, _width)),
-                Container(height: _hight * 1.08, child: ad3(_hight, _width)),
+                Container(height: _hight * 1.08, child: ad3(_hight, _width,user)),
               ]),
             ]),
           ))
@@ -188,7 +193,7 @@ class _PostAdState extends StateMVC<PostAd> {
                         ),
                         Container(
                           padding: EdgeInsets.only(
-                              left: width * 0.03, right: width * 0.03),
+                              left: width * 0.03, right: width * 0.00),
                           height: hight * 0.12,
                           width: width * 0.8,
                           child: Row(
@@ -219,7 +224,7 @@ class _PostAdState extends StateMVC<PostAd> {
                                     icon: Icon(
                                       Icons.arrow_drop_down_circle,
                                       size: width * 0.06,
-                                      color: Colors.blue[900],
+                                      color: Colors.indigo[900],
                                     ),
                                     items: <int>[
                                       0,
@@ -324,12 +329,12 @@ class _PostAdState extends StateMVC<PostAd> {
                           width: width * 0.8,
                           child: TextFormField(
                             keyboardType: TextInputType.phone,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please assumed money';
-                              }
-                              return null;
-                            },
+                            // validator: (value) {
+                            //   if (value.isEmpty) {
+                            //     return 'Please assumed money';
+                            //   }
+                            //   return null;
+                            // },0
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
                                   borderRadius:
@@ -541,7 +546,10 @@ class _PostAdState extends StateMVC<PostAd> {
                                       },
                                       icon: Icon(Icons.video_camera_back)),
                                   IconButton(
-                                      onPressed: () {}, icon: Icon(Icons.mic))
+                                      onPressed: () {
+                                        log(_adController.serviceImages.toString());
+                                        audioRecoder(context, hight, width, _adController);
+                                      }, icon: Icon(Icons.mic))
                                 ],
                               )),
                               SizedBox(
@@ -604,6 +612,8 @@ class _PostAdState extends StateMVC<PostAd> {
                                                             }),
                                                       )
                                                     : Stack(children: [
+
+                                                    
                                                         Container(
                                                           decoration: BoxDecoration(
                                                               image: DecorationImage(
@@ -626,7 +636,7 @@ class _PostAdState extends StateMVC<PostAd> {
                                                                           index -
                                                                               1);
 
-                                                                  refresh();
+                                                               _adController.refresh();
                                                                 },
                                                                 child: Icon(
                                                                   Icons.close,
@@ -697,7 +707,7 @@ class _PostAdState extends StateMVC<PostAd> {
     );
   }
 
-  Widget ad3(double hight, double width) {
+  Widget ad3(double hight, double width, user) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -727,16 +737,6 @@ class _PostAdState extends StateMVC<PostAd> {
                   width: width * 0.87,
                   child: ListView(
                     children: [
-                      // Container(
-                      //     height: hight * 0.15,
-                      //     child: SvgPicture.asset('assets/like.svg')),
-                      // SizedBox(
-                      //   height: hight * 0.022,
-                      // ),
-
-                      // SizedBox(
-                      //   height: hight * 0.022,
-                      // ),
                       TextWidget(
                         text: 'Choose Service Location',
                         size: width * 0.06,
@@ -759,7 +759,6 @@ class _PostAdState extends StateMVC<PostAd> {
                       SizedBox(
                         height: hight * 0.022,
                       ),
-
                       Container(
                         height: hight * 0.3,
                         child: Column(
@@ -848,7 +847,7 @@ class _PostAdState extends StateMVC<PostAd> {
                       ),
                       ElevatedButtonWidget(
                         onClick: () async {
-                          await _adController.step1();
+                          await _adController.step3(user);
                         },
                         buttonName: 'Finish',
                         bgColor: Colors.indigo[900],

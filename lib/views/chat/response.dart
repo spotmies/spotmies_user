@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -21,9 +22,10 @@ class Responsee extends StatefulWidget {
 class _ResponseeState extends StateMVC<Responsee> {
   ResponsiveController _responsiveController;
   ResponsesProvider responseProvider;
-  _ResponseeState() : super(ResponsiveController()) {
+  _ResponseeState() : super(ResponsiveController())  {
     this._responsiveController = controller;
   }
+
 
   void chatWithPatner(responseData) {
     //need display circular indicator with z index
@@ -35,6 +37,7 @@ class _ResponseeState extends StateMVC<Responsee> {
     super.initState();
 
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    // log(_chatController.data.toString());
   }
 
   @override
@@ -65,7 +68,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                 child: ListView.builder(
                     itemCount: listResponse.length,
                     scrollDirection: Axis.vertical,
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(10),
                     itemBuilder: (BuildContext ctxt, int index) {
                       var responseData = listResponse[index];
                       var ord = responseData['orderDetails'];
@@ -93,10 +96,10 @@ class _ResponseeState extends StateMVC<Responsee> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                      bottomLeft: Radius.circular(20),
-                                      bottomRight: Radius.circular(20)),
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
                                   boxShadow: [
                                     BoxShadow(
                                         color: Colors.grey[200],
@@ -115,8 +118,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                                     decoration: BoxDecoration(
                                       color: Colors.indigo[50],
                                       borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20)),
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10)),
                                     ),
                                     child: Column(
                                       children: [
