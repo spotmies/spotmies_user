@@ -27,10 +27,7 @@ Widget profileShimmer(BuildContext context) {
             Container(
               height: 10,
               width: _width * 0.4,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
+              decoration: decorator(10),
             ),
             SizedBox(
               height: _hight * 0.06,
@@ -74,10 +71,7 @@ Widget profileShimmer(BuildContext context) {
                           bottom: _hight * 0.025, right: 20, left: 20),
                       child: Container(
                         height: _hight * 0.065,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                        decoration: decorator(20),
                       ),
                     );
                   }),
@@ -87,13 +81,17 @@ Widget profileShimmer(BuildContext context) {
       ));
 }
 
+BoxDecoration decorator(double border) {
+  return BoxDecoration(
+    borderRadius: BorderRadius.circular(border),
+    color: Colors.white,
+  );
+}
+
 Container smallBlock(double _width) {
   return Container(
     height: 35,
     width: _width * 0.3,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      color: Colors.white,
-    ),
+    decoration: decorator(10),
   );
 }
