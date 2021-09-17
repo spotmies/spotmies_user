@@ -17,7 +17,7 @@ Widget profileShimmer(BuildContext context) {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: _hight * 0.01),
+              // padding: EdgeInsets.only(bottom: _hight * 0.006),
               child: Icon(
                 Icons.account_circle,
                 size: _width * 0.4,
@@ -26,32 +26,23 @@ Widget profileShimmer(BuildContext context) {
             ),
             Container(
               height: 10,
-              width: _width * 0.3,
+              width: _width * 0.4,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
               ),
             ),
             SizedBox(
-              height: _hight * 0.03,
+              height: _hight * 0.06,
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              smallBlock(_width),
               Container(
-                height: 25,
-                width: _width * 0.3,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
+                height: 30,
+                width: 2,
+                color: Colors.white,
               ),
-              Container(
-                height: 25,
-                width: _width * 0.3,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-              )
+              smallBlock(_width)
             ]),
             SizedBox(
               height: _hight * 0.03,
@@ -65,15 +56,6 @@ Widget profileShimmer(BuildContext context) {
                   width: _width * 0.32,
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 1, right: 1),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  // color: Colors.amber,
-                  height: _hight * 0.03,
-                  width: _width * 0.29,
-                ),
-                Container(
                   height: _hight * 0.001,
                   color: Colors.white,
                   width: _width * 0.32,
@@ -83,26 +65,35 @@ Widget profileShimmer(BuildContext context) {
             SizedBox(
               height: _hight * 0.03,
             ),
-            Container(
-              height: _hight * 0.37,
-              width: _width * 1,
-              child: GridView.builder(
+            Expanded(
+              child: ListView.builder(
                   itemCount: 6,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15),
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      decoration: BoxDecoration(
+                      padding: EdgeInsets.only(
+                          bottom: _hight * 0.025, right: 20, left: 20),
+                      child: Container(
+                        height: _hight * 0.065,
+                        decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15))),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
                     );
                   }),
             )
           ],
         ),
       ));
+}
+
+Container smallBlock(double _width) {
+  return Container(
+    height: 35,
+    width: _width * 0.3,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      color: Colors.white,
+    ),
+  );
 }
