@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textFormFieldWidget.dart';
@@ -32,16 +31,7 @@ Future editDetails(BuildContext context, {details}) {
     print(body);
   }
 
-  pickImage() async {
-    final pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        imageQuality: 10,
-        preferredCameraDevice: CameraDevice.rear);
-    // setState(() {
-    //   serviceImages.add(File(pickedFile?.path));
-    // });
-    // if (pickedFile.path == null) retrieveLostData();
-  }
+
 
   return showModalBottomSheet(
       context: context,

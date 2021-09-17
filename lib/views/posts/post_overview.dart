@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +50,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         return Center(child: profileShimmer(context));
 
       List<String> images = List.from(d['media']);
-      final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
+      // final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
 
       return Scaffold(
         resizeToAvoidBottomInset: true,

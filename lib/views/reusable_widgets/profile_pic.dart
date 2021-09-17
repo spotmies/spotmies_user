@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class ProfilePic extends StatelessWidget {
@@ -82,7 +83,7 @@ class ProfilePic extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    onClick != null ? onClick() : null;
+                    onClick != null ? onClick() : snackbar(context, "some went wrong");
                   },
                   child: Positioned(
                     right: 0,
