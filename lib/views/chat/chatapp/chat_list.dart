@@ -11,6 +11,7 @@ import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
+import 'package:spotmies/views/reusable_widgets/shimmers/chat_list_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class ChatList extends StatefulWidget {
@@ -67,7 +68,8 @@ class _ChatListState extends StateMVC<ChatList> {
                       List chatList = data.getChatList2();
 
                       if (data.getLoader)
-                        return Center(child: profileShimmer(context));
+                        return Center(child: chatListShimmer(context));
+
                       if (chatList.length < 1) {
                         return Center(
                             child: TextWid(

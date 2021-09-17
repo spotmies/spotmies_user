@@ -24,6 +24,8 @@ class _OTPScreenState extends State<OTPScreen> {
   // Timer _timer;
   // int _start = 60;
   TimeProvider timerProvider;
+  Timer _timer;
+
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   String _verificationCode;
   final TextEditingController _pinPutController = TextEditingController();
@@ -38,21 +40,25 @@ class _OTPScreenState extends State<OTPScreen> {
     ),
   );
   startTimer() {
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
       timerProvider.updateTime();
-      if (timerProvider.countDown < 2) {
-        timer.cancel();
-        log("timer stopped");
-      }
+      if (timerProvider.countDown < 2) timer?.cancel();
     });
   }
 
   @override
   void initState() {
+    _timer?.cancel();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
 
     super.initState();
     _verifyPhone();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   void resendOtp() {
