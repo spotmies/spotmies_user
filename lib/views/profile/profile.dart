@@ -315,8 +315,8 @@ class _ProfileState extends StateMVC<Profile> {
       body: Container(
         child: Consumer<UserDetailsProvider>(builder: (context, data, child) {
           var u = data.getUser;
-          if (data.getLoader || u == null)
-            return Center(child: profileShimmer(context));
+          // if (data.getLoader || u == null)
+          return Center(child: profileShimmer(context));
 
           return ListView(
             children: [

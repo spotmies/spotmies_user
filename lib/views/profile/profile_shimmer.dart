@@ -17,13 +17,42 @@ Widget profileShimmer(BuildContext context) {
         child: Column(
           children: [
             Container(
-              height: _hight * 0.39,
-              width: _width * 0.9,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
+              padding: EdgeInsets.only(bottom: _hight * 0.01),
+              child: Icon(
+                Icons.account_circle,
+                size: _width * 0.4,
                 color: Colors.white,
               ),
             ),
+            Container(
+              height: 10,
+              width: _width * 0.3,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              height: _hight * 0.03,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              Container(
+                height: 25,
+                width: _width * 0.3,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                height: 25,
+                width: _width * 0.3,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+              )
+            ]),
             SizedBox(
               height: _hight * 0.03,
             ),
