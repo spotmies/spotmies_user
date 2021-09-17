@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies/views/chat/chatapp/chat_list.dart';
-import 'package:spotmies/views/chat/chatapp/chat_page.dart';
 import 'package:spotmies/views/chat/response.dart';
 
 class Chat extends StatefulWidget {

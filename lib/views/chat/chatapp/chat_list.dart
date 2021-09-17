@@ -35,7 +35,7 @@ class _ChatListState extends StateMVC<ChatList> {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(context).size.width;
+    // final _width = MediaQuery.of(context).size.width;
     print('======render chatList screen =======');
     return Scaffold(
       // appBar: AppBar(

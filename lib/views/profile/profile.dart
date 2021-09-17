@@ -23,7 +23,6 @@ import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/profile/promotionsBS.dart';
 import 'package:spotmies/views/profile/settingsBS.dart';
 import 'package:spotmies/views/profile/signoutBS.dart';
-import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 
 class Profile extends StatefulWidget {
   @override

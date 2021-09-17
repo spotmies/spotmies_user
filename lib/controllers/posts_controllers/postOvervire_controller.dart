@@ -5,7 +5,7 @@ import 'package:geocoder/model.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
-import 'package:spotmies/views/home/ads/maps.dart';
+import 'package:spotmies/views/maps/maps.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:spotmies/views/profile/editDetailsBS.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 Widget profilePic(BuildContext context, upic, name, {onClick}) {
   final _width = MediaQuery.of(context).size.width;
-  final _hight = MediaQuery.of(context).size.height -
-      MediaQuery.of(context).padding.top -
-      kToolbarHeight;
+  // final _hight = MediaQuery.of(context).size.height -
+      // MediaQuery.of(context).padding.top -
+      // kToolbarHeight;
   return CircleAvatar(
     child: Stack(children: [
       ClipOval(

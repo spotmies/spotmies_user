@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:spotmies/models/placesModel.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
-import 'package:spotmies/views/home/ads/maps.dart';
+import 'package:spotmies/views/maps/maps.dart';
 
 class OfflinePlaceSearch extends StatefulWidget {
   @override

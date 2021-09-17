@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +10,9 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
-import 'package:spotmies/views/home/ads/adedit.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
-import 'package:spotmies/views/reusable_widgets/Badge_icon.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -420,9 +417,9 @@ class _PostListState extends StateMVC<PostList> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => PostAdEdit(value: orderid),
-                        ));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => PostAdEdit(value: orderid),
+                        // ));
                       },
                       child: Container(
                         child: CircleAvatar(
