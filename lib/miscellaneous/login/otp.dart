@@ -9,6 +9,7 @@ import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
@@ -64,7 +65,6 @@ class _OTPScreenState extends State<OTPScreen> {
   void resendOtp() {
     timerProvider.resetTimer();
     _verifyPhone();
-    snackbar(context, "Otp Resend successfully ");
   }
 
   loginUserWithOtp(otpValue) async {
@@ -186,34 +186,6 @@ class _OTPScreenState extends State<OTPScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      width: 150,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white)),
-                        onPressed: () {
-                          loginUserWithOtp(data.getOtp);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Submit',
-                              style: TextStyle(
-                                  color: Colors.blue[900], fontSize: 18),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              Icons.check_circle,
-                              color: Colors.lightGreen,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
                     data.countDown > 2
                         ? Container(
                             height: _hight * 0.3,
@@ -234,32 +206,45 @@ class _OTPScreenState extends State<OTPScreen> {
                                 )),
                           )
                         : Container(
-                            padding: EdgeInsets.only(top: _hight * 0.1),
                             width: 150,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.white)),
-                              onPressed: resendOtp,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Resend',
-                                    style: TextStyle(
-                                        color: Colors.blue[900], fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(
-                                    Icons.change_circle,
-                                    color: Colors.lightGreen,
-                                  )
-                                ],
+                            child: ElevatedButtonWidget(
+                              onClick: resendOtp,
+                              height: 20,
+                              minWidth: 100,
+                              buttonName: "Resend",
+                              bgColor: Colors.transparent,
+                              borderSideColor: Colors.transparent,
+                              textSize: 16,
+                              textColor: Colors.white,
+                              trailingIcon: Icon(
+                                Icons.refresh_outlined,
+                                size: 18,
                               ),
                             ),
                           ),
+                    Container(
+                      padding: EdgeInsets.only(
+                          top: data.countDown > 2 ? 0 : _hight * 0.25),
+                      child: ElevatedButtonWidget(
+                        onClick: () {
+                          loginUserWithOtp(data.getOtp);
+                        },
+                        height: 40,
+                        textStyle: FontWeight.w600,
+                        minWidth: 160,
+                        buttonName: "Submit",
+                        bgColor: Colors.white,
+                        borderSideColor: Colors.transparent,
+                        textSize: 22,
+                        borderRadius: 10,
+                        textColor: Colors.blue[900],
+                        trailingIcon: Icon(
+                          Icons.check,
+                          size: 20,
+                          color: Colors.blue[900],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -308,6 +293,8 @@ class _OTPScreenState extends State<OTPScreen> {
           log(e.message.toString());
         },
         codeSent: (String verficationID, int resendToken) {
+          snackbar(context, "Otp send successfully ");
+
           setState(() {
             _verificationCode = verficationID;
           });

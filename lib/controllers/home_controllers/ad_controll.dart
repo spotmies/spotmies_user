@@ -301,7 +301,7 @@ class AdController extends ControllerMVC {
 
   adbutton(userDetails) async {
     await uploadServiceMedia();
-    String images = imageLink.toString();
+    // String images = imageLink.toString();
     CircularProgressIndicator();
     // log(userDetails.toString());
     // var ud = userDetails["_id"].toString();

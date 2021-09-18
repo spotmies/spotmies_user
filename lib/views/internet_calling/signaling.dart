@@ -79,7 +79,7 @@ class Signaling {
     roomRef.snapshots().listen((snapshot) async {
       log('Got updated room: ${snapshot.data()}');
 
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data = snapshot.data();
       if (peerConnection?.getRemoteDescription() != null &&
           data['answer'] != null) {
         var answer = RTCSessionDescription(
@@ -97,7 +97,7 @@ class Signaling {
     roomRef.collection('calleeCandidates').snapshots().listen((snapshot) {
       snapshot.docChanges.forEach((change) {
         if (change.type == DocumentChangeType.added) {
-          Map<String, dynamic> data = change.doc.data() as Map<String, dynamic>;
+          Map<String, dynamic> data = change.doc.data();
           log('Got new remote ICE candidate: ${jsonEncode(data)}');
           peerConnection.addCandidate(
             RTCIceCandidate(
@@ -151,7 +151,7 @@ class Signaling {
       };
 
       // Code for creating SDP answer below
-      var data = roomSnapshot.data() as Map<String, dynamic>;
+      var data = roomSnapshot.data();
       log('Got offer $data');
       var offer = data['offer'];
       await peerConnection?.setRemoteDescription(
@@ -172,7 +172,7 @@ class Signaling {
       // Listening for remote ICE candidates below
       roomRef.collection('callerCandidates').snapshots().listen((snapshot) {
         snapshot.docChanges.forEach((document) {
-          var data = document.doc.data() as Map<String, dynamic>;
+          var data = document.doc.data();
           // log(data);
           log('Got new remote ICE candidate: $data');
           peerConnection.addCandidate(

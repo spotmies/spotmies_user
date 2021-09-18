@@ -4,7 +4,6 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
-import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/home/ads/page3.dart';
 import 'package:spotmies/views/home/ads/page1.dart';
