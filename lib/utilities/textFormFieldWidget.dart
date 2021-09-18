@@ -112,10 +112,19 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,
       validator: (value) {
-        if (value.isEmpty) {
-          return widget.validateMsg ?? '';
+        if (widget.label == "Alternative Number") {
+          if (value.length == 10 && int.parse(value) < 5000000000) {
+            return 'Please Enter Valid Mobile Number';
+          } else if (value.length > 0 && value.length < 10) {
+            return 'Please Enter Valid Mobile Number';
+          }
+          return null;
+        } else {
+          if (value.isEmpty) {
+            return widget.validateMsg ?? '';
+          }
+          return null;
         }
-        return null;
       },
       onFieldSubmitted: (value) {
         if (widget.onSubmitField != null) widget.onSubmitField();

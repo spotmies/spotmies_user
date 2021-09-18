@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,9 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/models/stepperPersonalModel.dart';
+import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/views/home/navBar.dart';
 
 class StepperPersonal extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
@@ -39,6 +44,15 @@ class StepperPersonal extends ControllerMVC {
   StepperPersonal() {
     this.stepperPersonalModel = StepperPersonalModel();
   }
+
+  TimeProvider timerProvider;
+  @override
+  void initState() {
+    timerProvider = Provider.of<TimeProvider>(context, listen: false);
+
+    super.initState();
+  }
+
   step1() {
     if (accept == true) {
       currentStep += 1;
@@ -76,39 +90,45 @@ class StepperPersonal extends ControllerMVC {
   }
 
   step3() async {
+    timerProvider.setLoader(true, loadingValue: "Uploading profile pic...");
+    log("${timerProvider.phoneNumber}");
     await uploadimage();
+    timerProvider.setLoader(true, loadingValue: "Registration Inprogress...");
     var body = {
-      "name": this.name.toString(),
-      "phNum": this.number.toString(),
+      "name": this?.name?.toString(),
+      "phNum": timerProvider?.phoneNumber?.toString(),
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       "uId": FirebaseAuth.instance.currentUser.uid.toString(),
       "userState": "active",
-      "altNum": this.altnumber.toString(),
-      "eMail": this.email.toString(),
-      "t&a": accept.toString(),
-      "pic":imageLink.toString(),
-      // "name": this.name.toString(),
-      // "phNum": this.number.toString(),
-      // "join": DateTime.now().toString(),
-      // "uId": FirebaseAuth.instance.currentUser.uid.toString(),
-      // "userState": "active",
-      // "altNum": this.altnumber.toString(),
-      // "eMail": this.email.toString(),
-      // // "reference": 0.toString(),
-      // "pic": imageLink.toString(),
-      // "t&a": accept.toString()
+      "altNum": this?.altnumber?.toString() ?? "",
+      "eMail": this?.email?.toString() ?? "",
+      "t&a": accept?.toString(),
+      "pic": imageLink?.toString() ?? "",
     };
-    await Server().postMethod(API.userRegister, body).catchError((e) {
+    log("body $body");
+    var resp =
+        await Server().postMethod(API.userRegister, body).catchError((e) {
       print(e);
     });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Fill all the fields'),
-      action: SnackBarAction(
-        label: 'Close',
-        onPressed: () {},
-      ),
-    ));
+    timerProvider.setLoader(false);
+    log("respss ${resp.statusCode}");
+    log("response ${resp.body}");
+    if (resp.statusCode == 200) {
+      snackbar(context, "Registration successfull");
+      await Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
+    } else {
+      snackbar(context, "something went wrong");
+    }
+    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //   content: Text('Fill all the fields'),
+    //   action: SnackBarAction(
+    //     label: 'Close',
+    //     onPressed: () {},
+    //   ),
+    // ));
     currentStep += 1;
+    return resp;
   }
 
   //image pick
@@ -125,6 +145,7 @@ class StepperPersonal extends ControllerMVC {
 
 //image upload function
   Future<void> uploadimage() async {
+    if (profilepic == null) return;
     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")

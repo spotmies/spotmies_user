@@ -4,7 +4,7 @@ import 'package:spotmies/apiCalls/testController.dart';
 class GetOrdersProvider extends ChangeNotifier {
   final controller = TestController();
   List ordersList = [];
-  bool loader = true;
+  bool loader = false;
 
   bool get getLoader => loader;
   void setLoader(state) {

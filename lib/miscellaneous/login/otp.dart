@@ -13,6 +13,8 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
+import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -76,6 +78,9 @@ class _OTPScreenState extends State<OTPScreen> {
               verificationId: _verificationCode, smsCode: otpValue))
           .then((value) async {
         if (value.user != null) {
+          // log("${value.user}");
+          // log("$value");
+          timerProvider.setPhoneNumber(widget.phone.toString());
           // print("user already login");
           bool resp = await checkUserRegistered(value.user.uid);
           timerProvider.setLoader(false);
@@ -248,18 +253,10 @@ class _OTPScreenState extends State<OTPScreen> {
                   ],
                 ),
               ),
-              Visibility(
-                visible: data.getLoader,
-                // visible: true,
-                child: Positioned.fill(
-                    child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-                  child: Center(
-                      child: CircularProgressIndicator(
-                    strokeWidth: 6.0,
-                    backgroundColor: Colors.white,
-                  )),
-                )),
+              ProgressWaiter(
+                contextt: context,
+                loaderState: data.getLoader,
+                loadingName: data.getLoading,
               ),
             ]),
           ],
@@ -293,6 +290,7 @@ class _OTPScreenState extends State<OTPScreen> {
           log(e.message.toString());
         },
         codeSent: (String verficationID, int resendToken) {
+          timerProvider.setLoader(false);
           snackbar(context, "Otp send successfully ");
 
           setState(() {
