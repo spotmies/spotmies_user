@@ -33,6 +33,7 @@ class LoginPageController extends ControllerMVC {
     if (formkey.currentState.validate()) {
       formkey.currentState.save();
       timerProvider.resetTimer();
+      timerProvider.setLoader(true, loadingValue: "Sending OTP .....");
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => OTPScreen(loginnum.text)));
     }

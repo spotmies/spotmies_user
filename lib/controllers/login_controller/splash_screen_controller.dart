@@ -1,5 +1,5 @@
-
 import 'dart:async';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -7,19 +7,19 @@ import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/onboard.dart';
 
+import 'login_controller.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    Timer(Duration(seconds: 3), () {
-      // print("18 ${FirebaseAuth.instance.currentUser}");
-      if (FirebaseAuth.instance.currentUser != null) {
+  checkUser() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      bool resp =
+          await checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
+      if (resp != false) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => GoogleNavBar()),
@@ -30,6 +30,21 @@ class _SplashScreenState extends State<SplashScreen> {
             MaterialPageRoute(builder: (_) => OnboardingScreen()),
             (route) => false);
       }
+    } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => OnboardingScreen()),
+          (route) => false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Timer(Duration(seconds: 1), () {
+      // print("18 ${FirebaseAuth.instance.currentUser}");
+      checkUser();
     });
   }
 

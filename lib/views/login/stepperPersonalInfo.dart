@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/stepperPersonalInfo_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/views/home/navBar.dart';
+import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
   @override
@@ -13,6 +18,13 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   StepperPersonal _stepperPersonalInfo;
   _StepperPersonalInfoState() : super(StepperPersonal()) {
     this._stepperPersonalInfo = controller;
+  }
+  TimeProvider timerProvider;
+  @override
+  void initState() {
+    timerProvider = Provider.of<TimeProvider>(context, listen: false);
+
+    super.initState();
   }
 
   @override
@@ -33,133 +45,143 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
         elevation: 0,
       ),
       backgroundColor: Colors.grey[50],
-      body: Theme(
-        data: ThemeData(primaryColor: Colors.blue[900]),
-        child: Stepper(
-            type: StepperType.horizontal,
-            currentStep: _stepperPersonalInfo.currentStep,
-            onStepTapped: (int step) =>
-                setState(() => _stepperPersonalInfo.currentStep = step),
-            controlsBuilder: (BuildContext context,
-                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      width: _width * 0.35,
-                      child: ElevatedButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(Icons.navigate_before),
-                            Text('Back'),
-                          ],
-                        ),
-                        onPressed: onStepCancel,
-                        style: ButtonStyle(
-                          backgroundColor: _stepperPersonalInfo.currentStep > 0
-                              ? MaterialStateProperty.all(Colors.blue[900])
-                              : MaterialStateProperty.all(Colors.white),
-                        ),
-                      ),
-                    ),
-                    _stepperPersonalInfo.currentStep ==
-                            2 // this is the last step
-                        ? Container(
-                            width: _width * 0.35,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                CircularProgressIndicator();
-                                await _stepperPersonalInfo.step3();
-                                await Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => GoogleNavBar()),
-                                    (route) => false);
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text('Finish'),
-                                  Icon(Icons.navigate_next),
-                                ],
-                              ),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.blue[900]),
-                              ),
-                              //color: Colors.green,
+      body: Consumer<TimeProvider>(builder: (context, data, child) {
+        return Theme(
+          data: ThemeData(primaryColor: Colors.blue[900]),
+          child: Stack(children: [
+            Stepper(
+                type: StepperType.horizontal,
+                currentStep: _stepperPersonalInfo.currentStep,
+                onStepTapped: (int step) =>
+                    setState(() => _stepperPersonalInfo.currentStep = step),
+                controlsBuilder: (BuildContext context,
+                    {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          width: _width * 0.35,
+                          child: ElevatedButton(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.navigate_before),
+                                Text('Back'),
+                              ],
                             ),
-                          )
-                        : Container(
-                            width: _width * 0.35,
-                            child: ElevatedButton(
-                              onPressed: onStepContinue,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text('Next'),
-                                  Icon(Icons.navigate_next),
-                                ],
-                              ),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.blue[900]),
-                              ),
+                            onPressed: onStepCancel,
+                            style: ButtonStyle(
+                              backgroundColor: _stepperPersonalInfo
+                                          .currentStep >
+                                      0
+                                  ? MaterialStateProperty.all(Colors.blue[900])
+                                  : MaterialStateProperty.all(Colors.white),
                             ),
                           ),
-                  ],
-                ),
-              );
-            },
-            onStepContinue: _stepperPersonalInfo.currentStep == 0
-                ? () => setState(() => _stepperPersonalInfo.step1())
-                : _stepperPersonalInfo.currentStep == 1
-                    ? () => setState(() => _stepperPersonalInfo.step2())
-                    : _stepperPersonalInfo.currentStep == 2
-                        ? () => setState(() => _stepperPersonalInfo.step3())
-                        : null,
-            onStepCancel: _stepperPersonalInfo.currentStep > 0
-                ? () => setState(() => _stepperPersonalInfo.currentStep -= 1)
-                : null,
-            steps: <Step>[
-              Step(
-                title: Text('Step1'),
-                subtitle: Text('Terms'),
-                content: step1(),
-                isActive: _stepperPersonalInfo.currentStep >= 0,
-                state: _stepperPersonalInfo.currentStep >= 0
-                    ? StepState.complete
-                    : StepState.disabled,
-              ),
-              Step(
-                title: Text('Step 2'),
-                subtitle: Text('Profile'),
-                content: Form(
-                  key: _stepperPersonalInfo.formkey,
-                  child: step2(),
-                ),
-                isActive: _stepperPersonalInfo.currentStep >= 1,
-                state: _stepperPersonalInfo.currentStep >= 1
-                    ? StepState.complete
-                    : StepState.disabled,
-              ),
-              Step(
-                title: Text('Step 3'),
-                subtitle: Text('Photo'),
-                content: step3(),
-                isActive: _stepperPersonalInfo.currentStep >= 2,
-                state: _stepperPersonalInfo.currentStep >= 2
-                    ? StepState.complete
-                    : StepState.disabled,
-              ),
-            ]),
-      ),
+                        ),
+                        _stepperPersonalInfo.currentStep ==
+                                2 // this is the last step
+                            ? Container(
+                                width: _width * 0.35,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    CircularProgressIndicator();
+                                    var resp =
+                                        await _stepperPersonalInfo.step3();
+                                    log("resp $resp");
+                                    // await Navigator.pushAndRemoveUntil(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (_) => GoogleNavBar()),
+                                    //     (route) => false);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text('Finish'),
+                                      Icon(Icons.navigate_next),
+                                    ],
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.blue[900]),
+                                  ),
+                                  //color: Colors.green,
+                                ),
+                              )
+                            : Container(
+                                width: _width * 0.35,
+                                child: ElevatedButton(
+                                  onPressed: onStepContinue,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text('Next'),
+                                      Icon(Icons.navigate_next),
+                                    ],
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.blue[900]),
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
+                  );
+                },
+                onStepContinue: _stepperPersonalInfo.currentStep == 0
+                    ? () => setState(() => _stepperPersonalInfo.step1())
+                    : _stepperPersonalInfo.currentStep == 1
+                        ? () => setState(() => _stepperPersonalInfo.step2())
+                        : _stepperPersonalInfo.currentStep == 2
+                            ? () => setState(() => _stepperPersonalInfo.step3())
+                            : null,
+                onStepCancel: _stepperPersonalInfo.currentStep > 0
+                    ? () =>
+                        setState(() => _stepperPersonalInfo.currentStep -= 1)
+                    : null,
+                steps: <Step>[
+                  Step(
+                    title: Text('Step1'),
+                    subtitle: Text('Terms'),
+                    content: step1(),
+                    isActive: _stepperPersonalInfo.currentStep >= 0,
+                    state: _stepperPersonalInfo.currentStep >= 0
+                        ? StepState.complete
+                        : StepState.disabled,
+                  ),
+                  Step(
+                    title: Text('Step 2'),
+                    subtitle: Text('Profile'),
+                    content: Form(
+                      key: _stepperPersonalInfo.formkey,
+                      child: step2(),
+                    ),
+                    isActive: _stepperPersonalInfo.currentStep >= 1,
+                    state: _stepperPersonalInfo.currentStep >= 1
+                        ? StepState.complete
+                        : StepState.disabled,
+                  ),
+                  Step(
+                    title: Text('Step 3'),
+                    subtitle: Text('Photo'),
+                    content: step3(),
+                    isActive: _stepperPersonalInfo.currentStep >= 2,
+                    state: _stepperPersonalInfo.currentStep >= 2
+                        ? StepState.complete
+                        : StepState.disabled,
+                  ),
+                ]),
+            ProgressWaiter(contextt: context, loaderState: data.getLoader)
+          ]),
+        );
+      }),
     );
   }
 
@@ -242,9 +264,12 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                       },
                                     );
                                   }),
-                              Text(
-                                'I agree to accept the terms and Conditions',
-                                style: TextStyle(fontSize: _width * 0.035),
+                              Flexible(
+                                child: Text(
+                                  'I agree to accept the terms and Conditions',
+                                  maxLines: 4,
+                                  style: TextStyle(fontSize: _width * 0.035),
+                                ),
                               ),
                             ],
                           ),
@@ -326,61 +351,20 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         borderSide: BorderSide(width: 1, color: Colors.white)),
                     hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
-                    hintText: 'Email',
+                    hintText: 'Email(Optional)',
                     suffixIcon: Icon(Icons.email),
                     //border: InputBorder.none,
                     contentPadding: EdgeInsets.all(20),
                   ),
                   validator: (value) {
-                    if (value.isEmpty || !value.contains('@')) {
+                    if (value.length > 1 && !value.contains('@')) {
                       return 'Please Enter Valid Email';
                     }
                     return null;
                   },
                   controller: _stepperPersonalInfo.emailTf,
                   onChanged: (value) {
-                    this._stepperPersonalInfo.email = value;
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 7,
-              ),
-              Container(
-                //padding: EdgeInsets.all(10),
-                height: _hight * 0.1,
-                width: _width * 1,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextFormField(
-                  maxLength: 10,
-                  onSaved: (item) =>
-                      _stepperPersonalInfo.stepperPersonalModel.number,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
-                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
-                    hintText: 'Mobile Number',
-                    suffixIcon: Icon(Icons.dialpad),
-                    //border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(20),
-                    counterText: "",
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty || value.length < 10) {
-                      return 'Please Enter Valid Mobile Number';
-                    }
-                    return null;
-                  },
-                  controller: _stepperPersonalInfo.numberTf,
-                  onChanged: (value) {
-                    this._stepperPersonalInfo.number = value;
+                    this._stepperPersonalInfo.email = value ?? "";
                   },
                 ),
               ),
@@ -400,6 +384,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       _stepperPersonalInfo.stepperPersonalModel.altnumber,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
+                    // labelText: "optional",
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         borderSide: BorderSide(width: 1, color: Colors.white)),
@@ -407,21 +392,23 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         borderSide: BorderSide(width: 1, color: Colors.white)),
                     hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
-                    hintText: 'Alternative Mobile Number',
+                    hintText: 'Alternative Mobile (optional)',
                     suffixIcon: Icon(Icons.dialpad),
                     //border: InputBorder.none,
                     contentPadding: EdgeInsets.all(20),
                     counterText: "",
                   ),
                   validator: (value) {
-                    if (value.isEmpty || value.length < 10) {
+                    if (value.length == 10 && int.parse(value) < 5000000000) {
+                      return 'Please Enter Valid Mobile Number';
+                    } else if (value.length > 0 && value.length < 10) {
                       return 'Please Enter Valid Mobile Number';
                     }
                     return null;
                   },
                   controller: _stepperPersonalInfo.altnumberTf,
                   onChanged: (value) {
-                    this._stepperPersonalInfo.altnumber = value;
+                    this._stepperPersonalInfo.altnumber = value ?? "";
                   },
                 ),
               ),
@@ -513,10 +500,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
             if (_stepperPersonalInfo.profilepic == null)
               TextButton(
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => GoogleNavBar()),
-                        (route) => false);
+                    _stepperPersonalInfo.step3();
                   },
                   child: Text('Skip',
                       style: TextStyle(fontSize: 20, color: Colors.black)))

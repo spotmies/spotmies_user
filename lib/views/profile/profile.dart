@@ -80,9 +80,9 @@ class _ProfileState extends StateMVC<Profile> {
     TextEditingController nameController =
         TextEditingController(text: details['name'].toString());
     TextEditingController emailController =
-        TextEditingController(text: details['eMail'].toString());
+        TextEditingController(text: details['eMail']?.toString() ?? "");
     TextEditingController mobileNoController =
-        TextEditingController(text: details['altNum'].toString());
+        TextEditingController(text: details['altNum']?.toString() ?? "");
     var nameformkey = GlobalKey<FormState>();
     var emailformkey = GlobalKey<FormState>();
     var mobileformkey = GlobalKey<FormState>();
@@ -245,7 +245,7 @@ class _ProfileState extends StateMVC<Profile> {
                                       focusBorderRadius: 15,
                                       errorBorderRadius: 15,
                                       focusErrorRadius: 15,
-                                      validateMsg: 'Enter Valid Name',
+                                      validateMsg: 'Enter Valid Number',
                                       maxLines: 1,
                                       label: "Alternative Number",
                                       postIcon: Icon(Icons.phone),
@@ -316,7 +316,11 @@ class _ProfileState extends StateMVC<Profile> {
           var u = data.getUser;
           if (data.getLoader || u == null)
             return Center(child: profileShimmer(context));
-
+          // return TextButton(
+          //     onPressed: () {
+          //       signOut(context);
+          //     },
+          //     child: Text("logout"));
           return ListView(
             children: [
               profilePic(context, u['pic'], u['name'], onClick: () {
@@ -440,7 +444,7 @@ class _ProfileState extends StateMVC<Profile> {
                                   settings(context, _hight, _width);
                                 }
                                 if (index == 7) {
-                                  signOut(context, _hight, _width);
+                                  signOut(context);
                                 }
                               },
                               leading: Column(

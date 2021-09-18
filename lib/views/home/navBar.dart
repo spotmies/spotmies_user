@@ -61,7 +61,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
 
     dynamic user = await getUserDetailsFromDB();
     profileProvider.setUser(user);
-    ordersProvider.setOrdersList(user['orders']);
+    ordersProvider.setOrdersList(user['orders'] != null ? user['orders'] : []);
     dynamic chatList = await getChatListFromDb();
     chatProvider.setChatList(chatList);
   }
