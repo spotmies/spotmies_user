@@ -27,7 +27,7 @@ class _ChatState extends State<Chat> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: _hight * 0.09,
+            toolbarHeight: _hight * 0.00,
             // title: Text('Responses',
             //     style: TextStyle(
             //         color: Colors.grey.shade800, fontWeight: FontWeight.bold)),

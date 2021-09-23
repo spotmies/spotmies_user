@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +8,7 @@ import 'package:spotmies/views/home/ads/page3.dart';
 import 'package:spotmies/views/home/ads/page1.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/onPending.dart';
+import 'package:spotmies/views/reusable_widgets/onSuccuss.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 
 //path for adding post data
@@ -52,7 +52,7 @@ class _PostAdState extends StateMVC<PostAd> {
       var user = data.user;
       if (data.getLoader || user == null)
         return Center(child: profileShimmer(context));
-      if (_adController.isUploading) return onPending(_hight,_width);
+      if (_adController.isUploading) return onPending(_hight, _width);
       return Scaffold(
           resizeToAvoidBottomInset: false,
           key: _adController.scaffoldkey,
@@ -62,8 +62,8 @@ class _PostAdState extends StateMVC<PostAd> {
             child: Column(children: [
               PageSlider(key: _adController.sliderKey, pages: [
                 Container(
-                    height: _hight * 1.08,
-                    child: page1(_hight, _width, context, _adController)),
+                    height: _hight * 1.08, child: page1(_hight, _width, context, _adController)),
+                // child: page1(_hight, _width, context, _adController)),
                 Container(
                     height: _hight * 1.08,
                     child: page2(_hight, _width, context, _adController)),
@@ -76,4 +76,3 @@ class _PostAdState extends StateMVC<PostAd> {
     });
   }
 }
-  
