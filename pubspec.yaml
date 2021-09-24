@@ -66,6 +66,7 @@ dependencies:
   flutter_audio_recorder2: ^0.0.2
   audioplayers: ^0.19.1
   path_provider: ^2.0.3
+  timelines: ^0.1.0
   
 
   

@@ -59,7 +59,8 @@ class ChatController extends ControllerMVC {
   }
 
   getTargetChat(list, msgId) {
-    List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
+    List currentChatData =
+        list.where((i) => i['msgId'].toString() == msgId.toString()).toList();
 
     return currentChatData[0];
   }

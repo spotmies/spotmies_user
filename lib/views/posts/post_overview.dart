@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
+import 'package:timelines/timelines.dart';
 
 class PostOverView extends StatefulWidget {
   final int index;
@@ -50,6 +54,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         return Center(child: profileShimmer(context));
 
       List<String> images = List.from(d['media']);
+      dynamic fullAddress = jsonDecode(d['address']);
       // final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
 
       return Scaffold(
@@ -153,7 +158,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 )),
             IconButton(
                 onPressed: () {
-                  bottomOptionsMenu(context,options: _postOverViewController.options);
+                  bottomOptionsMenu(context,
+                      options: _postOverViewController.options);
                 },
                 icon: Icon(
                   Icons.more_vert,
@@ -237,7 +243,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         _hight,
                         'Location',
                         Icons.location_on,
-                        '10-134, NH16, Pothinamallayya Palem, Visakhapatnam, Andhra Pradesh 530041'),
+                        fullAddress['addressLine'] ??
+                            "Unable to get service address"),
                   ],
                 ),
               ),
@@ -279,10 +286,29 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             ),
                           ),
                           partnerDetails(
-                              _hight, _width, context, _postOverViewController)
+                              _hight, _width, context, _postOverViewController),
                         ],
                       ))
                   : Container(),
+              Container(
+                height: 500,
+                padding: EdgeInsets.only(left: 30, bottom: 50, top: 30),
+                // width: _width * 0.7,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: TextWid(
+                        text: 'Service Status :',
+                        size: _width * 0.055,
+                        weight: FontWeight.w600,
+                      ),
+                    ),
+                    Container(child: _Timeline2(context)),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -584,20 +610,23 @@ partnerDetails(hight, width, BuildContext context, controller) {
                       Container(
                         child: Row(
                           children: [
-                            Text(
-                              'Telugu | ',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'Telugu | ',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
-                            Text(
-                              'English | ',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'English | ',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
-                            Text(
-                              'Hindi',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'Hindi',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
                           ],
                         ),
@@ -610,10 +639,11 @@ partnerDetails(hight, width, BuildContext context, controller) {
                               Icons.location_pin,
                               size: width * 0.03,
                             ),
-                            Text(
-                              'Vizag',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'vizag',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
                           ],
                         ),
@@ -699,7 +729,146 @@ partnerDetails(hight, width, BuildContext context, controller) {
   );
 }
 
+enum _TimelineStatus { request, accept, started, completed, feedback }
 
+const kTileHeight = 90.0;
+
+class _Timeline2 extends StatelessWidget {
+  final BuildContext contextt;
+  _Timeline2(this.contextt);
+  @override
+  Widget build(BuildContext context) {
+    final _width = MediaQuery.of(contextt).size.width;
+    final data = _TimelineStatus.values;
+    return Flexible(
+      child: Timeline.tileBuilder(
+        theme: TimelineThemeData(
+          nodePosition: 0,
+          connectorTheme: ConnectorThemeData(
+            thickness: 3.0,
+            space: 20,
+            color: Color(0xffd3d3d3),
+          ),
+          indicatorTheme: IndicatorThemeData(
+            size: _width * 0.06,
+          ),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        builder: TimelineTileBuilder.connected(
+          contentsBuilder: (_, index) {
+            return TimeLineTitle(index, contextt);
+          },
+          connectorBuilder: (_, index, connectorType) {
+            if (index == 0) {
+              return SolidLineConnector(
+                color: Colors.indigo[700],
+                indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+              );
+            } else {
+              return SolidLineConnector(
+                indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+              );
+            }
+          },
+          indicatorBuilder: (_, index) {
+            switch (data[index]) {
+              case _TimelineStatus.request:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.work_rounded,
+                    color: Colors.grey[300],
+                    size: _width * 0.035,
+                  ),
+                );
+              case _TimelineStatus.accept:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.how_to_reg_rounded,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.started:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.build,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.completed:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.verified_rounded,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.feedback:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.reviews,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              default:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.verified_rounded,
+                    size: _width * 0.035,
+                    color: Colors.white,
+                  ),
+                );
+            }
+          },
+          itemExtentBuilder: (_, __) => kTileHeight,
+          itemCount: data.length,
+        ),
+      ),
+    );
+  }
+}
+
+class TimeLineTitle extends StatelessWidget {
+  final int index;
+  final BuildContext contextt;
+  TimeLineTitle(this.index, this.contextt);
+  getStatus() {
+    switch (index) {
+      case 0:
+        return "Service Requested";
+      case 1:
+        return "Order Accepted";
+      case 2:
+        return "Service Started";
+      case 3:
+        return "Service Completed";
+      case 4:
+        return "Feedback";
+      default:
+        return "Something Went wrong";
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _width = MediaQuery.of(contextt).size.width;
+    return Container(
+        padding: EdgeInsets.only(left: _width * 0.03),
+        child: TextWid(
+            text: getStatus(), size: _width * 0.04, weight: FontWeight.w600));
+  }
+}
 
 
 
