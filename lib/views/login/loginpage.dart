@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -145,6 +146,10 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: TextFormField(
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9]')),
+                                      ],
                                       onSaved: (item) => _loginPageController
                                           .loginModel.loginnum,
                                       decoration: InputDecoration(
@@ -176,9 +181,7 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                         ),
                                       ),
                                       validator: (value) {
-                                        if (value.isEmpty ||
-                                            value.length < 10 ||
-                                            value.length > 10) {
+                                        if (value.length != 10) {
                                           return 'Please Enter Valid Mobile Number';
                                         }
                                         return null;

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -10,6 +11,7 @@ import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -150,19 +152,18 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                           SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            'Enter One Time Password You recieved to Verify',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.white),
+                          TextWid(
+                            text:
+                                'Enter One Time Password You recieved to Verify',
+                            weight: FontWeight.bold,
+                            size: 15,
+                            color: Colors.white,
                           ),
-                          Text(
-                            '+91 ${widget.phone}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          TextWid(
+                            text: '+91 ${widget.phone}',
+                            color: Colors.white,
+                            weight: FontWeight.bold,
+                            size: 20,
                           ),
                         ],
                       ),
@@ -172,6 +173,9 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(30.0),
                         child: PinPut(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
                           fieldsCount: 6,
                           textStyle: const TextStyle(
                               fontSize: 25.0, color: Colors.blueGrey),
