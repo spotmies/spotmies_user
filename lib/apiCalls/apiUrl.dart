@@ -22,4 +22,5 @@ class API {
   static var userChatsList = '/api/chat/user/$uid';
   static var createNewChat = '/api/chat/createNewChatRoom';
   static var confirmDeclineOrder = '/api/order/stateChange';
+  static var revealProfile = "/api/order/revealProfile";
 }
