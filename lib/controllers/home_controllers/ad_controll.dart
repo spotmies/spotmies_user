@@ -65,9 +65,7 @@ class AdController extends ControllerMVC {
 
   var latitude = "";
   var longitude = "";
-  String add1 = "";
-  String add2 = "";
-  String add3 = "";
+  Map fullAddress = {};
   var docc;
   var wid = 1;
   bool isUploading = false;
@@ -165,11 +163,23 @@ class AdController extends ControllerMVC {
     final coordinates = Coordinates(position.latitude, position.longitude);
     var addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    log("address ${addresses.first}");
 
+    Map<String, String> val = {
+      "subLocality": "${addresses.first.subLocality}",
+      "locality": "${addresses.first.locality}",
+      "latitude": "${addresses.first.coordinates.latitude}",
+      "logitude": "${addresses.first.coordinates.longitude}",
+      "addressLine": "${addresses.first.addressLine}",
+      "subAdminArea": "${addresses.first.subAdminArea}",
+      "postalCode": "${addresses.first.postalCode}",
+      "adminArea": "${addresses.first.adminArea}",
+      "subThoroughfare": "${addresses.first.subThoroughfare}",
+      "featureName": "${addresses.first.featureName}",
+      "thoroughfare": "${addresses.first.thoroughfare}",
+    };
     setState(() {
-      add1 = addresses.first.featureName;
-      add2 = addresses.first.addressLine;
-      add3 = addresses.first.subLocality;
+      fullAddress = val;
     });
   }
 
@@ -316,12 +326,14 @@ class AdController extends ControllerMVC {
       if (this.money != null) "money": this.money,
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
-      "uDetails": userDetails["_id"].toString()
+      "uDetails": userDetails["_id"].toString(),
+      "address": fullAddress.isNotEmpty ? jsonEncode(fullAddress) : ""
     };
     for (var i = 0; i < imageLink.length; i++) {
       body["media.$i"] = imageLink[i];
     }
     log(body.toString());
+
     // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
       if (response.statusCode == 200) {
@@ -335,7 +347,8 @@ class AdController extends ControllerMVC {
         isUploading = false;
         refresh();
         snackbar(context, 'Bad Request');
-      } if (response.statusCode == 404) {
+      }
+      if (response.statusCode == 404) {
         isUploading = false;
         refresh();
         snackbar(context, 'Bad Request');
@@ -368,7 +381,7 @@ class AdController extends ControllerMVC {
       'location': {
         'latitude': latitude,
         'longitude': longitude,
-        'add1': add3,
+        // 'add1': add3,
       },
       'orderstate': 0,
     });
@@ -389,7 +402,7 @@ class AdController extends ControllerMVC {
       'location': {
         'latitude': latitude,
         'longitude': longitude,
-        'add1': add3,
+        // 'add1': add3,
       },
       'orderstate': 0,
     });

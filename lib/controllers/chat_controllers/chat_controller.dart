@@ -59,7 +59,8 @@ class ChatController extends ControllerMVC {
   }
 
   getTargetChat(list, msgId) {
-    List currentChatData = list.where((i) => i['msgId'] == msgId).toList();
+    List currentChatData =
+        list.where((i) => i['msgId'].toString() == msgId.toString()).toList();
 
     return currentChatData[0];
   }
@@ -90,7 +91,8 @@ class ChatController extends ControllerMVC {
     // scrollToBottom();
   }
 
-  disableOrDeleteChat(targetChat, {typeOfAction: "disable"}) {
+  chatStreamSocket(targetChat,
+      {typeOfAction: "disable", revealProfile: "true"}) {
     Map<String, Object> sendPayload = {
       "uId": targetChat['uId'],
       "pId": targetChat['pId'],
@@ -100,9 +102,27 @@ class ChatController extends ControllerMVC {
       "type": typeOfAction,
       "socketName": "chatStream"
     };
+    if (typeOfAction == "revealProfile")
+      sendPayload['revealProfile'] = revealProfile;
 
     chatProvider.setSendMessage(sendPayload);
     // chatProvider.disableChatByMsgId(targetChat['msgId']);
+  }
+
+  revealProfile(chatDetails, {revealProfile = "true"}) async {
+    chatStreamSocket(chatDetails,
+        revealProfile: revealProfile, typeOfAction: "revealProfile");
+    Map<String, dynamic> body = {
+      "revealProfile": revealProfile,
+      "ordId": chatDetails['ordId'],
+      "pId": chatDetails['pId']
+    };
+    var response = await Server().postMethod(API.revealProfile, body);
+    if (response.statusCode == 200) {
+      snackbar(context, "Your shared your Profile to partner");
+    } else {
+      snackbar(context, "something went wrong");
+    }
   }
 
   getDate(stamp) {

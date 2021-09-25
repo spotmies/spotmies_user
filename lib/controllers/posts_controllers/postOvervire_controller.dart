@@ -1,21 +1,33 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/model.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
+import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/maps/maps.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   TextEditingController problem = TextEditingController();
+  ChatProvider chatProvider;
+  GetOrdersProvider ordersProvider;
   String title;
   int dropDownValue = 0;
 
   @override
   void initState() {
     super.initState();
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+
     // getAddressofLocation();
   }
 
@@ -71,14 +83,11 @@ class PostOverViewController extends ControllerMVC {
     'Plumber',
   ];
 
-
-
   List options = [
     {
       "name": "Close",
       "icon": Icons.cancel,
     },
-
     {
       "name": "Info",
       "icon": Icons.info,
@@ -87,12 +96,8 @@ class PostOverViewController extends ControllerMVC {
       "name": "Re-schedule",
       "icon": Icons.refresh,
     },
-    {
-      "name": "Help",
-      "icon": Icons.help
-    },
+    {"name": "Help", "icon": Icons.help},
   ];
-
 
   orderStateText(String orderState) {
     switch (orderState) {
@@ -144,6 +149,52 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
+  Future chatWithpatner(responseData) async {
+    if (ordersProvider.orderViewLoader) return;
+
+    String ordId = responseData['ordId'].toString();
+    String pId = responseData['pId'].toString();
+    List chatList = chatProvider.getChatList2();
+    int index = chatList.indexWhere((element) =>
+        element['ordId'].toString() == ordId &&
+        element['pId'].toString() == pId);
+    log("index $index");
+    if (index < 0) {
+      //this means there is no previous chat with this partner about this post
+      //create new chat here
+      log("creating new chat room");
+      String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      Map<String, dynamic> newChatObj = {
+        "msgId": timestamp,
+        "msgs":
+            "{\"msg\":\"New Chat Created for this service\",\"type\":\"text\",\"sender\":\"bot\",\"time\":$timestamp}",
+        "ordId": ordId,
+        "pId": pId,
+        "uId": responseData['uId'],
+        "uDetails": responseData['uDetails'],
+        "pDetails": responseData['pDetails']['_id'],
+        "orderDetails": responseData['orderDetails']['_id']
+      };
+      ordersProvider.setOrderViewLoader(true);
+      dynamic response =
+          await Server().postMethod(API.createNewChat, newChatObj);
+      ordersProvider.setOrderViewLoader(false);
+      if (response.statusCode == 200) {
+        log("success ${jsonDecode(response.body)}");
+        dynamic newChat = jsonDecode(response.body);
+        chatProvider.addNewchat(newChat);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PersonalChat(newChat['msgId'].toString())));
+      } else {
+        log("req failed $response please try again later");
+      }
+    } else {
+      //already there is a conversation about this post with this partner
+      dynamic msgId = chatList[index]['msgId'];
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PersonalChat(msgId.toString())));
+    }
+  }
 
   editDialogue(
     edit,

@@ -1,31 +1,32 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
-import 'package:spotmies/utilities/snackbar.dart';
-import 'package:spotmies/views/home/navBar.dart';
-import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
-  OTPScreen(this.phone);
+  final String verificationId;
+  OTPScreen(this.phone, this.verificationId);
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
 
-class _OTPScreenState extends State<OTPScreen> {
-  // Timer _timer;
-  // int _start = 60;
+class _OTPScreenState extends StateMVC<OTPScreen> {
+  LoginPageController _loginPageController;
+  _OTPScreenState() : super(LoginPageController()) {
+    this._loginPageController = controller;
+  }
+
   TimeProvider timerProvider;
   Timer _timer;
 
@@ -55,7 +56,8 @@ class _OTPScreenState extends State<OTPScreen> {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
 
     super.initState();
-    _verifyPhone();
+    startTimer();
+    _verificationCode = widget.verificationId;
   }
 
   @override
@@ -66,49 +68,50 @@ class _OTPScreenState extends State<OTPScreen> {
 
   void resendOtp() {
     timerProvider.resetTimer();
-    _verifyPhone();
+    // _verifyPhone();
+
+    _loginPageController.verifyPhone(navigate: false);
+    startTimer();
   }
 
-  loginUserWithOtp(otpValue) async {
-    log(otpValue.toString());
-    timerProvider.setLoader(true);
-    try {
-      await FirebaseAuth.instance
-          .signInWithCredential(PhoneAuthProvider.credential(
-              verificationId: _verificationCode, smsCode: otpValue))
-          .then((value) async {
-        if (value.user != null) {
-          // log("${value.user}");
-          // log("$value");
-          timerProvider.setPhoneNumber(widget.phone.toString());
-          // print("user already login");
-          bool resp = await checkUserRegistered(value.user.uid);
-          timerProvider.setLoader(false);
-          if (resp == false) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => StepperPersonalInfo()),
-                (route) => false);
-          } else {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => GoogleNavBar()),
-                (route) => false);
-          }
-        } else {
-          timerProvider.setLoader(false);
-          snackbar(context, "Something went wrong");
-        }
-      });
-    } catch (e) {
-      FocusScope.of(context).unfocus();
-      log(e.toString());
-      timerProvider.setLoader(false);
-      snackbar(context, "Invalid OTP");
-      // _scaffoldkey.currentState
-      //     .showSnackBar(SnackBar(content: Text('invalid OTP')));
-    }
-  }
+  // loginUserWithOtp(otpValue) async {
+  //   log(otpValue.toString());
+  //   timerProvider.setLoader(true);
+  //   try {
+  //     await FirebaseAuth.instance
+  //         .signInWithCredential(PhoneAuthProvider.credential(
+  //             verificationId: _verificationCode, smsCode: otpValue))
+  //         .then((value) async {
+  //       if (value.user != null) {
+  //         // log("${value.user}");
+  //         // log("$value");
+  //         timerProvider.setPhoneNumber(widget.phone.toString());
+  //         // print("user already login");
+  //         bool resp = await checkUserRegistered(value.user.uid);
+  //         timerProvider.setLoader(false);
+  //         if (resp == false) {
+  //           Navigator.pushAndRemoveUntil(
+  //               context,
+  //               MaterialPageRoute(builder: (context) => StepperPersonalInfo()),
+  //               (route) => false);
+  //         } else {
+  //           Navigator.pushAndRemoveUntil(
+  //               context,
+  //               MaterialPageRoute(builder: (context) => GoogleNavBar()),
+  //               (route) => false);
+  //         }
+  //       } else {
+  //         timerProvider.setLoader(false);
+  //         snackbar(context, "Something went wrong");
+  //       }
+  //     });
+  //   } catch (e) {
+  //     FocusScope.of(context).unfocus();
+  //     log(e.toString());
+  //     timerProvider.setLoader(false);
+  //     snackbar(context, "Invalid OTP");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +123,7 @@ class _OTPScreenState extends State<OTPScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue[900],
-      key: _scaffoldkey,
+      key: _loginPageController.scaffoldkey,
       body: Consumer<TimeProvider>(builder: (context, data, child) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,19 +152,18 @@ class _OTPScreenState extends State<OTPScreen> {
                           SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            'Enter One Time Password You recieved to Verify',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.white),
+                          TextWid(
+                            text:
+                                'Enter One Time Password You recieved to Verify',
+                            weight: FontWeight.bold,
+                            size: 15,
+                            color: Colors.white,
                           ),
-                          Text(
-                            '+91 ${widget.phone}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          TextWid(
+                            text: '+91 ${widget.phone}',
+                            color: Colors.white,
+                            weight: FontWeight.bold,
+                            size: 20,
                           ),
                         ],
                       ),
@@ -171,6 +173,9 @@ class _OTPScreenState extends State<OTPScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(30.0),
                         child: PinPut(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
                           fieldsCount: 6,
                           textStyle: const TextStyle(
                               fontSize: 25.0, color: Colors.blueGrey),
@@ -186,7 +191,7 @@ class _OTPScreenState extends State<OTPScreen> {
                             data.setOtp(pin.toString());
                           },
                           onSubmit: (pin) {
-                            loginUserWithOtp(pin);
+                            _loginPageController.loginUserWithOtp(pin);
                           },
                         ),
                       ),
@@ -232,7 +237,7 @@ class _OTPScreenState extends State<OTPScreen> {
                           top: data.countDown > 2 ? 0 : _hight * 0.25),
                       child: ElevatedButtonWidget(
                         onClick: () {
-                          loginUserWithOtp(data.getOtp);
+                          _loginPageController.loginUserWithOtp(data.getOtp);
                         },
                         height: 40,
                         textStyle: FontWeight.w600,
@@ -264,51 +269,4 @@ class _OTPScreenState extends State<OTPScreen> {
       }),
     );
   }
-
-  _verifyPhone() async {
-    startTimer();
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '+91${widget.phone}',
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await FirebaseAuth.instance
-              .signInWithCredential(credential)
-              .then((value) async {
-            if (value.user != null) {
-              // print("user already login");
-              // checkUserRegistered(value.user.uid);
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => StepperPersonalInfo(
-                          //value: '+91${widget.phone}'
-                          )),
-                  (route) => false);
-            }
-          });
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          log(e.message.toString());
-        },
-        codeSent: (String verficationID, int resendToken) {
-          timerProvider.setLoader(false);
-          snackbar(context, "Otp send successfully ");
-
-          setState(() {
-            _verificationCode = verficationID;
-          });
-        },
-        codeAutoRetrievalTimeout: (String verificationID) {
-          setState(() {
-            _verificationCode = verificationID;
-          });
-        },
-        timeout: Duration(seconds: 99));
-  }
-
-  // @override
-  // void initState() {
-  //   // implement initstate
-  //   super.initState();
-
-  // }
 }

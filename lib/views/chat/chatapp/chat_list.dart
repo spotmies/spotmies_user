@@ -84,7 +84,7 @@ class _ChatListState extends StateMVC<ChatList> {
                             Map user = chatList[index]['pDetails'];
                             List messages = chatList[index]['msgs'];
                             int count = chatList[index]['uCount'];
-                            log("count $count");
+                            // log("count $count");
 
                             var lastMessage = jsonDecode(messages.last);
 
@@ -150,7 +150,7 @@ class _ChatListCardState extends State<ChatListCard> {
 
           final count = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
-          log("fback $count");
+          // log("fback $count");
 
           widget.callBack(widget.msgId, "", "");
         },

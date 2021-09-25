@@ -4,11 +4,22 @@ class TimeProvider extends ChangeNotifier {
   int countDown = 99;
   bool loader = false;
   String otp;
+  String phNumber = "";
   String verifiedPhoneNumber = "";
   String loading = "";
+  String verificationCode = "";
+
+  void setVerificationCode(code) {
+    verificationCode = code;
+  }
 
   void setPhoneNumber(number) {
     verifiedPhoneNumber = number;
+    notifyListeners();
+  }
+
+  void setPhNumber(num) {
+    phNumber = num;
     notifyListeners();
   }
 

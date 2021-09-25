@@ -70,13 +70,18 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
   disableChat() {
     print("disable chat");
-    _chatController.disableOrDeleteChat(targetChat, typeOfAction: "disable");
+    _chatController.chatStreamSocket(targetChat, typeOfAction: "disable");
   }
 
   deleteChat() {
     print("delete chat");
-    _chatController.disableOrDeleteChat(targetChat, typeOfAction: "delete");
+    _chatController.chatStreamSocket(targetChat, typeOfAction: "delete");
     Navigator.pop(context, false);
+  }
+
+  revealMyProfile() {
+    print("reveal profile");
+    _chatController.revealProfile(targetChat, revealProfile: "true");
   }
 
   List options = [
@@ -85,8 +90,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       "icon": Icons.remove_red_eye,
     },
     {
-      "name": "Partner details",
-      "icon": Icons.account_circle,
+      "name": "Reveal My profile",
+      "icon": Icons.share,
     },
     {
       "name": "Disable chat",
@@ -390,6 +395,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               bottomOptionsMenu(context,
                   options: options,
                   menuTitle: "More options",
+                  option2Click: revealMyProfile,
                   option3Click: disableChat,
                   option4Click: deleteChat);
             })

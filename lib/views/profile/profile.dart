@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textFormFieldWidget.dart';
+import 'package:spotmies/utilities/uploadFilesToCloud.dart';
 // import 'package:spotmies/views/profile/editDetailsBS.dart';
 import 'package:spotmies/views/profile/feedBack.dart';
 import 'package:spotmies/views/profile/help&supportBS.dart';
@@ -23,6 +24,7 @@ import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/profile/promotionsBS.dart';
 import 'package:spotmies/views/profile/settingsBS.dart';
 import 'package:spotmies/views/profile/signoutBS.dart';
+import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -64,6 +66,7 @@ class _ProfileState extends StateMVC<Profile> {
   @override
   void initState() {
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+    editpic = profileProvider.getUser['pic'];
     super.initState();
   }
 
@@ -87,15 +90,19 @@ class _ProfileState extends StateMVC<Profile> {
     var emailformkey = GlobalKey<FormState>();
     var mobileformkey = GlobalKey<FormState>();
     Future<void> submitChange() async {
+      profileProvider.setLoader(true);
+      Navigator.pop(context);
+      String profilePicLink =
+          await uploadFilesToCloud(editpic, cloudLocation: "userDocs");
+
       var body = {
         "name": nameController.text,
         "eMail": emailController.text,
         "altNum": mobileNoController.text,
-        //  "pic": ""
+        "pic": profilePicLink
       };
       print(body);
-      profileProvider.setLoader(true);
-      Navigator.pop(context);
+
       var resp = await _profileController.updateProfileDetails(body);
       if (resp != false) {
         log(resp.toString());
@@ -110,6 +117,7 @@ class _ProfileState extends StateMVC<Profile> {
           imageQuality: 10,
           preferredCameraDevice: CameraDevice.rear);
       editpic = File(pickedFile?.path);
+      setState(() {});
       refresh();
 
       // if (pickedFile.path == null) retrieveLostData();
@@ -131,18 +139,15 @@ class _ProfileState extends StateMVC<Profile> {
             height: _hight * 0.9,
             child: ListView(
               children: [
-                profilePic(context, details["pic"], details['name'],
-                    onClick: pickImage),
-                // editpic != null
-                //     ? Container(
-                //         width: 30,
-                //         height: 30,
-                //         decoration: BoxDecoration(
-                //             color: Colors.amber,
-                //             image: DecorationImage(
-                //                 image: FileImage(editpic), fit: BoxFit.cover)),
-                //       )
-                //     : Container(),
+                Center(
+                  child: ProfilePic(
+                    profile: editpic,
+                    name: details['name'],
+                    size: _width * 0.22,
+                    onClick: pickImage,
+                    onClickLabel: "change profile",
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 20, left: 20),
                   alignment: Alignment.centerLeft,
@@ -278,6 +283,7 @@ class _ProfileState extends StateMVC<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    log("============ Render Profile ==============");
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;
@@ -314,6 +320,7 @@ class _ProfileState extends StateMVC<Profile> {
       body: Container(
         child: Consumer<UserDetailsProvider>(builder: (context, data, child) {
           var u = data.getUser;
+
           if (data.getLoader || u == null)
             return Center(child: profileShimmer(context));
           // return TextButton(
@@ -324,8 +331,6 @@ class _ProfileState extends StateMVC<Profile> {
           return ListView(
             children: [
               profilePic(context, u['pic'], u['name'], onClick: () {
-                // editpic = u['pic'];
-                // refresh();
                 editDetails(context, details: u);
               }),
               Container(

@@ -155,12 +155,13 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
         log("sending $newMessageObject");
         chatProvider.setReadyToSend(false);
         for (int i = 0; i < newMessageObject.length; i++) {
+          log("i is $i");
           var payLoad = newMessageObject[i];
           socket.emitWithAck(newMessageObject[i]['socketName'], payLoad,
               ack: (var callback) {
             if (callback == 'success') {
               print('working Fine');
-              switch (newMessageObject[i]['socketName']) {
+              switch (payLoad['socketName']) {
                 case "sendNewMessageCallback":
                   if (i == newMessageObject.length - 1) {
                     var msgId = payLoad['target']['msgId'];
@@ -176,6 +177,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
                   break;
                 case "chatStream":
                   if (i == newMessageObject.length - 1) {
+                    log("clear queue");
                     chatProvider.clearMessageQueue2();
                   }
                   if (payLoad['type'] == "disable") {

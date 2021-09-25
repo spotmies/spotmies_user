@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +14,14 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
+import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
+import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
+import 'package:timelines/timelines.dart';
 
 class PostOverView extends StatefulWidget {
   final int index;
@@ -31,6 +39,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   GetOrdersProvider ordersProvider;
   // _PostOverViewState(this.value);
   // int _currentStep = 0;
+  void chatWithPatner(responseData) {
+    _postOverViewController.chatWithpatner(responseData);
+  }
 
   @override
   void initState() {
@@ -46,246 +57,276 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     final _width = MediaQuery.of(context).size.width;
     return Consumer<GetOrdersProvider>(builder: (context, data, child) {
       var d = data.getOrdersList[widget.index];
+      log("ord $d");
       if (data.getOrdersList == null)
         return Center(child: profileShimmer(context));
 
       List<String> images = List.from(d['media']);
+      dynamic fullAddress = jsonDecode(d['address']);
       // final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
 
-      return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          toolbarHeight: _hight * 0.16,
-          // elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.grey[900],
-            ),
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextWidget(
-                text: _postOverViewController.jobs
-                    .elementAt(d['job'])
-                    .toString()
-                    .toUpperCase(),
-                size: _width * 0.04,
-                color: Colors.grey[500],
-                lSpace: 1.5,
-                weight: FontWeight.w600,
-              ),
-              SizedBox(
-                height: _hight * 0.007,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    _postOverViewController.orderStateIcon(d['ordState']),
-                    color: Colors.indigo[900],
-                    size: _width * 0.045,
-                  ),
-                  SizedBox(
-                    width: _width * 0.01,
-                  ),
-                  TextWidget(
-                      text:
-                          _postOverViewController.orderStateText(d['ordState']),
-                      color: Colors.grey[700],
-                      weight: FontWeight.w700,
-                      size: _width * 0.04),
-                ],
-              )
-            ],
-          ),
-          bottom: PreferredSize(
-              child: Container(
-                margin: EdgeInsets.only(bottom: _width * 0.01),
-                height: _hight * 0.06,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButtonWidget(
-                      height: _hight * 0.05,
-                      minWidth: _width * 0.4,
-                      bgColor: Colors.white,
-                      borderSideColor: Colors.grey[200],
-                      borderRadius: 10.0,
-                      buttonName: 'Cancel',
-                      textSize: _width * 0.04,
-                      leadingIcon: Icon(
-                        Icons.cancel,
-                        color: Colors.grey[900],
-                        size: _width * 0.045,
-                      ),
-                    ),
-                    ElevatedButtonWidget(
-                      height: _hight * 0.05,
-                      minWidth: _width * 0.55,
-                      bgColor: Colors.indigo[900],
-                      borderSideColor: Colors.grey[200],
-                      borderRadius: 10.0,
-                      buttonName: 'Re-schedule',
-                      textColor: Colors.white,
-                      textSize: _width * 0.04,
-                      trailingIcon: Icon(
-                        Icons.refresh,
-                        color: Colors.white,
-                        size: _width * 0.045,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              preferredSize: Size.fromHeight(4.0)),
-          actions: [
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.help,
-                  color: Colors.grey[700],
-                )),
-            IconButton(
+      return Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              toolbarHeight: _hight * 0.16,
+              // elevation: 0,
+              leading: IconButton(
                 onPressed: () {
-                  bottomOptionsMenu(context,options: _postOverViewController.options);
+                  Navigator.pop(context);
                 },
                 icon: Icon(
-                  Icons.more_vert,
+                  Icons.arrow_back,
                   color: Colors.grey[900],
-                )),
-          ],
-        ),
-        body: Container(
-          height: _hight,
-          width: _width,
-          color: Colors.grey[100],
-          child: ListView(
-            children: [
-              Divider(
-                color: Colors.white,
+                ),
               ),
-              (d['ordState'] == 'onGoing')
-                  ? TextWidget(
-                      text: 'Service was started on ' +
-                          getDate(d['schedule']) +
-                          "-" +
-                          getTime(d['schedule']),
-                      align: TextAlign.center,
-                    )
-                  : (d['ordState'] == 'completed')
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: _postOverViewController.jobs
+                        .elementAt(d['job'])
+                        .toString()
+                        .toUpperCase(),
+                    size: _width * 0.04,
+                    color: Colors.grey[500],
+                    lSpace: 1.5,
+                    weight: FontWeight.w600,
+                  ),
+                  SizedBox(
+                    height: _hight * 0.007,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        _postOverViewController.orderStateIcon(d['ordState']),
+                        color: Colors.indigo[900],
+                        size: _width * 0.045,
+                      ),
+                      SizedBox(
+                        width: _width * 0.01,
+                      ),
+                      TextWidget(
+                          text: _postOverViewController
+                              .orderStateText(d['ordState']),
+                          color: Colors.grey[700],
+                          weight: FontWeight.w700,
+                          size: _width * 0.04),
+                    ],
+                  )
+                ],
+              ),
+              bottom: PreferredSize(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: _width * 0.01),
+                    height: _hight * 0.06,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButtonWidget(
+                          height: _hight * 0.05,
+                          minWidth: _width * 0.4,
+                          bgColor: Colors.white,
+                          borderSideColor: Colors.grey[200],
+                          borderRadius: 10.0,
+                          buttonName: 'Cancel',
+                          textSize: _width * 0.04,
+                          leadingIcon: Icon(
+                            Icons.cancel,
+                            color: Colors.grey[900],
+                            size: _width * 0.045,
+                          ),
+                        ),
+                        ElevatedButtonWidget(
+                          height: _hight * 0.05,
+                          minWidth: _width * 0.55,
+                          bgColor: Colors.indigo[900],
+                          borderSideColor: Colors.grey[200],
+                          borderRadius: 10.0,
+                          buttonName: 'Re-schedule',
+                          textColor: Colors.white,
+                          textSize: _width * 0.04,
+                          trailingIcon: Icon(
+                            Icons.refresh,
+                            color: Colors.white,
+                            size: _width * 0.045,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  preferredSize: Size.fromHeight(4.0)),
+              actions: [
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.help,
+                      color: Colors.grey[700],
+                    )),
+                IconButton(
+                    onPressed: () {
+                      bottomOptionsMenu(context,
+                          options: _postOverViewController.options);
+                    },
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.grey[900],
+                    )),
+              ],
+            ),
+            body: Container(
+              height: _hight,
+              width: _width,
+              color: Colors.grey[100],
+              child: ListView(
+                children: [
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  (d['ordState'] == 'onGoing')
                       ? TextWidget(
-                          text: 'Service was completed on ' +
+                          text: 'Service was started on ' +
                               getDate(d['schedule']) +
                               "-" +
                               getTime(d['schedule']),
                           align: TextAlign.center,
                         )
+                      : (d['ordState'] == 'completed')
+                          ? TextWidget(
+                              text: 'Service was completed on ' +
+                                  getDate(d['schedule']) +
+                                  "-" +
+                                  getTime(d['schedule']),
+                              align: TextAlign.center,
+                            )
+                          : TextWidget(
+                              text: 'Service will start soon',
+                              align: TextAlign.center,
+                            ),
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  Container(
+                    height: _hight * 0.45,
+                    width: _width,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding:
+                              EdgeInsets.only(top: 15, left: 15, right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextWidget(
+                                text: 'Service Details :',
+                                size: _width * 0.055,
+                                weight: FontWeight.w600,
+                              ),
+                              IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                  onPressed: () {},
+                                  icon: Icon(Icons.edit))
+                            ],
+                          ),
+                        ),
+                        serviceDetailsListTile(
+                          _width,
+                          _hight,
+                          'Issue/Problem',
+                          Icons.settings,
+                          d['problem'],
+                        ),
+                        serviceDetailsListTile(
+                          _width,
+                          _hight,
+                          'Schedule',
+                          Icons.schedule,
+                          getDate(d['schedule']) + "-" + getTime(d['schedule']),
+                        ),
+                        serviceDetailsListTile(
+                            _width,
+                            _hight,
+                            'Location',
+                            Icons.location_on,
+                            fullAddress['addressLine'] ??
+                                "Unable to get service address"),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  images.isNotEmpty
+                      ? mediaView(_hight, _width, images)
                       : TextWidget(
-                          text: 'Service will start soon',
+                          text: 'No media files found',
                           align: TextAlign.center,
                         ),
-              Divider(
-                color: Colors.white,
-              ),
-              Container(
-                height: _hight * 0.45,
-                width: _width,
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(top: 15, left: 15, right: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextWidget(
-                            text: 'Service Details :',
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  warrentyCard(_hight, _width),
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  (d['ordState'] == 'onGoing' || d['ordState'] == 'completed')
+                      ? Container(
+                          height: _hight * 0.3,
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.only(
+                                    top: 15, left: 15, right: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextWidget(
+                                      text: 'Technician Details :',
+                                      size: _width * 0.055,
+                                      weight: FontWeight.w600,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              partnerDetails(_hight, _width, context,
+                                  _postOverViewController, d, chatWithPatner),
+                            ],
+                          ))
+                      : Container(),
+                  Container(
+                    height: 500,
+                    padding: EdgeInsets.only(left: 30, bottom: 50, top: 30),
+                    // width: _width * 0.7,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: TextWid(
+                            text: 'Service Status :',
                             size: _width * 0.055,
                             weight: FontWeight.w600,
                           ),
-                          IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(),
-                              onPressed: () {},
-                              icon: Icon(Icons.edit))
-                        ],
-                      ),
+                        ),
+                        Container(child: _Timeline2(context)),
+                      ],
                     ),
-                    serviceDetailsListTile(
-                      _width,
-                      _hight,
-                      'Issue/Problem',
-                      Icons.settings,
-                      d['problem'],
-                    ),
-                    serviceDetailsListTile(
-                      _width,
-                      _hight,
-                      'Schedule',
-                      Icons.schedule,
-                      getDate(d['schedule']) + "-" + getTime(d['schedule']),
-                    ),
-                    serviceDetailsListTile(
-                        _width,
-                        _hight,
-                        'Location',
-                        Icons.location_on,
-                        '10-134, NH16, Pothinamallayya Palem, Visakhapatnam, Andhra Pradesh 530041'),
-                  ],
-                ),
+                  )
+                ],
               ),
-              Divider(
-                color: Colors.white,
-              ),
-              images.isNotEmpty
-                  ? mediaView(_hight, _width, images)
-                  : TextWidget(
-                      text: 'No media files found',
-                      align: TextAlign.center,
-                    ),
-              Divider(
-                color: Colors.white,
-              ),
-              warrentyCard(_hight, _width),
-              Divider(
-                color: Colors.white,
-              ),
-              (d['ordState'] == 'onGoing' || d['ordState'] == 'completed')
-                  ? Container(
-                      height: _hight * 0.3,
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            padding:
-                                EdgeInsets.only(top: 15, left: 15, right: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextWidget(
-                                  text: 'Technician Details :',
-                                  size: _width * 0.055,
-                                  weight: FontWeight.w600,
-                                ),
-                              ],
-                            ),
-                          ),
-                          partnerDetails(
-                              _hight, _width, context, _postOverViewController)
-                        ],
-                      ))
-                  : Container(),
-            ],
+            ),
           ),
-        ),
+          ProgressWaiter(contextt: context, loaderState: data.orderViewLoader)
+        ],
       );
     });
   }
@@ -510,7 +551,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   }
 }
 
-partnerDetails(hight, width, BuildContext context, controller) {
+partnerDetails(hight, width, BuildContext context, controller, orderDetails,
+    chatWithPatner) {
+  dynamic pDetails = orderDetails['pDetails'];
   return Container(
     height: hight * 0.24,
     child: Column(
@@ -520,15 +563,10 @@ partnerDetails(hight, width, BuildContext context, controller) {
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircleAvatar(
-                  radius: hight * 0.06,
-                  child: ClipOval(
-                    child: Image.network(
-                        'https://pbs.twimg.com/profile_images/1428936441359323142/rdszNzrj_400x400.jpg',
-                        width: width * 0.4,
-                        height: width * 0.4,
-                        fit: BoxFit.fitHeight),
-                  ),
+                ProfilePic(
+                  profile: pDetails['partnerPic'],
+                  name: pDetails['name'],
+                  size: hight * 0.05,
                 ),
                 SizedBox(
                   width: width * 0.07,
@@ -546,7 +584,7 @@ partnerDetails(hight, width, BuildContext context, controller) {
                             children: [
                               TextWidget(
                                 text: toBeginningOfSentenceCase(
-                                  'saride Satish Kumar',
+                                  pDetails['name'],
                                 ),
                                 size: width * 0.04,
                                 weight: FontWeight.w600,
@@ -559,7 +597,9 @@ partnerDetails(hight, width, BuildContext context, controller) {
                               // mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 TextWidget(
-                                  text: controller.jobs.elementAt(4) + ' | ',
+                                  text: controller.jobs
+                                          .elementAt(pDetails['job']) +
+                                      ' | ',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
                                   color: Colors.grey[700],
@@ -584,20 +624,23 @@ partnerDetails(hight, width, BuildContext context, controller) {
                       Container(
                         child: Row(
                           children: [
-                            Text(
-                              'Telugu | ',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'Telugu | ',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
-                            Text(
-                              'English | ',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'English | ',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
-                            Text(
-                              'Hindi',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'Hindi',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
                           ],
                         ),
@@ -610,10 +653,11 @@ partnerDetails(hight, width, BuildContext context, controller) {
                               Icons.location_pin,
                               size: width * 0.03,
                             ),
-                            Text(
-                              'Vizag',
-                              style: fonts(width * 0.03, FontWeight.w600,
-                                  Colors.grey[900]),
+                            TextWid(
+                              text: 'vizag',
+                              size: width * 0.03,
+                              weight: FontWeight.w600,
+                              color: Colors.grey[900],
                             ),
                           ],
                         ),
@@ -631,16 +675,16 @@ partnerDetails(hight, width, BuildContext context, controller) {
           children: [
             InkWell(
               onTap: () {
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => MyCalling(
-                //           ordId: responseData['ordId'].toString(),
-                //           uId: FirebaseAuth.instance.currentUser.uid
-                //               .toString(),
-                //           pId: responseData['pId'].toString(),
-                //           isIncoming: false,
-                //           name: pDetails['name'].toString(),
-                //           profile: pDetails['partnerPic'].toString(),
-                //         )));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MyCalling(
+                          ordId: orderDetails['ordId'].toString(),
+                          uId: orderDetails['uDetails']['uId'],
+                          pId: orderDetails['pDetails']['pId'],
+                          isIncoming: false,
+                          name: orderDetails['pDetails']['name'].toString(),
+                          profile:
+                              orderDetails['pDetails']['partnerPic'].toString(),
+                        )));
               },
               child: Row(
                 children: [
@@ -667,7 +711,7 @@ partnerDetails(hight, width, BuildContext context, controller) {
             ),
             InkWell(
               onTap: () {
-                //  chatWithPatner(responseData);
+                chatWithPatner(orderDetails);
               },
               child: Row(
                 children: [
@@ -699,7 +743,146 @@ partnerDetails(hight, width, BuildContext context, controller) {
   );
 }
 
+enum _TimelineStatus { request, accept, started, completed, feedback }
 
+const kTileHeight = 90.0;
+
+class _Timeline2 extends StatelessWidget {
+  final BuildContext contextt;
+  _Timeline2(this.contextt);
+  @override
+  Widget build(BuildContext context) {
+    final _width = MediaQuery.of(contextt).size.width;
+    final data = _TimelineStatus.values;
+    return Flexible(
+      child: Timeline.tileBuilder(
+        theme: TimelineThemeData(
+          nodePosition: 0,
+          connectorTheme: ConnectorThemeData(
+            thickness: 3.0,
+            space: 20,
+            color: Color(0xffd3d3d3),
+          ),
+          indicatorTheme: IndicatorThemeData(
+            size: _width * 0.06,
+          ),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        builder: TimelineTileBuilder.connected(
+          contentsBuilder: (_, index) {
+            return TimeLineTitle(index, contextt);
+          },
+          connectorBuilder: (_, index, connectorType) {
+            if (index == 0) {
+              return SolidLineConnector(
+                color: Colors.indigo[700],
+                indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+              );
+            } else {
+              return SolidLineConnector(
+                indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+              );
+            }
+          },
+          indicatorBuilder: (_, index) {
+            switch (data[index]) {
+              case _TimelineStatus.request:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.work_rounded,
+                    color: Colors.grey[300],
+                    size: _width * 0.035,
+                  ),
+                );
+              case _TimelineStatus.accept:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.how_to_reg_rounded,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.started:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.build,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.completed:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.verified_rounded,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              case _TimelineStatus.feedback:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.reviews,
+                    size: _width * 0.035,
+                    color: Colors.grey[300],
+                  ),
+                );
+              default:
+                return DotIndicator(
+                  color: Colors.indigo[900],
+                  child: Icon(
+                    Icons.verified_rounded,
+                    size: _width * 0.035,
+                    color: Colors.white,
+                  ),
+                );
+            }
+          },
+          itemExtentBuilder: (_, __) => kTileHeight,
+          itemCount: data.length,
+        ),
+      ),
+    );
+  }
+}
+
+class TimeLineTitle extends StatelessWidget {
+  final int index;
+  final BuildContext contextt;
+  TimeLineTitle(this.index, this.contextt);
+  getStatus() {
+    switch (index) {
+      case 0:
+        return "Service Requested";
+      case 1:
+        return "Order Accepted";
+      case 2:
+        return "Service Started";
+      case 3:
+        return "Service Completed";
+      case 4:
+        return "Feedback";
+      default:
+        return "Something Went wrong";
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _width = MediaQuery.of(contextt).size.width;
+    return Container(
+        padding: EdgeInsets.only(left: _width * 0.03),
+        child: TextWid(
+            text: getStatus(), size: _width * 0.04, weight: FontWeight.w600));
+  }
+}
 
 
 

@@ -5,10 +5,16 @@ class GetOrdersProvider extends ChangeNotifier {
   final controller = TestController();
   List ordersList = [];
   bool loader = false;
+  bool orderViewLoader = false;
 
   bool get getLoader => loader;
   void setLoader(state) {
     loader = state;
+    notifyListeners();
+  }
+
+  void setOrderViewLoader(state) {
+    orderViewLoader = state;
     notifyListeners();
   }
 
