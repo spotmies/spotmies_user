@@ -134,8 +134,9 @@ class ChatProvider extends ChangeNotifier {
   }
 
   readReceipt(msgId, status) {
-    chatList[chatList.indexWhere((element) => element['msgId'] == msgId)]
-        ['uState'] = status;
+    int index = chatList.indexWhere((element) => element['msgId'] == msgId);
+    if (index < 0) return;
+    chatList[index]['uState'] = status;
   }
 
   chatReadReceipt(msgId, status) {

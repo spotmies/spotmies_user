@@ -162,18 +162,18 @@ class PostOverViewController extends ControllerMVC {
     if (index < 0) {
       //this means there is no previous chat with this partner about this post
       //create new chat here
-      log("creating new chat room");
+      log("creating new chat room $responseData");
       String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      Map<String, dynamic> newChatObj = {
+      var newChatObj = {
         "msgId": timestamp,
         "msgs":
             "{\"msg\":\"New Chat Created for this service\",\"type\":\"text\",\"sender\":\"bot\",\"time\":$timestamp}",
         "ordId": ordId,
         "pId": pId,
         "uId": responseData['uId'],
-        "uDetails": responseData['uDetails'],
+        "uDetails": responseData['uDetails']['_id'],
         "pDetails": responseData['pDetails']['_id'],
-        "orderDetails": responseData['orderDetails']['_id']
+        "orderDetails": responseData['_id']
       };
       ordersProvider.setOrderViewLoader(true);
       dynamic response =
