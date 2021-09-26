@@ -8,7 +8,6 @@ import 'package:spotmies/views/home/ads/page3.dart';
 import 'package:spotmies/views/home/ads/page1.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/onPending.dart';
-import 'package:spotmies/views/reusable_widgets/onSuccuss.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 
 //path for adding post data

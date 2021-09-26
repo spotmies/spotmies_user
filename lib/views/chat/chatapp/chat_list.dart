@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -28,7 +27,7 @@ class _ChatListState extends StateMVC<ChatList> {
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
-    chatProvider.setMsgId("");
+    // chatProvider.setMsgId("");
     super.initState();
   }
 
@@ -148,9 +147,9 @@ class _ChatListCardState extends State<ChatListCard> {
           widget.callBack(widget.msgId, widget.msgId, readReceiptobject);
           //navigate strore msg count value
 
-          final count = await Navigator.of(context).push(MaterialPageRoute(
+           await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
-          // log("fback $count");
+          
 
           widget.callBack(widget.msgId, "", "");
         },

@@ -30,8 +30,6 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   TimeProvider timerProvider;
   Timer _timer;
 
-  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
-  String _verificationCode;
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
   final BoxDecoration pinPutDecoration = BoxDecoration(
@@ -57,7 +55,6 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
 
     super.initState();
     startTimer();
-    _verificationCode = widget.verificationId;
   }
 
   @override

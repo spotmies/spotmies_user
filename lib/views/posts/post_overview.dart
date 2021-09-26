@@ -12,7 +12,6 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
-import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
