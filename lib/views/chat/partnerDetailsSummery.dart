@@ -10,7 +10,7 @@ import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 
 Future partnerDetailsSummury(BuildContext context, double hight, double width,
-    pDetails, ResponsiveController _responsiveController, responseData, chatWithPatner) {
+    pDetails, ResponsiveController _responsiveController, responseData, chatWithPatner,{onClick}) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -231,7 +231,8 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width,
                     minWidth: width * 0.5,
                     height: hight * 0.05,
                     bgColor: Colors.indigo[900],
-                    buttonName: 'See More',
+                    onClick: onClick,
+                    buttonName: 'orderDetails',
                     textColor: Colors.white,
                     borderRadius: 15.0,
                     textSize: width * 0.04,
