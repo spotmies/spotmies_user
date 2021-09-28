@@ -81,6 +81,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
   revealMyProfile() {
     print("reveal profile");
+    sendMessageHandler("user shared profile");
     _chatController.revealProfile(targetChat, revealProfile: "true");
   }
 

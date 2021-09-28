@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textFormFieldWidget.dart';
 import 'package:spotmies/utilities/uploadFilesToCloud.dart';
@@ -34,6 +35,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends StateMVC<Profile> {
   ProfileController _profileController;
   UserDetailsProvider profileProvider;
+  GetOrdersProvider ordersProvider;
 
   _ProfileState() : super(ProfileController()) {
     this._profileController = controller;
@@ -66,6 +68,8 @@ class _ProfileState extends StateMVC<Profile> {
   @override
   void initState() {
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+
     editpic = profileProvider.getUser['pic'];
     super.initState();
   }
@@ -388,19 +392,22 @@ class _ProfileState extends StateMVC<Profile> {
                     ),
                     Container(
                       width: _width * 0.4,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              u['orders'].length.toString(),
-                              style: fonts(_width * 0.04, FontWeight.w600,
-                                  Colors.grey[900]),
-                            ),
-                            Text('Total orders',
-                                style: fonts(_width * 0.02, FontWeight.w500,
-                                    Colors.grey[900])),
-                          ]),
+                      child: Consumer<GetOrdersProvider>(
+                          builder: (context, data, child) {
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                data.getOrdersList.length.toString(),
+                                style: fonts(_width * 0.04, FontWeight.w600,
+                                    Colors.grey[900]),
+                              ),
+                              Text('Total orders',
+                                  style: fonts(_width * 0.02, FontWeight.w500,
+                                      Colors.grey[900])),
+                            ]);
+                      }),
                     )
                   ],
                 ),
