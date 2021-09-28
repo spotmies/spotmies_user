@@ -33,6 +33,13 @@ class GetOrdersProvider extends ChangeNotifier {
 
   List get getOrdersList => ordersList;
 
+  getOrderById(ordId) {
+    int index = ordersList.indexWhere(
+        (element) => element['ordId'].toString() == ordId.toString());
+    if (index < 0) return null;
+    return ordersList[index];
+  }
+
   void addNewOrder(newOrder) {
     ordersList.add(newOrder);
     sortListByTime();

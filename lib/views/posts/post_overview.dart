@@ -12,7 +12,6 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
-import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
@@ -24,8 +23,8 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 import 'package:timelines/timelines.dart';
 
 class PostOverView extends StatefulWidget {
-  final int index;
-  PostOverView({this.index});
+  final String ordId;
+  PostOverView({@required this.ordId});
   @override
   _PostOverViewState createState() => _PostOverViewState();
 }
@@ -56,10 +55,23 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<GetOrdersProvider>(builder: (context, data, child) {
-      var d = data.getOrdersList[widget.index];
+      var d = data.getOrderById(widget.ordId);
       log("ord $d");
-      if (data.getOrdersList == null)
-        return Center(child: profileShimmer(context));
+      if (d == null)
+        return Scaffold(
+            body: Center(
+                child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.manage_search_rounded,
+                color: Colors.grey[700], size: _width * 0.3),
+            TextWid(
+              text: "Unable to Load this order",
+              weight: FontWeight.bold,
+              size: _width * 0.05,
+            ),
+          ],
+        )));
 
       List<String> images = List.from(d['media']);
       dynamic fullAddress = jsonDecode(d['address']);

@@ -96,7 +96,7 @@ class _PostListState extends StateMVC<PostList> {
                             //  OrderOverViewProvider().orderDetails(orderid);
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  PostOverView(index: index),
+                                  PostOverView(ordId: orderid.toString()),
                             ));
                           },
                           child: Container(
@@ -340,7 +340,8 @@ class _PostListState extends StateMVC<PostList> {
                                           ),
                                           borderSideColor: Colors.grey[50],
                                           onClick: () {
-                                            postmenu(orderid, _hight, _width,index);
+                                            postmenu(
+                                                orderid, _hight, _width, index);
                                           },
                                         ),
                                       ],
@@ -388,7 +389,8 @@ class _PostListState extends StateMVC<PostList> {
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => PostOverView(index: index),
+                          builder: (context) =>
+                              PostOverView(ordId: orderid.toString()),
                         ));
                       },
                       child: Container(
