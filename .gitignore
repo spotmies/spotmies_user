@@ -28,6 +28,7 @@
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
+.vscode/settings.json
 .pub/
 /build/
 
@@ -44,4 +45,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-.vscode/settings.json
+

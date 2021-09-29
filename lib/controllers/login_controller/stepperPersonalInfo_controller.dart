@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,6 +94,7 @@ class StepperPersonal extends ControllerMVC {
     timerProvider.setLoader(true, loadingValue: "Uploading profile pic...");
     log("${timerProvider.phoneNumber}");
     await uploadimage();
+    dynamic deviceToken = await FirebaseMessaging.instance.getToken();
     timerProvider.setLoader(true, loadingValue: "Registration Inprogress...");
     var body = {
       "name": this?.name?.toString(),
@@ -104,6 +106,9 @@ class StepperPersonal extends ControllerMVC {
       "eMail": this?.email?.toString() ?? "",
       "t&a": accept?.toString(),
       "pic": imageLink?.toString() ?? "",
+      "userDeviceToken": deviceToken?.toString() ?? "",
+      "referalCode":
+          "${name.substring(0, 4)}${timerProvider.phoneNumber.substring(6)}"
     };
     log("body $body");
     var resp =
@@ -127,7 +132,7 @@ class StepperPersonal extends ControllerMVC {
     //     onPressed: () {},
     //   ),
     // ));
-    currentStep += 1;
+    // currentStep += 1;
     return resp;
   }
 
