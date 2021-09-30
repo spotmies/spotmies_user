@@ -10,12 +10,14 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 
 class ResponsiveController extends ControllerMVC {
   ChatProvider chatProvider;
   ResponsesProvider responseProvider;
+  UserDetailsProvider profileProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -57,6 +59,7 @@ class ResponsiveController extends ControllerMVC {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
     //address
 
     //for notifications
@@ -80,7 +83,9 @@ class ResponsiveController extends ControllerMVC {
     //enable loader
     responseProvider.setLoader(true);
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    Map<String, dynamic> body = {};
+    Map<String, dynamic> body = {
+      "deviceToken": responseData['pDetails']['partnerDeviceToken'].toString()
+    };
     if (responseType == "accept") {
       body["responseType"] = responseType.toString();
       body["ordId"] = responseData['orderDetails']['ordId'].toString();
@@ -91,6 +96,8 @@ class ResponsiveController extends ControllerMVC {
       body["acceptAt"] = timestamp.toString();
       body["acceptResponse"] = responseData['_id'].toString();
       body["pDetails"] = responseData['pDetails']['_id'].toString();
+      body['userName'] = profileProvider.getUser['name'].toString();
+      body['userPic'] = profileProvider.getUser['pic'].toString();
     } else if (responseType == "reject") {
       body["responseType"] = responseType.toString();
       body["acceptResponse"] = responseData['_id'].toString();
