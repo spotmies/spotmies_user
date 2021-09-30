@@ -94,7 +94,7 @@ class StepperPersonal extends ControllerMVC {
     timerProvider.setLoader(true, loadingValue: "Uploading profile pic...");
     log("${timerProvider.phoneNumber}");
     await uploadimage();
-    dynamic deviceToken = await FirebaseMessaging.instance.getToken();
+     dynamic deviceToken = await FirebaseMessaging.instance.getToken();
     timerProvider.setLoader(true, loadingValue: "Registration Inprogress...");
     var body = {
       "name": this?.name?.toString(),
@@ -103,7 +103,7 @@ class StepperPersonal extends ControllerMVC {
       "uId": FirebaseAuth.instance.currentUser.uid.toString(),
       "userState": "active",
       "altNum": this?.altnumber?.toString() ?? "",
-      "eMail": this?.email?.toString() ?? "",
+      if(this.email != null)"eMail":this.email.toString(),
       "t&a": accept?.toString(),
       "pic": imageLink?.toString() ?? "",
       "userDeviceToken": deviceToken?.toString() ?? "",
@@ -132,7 +132,7 @@ class StepperPersonal extends ControllerMVC {
     //     onPressed: () {},
     //   ),
     // ));
-    // currentStep += 1;
+    currentStep += 1;
     return resp;
   }
 

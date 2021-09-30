@@ -354,7 +354,7 @@ class _ProfileState extends StateMVC<Profile> {
                           _width * 0.05, FontWeight.w600, Colors.grey[900]),
                     ),
                     Text(
-                      u['eMail'] ?? u['phNum'],
+                      u['phNum'].toString(),
                       style: fonts(
                           _width * 0.03, FontWeight.w500, Colors.grey[900]),
                     )
