@@ -379,6 +379,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       isIncoming: false,
                       name: partner['name'],
                       profile: partner['partnerPic'],
+                      partnerDeviceToken: partner['partnerDeviceToken'].toString(),
                     )));
           },
           icon: Icon(
