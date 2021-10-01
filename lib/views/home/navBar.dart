@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
@@ -10,6 +11,7 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/notifications.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/ads/adpost.dart';
 import 'package:spotmies/views/home/home.dart';
@@ -120,6 +122,35 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
 
   @override
   initState() {
+    FirebaseMessaging.instance.getToken().then((value) {
+      String token = value;
+      log(token.toString());
+    });
+    //notifications
+    LocalNotificationService.initialize(context);
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      final routefromMessage = message.data["route"];
+      log(routefromMessage);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
+    });
+    //forground
+    FirebaseMessaging.onMessage.listen((message) async {
+      if (message.notification != null) {
+        print(message.notification.title);
+        print(message.notification.body);
+        LocalNotificationService.display(message);
+      }
+    });
+    // when app background but in recent
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      final routefromMessage = message.data["route"];
+      log(routefromMessage);
+      LocalNotificationService.display(message);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
+    });
+
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
