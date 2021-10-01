@@ -323,7 +323,7 @@ class AdController extends ControllerMVC {
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       "schedule": pickedDate.millisecondsSinceEpoch.toString(),
       "uId": FirebaseAuth.instance.currentUser.uid.toString(),
-      if (this.money != null) "money": this.money,
+      if (this.money != null) "money": this.money.toString(),
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
       "uDetails": userDetails["_id"].toString(),
