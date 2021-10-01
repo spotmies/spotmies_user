@@ -8,6 +8,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/chat_input_field.dart';
@@ -34,6 +35,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   Map targetChat = {};
   Map partner = {};
   Map userDetails = {};
+  Map orderDetails = {};
   int msgCount = 20;
   void scrollToBottom() {
     Timer(
@@ -113,13 +115,18 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     return Consumer<ChatProvider>(builder: (context, data, child) {
       chatList = data.getChatList2();
       targetChat = _chatController.getTargetChat(chatList, widget.msgId);
+      log(targetChat.toString());
       userDetails = targetChat['uDetails'];
       partner = targetChat['pDetails'];
+      orderDetails = targetChat['orderDetails'];
+      bool showConfirmation =
+          targetChat['orderDetails']['ordState'] == "req" ? true : false;
 
       List messages = targetChat['msgs'];
       return Scaffold(
           key: _chatController.scaffoldkey,
-          appBar: _buildAppBar(context, _hight, _width),
+          appBar: _buildAppBar(context, _hight, _width,
+              showConfirmation: showConfirmation),
           body: Container(
             child: Column(children: [
               Expanded(
@@ -348,9 +355,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         ));
   }
 
-  Widget _buildAppBar(BuildContext context, double hight, double width) {
+  Widget _buildAppBar(BuildContext context, double hight, double width,
+      {showConfirmation: false}) {
     return AppBar(
-      elevation: 0,
+      toolbarHeight: showConfirmation ? hight * 0.13 : hight * 0.08,
+      elevation: 2,
       backgroundColor: Colors.grey[50],
       leading: IconButton(
           onPressed: () {
@@ -360,6 +369,57 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             Icons.arrow_back,
             color: Colors.black,
           )),
+      bottom: PreferredSize(
+          child: showConfirmation
+              ? Container(
+                  color: Colors.grey[200],
+                  padding:
+                      EdgeInsets.only(bottom: width * 0.01, top: width * 0.01),
+                  // height: hight * 0.04,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: width * 0.45,
+                        child: TextWid(
+                          text: "Would you like to give order to this partner",
+                          maxlines: 3,
+                          size: width * 0.035,
+                        ),
+                      ),
+                      ElevatedButtonWidget(
+                        height: hight * 0.04,
+                        minWidth: width * 0.22,
+                        bgColor: Colors.white,
+                        borderSideColor: Colors.grey[200],
+                        borderRadius: 10.0,
+                        buttonName: 'No',
+                        textSize: width * 0.04,
+                        leadingIcon: Icon(
+                          Icons.cancel_outlined,
+                          color: Colors.grey[900],
+                          size: width * 0.045,
+                        ),
+                      ),
+                      ElevatedButtonWidget(
+                        height: hight * 0.04,
+                        minWidth: width * 0.22,
+                        bgColor: Colors.white,
+                        borderSideColor: Colors.grey,
+                        borderRadius: 10.0,
+                        buttonName: 'Yes',
+                        textSize: width * 0.04,
+                        leadingIcon: Icon(
+                          Icons.check_circle_outline,
+                          color: Colors.grey[900],
+                          size: width * 0.045,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : Container(),
+          preferredSize: Size.fromHeight(4.0)),
       actions: [
         // IconButton(
         //   onPressed: () {},
@@ -379,7 +439,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       isIncoming: false,
                       name: partner['name'],
                       profile: partner['partnerPic'],
-                      partnerDeviceToken: partner['partnerDeviceToken'].toString(),
+                      partnerDeviceToken:
+                          partner['partnerDeviceToken'].toString(),
                     )));
           },
           icon: Icon(
