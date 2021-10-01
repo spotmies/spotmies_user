@@ -9,16 +9,19 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 
 class ChatController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
   ChatProvider chatProvider;
+  UserDetailsProvider profileProvider;
 
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
 
     super.initState();
   }
@@ -75,17 +78,21 @@ class ChatController extends ControllerMVC {
     };
     Map<String, dynamic> target = {
       'pId': targetChat['pId'],
-      // 'uId': "FtaZm2dasvN7cL9UumTG98ksk6I3",
       'uId': FirebaseAuth.instance.currentUser.uid,
       'msgId': msgId,
       'ordId': targetChat['ordId'],
-      // 'ordId': "2"
+      'incomingName': profileProvider.getUser['name'],
+      'incomingProfile': profileProvider.getUser['pic'],
+      'deviceToken': [targetChat['pDetails']['partnerDeviceToken']]
+     // 'deviceToken':['dVMBmjRYQTSXm0twrxhQ5p:APA91bH-tfbTwRZGRLRwYxmrYOiJ8tA6WxHhyGkAKv8NxPUCs9Z_uIjmITGjyxwzrQjT60AVdcDCi2f5Juo249VrakEoKTf8242iLmvceCB2ik2gzc4Y9pYJH-drcX2A1vtcPwlMPtwJ']
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
       "target": target,
       "socketName": "sendNewMessageCallback".toString()
     };
+    log("pay load $sendPayload");
+    // return;
     chatProvider.addnewMessage(sendPayload);
     chatProvider.setSendMessage(sendPayload);
     // scrollToBottom();

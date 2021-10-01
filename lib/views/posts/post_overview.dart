@@ -696,6 +696,7 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                           name: orderDetails['pDetails']['name'].toString(),
                           profile:
                               orderDetails['pDetails']['partnerPic'].toString(),
+                              partnerDeviceToken: orderDetails['pDetails']['partnerDeviceToken'].toString(),
                         )));
               },
               child: Row(

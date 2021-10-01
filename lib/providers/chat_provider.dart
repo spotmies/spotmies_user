@@ -155,6 +155,7 @@ class ChatProvider extends ChangeNotifier {
 
   clearMessageQueue2() {
     sendMessageQueue.clear();
+     readyToSend = true;
     notifyListeners();
   }
 
