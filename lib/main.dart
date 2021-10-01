@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,20 @@ import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/notifications.dart';
+
+// recieve messages when app is in background
+Future<void> backGroundHandler(RemoteMessage message) async {
+  // print(message.data.toString());
+  // print(message.notification.title);
+  LocalNotificationService.display(message);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(backGroundHandler);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MultiProvider(providers: [
