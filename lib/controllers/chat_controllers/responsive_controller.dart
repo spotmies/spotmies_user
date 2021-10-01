@@ -84,7 +84,8 @@ class ResponsiveController extends ControllerMVC {
     responseProvider.setLoader(true);
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     Map<String, dynamic> body = {
-      "deviceToken": responseData['pDetails']['partnerDeviceToken'].toString()
+      "deviceToken": responseData['pDetails']['partnerDeviceToken'].toString(),
+      "notificationTitle": "Your order alert",
     };
     if (responseType == "accept") {
       body["responseType"] = responseType.toString();
@@ -98,9 +99,13 @@ class ResponsiveController extends ControllerMVC {
       body["pDetails"] = responseData['pDetails']['_id'].toString();
       body['userName'] = profileProvider.getUser['name'].toString();
       body['userPic'] = profileProvider.getUser['pic'].toString();
+      body["notificationBody"] =
+          "${profileProvider.getUser['name']} accepted your request start your service";
     } else if (responseType == "reject") {
       body["responseType"] = responseType.toString();
       body["acceptResponse"] = responseData['_id'].toString();
+      body["notificationBody"] =
+          "${profileProvider.getUser['name']} Rejected your request";
     } else {
       snackbar(context, "Something went wrong");
       //disable loader
