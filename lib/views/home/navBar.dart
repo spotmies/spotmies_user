@@ -66,6 +66,9 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     ordersProvider.setOrdersList(user['orders'] != null ? user['orders'] : []);
     dynamic chatList = await getChatListFromDb();
     chatProvider.setChatList(chatList);
+
+    dynamic ordersList = await getOrderFromDB();
+    ordersProvider.setOrdersList(ordersList);
   }
 
   StreamController _chatResponse;

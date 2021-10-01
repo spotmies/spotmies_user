@@ -13,7 +13,6 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
-import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;

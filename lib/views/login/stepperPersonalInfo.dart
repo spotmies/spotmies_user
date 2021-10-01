@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/stepperPersonalInfo_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/providers/timer_provider.dart';
-import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 
 class StepperPersonalInfo extends StatefulWidget {

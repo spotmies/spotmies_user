@@ -9,6 +9,7 @@ import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
+import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -85,7 +86,14 @@ class _ResponseeState extends StateMVC<Responsee> {
                                   pDetails,
                                   _responsiveController,
                                   responseData,
-                                  chatWithPatner);
+                                  chatWithPatner, onClick: () {
+                                // Navigator.of(context).psu
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => PostOverView(
+                                          ordId:
+                                              responseData['ordId'].toString(),
+                                        )));
+                              });
                             },
                             child: Container(
                               padding: EdgeInsets.only(bottom: 10),

@@ -7,7 +7,6 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
-import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 
@@ -27,7 +26,6 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
   }
