@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
@@ -18,6 +19,7 @@ class ResponsiveController extends ControllerMVC {
   ChatProvider chatProvider;
   ResponsesProvider responseProvider;
   UserDetailsProvider profileProvider;
+  GetOrdersProvider ordersProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -60,7 +62,25 @@ class ResponsiveController extends ControllerMVC {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     //address
+
+    responseProvider.addListener(() {
+      if (responseProvider.acceptOrRejectResponsesQueue.length > 0) {
+        dynamic queueData = responseProvider.acceptOrRejectResponsesQueue[0];
+        dynamic targetResponse = responseProvider.getResponseByordIdAndPid(
+            ordId: queueData['ordId'], pId: queueData['pId']);
+        log("targetresp $targetResponse  $queueData");
+        if (targetResponse == null) {
+          snackbar(context, "something went wrong");
+          log("something went wrong");
+          responseProvider.resetResponsesQueue();
+          return;
+        }
+        responseProvider.resetResponsesQueue();
+        acceptOrRejectResponse(targetResponse, queueData['responseType']);
+      }
+    });
 
     //for notifications
     var androidInitialize = AndroidInitializationSettings('asdf');
@@ -111,11 +131,27 @@ class ResponsiveController extends ControllerMVC {
       //disable loader
       responseProvider.setLoader(false);
     }
+    chatProvider.setPersonalChatLoader(true);
     var response = await Server().postMethod(API.confirmDeclineOrder, body);
+    chatProvider.setPersonalChatLoader(false);
     responseProvider.setLoader(false);
     if (response.statusCode == 200 || response.statusCode == 204) {
       responseProvider.removeResponseById(responseData['responseId']);
+
       snackbar(context, "Request succeed");
+      if (responseType != "accept") return;
+      ordersProvider.setLoader(true);
+      chatProvider.setPersonalChatLoader(true);
+      dynamic updatedOrder = await Server()
+          .getMethod(API.particularOrder + responseData['ordId'].toString());
+      ordersProvider.setLoader(false);
+      chatProvider.setPersonalChatLoader(false);
+      log("updating orders");
+      updatedOrder = jsonDecode(updatedOrder);
+      ordersProvider.updateOrderById(
+          ordId: updatedOrder['ordId'], orderData: updatedOrder);
+      chatProvider.updateOrderState(
+          ordId: responseData['ordId'], ordState: "onGoing");
     } else {
       snackbar(context, "Unable to process request please try again later");
     }
