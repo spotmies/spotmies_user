@@ -14,7 +14,7 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
-import 'package:spotmies/views/profile/profile_shimmer.dart';
+import 'package:spotmies/views/maps/maps.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
@@ -261,13 +261,37 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           Icons.schedule,
                           getDate(d['schedule']) + "-" + getTime(d['schedule']),
                         ),
-                        serviceDetailsListTile(
-                            _width,
-                            _hight,
-                            'Location',
-                            Icons.location_on,
-                            fullAddress['addressLine'] ??
-                                "Unable to get service address"),
+                        Stack(
+                          children: [
+                            serviceDetailsListTile(
+                                _width,
+                                _hight,
+                                'Location',
+                                Icons.location_on,
+                                fullAddress['addressLine'] ??
+                                    "Unable to get service address"),
+                            Positioned(
+                                right: _width * 0.02,
+                                top: _hight * 0.02,
+                                child: IconButton(
+                                    onPressed: () {
+                                      var coordiantes = {
+                                        "latitude": double.parse(
+                                            fullAddress['latitude']),
+                                        "logitude": double.parse(
+                                            fullAddress['logitude'])
+                                      };
+                                      // log(fullAddress['latitude']);
+
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) => Maps(
+                                                    coordinates: coordiantes,
+                                                  )));
+                                    },
+                                    icon: Icon(Icons.near_me)))
+                          ],
+                        )
                       ],
                     ),
                   ),
