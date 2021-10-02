@@ -7,7 +7,9 @@ import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/home/ads/page3.dart';
 import 'package:spotmies/views/home/ads/page1.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
+import 'package:spotmies/views/reusable_widgets/onFailure.dart';
 import 'package:spotmies/views/reusable_widgets/onPending.dart';
+import 'package:spotmies/views/reusable_widgets/onSuccuss.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 
 //path for adding post data
@@ -36,6 +38,7 @@ class _PostAdState extends StateMVC<PostAd> {
 
   @override
   void initState() {
+    _adController.isUploading = 0;
     uDetailsProvider = Provider.of<UserDetailsProvider>(context, listen: false);
     super.initState();
   }
@@ -51,7 +54,18 @@ class _PostAdState extends StateMVC<PostAd> {
       var user = data.user;
       if (data.getLoader || user == null)
         return Center(child: profileShimmer(context));
-      if (_adController.isUploading) return onPending(_hight, _width);
+      switch (_adController.isUploading) {
+        case 1:
+          return onPending(_hight, _width);
+        case 2:
+          return onFail(_hight, _width, context);
+        case 3:
+          return onSuccess(_hight, _width, context);
+
+          break;
+        default:
+          break;
+      }
       return Scaffold(
           resizeToAvoidBottomInset: false,
           key: _adController.scaffoldkey,
@@ -61,7 +75,8 @@ class _PostAdState extends StateMVC<PostAd> {
             child: Column(children: [
               PageSlider(key: _adController.sliderKey, pages: [
                 Container(
-                    height: _hight * 1.08, child: page1(_hight, _width, context, _adController)),
+                    height: _hight * 1.08,
+                    child: page1(_hight, _width, context, _adController)),
                 // child: page1(_hight, _width, context, _adController)),
                 Container(
                     height: _hight * 1.08,
