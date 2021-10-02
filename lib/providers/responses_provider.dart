@@ -3,8 +3,31 @@ import 'package:flutter/material.dart';
 class ResponsesProvider extends ChangeNotifier {
   List responsesList = [];
   bool loader = true;
+  List acceptOrRejectResponsesQueue = [];
 
+  /* -------------------------------------------------------------------------- */
+  /*                             THIS IS THE GETTERS                            */
+  /* -------------------------------------------------------------------------- */
   List get getResponsesList => responsesList;
+  bool get getLoader => loader;
+  getResponseById(responseId) {
+    int index = responsesList.indexWhere(
+        (element) => element['responseId'].toString() == responseId.toString());
+    if (index < 0) return null;
+    return responsesList[index];
+  }
+
+  getResponseByordIdAndPid({ordId, pId}) {
+    int index = responsesList.indexWhere((element) =>
+        element['ordId'].toString() == ordId.toString() &&
+        element['pId'].toString() == pId.toString());
+    if (index < 0) return null;
+    return responsesList[index];
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                               THIS IS SETTERS                              */
+/* -------------------------------------------------------------------------- */
 
   void sortListByTime() {
     responsesList.sort((a, b) {
@@ -38,5 +61,13 @@ class ResponsesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get getLoader => loader;
+  void addNewResponsesQueue(newResponse) {
+    acceptOrRejectResponsesQueue.add(newResponse);
+    notifyListeners();
+  }
+
+  void resetResponsesQueue() {
+    acceptOrRejectResponsesQueue.clear();
+    notifyListeners();
+  }
 }

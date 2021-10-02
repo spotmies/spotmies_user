@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:spotmies/views/chat/chatapp/chat_list.dart';
 
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
@@ -14,6 +15,7 @@ class ChatProvider extends ChangeNotifier {
   int msgCount = 20;
   bool enableFoat = true;
   bool loader = true;
+  bool personalChatLoader = false;
 
   //calling variables
   bool terminateCall = false;
@@ -28,6 +30,11 @@ class ChatProvider extends ChangeNotifier {
   bool get getLoader => loader;
   void setLoader(state) {
     loader = state;
+  }
+
+  void setPersonalChatLoader(state) {
+    personalChatLoader = state;
+    notifyListeners();
   }
 
   setChatList(var list) {
@@ -155,7 +162,7 @@ class ChatProvider extends ChangeNotifier {
 
   clearMessageQueue2() {
     sendMessageQueue.clear();
-     readyToSend = true;
+    readyToSend = true;
     notifyListeners();
   }
 
@@ -280,6 +287,15 @@ class ChatProvider extends ChangeNotifier {
   get getTerminateCall => terminateCall;
   void setTerminateCall(state) {
     terminateCall = state ?? true;
+    notifyListeners();
+  }
+
+  void updateOrderState({ordId, ordState}) {
+    for (int i = 0; i < chatList.length; i++) {
+      if (chatList[i]['ordId'].toString() == ordId.toString()) {
+        chatList[i]['orderDetails']['ordState'] = ordState;
+      }
+    }
     notifyListeners();
   }
 }
