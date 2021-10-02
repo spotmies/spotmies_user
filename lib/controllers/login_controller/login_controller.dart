@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -144,7 +145,11 @@ class LoginPageController extends ControllerMVC {
 }
 
 checkUserRegistered(uid) async {
-  var obj = {"lastLogin": DateTime.now().millisecondsSinceEpoch.toString()};
+  dynamic deviceToken = await FirebaseMessaging.instance.getToken();
+  var obj = {
+    "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
+    "userDeviceToken": deviceToken?.toString() ?? "",
+  };
   // print("checkUserreg");
   var response = await Server().editMethod(API.userDetails, obj);
   // print("36 $response");

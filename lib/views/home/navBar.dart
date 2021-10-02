@@ -123,6 +123,11 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     });
   }
 
+  connectNotifications() async {
+    log("devic id ${await FirebaseMessaging.instance.getToken()}");
+    await FirebaseMessaging.instance.subscribeToTopic("spotmiesUser");
+  }
+
   @override
   initState() {
     FirebaseMessaging.instance.getToken().then((value) {
@@ -162,6 +167,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
 
     hitAllApis();
+    // connectNotifications();
 
     _chatResponse = StreamController();
 

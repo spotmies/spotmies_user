@@ -149,6 +149,7 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width,
                                 isIncoming: false,
                                 name: pDetails['name'].toString(),
                                 profile: pDetails['partnerPic'].toString(),
+                                partnerDeviceToken: pDetails['partnerDeviceToken'].toString(),
                               )));
                     },
                     child: Row(

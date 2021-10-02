@@ -52,23 +52,11 @@ class GetOrdersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // getOrders() async {
-  //   var response = await Server().getMethod(API.getOrders);
-  //   orders = jsonDecode(response);
-  //   controller.getData();
-  //   notifyListeners();
-  // }
-
-  // localStore() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString('orders', jsonEncode(orders));
-  // }
-
-  // localData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String orderData = prefs.getString('orders');
-  //   Map<String, dynamic> details =
-  //       jsonDecode(orderData) as Map<String, dynamic>;
-  //   local = details;
-  // }
+  void updateOrderById({ordId, orderData}) {
+    int index = ordersList.indexWhere(
+        (element) => element['ordId'].toString() == ordId.toString());
+    if (index < 0) return;
+    ordersList[index] = orderData;
+    notifyListeners();
+  }
 }

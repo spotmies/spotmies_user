@@ -321,6 +321,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     if (value.isEmpty) {
                       return 'Please Enter Your Name';
                     }
+                    if (value.length < 5)
+                      return 'name should be greater than 4 letters';
                     return null;
                   },
                   onChanged: (value) {
