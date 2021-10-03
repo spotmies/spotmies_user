@@ -68,7 +68,7 @@ class AdController extends ControllerMVC {
   Map fullAddress = {};
   var docc;
   var wid = 1;
-  bool isUploading = false;
+  int isUploading = 0; //0 for nothing 1- pending 2- failure 3-success
   List jobs = [
     'Select',
     'AC Service',
@@ -296,7 +296,7 @@ class AdController extends ControllerMVC {
   }
 
   step3(userDetails) {
-    isUploading = true;
+    isUploading = 1;
     refresh();
     adbutton(userDetails);
   }
@@ -337,19 +337,18 @@ class AdController extends ControllerMVC {
     // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
       if (response.statusCode == 200) {
-        isUploading = false;
+        isUploading = 3;
         refresh();
         snackbar(context, 'Published');
         ordersProvider.addNewOrder(jsonDecode(response.body));
-        Navigator.pop(context);
       }
       if (response.statusCode == 400) {
-        isUploading = false;
+        isUploading = 2;
         refresh();
         snackbar(context, 'Bad Request');
       }
       if (response.statusCode == 404) {
-        isUploading = false;
+        isUploading = 2;
         refresh();
         snackbar(context, 'Bad Request');
       }
