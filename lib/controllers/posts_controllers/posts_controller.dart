@@ -32,55 +32,8 @@ class PostsController extends ControllerMVC {
     super.initState();
   }
 
-  orderStateText(String orderState) {
-    switch (orderState) {
-      case 'req':
-        return 'Waiting for conformation';
-        break;
-      case 'noPartner':
-        return 'No technicians found';
-        break;
-      case 'updated':
-        return 'updated';
-        break;
-      case 'onGoing':
-        return 'On Going';
-        break;
-      case 'completed':
-        return 'Completed';
-        break;
-      case 'cancel':
-        return 'Cancelled';
-        break;
-      default:
-        return 'Booking done';
-    }
-  }
 
-  orderStateIcon(String orderState) {
-    switch (orderState) {
-      case 'req':
-        return Icons.pending_actions;
-        break;
-      case 'noPartner':
-        return Icons.stop_circle;
-        break;
-      case 'updated':
-        return Icons.update;
-        break;
-      case 'onGoing':
-        return Icons.run_circle_rounded;
-        break;
-      case 'completed':
-        return Icons.done_all;
-        break;
-      case 'cancel':
-        return Icons.cancel;
-        break;
-      default:
-        return Icons.search;
-    }
-  }
+
 
   getAddressofLocation(addresses) async {
     // Position position = await Geolocator.getCurrentPosition(

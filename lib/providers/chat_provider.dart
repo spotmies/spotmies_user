@@ -290,10 +290,11 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateOrderState({ordId, ordState}) {
+  void updateOrderState({ordId, ordState,orderState}) {
     for (int i = 0; i < chatList.length; i++) {
       if (chatList[i]['ordId'].toString() == ordId.toString()) {
         chatList[i]['orderDetails']['ordState'] = ordState;
+        chatList[i]['orderDetails']['orderState'] = orderState;
       }
     }
     notifyListeners();

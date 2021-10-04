@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
@@ -114,7 +115,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Row(
                     children: [
                       Icon(
-                        _postOverViewController.orderStateIcon(d['ordState']),
+                        orderStateIcon(ordState:d['orderState']),
                         color: Colors.indigo[900],
                         size: _width * 0.045,
                       ),
@@ -122,8 +123,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         width: _width * 0.01,
                       ),
                       TextWidget(
-                          text: _postOverViewController
-                              .orderStateText(d['ordState']),
+                          text: orderStateString(ordState:d['orderState']),
                           color: Colors.grey[700],
                           weight: FontWeight.w700,
                           size: _width * 0.04),
@@ -198,26 +198,30 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  (d['ordState'] == 'onGoing')
-                      ? TextWidget(
-                          text: 'Service was started on ' +
-                              getDate(d['schedule']) +
-                              "-" +
-                              getTime(d['schedule']),
-                          align: TextAlign.center,
-                        )
-                      : (d['ordState'] == 'completed')
-                          ? TextWidget(
-                              text: 'Service was completed on ' +
-                                  getDate(d['schedule']) +
-                                  "-" +
-                                  getTime(d['schedule']),
-                              align: TextAlign.center,
-                            )
-                          : TextWidget(
-                              text: 'Service will start soon',
-                              align: TextAlign.center,
-                            ),
+                  TextWidget(
+                    text: orderStateString(ordState: d['orderState']),
+                    align: TextAlign.center,
+                  ),
+                  // (d['orderState'] == 8)
+                  //     ? TextWidget(
+                  //         text: 'Service was started on ' +
+                  //             getDate(d['schedule']) +
+                  //             "-" +
+                  //             getTime(d['schedule']),
+                  //         align: TextAlign.center,
+                  //       )
+                  //     : (d['orderState'] == 9)
+                  //         ? TextWidget(
+                  //             text: 'Service was completed on ' +
+                  //                 getDate(d['schedule']) +
+                  //                 "-" +
+                  //                 getTime(d['schedule']),
+                  //             align: TextAlign.center,
+                  //           )
+                  //         : TextWidget(
+                  //             text: 'Service will start soon',
+                  //             align: TextAlign.center,
+                  //           ),
                   Divider(
                     color: Colors.white,
                   ),
@@ -311,7 +315,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  (d['ordState'] == 'onGoing' || d['ordState'] == 'completed')
+                  (d['orderState'] > 6)
                       ? Container(
                           height: _hight * 0.3,
                           color: Colors.white,

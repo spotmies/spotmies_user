@@ -113,6 +113,7 @@ class ResponsiveController extends ControllerMVC {
       body["pId"] = responseData['pId'].toString();
       body["uId"] = responseData['orderDetails']['uId'].toString();
       body["ordState"] = "onGoing".toString();
+      body['orderState'] = "8";
       body["acceptBy"] = "user".toString();
       body["acceptAt"] = timestamp.toString();
       body["acceptResponse"] = responseData['_id'].toString();
@@ -151,7 +152,7 @@ class ResponsiveController extends ControllerMVC {
       ordersProvider.updateOrderById(
           ordId: updatedOrder['ordId'], orderData: updatedOrder);
       chatProvider.updateOrderState(
-          ordId: responseData['ordId'], ordState: "onGoing");
+          ordId: responseData['ordId'], ordState: "onGoing",orderState:8);
     } else {
       snackbar(context, "Unable to process request please try again later");
     }
