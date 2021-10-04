@@ -301,13 +301,12 @@ class AdController extends ControllerMVC {
     adbutton(userDetails);
   }
 
-  // widDec() {
-  //   wid >= 1
-  //       ? setState(() {
-  //           wid = wid - 1;
-  //         })
-  //       : print('Back');
-  // }
+  getDateAndTime() {
+    DateTime pickedDateTime = new DateTime(pickedDate.year, pickedDate.month,
+        pickedDate.day, pickedTime.hour, pickedTime.minute);
+
+    return pickedDateTime.millisecondsSinceEpoch.toString();
+  }
 
   adbutton(userDetails) async {
     await uploadServiceMedia();
@@ -321,7 +320,8 @@ class AdController extends ControllerMVC {
       "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
       "ordState": "req",
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
-      "schedule": pickedDate.millisecondsSinceEpoch.toString(),
+      // "schedule": pickedDate.millisecondsSinceEpoch.toString(),
+      "schedule": getDateAndTime(),
       "uId": FirebaseAuth.instance.currentUser.uid.toString(),
       if (this.money != null) "money": this.money.toString(),
       "loc.0": latitude.toString(),
@@ -333,7 +333,6 @@ class AdController extends ControllerMVC {
       body["media.$i"] = imageLink[i];
     }
     log(body.toString());
-
     // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
       if (response.statusCode == 200) {

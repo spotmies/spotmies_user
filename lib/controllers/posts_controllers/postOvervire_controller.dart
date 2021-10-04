@@ -22,6 +22,10 @@ class PostOverViewController extends ControllerMVC {
   GetOrdersProvider ordersProvider;
   String title;
   int dropDownValue = 0;
+  dynamic orderDetails = {};
+  //date time picker
+  DateTime pickedDate;
+  TimeOfDay pickedTime;
 
   @override
   void initState() {
@@ -38,14 +42,18 @@ class PostOverViewController extends ControllerMVC {
         await Server().editMethod(API.editOrder + orderID.toString(), body);
     if (response != null) {
       snackbar(context, "Your order completed now");
-      dynamic response2 =
-          await Server().getMethod(API.confirmOrder + orderID.toString());
-      dynamic updatedOrder = jsonDecode(response2);
-      ordersProvider.updateOrderById(
-          ordId: updatedOrder['ordId'], orderData: updatedOrder);
+      await getOrderAndUpdate(orderID);
     } else {
       snackbar(context, "Something went wrong try again later");
     }
+  }
+
+  Future<void> getOrderAndUpdate(orderID) async {
+    dynamic response2 =
+        await Server().getMethod(API.confirmOrder + orderID.toString());
+    dynamic updatedOrder = jsonDecode(response2);
+    ordersProvider.updateOrderById(
+        ordId: updatedOrder['ordId'], orderData: updatedOrder);
   }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,
@@ -300,6 +308,56 @@ class PostOverViewController extends ControllerMVC {
         });
   }
 
+  pickDate(BuildContext context) async {
+    DateTime date = await showDatePicker(
+        confirmText: 'SET DATE',
+        context: context,
+        initialDate: pickedDate,
+        firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
+            DateTime.now().day - 0),
+        lastDate: DateTime(DateTime.now().year + 1));
+    if (date != null) {
+      setState(() {
+        pickedDate = date;
+        print(pickedDate.millisecondsSinceEpoch);
+      });
+    }
+  }
+
+  picktime(BuildContext context) async {
+    TimeOfDay t = await showTimePicker(
+      context: context,
+      initialTime: pickedTime,
+    );
+    if (t != null) {
+      setState(() {
+        pickedTime = t;
+      });
+    }
+  }
+
+  getDateAndTime() {
+    DateTime pickedDateTime = new DateTime(pickedDate.year, pickedDate.month,
+        pickedDate.day, pickedTime.hour, pickedTime.minute);
+
+    return pickedDateTime.millisecondsSinceEpoch.toString();
+  }
+
+  rescheduleService(orderState, orderId) async {
+    Map<String, dynamic> body = {
+      "schedule": getDateAndTime(),
+      "orderState": orderState > 6 ? "7" : "2"
+    };
+    log("body $body");
+    ordersProvider.setOrderViewLoader(true);
+    dynamic response = await updateOrder(body: body, ordId: orderId);
+    ordersProvider.setOrderViewLoader(false);
+    if (response != null) {
+      ordersProvider.setOrderViewLoader(true);
+      await getOrderAndUpdate(orderId);
+      ordersProvider.setOrderViewLoader(false);
+    }
+  }
   // getAddressofLocation(Set<double> coordinates) async {
   //   var addresses =
   //       await Geocoder.local.findAddressesFromCoordinates(coordinates);
@@ -349,4 +407,13 @@ class PostOverViewController extends ControllerMVC {
   ];
 
   int currentStep = 0;
+}
+
+updateOrder({body, ordId}) async {
+  dynamic response =
+      await Server().editMethod(API.editOrder + ordId.toString(), body);
+  if (response != null) {
+    return jsonDecode(response);
+  }
+  return null;
 }

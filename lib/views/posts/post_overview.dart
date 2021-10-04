@@ -74,7 +74,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<GetOrdersProvider>(builder: (context, data, child) {
-      var d = data.getOrderById(widget.ordId);
+      dynamic d = data.getOrderById(widget.ordId);
+      _postOverViewController.orderDetails = d;
+      _postOverViewController.pickedDate =
+          DateTime.fromMillisecondsSinceEpoch(d['schedule']);
+      _postOverViewController.pickedTime =
+          TimeOfDay.fromDateTime(_postOverViewController.pickedDate);
       log("ord $d");
       if (d == null)
         return Scaffold(
@@ -178,6 +183,20 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 ),
                               ),
                               ElevatedButtonWidget(
+                                onClick: () async {
+                                  await _postOverViewController
+                                      .pickDate(context);
+                                  await _postOverViewController
+                                      .picktime(context);
+                                  log("${d['schedule']} ${_postOverViewController.getDateAndTime()}");
+                                  if (d['schedule'] ==
+                                      _postOverViewController.getDateAndTime())
+                                    return;
+
+                                  await _postOverViewController
+                                      .rescheduleService(
+                                          d['orderState'], d['ordId']);
+                                },
                                 height: _hight * 0.05,
                                 minWidth: _width * 0.55,
                                 bgColor: Colors.indigo[900],
