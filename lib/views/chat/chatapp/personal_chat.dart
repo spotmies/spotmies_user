@@ -144,8 +144,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       userDetails = targetChat['uDetails'];
       partner = targetChat['pDetails'];
       orderDetails = targetChat['orderDetails'];
-      bool showConfirmation =
-          targetChat['orderDetails']['ordState'] == "req" ? true : false;
+      // bool showConfirmation =
+      //     targetChat['orderDetails']['ordState'] == "req" ? true : false;
+       bool showConfirmation =
+          targetChat['orderDetails']['orderState'] < 7 ? true : false;
 
       List messages = targetChat['msgs'];
       return Stack(

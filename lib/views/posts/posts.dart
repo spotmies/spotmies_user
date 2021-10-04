@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
@@ -159,10 +160,11 @@ class _PostListState extends StateMVC<PostList> {
                                                               .center,
                                                       children: [
                                                         Icon(
-                                                          _postsController
-                                                              .orderStateIcon(o[
+                                                          
+                                                              orderStateIcon(
+                                                              ordState: o[
                                                                       index]
-                                                                  ['ordState']),
+                                                                  ['orderState']),
                                                           color: Colors
                                                               .indigo[900],
                                                           size: _width * 0.04,
@@ -171,10 +173,10 @@ class _PostListState extends StateMVC<PostList> {
                                                           width: _width * 0.01,
                                                         ),
                                                         TextWidget(
-                                                            text: _postsController
-                                                                .orderStateText(o[
+                                                            text: 
+                                                                orderStateString(ordState:o[
                                                                         index][
-                                                                    'ordState']),
+                                                                    'orderState']),
                                                             color: Colors
                                                                 .indigo[900],
                                                             weight:
