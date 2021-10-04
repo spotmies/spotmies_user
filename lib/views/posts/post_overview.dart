@@ -48,11 +48,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   void initState() {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
 
-    ordersProvider.getOrderById(widget.ordId)['orderState'] < 9
-        ? showOrderStatusQuestion = true
-        : showOrderStatusQuestion = false;
+    try {
+      ordersProvider.getOrderById(widget.ordId)['orderState'] < 9
+          ? showOrderStatusQuestion = true
+          : showOrderStatusQuestion = false;
 
-    refresh();
+      refresh();
+    } catch (e) {}
 
     super.initState();
   }
@@ -357,8 +359,20 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                   ],
                                 ),
                               ),
-                              partnerDetails(_hight, _width, context,
-                                  _postOverViewController, d, chatWithPatner),
+                              d['pDetails'] != null
+                                  ? partnerDetails(
+                                      _hight,
+                                      _width,
+                                      context,
+                                      _postOverViewController,
+                                      d,
+                                      chatWithPatner)
+                                  : Container(
+                                      height: 60,
+                                      alignment: Alignment.center,
+                                      child: TextWid(
+                                          text:
+                                              "Unable to get Technician details")),
                             ],
                           ))
                       : Container(),
@@ -890,6 +904,7 @@ class _Timeline2 extends StatelessWidget {
         ? int.parse(orderData['schedule'])
         : orderData['schedule'];
     int presentTimestamp = DateTime.now().millisecondsSinceEpoch;
+    if (orderData['orderState'] < 8) return false;
     if (schedule < presentTimestamp) return true;
     if (orderData['orderState'] > 8) return true;
     return false;
@@ -958,7 +973,9 @@ class _Timeline2 extends StatelessWidget {
                 );
               case _TimelineStatus.accept:
                 return DotIndicator(
-                  color: Colors.indigo[900],
+                  color: orderData['orderState'] > 7
+                      ? Colors.indigo[900]
+                      : Colors.grey,
                   child: Icon(
                     Icons.how_to_reg_rounded,
                     size: _width * 0.035,
