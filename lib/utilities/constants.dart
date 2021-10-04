@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 
+class Constants {
+  static var jobCategories = [
+    "Ac/Refrigirator Service",
+    "Computer/Laptop Service",
+    "Tv Repair",
+    "Development",
+    "Tutor",
+    "Beauty",
+    "Photographer",
+    "Driver",
+    "Events",
+    "Electrician",
+    "Carpenter",
+    "Plumber",
+    "Interior Design",
+    "Design",
+    "CC Tv Installation",
+    "Catering",
+  ];
+}
+
 orderStateString({ordState = 0}) {
   int orderState =
       ordState.runtimeType == String ? int.parse(ordState) : ordState;
@@ -23,7 +44,7 @@ orderStateString({ordState = 0}) {
     case 8:
       return "Service is Ongoing";
     case 9:
-      return "Service successfully completed";
+      return "Service completed successfully";
     case 10:
       return "Service successfully completed and feedback given by You";
 
@@ -49,7 +70,8 @@ orderStateString({ordState = 0}) {
       return Icons.run_circle_rounded;
       break;
     case 9:
-      return Icons.done_all;
+    case 10:
+      return Icons.verified_rounded;
       break;
     case 3:
       return Icons.cancel;

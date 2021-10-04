@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 
@@ -53,9 +55,11 @@ class GetOrdersProvider extends ChangeNotifier {
   }
 
   void updateOrderById({ordId, orderData}) {
+    log("order updating....");
     int index = ordersList.indexWhere(
         (element) => element['ordId'].toString() == ordId.toString());
     if (index < 0) return;
+    log("order updated");
     ordersList[index] = orderData;
     notifyListeners();
   }

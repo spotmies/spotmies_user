@@ -11,6 +11,7 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/maps/maps.dart';
 
@@ -29,6 +30,22 @@ class PostOverViewController extends ControllerMVC {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
 
     // getAddressofLocation();
+  }
+
+  isOrderCompleted({orderID: 175642365745}) async {
+    Map<String, String> body = {"orderState": "9"};
+    dynamic response =
+        await Server().editMethod(API.editOrder + orderID.toString(), body);
+    if (response != null) {
+      snackbar(context, "Your order completed now");
+      dynamic response2 =
+          await Server().getMethod(API.confirmOrder + orderID.toString());
+      dynamic updatedOrder = jsonDecode(response2);
+      ordersProvider.updateOrderById(
+          ordId: updatedOrder['ordId'], orderData: updatedOrder);
+    } else {
+      snackbar(context, "Something went wrong try again later");
+    }
   }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,

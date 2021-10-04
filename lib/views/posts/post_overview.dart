@@ -36,6 +36,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     this._postOverViewController = controller;
   }
   int ordId;
+  bool showOrderStatusQuestion = false;
   GetOrdersProvider ordersProvider;
   // _PostOverViewState(this.value);
   // int _currentStep = 0;
@@ -46,7 +47,22 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   @override
   void initState() {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+
+    ordersProvider.getOrderById(widget.ordId)['orderState'] < 9
+        ? showOrderStatusQuestion = true
+        : showOrderStatusQuestion = false;
+
+    refresh();
+
     super.initState();
+  }
+
+  isThisOrderCompleted(state, {orderID = 123}) {
+    if (state) {
+      _postOverViewController.isOrderCompleted(orderID: orderID);
+    }
+    showOrderStatusQuestion = false;
+    refresh();
   }
 
   @override
@@ -84,8 +100,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
-              toolbarHeight: _hight * 0.16,
+              backgroundColor:
+                  d['orderState'] > 8 ? Colors.green : Colors.white,
+              toolbarHeight:
+                  d['orderState'] < 9 ? _hight * 0.16 : _hight * 0.08,
               // elevation: 0,
               leading: IconButton(
                 onPressed: () {
@@ -100,12 +118,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: _postOverViewController.jobs
-                        .elementAt(d['job'])
-                        .toString()
-                        .toUpperCase(),
+                    text: Constants.jobCategories[d['job'].runtimeType == String
+                        ? int.parse(d['job'])
+                        : d['job']],
                     size: _width * 0.04,
-                    color: Colors.grey[500],
+                    color:
+                        d['orderState'] > 8 ? Colors.white : Colors.grey[500],
                     lSpace: 1.5,
                     weight: FontWeight.w600,
                   ),
@@ -115,68 +133,74 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Row(
                     children: [
                       Icon(
-                        orderStateIcon(ordState:d['orderState']),
+                        orderStateIcon(ordState: d['orderState']),
                         color: Colors.indigo[900],
                         size: _width * 0.045,
                       ),
                       SizedBox(
                         width: _width * 0.01,
                       ),
-                      TextWidget(
-                          text: orderStateString(ordState:d['orderState']),
-                          color: Colors.grey[700],
-                          weight: FontWeight.w700,
-                          size: _width * 0.04),
+                      Expanded(
+                        child: TextWid(
+                            text: orderStateString(ordState: d['orderState']),
+                            color: d['orderState'] > 8
+                                ? Colors.white
+                                : Colors.grey[700],
+                            weight: FontWeight.w700,
+                            size: _width * 0.04),
+                      ),
                     ],
                   )
                 ],
               ),
               bottom: PreferredSize(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: _width * 0.01),
-                    height: _hight * 0.06,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButtonWidget(
-                          height: _hight * 0.05,
-                          minWidth: _width * 0.4,
-                          bgColor: Colors.white,
-                          borderSideColor: Colors.grey[200],
-                          borderRadius: 10.0,
-                          buttonName: 'Cancel',
-                          textSize: _width * 0.04,
-                          leadingIcon: Icon(
-                            Icons.cancel,
-                            color: Colors.grey[900],
-                            size: _width * 0.045,
-                          ),
-                        ),
-                        ElevatedButtonWidget(
-                          height: _hight * 0.05,
-                          minWidth: _width * 0.55,
-                          bgColor: Colors.indigo[900],
-                          borderSideColor: Colors.grey[200],
-                          borderRadius: 10.0,
-                          buttonName: 'Re-schedule',
-                          textColor: Colors.white,
-                          textSize: _width * 0.04,
-                          trailingIcon: Icon(
-                            Icons.refresh,
-                            color: Colors.white,
-                            size: _width * 0.045,
+                  child: d['orderState'] < 9
+                      ? Container(
+                          margin: EdgeInsets.only(bottom: _width * 0.01),
+                          height: _hight * 0.06,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButtonWidget(
+                                height: _hight * 0.05,
+                                minWidth: _width * 0.4,
+                                bgColor: Colors.white,
+                                borderSideColor: Colors.grey[200],
+                                borderRadius: 10.0,
+                                buttonName: 'Cancel',
+                                textSize: _width * 0.04,
+                                leadingIcon: Icon(
+                                  Icons.cancel,
+                                  color: Colors.grey[900],
+                                  size: _width * 0.045,
+                                ),
+                              ),
+                              ElevatedButtonWidget(
+                                height: _hight * 0.05,
+                                minWidth: _width * 0.55,
+                                bgColor: Colors.indigo[900],
+                                borderSideColor: Colors.grey[200],
+                                borderRadius: 10.0,
+                                buttonName: 'Re-schedule',
+                                textColor: Colors.white,
+                                textSize: _width * 0.04,
+                                trailingIcon: Icon(
+                                  Icons.refresh,
+                                  color: Colors.white,
+                                  size: _width * 0.045,
+                                ),
+                              )
+                            ],
                           ),
                         )
-                      ],
-                    ),
-                  ),
+                      : Container(),
                   preferredSize: Size.fromHeight(4.0)),
               actions: [
                 IconButton(
                     onPressed: () {},
                     icon: Icon(
                       Icons.help,
-                      color: Colors.grey[700],
+                      color: Colors.grey[900],
                     )),
                 IconButton(
                     onPressed: () {
@@ -302,12 +326,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  images.isNotEmpty
-                      ? mediaView(_hight, _width, images)
-                      : TextWidget(
-                          text: 'No media files found',
-                          align: TextAlign.center,
-                        ),
+                  mediaView(_hight, _width, images),
+
                   Divider(
                     color: Colors.white,
                   ),
@@ -317,7 +337,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   ),
                   (d['orderState'] > 6)
                       ? Container(
-                          height: _hight * 0.3,
+                          // height: _hight * 0.3,
                           color: Colors.white,
                           child: Column(
                             children: [
@@ -349,6 +369,67 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        showOrderStatusQuestion
+                            ? Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: TextWid(
+                                      text: 'Is this order completed ?',
+                                      size: _width * 0.055,
+                                      weight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(top: 20, bottom: 40),
+                                    height: _hight * 0.06,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        ElevatedButtonWidget(
+                                          height: _hight * 0.05,
+                                          minWidth: _width * 0.35,
+                                          onClick: () {
+                                            isThisOrderCompleted(false);
+                                          },
+                                          bgColor: Colors.white,
+                                          borderSideColor: Colors.grey[200],
+                                          borderRadius: 10.0,
+                                          buttonName: 'Not yet',
+                                          textSize: _width * 0.04,
+                                          leadingIcon: Icon(
+                                            Icons.cancel,
+                                            color: Colors.grey[900],
+                                            size: _width * 0.045,
+                                          ),
+                                        ),
+                                        ElevatedButtonWidget(
+                                          height: _hight * 0.05,
+                                          minWidth: _width * 0.45,
+                                          bgColor: Colors.indigo[900],
+                                          borderSideColor: Colors.grey[200],
+                                          borderRadius: 10.0,
+                                          buttonName: 'Completed',
+                                          onClick: () {
+                                            isThisOrderCompleted(true,
+                                                orderID: d['ordId']);
+                                          },
+                                          textColor: Colors.white,
+                                          textSize: _width * 0.04,
+                                          leadingIcon: Icon(
+                                            Icons.check_circle,
+                                            color: Colors.white,
+                                            size: _width * 0.045,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container(),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: TextWid(
@@ -357,7 +438,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             weight: FontWeight.w600,
                           ),
                         ),
-                        Container(child: _Timeline2(context)),
+                        Container(child: _Timeline2(context, orderData: d)),
                       ],
                     ),
                   )
@@ -406,7 +487,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   mediaView(hight, width, images) {
     return Container(
-      height: hight * 0.22,
+      //height: hight * 0.22,
       color: Colors.white,
       padding: EdgeInsets.only(bottom: 15),
       child: Column(
@@ -426,41 +507,51 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               ],
             ),
           ),
-          Container(
-            height: hight * 0.11,
-            child: ListView.builder(
-                itemCount: images.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width: width * 0.05,
-                      ),
-                      Container(
-                        child: images[index].contains('jpg')
-                            ? InkWell(
-                                onTap: () {
-                                  imageslider(images, hight, width);
-                                },
-                                child: Container(
-                                  width: width * 0.11,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          image: NetworkImage(images[index]))),
-                                ),
-                              )
-                            : images[index].contains('mp4')
-                                ? TextWidget(
-                                    text: 'Video',
-                                  )
-                                : TextWidget(text: 'Audio'),
-                      ),
-                    ],
-                  );
-                }),
-          ),
+          images.length > 0
+              ? Container(
+                  height: hight * 0.11,
+                  child: ListView.builder(
+                      itemCount: images.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            SizedBox(
+                              width: width * 0.05,
+                            ),
+                            Container(
+                              child: images[index].contains('jpg')
+                                  ? InkWell(
+                                      onTap: () {
+                                        imageslider(images, hight, width);
+                                      },
+                                      child: Container(
+                                        width: width * 0.11,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    images[index]))),
+                                      ),
+                                    )
+                                  : images[index].contains('mp4')
+                                      ? TextWidget(
+                                          text: 'Video',
+                                        )
+                                      : TextWidget(text: 'Audio'),
+                            ),
+                          ],
+                        );
+                      }),
+                )
+              : Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: TextWid(
+                    text: 'No media files found',
+                    align: TextAlign.center,
+                  ),
+                ),
         ],
       ),
     );
@@ -792,7 +883,18 @@ const kTileHeight = 90.0;
 
 class _Timeline2 extends StatelessWidget {
   final BuildContext contextt;
-  _Timeline2(this.contextt);
+  final dynamic orderData;
+  _Timeline2(this.contextt, {@required this.orderData});
+  isServiceStarted() {
+    int schedule = orderData['schedule'].runtimeType == String
+        ? int.parse(orderData['schedule'])
+        : orderData['schedule'];
+    int presentTimestamp = DateTime.now().millisecondsSinceEpoch;
+    if (schedule < presentTimestamp) return true;
+    if (orderData['orderState'] > 8) return true;
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(contextt).size.width;
@@ -810,23 +912,37 @@ class _Timeline2 extends StatelessWidget {
             size: _width * 0.06,
           ),
         ),
-        padding: EdgeInsets.symmetric(vertical: 20.0),
+        //padding: EdgeInsets.symmetric(vertical: 5.0),
         builder: TimelineTileBuilder.connected(
           contentsBuilder: (_, index) {
-            return TimeLineTitle(index, contextt);
+            return TimeLineTitle(
+                index, contextt, orderData['orderState'], isServiceStarted());
           },
           connectorBuilder: (_, index, connectorType) {
-            if (index == 0) {
-              return SolidLineConnector(
-                color: Colors.indigo[700],
-                indent: connectorType == ConnectorType.start ? 0 : 2.0,
-                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
-              );
-            } else {
-              return SolidLineConnector(
-                indent: connectorType == ConnectorType.start ? 0 : 2.0,
-                endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
-              );
+            var solidLineConnector = SolidLineConnector(
+              color: Colors.indigo[700],
+              indent: connectorType == ConnectorType.start ? 0 : 2.0,
+              endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+            );
+            var solidLineConnectorEmpty = SolidLineConnector(
+              indent: connectorType == ConnectorType.start ? 0 : 2.0,
+              endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+            );
+            switch (index) {
+              case 0:
+                return solidLineConnector;
+                break;
+              case 1:
+                if (orderData['orderState'] > 7) return solidLineConnector;
+                return solidLineConnectorEmpty;
+              case 2:
+                if (orderData['orderState'] > 8) return solidLineConnector;
+                return solidLineConnectorEmpty;
+              case 3:
+                if (orderData['orderState'] > 9) return solidLineConnector;
+                return solidLineConnectorEmpty;
+              default:
+                return solidLineConnectorEmpty;
             }
           },
           indicatorBuilder: (_, index) {
@@ -851,7 +967,7 @@ class _Timeline2 extends StatelessWidget {
                 );
               case _TimelineStatus.started:
                 return DotIndicator(
-                  color: Colors.indigo[900],
+                  color: isServiceStarted() ? Colors.indigo[900] : Colors.grey,
                   child: Icon(
                     Icons.build,
                     size: _width * 0.035,
@@ -860,7 +976,9 @@ class _Timeline2 extends StatelessWidget {
                 );
               case _TimelineStatus.completed:
                 return DotIndicator(
-                  color: Colors.indigo[900],
+                  color: orderData['orderState'] > 8
+                      ? Colors.indigo[900]
+                      : Colors.grey,
                   child: Icon(
                     Icons.verified_rounded,
                     size: _width * 0.035,
@@ -869,7 +987,9 @@ class _Timeline2 extends StatelessWidget {
                 );
               case _TimelineStatus.feedback:
                 return DotIndicator(
-                  color: Colors.indigo[900],
+                  color: orderData['orderState'] > 9
+                      ? Colors.indigo[900]
+                      : Colors.grey,
                   child: Icon(
                     Icons.reviews,
                     size: _width * 0.035,
@@ -898,7 +1018,9 @@ class _Timeline2 extends StatelessWidget {
 class TimeLineTitle extends StatelessWidget {
   final int index;
   final BuildContext contextt;
-  TimeLineTitle(this.index, this.contextt);
+  final int orderState;
+  final bool orderStarted;
+  TimeLineTitle(this.index, this.contextt, this.orderState, this.orderStarted);
   getStatus() {
     switch (index) {
       case 0:
@@ -917,13 +1039,35 @@ class TimeLineTitle extends StatelessWidget {
     }
   }
 
+  isCompleted() {
+    if (index < 2) return true;
+    switch (index) {
+      case 2:
+        if (orderStarted) return true;
+        return false;
+      case 3:
+        if (orderState > 8) return true;
+        return false;
+      case 4:
+        if (orderState > 9) return true;
+        return false;
+        break;
+      default:
+        return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(contextt).size.width;
     return Container(
         padding: EdgeInsets.only(left: _width * 0.03),
         child: TextWid(
-            text: getStatus(), size: _width * 0.04, weight: FontWeight.w600));
+          text: getStatus(),
+          size: _width * 0.04,
+          weight: FontWeight.w600,
+          color: isCompleted() ? Colors.grey[850] : Colors.grey[600],
+        ));
   }
 }
 
