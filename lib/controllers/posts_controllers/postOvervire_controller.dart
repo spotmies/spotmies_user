@@ -312,15 +312,18 @@ class PostOverViewController extends ControllerMVC {
     DateTime date = await showDatePicker(
         confirmText: 'SET DATE',
         context: context,
-        initialDate: pickedDate,
+        initialDate: pickedDate.millisecondsSinceEpoch <
+                DateTime.now().millisecondsSinceEpoch
+            ? DateTime.now()
+            : pickedDate,
         firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
             DateTime.now().day - 0),
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
-      setState(() {
-        pickedDate = date;
-        print(pickedDate.millisecondsSinceEpoch);
-      });
+      // setState(() {
+      pickedDate = date;
+      print(pickedDate.millisecondsSinceEpoch);
+      // });
     }
   }
 
@@ -330,9 +333,9 @@ class PostOverViewController extends ControllerMVC {
       initialTime: pickedTime,
     );
     if (t != null) {
-      setState(() {
-        pickedTime = t;
-      });
+      // setState(() {
+      pickedTime = t;
+      // });
     }
   }
 
@@ -343,20 +346,26 @@ class PostOverViewController extends ControllerMVC {
     return pickedDateTime.millisecondsSinceEpoch.toString();
   }
 
-  rescheduleService(orderState, orderId) async {
+  rescheduleServiceOrCancel(orderState, orderId, {isReschedule = true}) async {
     Map<String, dynamic> body = {
       "schedule": getDateAndTime(),
       "orderState": orderState > 6 ? "7" : "2"
     };
-    log("body $body");
+    Map<String, String> cancelBody = {"orderState": "3"};
     ordersProvider.setOrderViewLoader(true);
-    dynamic response = await updateOrder(body: body, ordId: orderId);
+    dynamic response = await updateOrder(
+        body: isReschedule ? body : cancelBody, ordId: orderId);
     ordersProvider.setOrderViewLoader(false);
     if (response != null) {
       ordersProvider.setOrderViewLoader(true);
       await getOrderAndUpdate(orderId);
       ordersProvider.setOrderViewLoader(false);
     }
+  }
+
+  cancelOrder(ordId) async {
+    Map<String, String> body = {"orderState": "3"};
+    dynamic response = await updateOrder(body: body, ordId: ordId);
   }
   // getAddressofLocation(Set<double> coordinates) async {
   //   var addresses =

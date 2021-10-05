@@ -49,7 +49,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
 
     try {
-      ordersProvider.getOrderById(widget.ordId)['orderState'] < 9
+      ordersProvider.getOrderById(widget.ordId)['orderState'] < 9 &&
+              ordersProvider.getOrderById(widget.ordId)['orderState'] != 3
           ? showOrderStatusQuestion = true
           : showOrderStatusQuestion = false;
 
@@ -65,6 +66,28 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     }
     showOrderStatusQuestion = false;
     refresh();
+  }
+
+  appBarColor(orderState) {
+    switch (orderState) {
+      case 1:
+      case 2:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+        return Colors.white;
+      case 3:
+      case 4:
+        return Colors.red;
+      case 9:
+      case 10:
+        return Colors.green;
+
+        break;
+      default:
+        return Colors.white;
+    }
   }
 
   @override
@@ -107,10 +130,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor:
-                  d['orderState'] > 8 ? Colors.green : Colors.white,
-              toolbarHeight:
-                  d['orderState'] < 9 ? _hight * 0.16 : _hight * 0.08,
+              backgroundColor: appBarColor(d['orderState']),
+              toolbarHeight: d['orderState'] < 9 && d['orderState'] != 3
+                  ? _hight * 0.16
+                  : _hight * 0.08,
               // elevation: 0,
               leading: IconButton(
                 onPressed: () {
@@ -161,7 +184,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 ],
               ),
               bottom: PreferredSize(
-                  child: d['orderState'] < 9
+                  child: d['orderState'] < 9 && d['orderState'] != 3
                       ? Container(
                           margin: EdgeInsets.only(bottom: _width * 0.01),
                           height: _hight * 0.06,
@@ -169,6 +192,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               ElevatedButtonWidget(
+                                onClick: () {
+                                  _postOverViewController
+                                      .rescheduleServiceOrCancel(
+                                          d['orderState'], d['ordId'],
+                                          isReschedule: false);
+                                },
                                 height: _hight * 0.05,
                                 minWidth: _width * 0.4,
                                 bgColor: Colors.white,
@@ -188,14 +217,14 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                       .pickDate(context);
                                   await _postOverViewController
                                       .picktime(context);
-                                  log("${d['schedule']} ${_postOverViewController.getDateAndTime()}");
-                                  if (d['schedule'] ==
-                                      _postOverViewController.getDateAndTime())
-                                    return;
 
-                                  await _postOverViewController
-                                      .rescheduleService(
-                                          d['orderState'], d['ordId']);
+                                  if (d['schedule'].toString() !=
+                                      _postOverViewController
+                                          .getDateAndTime()) {
+                                    await _postOverViewController
+                                        .rescheduleServiceOrCancel(
+                                            d['orderState'], d['ordId']);
+                                  }
                                 },
                                 height: _hight * 0.05,
                                 minWidth: _width * 0.55,
@@ -923,9 +952,14 @@ class _Timeline2 extends StatelessWidget {
         ? int.parse(orderData['schedule'])
         : orderData['schedule'];
     int presentTimestamp = DateTime.now().millisecondsSinceEpoch;
-    if (orderData['orderState'] < 8) return false;
-    if (schedule < presentTimestamp) return true;
-    if (orderData['orderState'] > 8) return true;
+    // if (orderData['orderState'] < 8) return false;
+    if (schedule < presentTimestamp) {
+      if (orderData['orderState'] > 6) {
+        return true;
+      }
+      return false;
+    }
+    if (orderData['orderState'] > 6) return true;
     return false;
   }
 
@@ -967,7 +1001,7 @@ class _Timeline2 extends StatelessWidget {
                 return solidLineConnector;
                 break;
               case 1:
-                if (orderData['orderState'] > 7) return solidLineConnector;
+                if (orderData['orderState'] > 6) return solidLineConnector;
                 return solidLineConnectorEmpty;
               case 2:
                 if (orderData['orderState'] > 8) return solidLineConnector;
@@ -992,7 +1026,7 @@ class _Timeline2 extends StatelessWidget {
                 );
               case _TimelineStatus.accept:
                 return DotIndicator(
-                  color: orderData['orderState'] > 7
+                  color: orderData['orderState'] > 6
                       ? Colors.indigo[900]
                       : Colors.grey,
                   child: Icon(
