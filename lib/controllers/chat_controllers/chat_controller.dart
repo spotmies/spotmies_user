@@ -68,13 +68,14 @@ class ChatController extends ControllerMVC {
     return currentChatData[0];
   }
 
-  sendMessageHandler(msgId, targetChat, value, {sender: "user"}) {
+  sendMessageHandler(msgId, targetChat, value, {sender: "user", action: ""}) {
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     Map<String, String> msgData = {
       'msg': value.toString(),
       'time': timestamp,
       'sender': sender,
-      'type': 'text'
+      'type': 'text',
+      'action': action,
     };
     Map<String, dynamic> target = {
       'pId': targetChat['pId'],
@@ -116,17 +117,22 @@ class ChatController extends ControllerMVC {
     // chatProvider.disableChatByMsgId(targetChat['msgId']);
   }
 
-  revealProfile(chatDetails, {revealProfile = "true"}) async {
-    chatStreamSocket(chatDetails,
-        revealProfile: revealProfile, typeOfAction: "revealProfile");
+  revealProfile(chatDetails, {bool revealProfile = true}) async {
+    // chatStreamSocket(chatDetails,
+    //     revealProfile: revealProfile, typeOfAction: "revealProfile");
     Map<String, dynamic> body = {
-      "revealProfile": revealProfile,
+      "revealProfile": revealProfile ? "true" : "false",
       "ordId": chatDetails['ordId'],
       "pId": chatDetails['pId']
     };
-    var response = await Server().postMethod(API.revealProfile, body);
+    snackbar(context, "Wait a moment");
+    dynamic response = await Server().postMethod(API.revealProfile, body);
     if (response.statusCode == 200) {
-      snackbar(context, "Your shared your Profile to partner");
+      chatProvider.revealProfile(
+          revealProfile, chatDetails['msgId'], chatDetails['pId']);
+      revealProfile
+          ? snackbar(context, "You shared your Profile to partner")
+          : snackbar(context, "You disabled your Profile to partner");
     } else {
       snackbar(context, "something went wrong");
     }

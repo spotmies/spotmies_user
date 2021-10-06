@@ -11,6 +11,7 @@ import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/views/chat/chatapp/partner_details.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/chat_input_field.dart';
@@ -72,8 +73,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     });
   }
 
-  sendMessageHandler(value) {
-    _chatController.sendMessageHandler(widget.msgId, targetChat, value);
+  sendMessageHandler(value, {sender: "user", action: ""}) {
+    _chatController.sendMessageHandler(widget.msgId, targetChat, value,
+        sender: sender, action: action);
   }
 
   disableChat() {
@@ -87,10 +89,17 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     Navigator.pop(context, false);
   }
 
-  revealMyProfile() {
-    print("reveal profile");
-    sendMessageHandler("user shared profile");
-    _chatController.revealProfile(targetChat, revealProfile: "true");
+  revealMyProfile(bool state) {
+    print("reveal profile $state");
+    sendMessageHandler(state ? "user shared profile" : "user disabled Profile",
+        sender: "bot", action: state ? "enableProfile" : "disableProfile");
+    _chatController.revealProfile(targetChat, revealProfile: state);
+  }
+
+  isMyProfileRevealedFunc() {
+    if (orderDetails['revealProfileTo'].contains(targetChat['pId']))
+      return true;
+    return false;
   }
 
   List options = [
@@ -140,13 +149,12 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     return Consumer<ChatProvider>(builder: (context, data, child) {
       chatList = data.getChatList2();
       targetChat = _chatController.getTargetChat(chatList, widget.msgId);
-      log(targetChat.toString());
       userDetails = targetChat['uDetails'];
       partner = targetChat['pDetails'];
       orderDetails = targetChat['orderDetails'];
       // bool showConfirmation =
       //     targetChat['orderDetails']['ordState'] == "req" ? true : false;
-       bool showConfirmation =
+      bool showConfirmation =
           targetChat['orderDetails']['orderState'] < 7 ? true : false;
 
       List messages = targetChat['msgs'];
@@ -477,27 +485,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               : Container(),
           preferredSize: Size.fromHeight(4.0)),
       actions: [
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: Icon(
-        //     Icons.read_more,
-        //     color: Colors.grey[900],
-        //   ),
-        // ),
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MyCalling(
-                      msgId: widget.msgId,
-                      ordId: targetChat['ordId'],
-                      uId: FirebaseAuth.instance.currentUser.uid,
-                      pId: targetChat['pId'],
-                      isIncoming: false,
-                      name: partner['name'],
-                      profile: partner['partnerPic'],
-                      partnerDeviceToken:
-                          partner['partnerDeviceToken'].toString(),
-                    )));
+            calling(context);
           },
           icon: Icon(
             Icons.phone,
@@ -514,39 +504,59 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               bottomOptionsMenu(context,
                   options: options,
                   menuTitle: "More options",
-                  option2Click: revealMyProfile,
+                  option2Click: null,
                   option3Click: disableChat,
                   option4Click: deleteChat);
             })
       ],
-      title: Row(
-        children: [
-          ProfilePic(
-            name: partner['name'],
-            profile: partner['partnerPic'],
-            status: false,
-            bgColor: Colors.blueGrey[600],
-            size: width * 0.045,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Expanded(
-              child: TextWid(
-            text: partner['name'] ?? "Spotmies User",
-            size: width * 0.058,
-            weight: FontWeight.w600,
-          )
-              // Text(
-              //   user['name'] ?? "Unknown",
-              //   maxLines: 1,
-              //   style: TextStyle(
-              //     fontWeight: FontWeight.w600,
-              //   ),
-              // ),
-              ),
-        ],
+      title: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PartnerDetails(
+                  profileDetails: partner,
+                  isMyProfileRevealed: isMyProfileRevealedFunc(),
+                  revealMyProfile: (state) {
+                    revealMyProfile(state);
+                  },
+                  onTapPhone: () {
+                    calling(context);
+                  })));
+        },
+        child: Row(
+          children: [
+            ProfilePic(
+              name: partner['name'],
+              profile: partner['partnerPic'],
+              status: false,
+              bgColor: Colors.blueGrey[600],
+              size: width * 0.045,
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Expanded(
+                child: TextWid(
+              text: partner['name'] ?? "Spotmies User",
+              size: width * 0.058,
+              weight: FontWeight.w600,
+            )),
+          ],
+        ),
       ),
     );
+  }
+
+  void calling(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => MyCalling(
+              msgId: widget.msgId,
+              ordId: targetChat['ordId'],
+              uId: FirebaseAuth.instance.currentUser.uid,
+              pId: targetChat['pId'],
+              isIncoming: false,
+              name: partner['name'],
+              profile: partner['partnerPic'],
+              partnerDeviceToken: partner['partnerDeviceToken'].toString(),
+            )));
   }
 }

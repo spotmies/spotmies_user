@@ -11,12 +11,12 @@ getTime(timeStamp) {
       DateTime.fromMillisecondsSinceEpoch((int.parse(timeStamp.toString()))));
 }
 
-getDate(timeStamp) {
-  if (timeStamp == null) {
+getDate(dynamic timeStamp) {
+  if (timeStamp == null || timeStamp == "null" || timeStamp == "") {
     log(timeStamp);
     return '';
   }
   return DateFormat('dd MMM,yyyy').format(
-    DateTime.fromMillisecondsSinceEpoch(timeStamp),
+    DateTime.fromMillisecondsSinceEpoch(int.parse(timeStamp.toString())),
   );
 }
