@@ -290,13 +290,32 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateOrderState({ordId, ordState,orderState}) {
+  void updateOrderState({ordId, ordState, orderState}) {
     for (int i = 0; i < chatList.length; i++) {
       if (chatList[i]['ordId'].toString() == ordId.toString()) {
         chatList[i]['orderDetails']['ordState'] = ordState;
         chatList[i]['orderDetails']['orderState'] = orderState;
       }
     }
+    notifyListeners();
+  }
+
+  void revealProfile(bool state, msgId, pId) {
+    int index = chatList.indexWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    if (index < 0) return;
+    if (state)
+      chatList[index]['orderDetails']['revealProfileTo'].add(pId.toString());
+    else
+      chatList[index]['orderDetails']['revealProfileTo'].remove(pId.toString());
+    notifyListeners();
+  }
+
+  void blockChatBymsgId(msgId, {block = true}) {
+    int index = chatList.indexWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    if (index < 0) return;
+    chatList[index]['cBuild'] = block ? 0 : 1;
     notifyListeners();
   }
 }
