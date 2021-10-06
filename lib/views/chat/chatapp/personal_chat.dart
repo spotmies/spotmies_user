@@ -141,7 +141,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     });
     _chatController.sendMessageHandler(widget.msgId,
         "${_chatController.userDetails['name']} $responseType the order",
-        sender: "bot");
+        sender: "bot",
+        action: responseType == "accept" ? "acceptOrder" : "rejectOrder");
   }
 
   @override
