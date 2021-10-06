@@ -37,11 +37,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   ResponsesProvider responseProvider;
 
   ScrollController _scrollController = ScrollController();
-  List chatList = [];
-  Map targetChat = {};
-  Map partner = {};
-  Map userDetails = {};
-  Map orderDetails = {};
+
   int msgCount = 20;
   void scrollToBottom() {
     Timer(
@@ -74,31 +70,39 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   sendMessageHandler(value, {sender: "user", action: ""}) {
-    _chatController.sendMessageHandler(widget.msgId, targetChat, value,
+    _chatController.sendMessageHandler(widget.msgId, value,
         sender: sender, action: action);
   }
 
-  disableChat() {
-    print("disable chat");
-    _chatController.chatStreamSocket(targetChat, typeOfAction: "disable");
-  }
+  // disableChat() {
+  //   print("disable chat");
+  //   _chatController.chatStreamSocket(_chatController.targetChat,
+  //       typeOfAction: "disable");
+  // }
 
-  deleteChat() {
-    print("delete chat");
-    _chatController.chatStreamSocket(targetChat, typeOfAction: "delete");
-    Navigator.pop(context, false);
-  }
+  // deleteChat() {
+  //   print("delete chat");
+  //   _chatController.chatStreamSocket(_chatController.targetChat,
+  //       typeOfAction: "delete");
+  //   Navigator.pop(context, false);
+  // }
 
   revealMyProfile(bool state) {
     print("reveal profile $state");
     sendMessageHandler(state ? "user shared profile" : "user disabled Profile",
         sender: "bot", action: state ? "enableProfile" : "disableProfile");
-    _chatController.revealProfile(targetChat, revealProfile: state);
+    _chatController.revealProfile(_chatController.targetChat,
+        revealProfile: state);
   }
 
   isMyProfileRevealedFunc() {
-    if (orderDetails['revealProfileTo'].contains(targetChat['pId']))
+    log("revela true  ${_chatController.orderDetails['revealProfileTo']}");
+    if (_chatController.orderDetails['revealProfileTo']
+        .contains(_chatController.targetChat['pId'])) {
+      log("revela true  ${_chatController.orderDetails['revealProfileTo']}");
       return true;
+    }
+    log("revela true");
     return false;
   }
 
@@ -123,19 +127,20 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
   acceptRejectPartner(responseType) {
     dynamic checkThisResponse = responseProvider.getResponseByordIdAndPid(
-        pId: targetChat['pId'], ordId: targetChat['ordId']);
+        pId: _chatController.targetChat['pId'],
+        ordId: _chatController.targetChat['ordId']);
     if (checkThisResponse == null) {
       snackbar(
           context, "Your already Accept or Reject this partner for the order");
       return;
     }
     responseProvider.addNewResponsesQueue({
-      "pId": targetChat['pId'],
-      "ordId": targetChat['ordId'],
+      "pId": _chatController.targetChat['pId'],
+      "ordId": _chatController.targetChat['ordId'],
       "responseType": responseType == "accept" ? "accept" : "reject"
     });
-    _chatController.sendMessageHandler(widget.msgId, targetChat,
-        "${userDetails['name']} $responseType the order",
+    _chatController.sendMessageHandler(widget.msgId,
+        "${_chatController.userDetails['name']} $responseType the order",
         sender: "bot");
   }
 
@@ -147,17 +152,20 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<ChatProvider>(builder: (context, data, child) {
-      chatList = data.getChatList2();
-      targetChat = _chatController.getTargetChat(chatList, widget.msgId);
-      userDetails = targetChat['uDetails'];
-      partner = targetChat['pDetails'];
-      orderDetails = targetChat['orderDetails'];
+      _chatController.chatList = data.getChatList2();
+      _chatController.targetChat =
+          _chatController.getTargetChat(_chatController.chatList, widget.msgId);
+      _chatController.userDetails = _chatController.targetChat['uDetails'];
+      _chatController.partner = _chatController.targetChat['pDetails'];
+      _chatController.orderDetails = _chatController.targetChat['orderDetails'];
       // bool showConfirmation =
-      //     targetChat['orderDetails']['ordState'] == "req" ? true : false;
+      //     _chatController.targetChat['orderDetails']['ordState'] == "req" ? true : false;
       bool showConfirmation =
-          targetChat['orderDetails']['orderState'] < 7 ? true : false;
+          _chatController.targetChat['orderDetails']['orderState'] < 7
+              ? true
+              : false;
 
-      List messages = targetChat['msgs'];
+      List messages = _chatController.targetChat['msgs'];
       return Stack(
         children: [
           Scaffold(
@@ -331,7 +339,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                             visible:
                                                 index == 0 && sender == "user",
                                             child: readReciept(
-                                                _width, targetChat['uState']),
+                                                _width,
+                                                _chatController
+                                                    .targetChat['uState']),
                                           )
                                         ],
                                       ),
@@ -343,7 +353,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                           }),
                     ),
                   ),
-                  targetChat['cBuild'] == 1
+                  _chatController.targetChat['cBuild'] == 1
                       ? chatInputField(
                           sendMessageHandler, context, _hight, _width)
                       : Container(
@@ -501,20 +511,23 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               color: Colors.grey[900],
             ),
             onPressed: () {
-              bottomOptionsMenu(context,
-                  options: options,
-                  menuTitle: "More options",
-                  option2Click: null,
-                  option3Click: disableChat,
-                  option4Click: deleteChat);
+              bottomOptionsMenu(
+                context,
+                options: options,
+                menuTitle: "More options",
+                option2Click: null,
+                // option3Click: disableChat,
+                // option4Click: deleteChat
+              );
             })
       ],
       title: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PartnerDetails(
-                  profileDetails: partner,
-                  msgId: targetChat['msgId'].toString(),
+                  profileDetails: _chatController.partner,
+                  chatDetails: _chatController.targetChat,
+                  msgId: _chatController.targetChat['msgId'].toString(),
                   isMyProfileRevealed: isMyProfileRevealedFunc(),
                   revealMyProfile: (state) {
                     revealMyProfile(state);
@@ -526,8 +539,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         child: Row(
           children: [
             ProfilePic(
-              name: partner['name'],
-              profile: partner['partnerPic'],
+              name: _chatController.partner['name'],
+              profile: _chatController.partner['partnerPic'],
               status: false,
               bgColor: Colors.blueGrey[600],
               size: width * 0.045,
@@ -537,7 +550,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             ),
             Expanded(
                 child: TextWid(
-              text: partner['name'] ?? "Spotmies User",
+              text: _chatController.partner['name'] ?? "Spotmies User",
               size: width * 0.058,
               weight: FontWeight.w600,
             )),
@@ -551,13 +564,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => MyCalling(
               msgId: widget.msgId,
-              ordId: targetChat['ordId'],
+              ordId: _chatController.targetChat['ordId'],
               uId: FirebaseAuth.instance.currentUser.uid,
-              pId: targetChat['pId'],
+              pId: _chatController.targetChat['pId'],
               isIncoming: false,
-              name: partner['name'],
-              profile: partner['partnerPic'],
-              partnerDeviceToken: partner['partnerDeviceToken'].toString(),
+              name: _chatController.partner['name'],
+              profile: _chatController.partner['partnerPic'],
+              partnerDeviceToken:
+                  _chatController.partner['partnerDeviceToken'].toString(),
             )));
   }
 }

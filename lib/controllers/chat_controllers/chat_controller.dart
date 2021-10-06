@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -17,12 +18,16 @@ class ChatController extends ControllerMVC {
   var formkey = GlobalKey<FormState>();
   ChatProvider chatProvider;
   UserDetailsProvider profileProvider;
-
+  List chatList = [];
+  Map targetChat = {};
+  Map partner = {};
+  Map userDetails = {};
+  Map orderDetails = {};
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
-
+    log("<<<<<<<<<<chat controller initiated>>>>>>>>>>>");
     super.initState();
   }
 
@@ -68,7 +73,14 @@ class ChatController extends ControllerMVC {
     return currentChatData[0];
   }
 
-  sendMessageHandler(msgId, targetChat, value, {sender: "user", action: ""}) {
+  sendMessageHandler(msgId, value, {sender: "user", action: "", chatDetails}) {
+    if (chatProvider.personalChatLoader) {
+      snackbar(context, "wait a moment");
+      return;
+    }
+    log("target chat is $partner $orderDetails");
+    //return;
+    Map<dynamic, dynamic> targetC = chatDetails ?? targetChat;
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     Map<String, String> msgData = {
       'msg': value.toString(),
@@ -78,19 +90,19 @@ class ChatController extends ControllerMVC {
       'action': action,
     };
     Map<String, dynamic> target = {
-      'pId': targetChat['pId'],
+      'pId': targetC['pId'],
       'uId': FirebaseAuth.instance.currentUser.uid,
       'msgId': msgId,
-      'ordId': targetChat['ordId'],
+      'ordId': targetC['ordId'],
       'incomingName': profileProvider.getUser['name'],
       'incomingProfile': profileProvider.getUser['pic'],
-      'deviceToken': [targetChat['pDetails']['partnerDeviceToken']]
+      'deviceToken': [targetC['pDetails']['partnerDeviceToken']]
       // 'deviceToken':['dVMBmjRYQTSXm0twrxhQ5p:APA91bH-tfbTwRZGRLRwYxmrYOiJ8tA6WxHhyGkAKv8NxPUCs9Z_uIjmITGjyxwzrQjT60AVdcDCi2f5Juo249VrakEoKTf8242iLmvceCB2ik2gzc4Y9pYJH-drcX2A1vtcPwlMPtwJ']
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
       "target": target,
-      "socketName": "sendNewMessageCallback".toString()
+      "socketName": "sendNewMessageCallback"
     };
     log("pay load $sendPayload");
     // return;
@@ -100,16 +112,25 @@ class ChatController extends ControllerMVC {
   }
 
   deleteOrBlockThisChat(msgId, {bool isChatDelete = false}) async {
-    snackbar(context, "wait a moment");
+    if (chatProvider.personalChatLoader) {
+      snackbar(context, "wait a moment");
+      return;
+    }
+    chatProvider.setPersonalChatLoader(true);
     Map<String, String> body = {'cBuild': "0"};
     if (isChatDelete) body['isDeletedForUser'] = "true";
     dynamic response =
         await Server().editMethod(API.specificChat + msgId.toString(), body);
+    chatProvider.setPersonalChatLoader(false);
     if (response != null) {
       //need to block or delete chat here
       if (isChatDelete) {
+        Navigator.pop(context);
+        Navigator.pop(context);
         snackbar(context, "Your chat deleted and disable too");
-        chatProvider.deleteChatByMsgId(msgId);
+        Timer(Duration(seconds: 1), () {
+          chatProvider.deleteChatByMsgId(msgId);
+        });
       } else {
         snackbar(context, "Blocked successfully");
         chatProvider.disableChatByMsgId(msgId);
@@ -136,6 +157,11 @@ class ChatController extends ControllerMVC {
   }
 
   revealProfile(chatDetails, {bool revealProfile = true}) async {
+    if (chatProvider.personalChatLoader) {
+      snackbar(context, "wait a moment");
+      return;
+    }
+
     // chatStreamSocket(chatDetails,
     //     revealProfile: revealProfile, typeOfAction: "revealProfile");
     Map<String, dynamic> body = {
@@ -143,8 +169,9 @@ class ChatController extends ControllerMVC {
       "ordId": chatDetails['ordId'],
       "pId": chatDetails['pId']
     };
-    snackbar(context, "Wait a moment");
+    chatProvider.setPersonalChatLoader(true);
     dynamic response = await Server().postMethod(API.revealProfile, body);
+    chatProvider.setPersonalChatLoader(false);
     if (response.statusCode == 200) {
       chatProvider.revealProfile(
           revealProfile, chatDetails['msgId'], chatDetails['pId']);
@@ -152,7 +179,7 @@ class ChatController extends ControllerMVC {
           ? snackbar(context, "You shared your Profile to partner")
           : snackbar(context, "You disabled your Profile to partner");
     } else {
-      snackbar(context, "something went wrong");
+      snackbar(context, "something went wrong try again later");
     }
   }
 
@@ -172,7 +199,13 @@ class ChatController extends ControllerMVC {
   }
 
   Future fetchNewChatList() async {
-    var response = await Server().getMethod(API.userChatsList);
+    if (chatProvider.personalChatLoader) {
+      snackbar(context, "wait a moment");
+      return;
+    }
+    chatProvider.setPersonalChatLoader(true);
+    dynamic response = await Server().getMethod(API.userChatsList);
+    chatProvider.setPersonalChatLoader(false);
     dynamic chatList = jsonDecode(response);
     chatProvider.setChatList(chatList);
     snackbar(context, "sync with new changes");

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -20,13 +21,15 @@ class PartnerDetails extends StatefulWidget {
   final Function revealMyProfile;
   final bool isMyProfileRevealed;
   final String msgId;
+  final Map chatDetails;
   PartnerDetails(
       {@required this.profileDetails,
       this.isProfileRevealed = true,
       this.onTapPhone,
       this.revealMyProfile,
       this.isMyProfileRevealed = false,
-      this.msgId});
+      this.msgId,
+      this.chatDetails});
   @override
   _PartnerDetailsState createState() => _PartnerDetailsState();
 }
@@ -299,7 +302,20 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                               value: isSwitch,
                               activeColor: Colors.blue[900],
                               onChanged: (value) {
-                                widget.revealMyProfile(value);
+                                // widget.revealMyProfile(value);
+                                _chatController.sendMessageHandler(
+                                    widget.msgId,
+                                    value
+                                        ? "user shared the profile"
+                                        : "user disabled their profile",
+                                    chatDetails: widget.chatDetails,
+                                    sender: "bot",
+                                    action: value
+                                        ? "enableProfile"
+                                        : "disableProfile");
+                                _chatController.revealProfile(
+                                    widget.chatDetails,
+                                    revealProfile: value);
                                 setState(() {
                                   isSwitch = value;
                                 });
@@ -322,12 +338,23 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                       Colors.redAccent,
                       Icons.block, onTap: () {
                     log("block");
-                    // _chatController.sendMessageHandler(msgId, targetChat, value)
+                    _chatController.sendMessageHandler(
+                        widget.msgId, "User blocked this chat",
+                        sender: "bot",
+                        chatDetails: widget.chatDetails,
+                        action: "blockChat");
+
                     _chatController.deleteOrBlockThisChat(widget.msgId);
                   }),
                   actionButton(_width, _hight, "Delete Chat", Colors.redAccent,
                       Icons.delete_sweep_rounded, onTap: () {
                     log("delete");
+                    _chatController.sendMessageHandler(
+                        widget.msgId, "User deleted this chat",
+                        sender: "bot",
+                        chatDetails: widget.chatDetails,
+                        action: "deleteChat");
+
                     _chatController.deleteOrBlockThisChat(widget.msgId,
                         isChatDelete: true);
                   }),
