@@ -310,4 +310,12 @@ class ChatProvider extends ChangeNotifier {
       chatList[index]['orderDetails']['revealProfileTo'].remove(pId.toString());
     notifyListeners();
   }
+
+  void blockChatBymsgId(msgId, {block = true}) {
+    int index = chatList.indexWhere(
+        (element) => element['msgId'].toString() == msgId.toString());
+    if (index < 0) return;
+    chatList[index]['cBuild'] = block ? 0 : 1;
+    notifyListeners();
+  }
 }

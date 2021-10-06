@@ -514,6 +514,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PartnerDetails(
                   profileDetails: partner,
+                  msgId: targetChat['msgId'].toString(),
                   isMyProfileRevealed: isMyProfileRevealedFunc(),
                   revealMyProfile: (state) {
                     revealMyProfile(state);

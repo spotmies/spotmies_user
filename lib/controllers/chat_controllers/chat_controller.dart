@@ -99,6 +99,24 @@ class ChatController extends ControllerMVC {
     // scrollToBottom();
   }
 
+  deleteOrBlockThisChat(msgId, {bool isChatDelete = false}) async {
+    snackbar(context, "wait a moment");
+    Map<String, String> body = {'cBuild': "0"};
+    if (isChatDelete) body['isDeletedForUser'] = "true";
+    dynamic response =
+        await Server().editMethod(API.specificChat + msgId.toString(), body);
+    if (response != null) {
+      //need to block or delete chat here
+      if (isChatDelete) {
+        snackbar(context, "Your chat deleted and disable too");
+        chatProvider.deleteChatByMsgId(msgId);
+      } else {
+        snackbar(context, "Blocked successfully");
+        chatProvider.disableChatByMsgId(msgId);
+      }
+    }
+  }
+
   chatStreamSocket(targetChat,
       {typeOfAction: "disable", revealProfile: "true"}) {
     Map<String, Object> sendPayload = {
