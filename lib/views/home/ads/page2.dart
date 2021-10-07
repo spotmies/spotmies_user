@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';
@@ -127,6 +128,7 @@ Widget page2(double hight, double width, BuildContext context,
                                                     crossAxisCount: 4),
                                             itemBuilder: (context, index) {
                                               // String type =  _adController.serviceImages[index].toString();
+
                                               return index == 0
                                                   ? Center(
                                                       child: IconButton(
@@ -140,17 +142,8 @@ Widget page2(double hight, double width, BuildContext context,
                                                           }),
                                                     )
                                                   : Stack(children: [
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            image: DecorationImage(
-                                                                image: FileImage(
-                                                                    adController
-                                                                            .serviceImages[
-                                                                        index -
-                                                                            1]),
-                                                                fit: BoxFit
-                                                                    .cover)),
-                                                      ),
+                                                      mediaContent(
+                                                          adController, index),
                                                       Positioned(
                                                           right: 0,
                                                           top: 0,
@@ -232,4 +225,49 @@ Widget page2(double hight, double width, BuildContext context,
       ),
     ),
   );
+}
+
+Container mediaContent(AdController adController, int index) {
+  String target = adController.serviceImages[index - 1].toString();
+
+  switch (checkFileType(target)) {
+    case "image":
+      return Container(
+        decoration: BoxDecoration(
+            color: Colors.amber,
+            image: DecorationImage(
+                image: FileImage(adController.serviceImages[index - 1]),
+                fit: BoxFit.cover)),
+      );
+      break;
+    case "audio":
+      return Container(
+        color: Colors.grey[800],
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.mic,
+          size: 30,
+          color: Colors.grey[100],
+        ),
+      );
+      break;
+    case "video":
+      return Container(
+        color: Colors.grey[800],
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.slow_motion_video_rounded,
+          size: 30,
+          color: Colors.grey[100],
+        ),
+      );
+      break;
+    default:
+      return Container(
+        color: Colors.grey[400],
+        alignment: Alignment.center,
+        child: TextWidget(text: "undefined"),
+      );
+      break;
+  }
 }
