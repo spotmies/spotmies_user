@@ -13,7 +13,9 @@ import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.d
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/media_player.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/maps/maps.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
@@ -571,7 +573,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           ),
           images.length > 0
               ? Container(
-                  height: hight * 0.11,
+                  height: hight * 0.14,
                   child: ListView.builder(
                       itemCount: images.length,
                       scrollDirection: Axis.horizontal,
@@ -581,28 +583,41 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             SizedBox(
                               width: width * 0.05,
                             ),
-                            Container(
-                              child: images[index].contains('jpg')
-                                  ? InkWell(
-                                      onTap: () {
-                                        imageslider(images, hight, width);
-                                      },
-                                      child: Container(
-                                        width: width * 0.11,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                    images[index]))),
-                                      ),
-                                    )
-                                  : images[index].contains('mp4')
-                                      ? TextWidget(
-                                          text: 'Video',
-                                        )
-                                      : TextWidget(text: 'Audio'),
-                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MediaPlayer(
+                                          mediaList: [images[index]],
+                                        )));
+                              },
+                              child: Container(
+                                  height: width * 0.15,
+                                  width: width * 0.15,
+                                  child: mediaContent(images[index],
+                                      isOnline: true)),
+                            )
+                            // Container(
+                            //   child: images[index].contains('jpg')
+                            //       ? InkWell(
+                            //           onTap: () {
+                            //             imageslider(images, hight, width);
+                            //           },
+                            //           child: Container(
+                            //             width: width * 0.11,
+                            //             decoration: BoxDecoration(
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(10),
+                            //                 image: DecorationImage(
+                            //                     image: NetworkImage(
+                            //                         images[index]))),
+                            //           ),
+                            //         )
+                            //       : images[index].contains('mp4')
+                            //           ? TextWidget(
+                            //               text: 'Video',
+                            //             )
+                            //           : TextWidget(text: 'Audio'),
+                            // ),
                           ],
                         );
                       }),

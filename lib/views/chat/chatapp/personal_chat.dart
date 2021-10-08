@@ -11,6 +11,7 @@ import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/media_player.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/partner_details.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
@@ -179,9 +180,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         case 'img':
           return InkWell(
               onTap: () {
-                snackbar(context, "Media player not found");
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => ImageViewer(imageLink: message)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MediaPlayer(
+                          mediaList: [message],
+                        )));
               },
               child: Container(
                   height: width * 0.55,
@@ -194,9 +196,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         case 'video':
           return TextButton(
               onPressed: () {
-                snackbar(context, "Media player not found");
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => Video(videoLink: message)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MediaPlayer(
+                          mediaList: [message],
+                        )));
               },
               child: Row(
                 children: [
@@ -218,8 +221,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         case 'audio':
           return TextButton(
               onPressed: () {
-                snackbar(context, "Media player not found");
-                // playAudio(context, hight, width, message);
+                // MediaPlayer(
+                //   mediaList: [message],
+                // );
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => MediaPlayer(
+                          mediaList: [message],
+                        )));
               },
               child: Row(
                 children: [

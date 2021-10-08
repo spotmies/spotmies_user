@@ -142,8 +142,9 @@ Widget page2(double hight, double width, BuildContext context,
                                                           }),
                                                     )
                                                   : Stack(children: [
-                                                      mediaContent(
-                                                          adController, index),
+                                                      mediaContent(adController
+                                                              .serviceImages[
+                                                          index - 1]),
                                                       Positioned(
                                                           right: 0,
                                                           top: 0,
@@ -227,8 +228,8 @@ Widget page2(double hight, double width, BuildContext context,
   );
 }
 
-Container mediaContent(AdController adController, int index) {
-  String target = adController.serviceImages[index - 1].toString();
+Container mediaContent(file, {bool isOnline = false}) {
+  String target = file.toString();
 
   switch (checkFileType(target)) {
     case "image":
@@ -236,7 +237,7 @@ Container mediaContent(AdController adController, int index) {
         decoration: BoxDecoration(
             color: Colors.amber,
             image: DecorationImage(
-                image: FileImage(adController.serviceImages[index - 1]),
+                image: !isOnline ? FileImage(file) : NetworkImage(file),
                 fit: BoxFit.cover)),
       );
       break;
