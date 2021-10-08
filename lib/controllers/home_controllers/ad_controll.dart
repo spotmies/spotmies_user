@@ -73,18 +73,22 @@ class AdController extends ControllerMVC {
   int isUploading = 0; //0 for nothing 1- pending 2- failure 3-success
   List jobs = [
     'Select',
-    'AC Service',
-    'Computer',
-    'TV Repair',
-    'development',
-    'tutor',
-    'beauty',
-    'photography',
-    'drivers',
-    'events',
-    'Electrician',
-    'Carpentor',
-    'Plumber',
+    "Ac/Refrigirator Service",
+    "Computer/Laptop Service",
+    "Tv Repair",
+    "Development",
+    "Tutor",
+    "Beauty",
+    "Photographer",
+    "Driver",
+    "Events",
+    "Electrician",
+    "Carpenter",
+    "Plumber",
+    "Interior Design",
+    "Design",
+    "CC Tv Installation",
+    "Catering",
   ];
 
   AdModel adModel;
@@ -340,7 +344,7 @@ class AdController extends ControllerMVC {
     // var ud = userDetails["_id"].toString();
     var body = {
       "problem": this.title.toString(),
-      "job": this.dropDownValue.toString(),
+      "job": (this.dropDownValue - 1).toString(),
       "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
       "ordState": "req",
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
@@ -357,6 +361,7 @@ class AdController extends ControllerMVC {
       body["media.$i"] = imageLink[i];
     }
     log(body.toString());
+
     // controller.postData();
     Server().postMethod(API.createOrder, body).then((response) {
       if (response.statusCode == 200) {
