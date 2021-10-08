@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/partner_details.dart';
@@ -19,6 +20,7 @@ import 'package:spotmies/views/reusable_widgets/date_formates.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PersonalChat extends StatefulWidget {
   final String msgId;
@@ -145,6 +147,113 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         action: responseType == "accept" ? "acceptOrder" : "rejectOrder");
   }
 
+  typeofChat(type, message, sender, double hight, double width,
+      ChatController chatController, BuildContext context) {
+    String isLink = message.toString();
+    // bool isPlaying = false;
+
+    if ((isLink.contains('http') ||
+            isLink.contains('https') ||
+            isLink.contains('.com')) &&
+        type == 'text') {
+      return TextButton(
+          onPressed: () {
+            launch(message);
+          },
+          child: TextWid(
+              text: message,
+              weight: FontWeight.w600,
+              color: Colors.indigo,
+              decoration: TextDecoration.underline));
+    } else {
+      switch (type) {
+        case 'text':
+          return TextWid(
+            text: toBeginningOfSentenceCase(message),
+            maxlines: 200,
+            lSpace: 1.5,
+            color: messageColorTheme(sender)[1],
+            weight: sender == "partner" ? FontWeight.w600 : FontWeight.w600,
+          );
+          break;
+        case 'img':
+          return InkWell(
+              onTap: () {
+                snackbar(context, "Media player not found");
+                // Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (context) => ImageViewer(imageLink: message)));
+              },
+              child: Container(
+                  height: width * 0.55,
+                  width: width * 0.55,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(message), fit: BoxFit.cover))));
+
+          break;
+        case 'video':
+          return TextButton(
+              onPressed: () {
+                snackbar(context, "Media player not found");
+                // Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (context) => Video(videoLink: message)));
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.slow_motion_video,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(
+                    width: width * 0.05,
+                  ),
+                  TextWid(
+                      text: 'Play Video',
+                      weight: FontWeight.w600,
+                      color: Colors.indigo,
+                      decoration: TextDecoration.underline),
+                ],
+              ));
+          break;
+        case 'audio':
+          return TextButton(
+              onPressed: () {
+                snackbar(context, "Media player not found");
+                // playAudio(context, hight, width, message);
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.audiotrack,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(
+                    width: width * 0.05,
+                  ),
+                  TextWid(
+                      text: 'Play Audio',
+                      weight: FontWeight.w600,
+                      color: Colors.indigo,
+                      decoration: TextDecoration.underline),
+                ],
+              ));
+        case "call":
+          return TextWid(
+            text: sender == "user" ? "OutGoing Call" : "Incoming Call",
+            maxlines: 200,
+            lSpace: 1.5,
+            color: sender == "user" ? Colors.grey[800] : Colors.grey[900],
+            weight: sender == "user" ? FontWeight.w600 : FontWeight.w600,
+          );
+          break;
+        default:
+          return TextWid(
+            text: message,
+          );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
@@ -153,6 +262,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Consumer<ChatProvider>(builder: (context, data, child) {
+      _chatController.currentMsgId = widget.msgId;
       _chatController.chatList = data.getChatList2();
       _chatController.targetChat =
           _chatController.getTargetChat(_chatController.chatList, widget.msgId);
@@ -266,9 +376,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                 minWidth: 30,
                                                 maxWidth: _width * 0.50),
                                             decoration: BoxDecoration(
-                                                color: sender != "user"
-                                                    ? Colors.white
-                                                    : Colors.blueGrey[500],
+                                                color: messageColorTheme(
+                                                    sender.toString())[0],
                                                 border: Border.all(
                                                     color: Colors.blueGrey[500],
                                                     width: 0.3),
@@ -289,33 +398,49 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                             child: Column(
                                               children: [
                                                 Container(
-                                                    padding: EdgeInsets.only(
-                                                        left: 10,
-                                                        top: 10,
-                                                        right: 10),
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: type == "text" ||
-                                                            type == "call"
-                                                        ? TextWid(
-                                                            text:
-                                                                toBeginningOfSentenceCase(
-                                                                    message),
-                                                            maxlines: 200,
-                                                            lSpace: 1.5,
-                                                            color: sender ==
-                                                                    "user"
-                                                                ? Colors.white
-                                                                : Colors
-                                                                    .grey[900],
-                                                          )
-                                                        : type != "audio"
-                                                            ? Image.network(
-                                                                message)
-                                                            : type != "video"
-                                                                ? Text('audio')
-                                                                : Text(
-                                                                    'video')),
+                                                  padding: EdgeInsets.only(
+                                                      left: 10,
+                                                      top: 10,
+                                                      right: 10),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: typeofChat(
+                                                      type,
+                                                      message,
+                                                      sender,
+                                                      _hight,
+                                                      _width,
+                                                      _chatController,
+                                                      context),
+                                                ),
+                                                // Container(
+                                                //     padding: EdgeInsets.only(
+                                                //         left: 10,
+                                                //         top: 10,
+                                                //         right: 10),
+                                                //     alignment:
+                                                //         Alignment.centerLeft,
+                                                //     child: type == "text" ||
+                                                //             type == "call"
+                                                //         ? TextWid(
+                                                //             text:
+                                                //                 toBeginningOfSentenceCase(
+                                                //                     message),
+                                                //             maxlines: 200,
+                                                //             lSpace: 1.5,
+                                                //             color: sender ==
+                                                //                     "user"
+                                                //                 ? Colors.white
+                                                //                 : Colors
+                                                //                     .grey[900],
+                                                //           )
+                                                //         : type != "audio"
+                                                //             ? Image.network(
+                                                //                 message)
+                                                //             : type != "video"
+                                                //                 ? Text('audio')
+                                                //                 : Text(
+                                                //                     'video')),
                                                 Container(
                                                   padding: EdgeInsets.only(
                                                       right: 10, top: 5),
@@ -355,8 +480,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                     ),
                   ),
                   _chatController.targetChat['cBuild'] == 1
-                      ? chatInputField(
-                          sendMessageHandler, context, _hight, _width)
+                      ? chatInputField(sendMessageHandler, context,
+                          controller: _chatController)
                       : Container(
                           child: TextWid(text: "You can't Message any More"),
                         )
@@ -392,7 +517,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.endFloat),
           ProgressWaiter(
-              contextt: context, loaderState: data.personalChatLoader)
+            contextt: context,
+            loaderState: data.personalChatLoader,
+            loadingName: data.loaderText,
+          )
         ],
       );
     });

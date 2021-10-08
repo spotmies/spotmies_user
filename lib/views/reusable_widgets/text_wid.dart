@@ -10,13 +10,15 @@ class TextWid extends StatelessWidget {
   final double lSpace;
   final int maxlines;
   final TextAlign align;
+  final TextDecoration decoration;
 
   TextWid(
       {this.text,
       this.size,
       this.color,
       this.weight,
-       this.align,
+      this.align,
+      this.decoration,
       this.family,
       this.maxlines,
       this.lSpace});
@@ -26,16 +28,16 @@ class TextWid extends StatelessWidget {
     return Text(text,
         overflow: TextOverflow.ellipsis,
         maxLines: maxlines,
-         textAlign: align ?? TextAlign.start,
+        textAlign: align ?? TextAlign.start,
         style: GoogleFonts.josefinSans(
           letterSpacing: lSpace ?? 0,
+          decoration: decoration ?? TextDecoration.none,
           fontSize: size ?? 14,
           color: color ?? Colors.black,
           fontWeight: weight ?? FontWeight.normal,
         ));
   }
 }
-
 
 // for text field stylish
 fonts(size, bold, color) {

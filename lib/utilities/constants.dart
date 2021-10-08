@@ -101,3 +101,22 @@ checkFileType(String target) {
   }
   return "undefined";
 }
+
+messageColorTheme(String sender) {
+  switch (sender) {
+    case "user":
+      return [
+        Colors.blueGrey[500],
+        Colors.grey[50]
+      ]; //background is index - 0 && text color is index - 1
+
+    case "partner":
+      return [Colors.white, Colors.grey[800]];
+
+    case "bot":
+      return [Colors.grey[900], Colors.grey[50]];
+    default:
+      return [Colors.grey[900], Colors.grey[50]];
+      break;
+  }
+}
