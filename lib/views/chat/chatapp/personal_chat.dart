@@ -242,7 +242,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             text: sender == "user" ? "OutGoing Call" : "Incoming Call",
             maxlines: 200,
             lSpace: 1.5,
-            color: sender == "user" ? Colors.grey[800] : Colors.grey[900],
+            color: messageColorTheme(sender)[1],
             weight: sender == "user" ? FontWeight.w600 : FontWeight.w600,
           );
           break;
@@ -413,34 +413,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                       _chatController,
                                                       context),
                                                 ),
-                                                // Container(
-                                                //     padding: EdgeInsets.only(
-                                                //         left: 10,
-                                                //         top: 10,
-                                                //         right: 10),
-                                                //     alignment:
-                                                //         Alignment.centerLeft,
-                                                //     child: type == "text" ||
-                                                //             type == "call"
-                                                //         ? TextWid(
-                                                //             text:
-                                                //                 toBeginningOfSentenceCase(
-                                                //                     message),
-                                                //             maxlines: 200,
-                                                //             lSpace: 1.5,
-                                                //             color: sender ==
-                                                //                     "user"
-                                                //                 ? Colors.white
-                                                //                 : Colors
-                                                //                     .grey[900],
-                                                //           )
-                                                //         : type != "audio"
-                                                //             ? Image.network(
-                                                //                 message)
-                                                //             : type != "video"
-                                                //                 ? Text('audio')
-                                                //                 : Text(
-                                                //                     'video')),
                                                 Container(
                                                   padding: EdgeInsets.only(
                                                       right: 10, top: 5),

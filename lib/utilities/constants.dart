@@ -120,3 +120,45 @@ messageColorTheme(String sender) {
       break;
   }
 }
+
+typeofLastMessage(String type, String lastMessage, String data) {
+  if (data != 'icon') {
+    switch (type) {
+      case 'text':
+        return lastMessage;
+        break;
+      case 'img':
+        return 'Image File';
+        break;
+      case 'video':
+        return 'Video File';
+        break;
+      case 'audio':
+        return 'Audio File';
+        break;
+      case "call":
+        return "call";
+      default:
+        return 'Unknown';
+    }
+  } else {
+    switch (type) {
+      case 'text':
+        return Icons.textsms;
+        break;
+      case 'img':
+        return Icons.image;
+        break;
+      case 'video':
+        return Icons.slow_motion_video;
+        break;
+      case 'audio':
+        return Icons.mic;
+        break;
+      case 'call':
+        return Icons.call;
+      default:
+        return Icons.connect_without_contact;
+    }
+  }
+}
