@@ -246,6 +246,7 @@ class ChatController extends ControllerMVC {
   }
 
   uploadAudioFiles(File audioFile) async {
+    log("audio is $audioFile");
     await uploadFilesLoop(currentMsgId, fileArray: [audioFile], type: "audio");
   }
 

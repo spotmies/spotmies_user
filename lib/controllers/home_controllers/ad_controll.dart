@@ -17,7 +17,9 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 import 'package:spotmies/models/admodel.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/utilities/uploadFilesToCloud.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -257,21 +259,43 @@ class AdController extends ControllerMVC {
 
 //image upload function
   Future<void> uploadServiceMedia() async {
-    int i = 1;
+    extensionType(int indexx) {
+      switch (checkFileType(serviceImages[indexx].toString())) {
+        case "image":
+          return ".jpg";
+        case "audio":
+          return ".aac";
+        case "video":
+          return ".mp4";
 
-    for (var img in serviceImages) {
-      setState(() {
-        val = i / serviceImages.length;
-      });
-      var postImageRef = FirebaseStorage.instance.ref().child('adImages');
-      UploadTask uploadTask =
-          postImageRef.child(DateTime.now().toString() + ".jpg").putFile(img);
-      await (await uploadTask)
-          .ref
-          .getDownloadURL()
-          .then((value) => imageLink.add(value.toString()));
-      i++;
+          break;
+        default:
+          return ".jpg";
+          break;
+      }
     }
+
+    for (int i = 0; i < serviceImages.length; i++) {
+      String downloadLink = await uploadFilesToCloud(serviceImages[i],
+          cloudLocation: "orderMediaFiles", fileType: extensionType(i));
+      imageLink.add(downloadLink);
+    }
+
+    // int i = 1;
+
+    // for (var img in serviceImages) {
+    //   setState(() {
+    //     val = i / serviceImages.length;
+    //   });
+    //   var postImageRef = FirebaseStorage.instance.ref().child('adImages');
+    //   UploadTask uploadTask =
+    //       postImageRef.child(DateTime.now().toString() + ".jpg").putFile(img);
+    //   await (await uploadTask)
+    //       .ref
+    //       .getDownloadURL()
+    //       .then((value) => imageLink.add(value.toString()));
+    //   i++;
+    // }
   }
 
   // step2() {
