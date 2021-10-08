@@ -53,8 +53,8 @@ orderStateString({ordState = 0}) {
   }
 }
 
-  orderStateIcon({ordState = 0}) {
-      int orderState =
+orderStateIcon({ordState = 0}) {
+  int orderState =
       ordState.runtimeType == String ? int.parse(ordState) : ordState;
   switch (orderState) {
     case 0:
@@ -78,5 +78,87 @@ orderStateString({ordState = 0}) {
       break;
     default:
       return Icons.search;
+  }
+}
+
+checkFileType(String target) {
+  List<String> imageFormats = ["jpg", "png", "jpeg"];
+  List<String> videoFormats = ["mp4", "mvc"];
+  List<String> audioFormats = ["aac", "mp3"];
+
+  List mediaArray = [imageFormats, videoFormats, audioFormats];
+  for (int i = 0; i < mediaArray.length; i++) {
+    for (int j = 0; j < mediaArray[i].length; j++) {
+      if (target.contains(mediaArray[i][j])) {
+        if (i == 0)
+          return "image";
+        else if (i == 1)
+          return "video";
+        else
+          return "audio";
+      }
+    }
+  }
+  return "undefined";
+}
+
+messageColorTheme(String sender) {
+  switch (sender) {
+    case "user":
+      return [
+        Colors.blueGrey[500],
+        Colors.grey[50]
+      ]; //background is index - 0 && text color is index - 1
+
+    case "partner":
+      return [Colors.white, Colors.grey[800]];
+
+    case "bot":
+      return [Colors.grey[900], Colors.grey[50]];
+    default:
+      return [Colors.grey[900], Colors.grey[50]];
+      break;
+  }
+}
+
+typeofLastMessage(String type, String lastMessage, String data) {
+  if (data != 'icon') {
+    switch (type) {
+      case 'text':
+        return lastMessage;
+        break;
+      case 'img':
+        return 'Image File';
+        break;
+      case 'video':
+        return 'Video File';
+        break;
+      case 'audio':
+        return 'Audio File';
+        break;
+      case "call":
+        return "call";
+      default:
+        return 'Unknown';
+    }
+  } else {
+    switch (type) {
+      case 'text':
+        return Icons.textsms;
+        break;
+      case 'img':
+        return Icons.image;
+        break;
+      case 'video':
+        return Icons.slow_motion_video;
+        break;
+      case 'audio':
+        return Icons.mic;
+        break;
+      case 'call':
+        return Icons.call;
+      default:
+        return Icons.connect_without_contact;
+    }
   }
 }

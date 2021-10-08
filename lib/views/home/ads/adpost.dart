@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +47,7 @@ class _PostAdState extends StateMVC<PostAd> {
 
   @override
   Widget build(BuildContext context) {
+    log("============ Render AdPost ==============");
     final _hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
         kToolbarHeight;

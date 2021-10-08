@@ -1,14 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+// import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 
-Future audioRecoder(BuildContext context, double hight, double width,
-    AdController adController) {
+Future audioRecoder(
+    BuildContext context, double hight, double width, dynamic adController,
+    {String from = "adpost"}) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -28,8 +30,9 @@ Future audioRecoder(BuildContext context, double hight, double width,
                   Expanded(
                     flex: 2,
                     child: FeatureButtonsView(
-                        adController: adController,
-                        ),
+                      adController: adController,
+                      from: from,
+                    ),
                   ),
                 ],
               )
@@ -41,17 +44,20 @@ Future audioRecoder(BuildContext context, double hight, double width,
 
 class FeatureButtonsView extends StatefulWidget {
   final Function onUploadComplete;
-  final AdController adController;
+  final dynamic adController;
   final Function sendCallBack;
   final String message;
   final String msgId;
-  const FeatureButtonsView({
-    Key key,
-    this.onUploadComplete,
-    this.adController,
-    this.sendCallBack,
-    this.message, this.msgId,
-  }) : super(key: key);
+  final String from;
+  const FeatureButtonsView(
+      {Key key,
+      this.onUploadComplete,
+      this.adController,
+      this.sendCallBack,
+      this.message,
+      this.msgId,
+      this.from = "adpost"})
+      : super(key: key);
   @override
   _FeatureButtonsViewState createState() => _FeatureButtonsViewState();
 }
@@ -82,10 +88,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     var hight = MediaQuery.of(context).size.height;
     return Center(
       child: _isRecorded
-          ? 
-          _isUploading
-              ? 
-              Container(
+          ? _isUploading
+              ? Container(
                   height: hight * 0.2,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -124,11 +128,24 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                       IconButton(
                         icon: Icon(Icons.done),
                         onPressed: () {
-                          widget.adController.serviceImages.add(File(_filePath));
-                         
+                          switch (widget.from) {
+                            case "adpost":
+                              widget.adController?.serviceImages
+                                  ?.add(File(_filePath));
+                              break;
+                            case "personalChat":
+                              widget.adController
+                                  ?.uploadAudioFiles(File(_filePath));
+                              // widget.adController.serviceImages
+                              //     .add(File(_filePath));
+                              break;
+                            default:
+                              log("please add from");
+                              break;
+                          }
+
                           setState(() {});
                           Navigator.pop(context);
-                          
                         },
                       ),
                     ],

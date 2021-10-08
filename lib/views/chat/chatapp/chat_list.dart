@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
@@ -94,6 +96,7 @@ class _ChatListState extends StateMVC<ChatList> {
                               getTime(lastMessage['time']),
                               chatList[index]['msgId'],
                               count,
+                              lastMessage['type'],
                               chatList[index]['uId'],
                               chatList[index]['pId'],
                               callBack: _chatController.cardOnClick,
@@ -121,10 +124,11 @@ class ChatListCard extends StatefulWidget {
   final String msgId;
   final int count;
   final Function callBack;
+  final String type;
   final String uId;
   final String pId;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
-      this.msgId, this.count, this.uId, this.pId,
+      this.msgId, this.count, this.type, this.uId, this.pId,
       {this.callBack});
 
   @override
@@ -147,9 +151,8 @@ class _ChatListCardState extends State<ChatListCard> {
           widget.callBack(widget.msgId, widget.msgId, readReceiptobject);
           //navigate strore msg count value
 
-           await Navigator.of(context).push(MaterialPageRoute(
+          await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
-          
 
           widget.callBack(widget.msgId, "", "");
         },
@@ -158,11 +161,36 @@ class _ChatListCardState extends State<ChatListCard> {
             size: _width * 0.045,
             weight: FontWeight.w600,
             color: widget.count > 0 ? Colors.black : Colors.grey[700]),
-        subtitle: TextWid(
-            text: widget.lastMessage,
-            size: _width * 0.035,
-            weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
-            color: widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
+        subtitle: Row(
+          children: [
+            Icon(
+              typeofLastMessage(widget.type, widget.lastMessage, 'icon'),
+              size: 12,
+              color: widget.count > 0 ? Colors.black : Colors.grey[500],
+            ),
+            SizedBox(
+              width: 3,
+            ),
+            Container(
+              width: _width * 0.47,
+              child: TextWid(
+                  text: toBeginningOfSentenceCase(
+                    typeofLastMessage(widget.type, widget.lastMessage, 'text'),
+                  ),
+                  size: _width * 0.035,
+                  flow: TextOverflow.ellipsis,
+                  weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
+                  color: widget.count > 0
+                      ? Colors.blueGrey[600]
+                      : Colors.grey[500]),
+            ),
+          ],
+        ),
+        // subtitle: TextWid(
+        //     text: widget.lastMessage,
+        //     size: _width * 0.035,
+        //     weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
+        //     color: widget.count > 0 ? Colors.blueGrey[600] : Colors.grey[500]),
         leading: ProfilePic(
           profile: widget.profile,
           name: widget.name,

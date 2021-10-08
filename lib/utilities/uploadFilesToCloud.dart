@@ -8,6 +8,6 @@ uploadFilesToCloud(inputFile,
       .child(DateTime.now().toString() + fileType)
       .putFile(inputFile);
   print(uploadTask);
-  var imageUrl = await (await uploadTask).ref.getDownloadURL();
+  String imageUrl = await (await uploadTask).ref.getDownloadURL();
   return imageUrl.toString();
 }
