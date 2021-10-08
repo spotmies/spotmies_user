@@ -171,56 +171,56 @@ Widget page1(double hight, double width, BuildContext context,
                       SizedBox(
                         height: hight * 0.022,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey[300],
-                                  blurRadius: 3,
-                                  spreadRadius: 1)
-                            ],
-                            color: Colors.grey[50],
-                            borderRadius: BorderRadius.circular(15)),
-                        height: hight * 0.087,
-                        width: width * 0.8,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                          ],
-                          // validator: (value) {
-                          //   if (value.isEmpty) {
-                          //     return 'Please assumed money';
-                          //   }
-                          //   return null;
-                          // },0
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                borderSide: BorderSide(
-                                    width: 1, color: Colors.indigo[900])),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                borderSide: BorderSide(
-                                    width: 1, color: Colors.grey[200])),
-                            hintStyle: fonts(width * 0.05, FontWeight.w400,
-                                Colors.grey[500]),
-                            hintText: 'Money',
-                            suffixIcon: Icon(
-                              Icons.account_balance_wallet,
-                              color: Colors.indigo[900],
-                            ),
-                            //border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(
-                                left: hight * 0.03, top: hight * 0.06),
-                          ),
-                          onChanged: (value) {
-                            adController.money = value;
-                          },
-                        ),
-                      ),
+                      // Container(
+                      //   decoration: BoxDecoration(
+                      //       boxShadow: [
+                      //         BoxShadow(
+                      //             color: Colors.grey[300],
+                      //             blurRadius: 3,
+                      //             spreadRadius: 1)
+                      //       ],
+                      //       color: Colors.grey[50],
+                      //       borderRadius: BorderRadius.circular(15)),
+                      //   height: hight * 0.087,
+                      //   width: width * 0.8,
+                      //   child: TextFormField(
+                      //     keyboardType: TextInputType.number,
+                      //     inputFormatters: <TextInputFormatter>[
+                      //       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      //     ],
+                      //     // validator: (value) {
+                      //     //   if (value.isEmpty) {
+                      //     //     return 'Please assumed money';
+                      //     //   }
+                      //     //   return null;
+                      //     // },0
+                      //     decoration: InputDecoration(
+                      //       focusedBorder: OutlineInputBorder(
+                      //           borderRadius:
+                      //               BorderRadius.all(Radius.circular(15)),
+                      //           borderSide: BorderSide(
+                      //               width: 1, color: Colors.indigo[900])),
+                      //       enabledBorder: OutlineInputBorder(
+                      //           borderRadius:
+                      //               BorderRadius.all(Radius.circular(15)),
+                      //           borderSide: BorderSide(
+                      //               width: 1, color: Colors.grey[200])),
+                      //       hintStyle: fonts(width * 0.05, FontWeight.w400,
+                      //           Colors.grey[500]),
+                      //       hintText: 'Money',
+                      //       suffixIcon: Icon(
+                      //         Icons.account_balance_wallet,
+                      //         color: Colors.indigo[900],
+                      //       ),
+                      //       //border: InputBorder.none,
+                      //       contentPadding: EdgeInsets.only(
+                      //           left: hight * 0.03, top: hight * 0.06),
+                      //     ),
+                      //     onChanged: (value) {
+                      //       adController.money = value;
+                      //     },
+                      //   ),
+                      // ),
                       SizedBox(
                         height: hight * 0.022,
                       ),
