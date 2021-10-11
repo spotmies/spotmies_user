@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -12,7 +11,6 @@ import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PartnerDetails extends StatefulWidget {
   final Map profileDetails;

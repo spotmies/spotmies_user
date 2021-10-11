@@ -98,6 +98,7 @@ class _ProfileState extends StateMVC<Profile> {
       Navigator.pop(context);
       String profilePicLink =
           await uploadFilesToCloud(editpic, cloudLocation: "userDocs");
+      profileProvider.setLoader(false);
 
       var body = {
         "name": nameController.text,
@@ -106,8 +107,9 @@ class _ProfileState extends StateMVC<Profile> {
         "pic": profilePicLink
       };
       print(body);
-
+      profileProvider.setLoader(true);
       var resp = await _profileController.updateProfileDetails(body);
+      profileProvider.setLoader(false);
       if (resp != false) {
         log(resp.toString());
         profileProvider.setUser(resp);
