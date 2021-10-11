@@ -51,9 +51,11 @@ class PostOverViewController extends ControllerMVC {
   Future<void> getOrderAndUpdate(orderID) async {
     dynamic response2 =
         await Server().getMethod(API.confirmOrder + orderID.toString());
-    dynamic updatedOrder = jsonDecode(response2);
-    ordersProvider.updateOrderById(
-        ordId: updatedOrder['ordId'], orderData: updatedOrder);
+    if (response2.statusCode == 200) {
+      dynamic updatedOrder = jsonDecode(response2.body);
+      ordersProvider.updateOrderById(
+          ordId: updatedOrder['ordId'], orderData: updatedOrder);
+    }
   }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,

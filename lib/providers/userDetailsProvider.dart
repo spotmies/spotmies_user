@@ -26,8 +26,11 @@ class UserDetailsProvider extends ChangeNotifier {
 
   userDetails() async {
     var response = await Server().getMethod(API.userDetails);
-    user = jsonDecode(response);
-    controller.getData();
-    notifyListeners();
+     if(response.statusCode == 200){
+    user = jsonDecode(response.body);
+      controller.getData();
+      notifyListeners();
+     }
+
   }
 }

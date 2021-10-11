@@ -45,10 +45,16 @@ class PostsController extends ControllerMVC {
 
   Future getOrderFromDB() async {
     var response = await Server().getMethod(API.getOrders);
+    if(response.statusCode == 200){
 
-    var ordersList = jsonDecode(response);
+    
+    var ordersList = jsonDecode(response.body);
     ordersProvider.setOrdersList(ordersList);
 
     snackbar(context, "sync with new changes");
+    }
+    else{
+      snackbar(context, "Something went wrong");
+    }
   }
 }

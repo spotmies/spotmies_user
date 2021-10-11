@@ -27,6 +27,7 @@ class GetResponseProvider extends ChangeNotifier {
     var response = await Server().getMethod(API.reponse).catchError((e) {
       print(e);
     });
+    
     responseData = jsonDecode(response);
     controller.getData();
     notifyListeners();

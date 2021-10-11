@@ -222,9 +222,15 @@ class ChatController extends ControllerMVC {
     chatProvider.setPersonalChatLoader(true);
     dynamic response = await Server().getMethod(API.userChatsList);
     chatProvider.setPersonalChatLoader(false);
-    dynamic chatList = jsonDecode(response);
-    chatProvider.setChatList(chatList);
-    snackbar(context, "sync with new changes");
+    if(response.statusCode == 200){
+    dynamic chatList = jsonDecode(response.body);
+      chatProvider.setChatList(chatList);
+      snackbar(context, "New data fetched");
+    }
+    else{
+      snackbar(context, "Something went wrong please try again later");
+    }
+
   }
 
   chooseImage(sendCallBack, String msgId) async {
