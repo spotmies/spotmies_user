@@ -365,7 +365,7 @@ class PostOverViewController extends ControllerMVC {
 
   cancelOrder(ordId) async {
     Map<String, String> body = {"orderState": "3"};
-    dynamic response = await updateOrder(body: body, ordId: ordId);
+    await updateOrder(body: body, ordId: ordId);
   }
   // getAddressofLocation(Set<double> coordinates) async {
   //   var addresses =

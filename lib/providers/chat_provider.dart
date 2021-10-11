@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:spotmies/views/chat/chatapp/chat_list.dart';
 
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
@@ -16,7 +15,7 @@ class ChatProvider extends ChangeNotifier {
   bool enableFoat = true;
   bool loader = true;
   bool personalChatLoader = false;
-  String loaderText="Please wait a moment";
+  String loaderText = "Please wait a moment";
 
   //calling variables
   bool terminateCall = false;
@@ -33,7 +32,7 @@ class ChatProvider extends ChangeNotifier {
     loader = state;
   }
 
-  void setPersonalChatLoader(bool state,{String text:"Please wait..."}) {
+  void setPersonalChatLoader(bool state, {String text: "Please wait..."}) {
     personalChatLoader = state;
     loaderText = text;
     notifyListeners();
@@ -320,5 +319,4 @@ class ChatProvider extends ChangeNotifier {
     chatList[index]['cBuild'] = block ? 0 : 1;
     notifyListeners();
   }
-
 }
