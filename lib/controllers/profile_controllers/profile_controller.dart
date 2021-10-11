@@ -78,9 +78,12 @@ class ProfileController extends ControllerMVC {
   }
 
   updateProfileDetails(body) async {
-    var response = await Server().editMethod(API.editPersonalInfo, body);
-    response = jsonDecode(response);
-    return response;
+    dynamic response = await Server().editMethod(API.editPersonalInfo, body);
+    if (response.statusCode == 200) {
+      response = jsonDecode(response.body);
+      return response;
+    }
+    return null;
   }
 
   Widget drawer() {

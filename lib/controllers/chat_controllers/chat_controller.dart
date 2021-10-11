@@ -138,7 +138,7 @@ class ChatController extends ControllerMVC {
     dynamic response =
         await Server().editMethod(API.specificChat + msgId.toString(), body);
     chatProvider.setPersonalChatLoader(false);
-    if (response != null) {
+    if (response.statusCode == 200 || response.statusCode ==204) {
       //need to block or delete chat here
       if (isChatDelete) {
         Navigator.pop(context);
