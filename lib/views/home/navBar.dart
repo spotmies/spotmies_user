@@ -59,16 +59,18 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
 
   hitAllApis() async {
     dynamic responsesList = await getResponseListFromDB();
-    responseProvider.setResponsesList(responsesList);
+    if(responsesList != null)responseProvider.setResponsesList(responsesList);
 
     dynamic user = await getUserDetailsFromDB();
-    profileProvider.setUser(user);
+    if (user != null) {
+      profileProvider.setUser(user);
     ordersProvider.setOrdersList(user['orders'] != null ? user['orders'] : []);
+    }
     dynamic chatList = await getChatListFromDb();
-    chatProvider.setChatList(chatList);
+    if (chatList != null) chatProvider.setChatList(chatList);
 
     dynamic ordersList = await getOrderFromDB();
-    ordersProvider.setOrdersList(ordersList);
+    if (ordersList != null) ordersProvider.setOrdersList(ordersList);
   }
 
   StreamController _chatResponse;
