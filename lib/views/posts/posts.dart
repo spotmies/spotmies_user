@@ -479,7 +479,7 @@ class _PostListState extends StateMVC<PostList> {
                                             await Server().deleteMethod(ordid);
                                         ordersProvider.setLoader(false);
                                         if (response.statusCode == 200) {
-                                          response = jsonDecode(response);
+                                          response = jsonDecode(response.body);
                                           ordersProvider.removeOrderById(
                                               response['ordId']);
                                         }
