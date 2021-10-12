@@ -110,7 +110,7 @@ class _ProfileState extends StateMVC<Profile> {
       profileProvider.setLoader(true);
       var resp = await _profileController.updateProfileDetails(body);
       profileProvider.setLoader(false);
-      if (resp != false) {
+      if (resp != null) {
         log(resp.toString());
         profileProvider.setUser(resp);
       }

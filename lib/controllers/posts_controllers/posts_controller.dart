@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -13,6 +14,7 @@ class PostsController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   final controller = TestController();
   GetOrdersProvider ordersProvider;
+  String uuId = FirebaseAuth.instance.currentUser.uid;
   List jobs = [
     'AC Service',
     'Computer',
@@ -44,11 +46,17 @@ class PostsController extends ControllerMVC {
   }
 
   Future getOrderFromDB() async {
-    var response = await Server().getMethod(API.getOrders);
+    var response = await Server().getMethod(API.getOrders + uuId);
+    if(response.statusCode == 200){
 
-    var ordersList = jsonDecode(response);
+    
+    var ordersList = jsonDecode(response.body);
     ordersProvider.setOrdersList(ordersList);
 
     snackbar(context, "sync with new changes");
+    }
+    else{
+      snackbar(context, "Something went wrong");
+    }
   }
 }

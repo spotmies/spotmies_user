@@ -40,7 +40,7 @@ class PostOverViewController extends ControllerMVC {
     Map<String, String> body = {"orderState": "9"};
     dynamic response =
         await Server().editMethod(API.editOrder + orderID.toString(), body);
-    if (response != null) {
+    if (response.statusCode == 200 || response.statusCode == 204) {
       snackbar(context, "Your order completed now");
       await getOrderAndUpdate(orderID);
     } else {
@@ -51,9 +51,11 @@ class PostOverViewController extends ControllerMVC {
   Future<void> getOrderAndUpdate(orderID) async {
     dynamic response2 =
         await Server().getMethod(API.confirmOrder + orderID.toString());
-    dynamic updatedOrder = jsonDecode(response2);
-    ordersProvider.updateOrderById(
-        ordId: updatedOrder['ordId'], orderData: updatedOrder);
+    if (response2.statusCode == 200) {
+      dynamic updatedOrder = jsonDecode(response2.body);
+      ordersProvider.updateOrderById(
+          ordId: updatedOrder['ordId'], orderData: updatedOrder);
+    }
   }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,
@@ -421,8 +423,8 @@ class PostOverViewController extends ControllerMVC {
 updateOrder({body, ordId}) async {
   dynamic response =
       await Server().editMethod(API.editOrder + ordId.toString(), body);
-  if (response != null) {
-    return jsonDecode(response);
+  if (response.statusCode == 200 || response.statusCode == 204) {
+    return jsonDecode(response.body);
   }
   return null;
 }

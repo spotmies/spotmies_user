@@ -69,27 +69,28 @@ class Server {
   }
 
   dynamic processResponse(http.Response response) {
-    switch (response.statusCode) {
-      case 200:
-        var responseJson = utf8.decode(response.bodyBytes);
-        //print(responseJson);
-        return responseJson;
-        break;
-      case 400:
-        throw BadRequestException(
-            utf8.decode(response.bodyBytes), response.request.url.toString());
-      case 404:
-        return null;
-      case 401:
-      case 403:
-        throw UnAuthorizedException(
-            utf8.decode(response.bodyBytes), response.request.url.toString());
-      case 500:
-      default:
-        throw FetchDataException(
-            'Error occured with with code:${response.statusCode}',
-            response.request.url.toString());
-    }
+    return response;
+    // switch (response.statusCode) {
+    //   case 200:
+    //     var responseJson = utf8.decode(response.bodyBytes);
+    //     //print(responseJson);
+    //     return responseJson;
+    //     break;
+    //   case 400:
+    //     throw BadRequestException(
+    //         utf8.decode(response.bodyBytes), response.request.url.toString());
+    //   case 404:
+    //     return null;
+    //   case 401:
+    //   case 403:
+    //     throw UnAuthorizedException(
+    //         utf8.decode(response.bodyBytes), response.request.url.toString());
+    //   case 500:
+    //   default:
+    //     throw FetchDataException(
+    //         'Error occured with with code:${response.statusCode}',
+    //         response.request.url.toString());
+    // }
   }
 }
 

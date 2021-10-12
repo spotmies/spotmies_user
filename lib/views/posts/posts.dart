@@ -160,11 +160,10 @@ class _PostListState extends StateMVC<PostList> {
                                                               .center,
                                                       children: [
                                                         Icon(
-                                                          
-                                                              orderStateIcon(
-                                                              ordState: o[
-                                                                      index]
-                                                                  ['orderState']),
+                                                          orderStateIcon(
+                                                              ordState: o[index]
+                                                                  [
+                                                                  'orderState']),
                                                           color: Colors
                                                               .indigo[900],
                                                           size: _width * 0.04,
@@ -173,8 +172,8 @@ class _PostListState extends StateMVC<PostList> {
                                                           width: _width * 0.01,
                                                         ),
                                                         TextWidget(
-                                                            text: 
-                                                                orderStateString(ordState:o[
+                                                            text: orderStateString(
+                                                                ordState: o[
                                                                         index][
                                                                     'orderState']),
                                                             color: Colors
@@ -478,10 +477,13 @@ class _PostListState extends StateMVC<PostList> {
                                             API.deleteOrder + '$orderid';
                                         var response =
                                             await Server().deleteMethod(ordid);
-                                        response = jsonDecode(response);
-                                        ordersProvider
-                                            .removeOrderById(response['ordId']);
                                         ordersProvider.setLoader(false);
+                                        if (response.statusCode == 200) {
+                                          response = jsonDecode(response.body);
+                                          ordersProvider.removeOrderById(
+                                              response['ordId']);
+                                        }
+
                                         Navigator.pop(context);
                                       },
                                       child: Text(

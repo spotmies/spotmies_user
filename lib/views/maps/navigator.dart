@@ -74,7 +74,11 @@ class _DummyState extends State<Dummy> {
 places() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var response = await Server().getMethod(API.places);
-  var loc = jsonDecode(response);
+  var loc;
+   if(response.statusCode == 200){
+loc = jsonDecode(response.body);
+   }
+  
   // log(loc[1]['coordinates']['latitude'].toString());
   // final List geoLocations = json.decode(response.body);
   prefs.setString('places', jsonEncode(loc));

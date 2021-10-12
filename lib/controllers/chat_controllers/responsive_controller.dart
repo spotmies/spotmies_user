@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -20,7 +21,7 @@ class ResponsiveController extends ControllerMVC {
   ResponsesProvider responseProvider;
   UserDetailsProvider profileProvider;
   GetOrdersProvider ordersProvider;
-
+String uuId = FirebaseAuth.instance.currentUser.uid;
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
 
@@ -92,10 +93,13 @@ class ResponsiveController extends ControllerMVC {
   FlutterLocalNotificationsPlugin localNotifications;
 
   Future fetchNewResponses() async {
-    dynamic response = await Server().getMethod(API.reponse);
-    dynamic responseDecode = jsonDecode(response);
-    log("$responseDecode");
+    dynamic response = await Server().getMethod(API.reponse + uuId);
+    if (response.statusCode == 200) {
+    dynamic responseDecode = jsonDecode(response.body);
+   
     responseProvider.setResponsesList(responseDecode);
+    }
+    else snackbar(context, "Something went wrong");
   }
 
   acceptOrRejectResponse(responseData, responseType) async {
@@ -148,11 +152,16 @@ class ResponsiveController extends ControllerMVC {
       ordersProvider.setLoader(false);
       chatProvider.setPersonalChatLoader(false);
       log("updating orders");
-      updatedOrder = jsonDecode(updatedOrder);
+      if (response.statusCode == 200) {
+      updatedOrder = jsonDecode(updatedOrder.body);
       ordersProvider.updateOrderById(
           ordId: updatedOrder['ordId'], orderData: updatedOrder);
       chatProvider.updateOrderState(
           ordId: responseData['ordId'], ordState: "onGoing",orderState:8);
+      }
+      else{
+        snackbar(context, "something went wrong");
+      }
     } else {
       snackbar(context, "Unable to process request please try again later");
     }

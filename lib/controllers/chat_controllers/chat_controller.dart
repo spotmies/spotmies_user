@@ -33,6 +33,7 @@ class ChatController extends ControllerMVC {
   List imageLink = [];
   List videoLink = [];
   List audioLink = [];
+  String uuId = FirebaseAuth.instance.currentUser.uid;
   final picker = ImagePicker();
   VideoPlayerController videoPlayerController;
   @override
@@ -138,7 +139,7 @@ class ChatController extends ControllerMVC {
     dynamic response =
         await Server().editMethod(API.specificChat + msgId.toString(), body);
     chatProvider.setPersonalChatLoader(false);
-    if (response != null) {
+    if (response.statusCode == 200 || response.statusCode ==204) {
       //need to block or delete chat here
       if (isChatDelete) {
         Navigator.pop(context);
@@ -220,11 +221,17 @@ class ChatController extends ControllerMVC {
       return;
     }
     chatProvider.setPersonalChatLoader(true);
-    dynamic response = await Server().getMethod(API.userChatsList);
+    dynamic response = await Server().getMethod(API.userChatsList + uuId);
     chatProvider.setPersonalChatLoader(false);
-    dynamic chatList = jsonDecode(response);
-    chatProvider.setChatList(chatList);
-    snackbar(context, "sync with new changes");
+    if(response.statusCode == 200){
+    dynamic chatList = jsonDecode(response.body);
+      chatProvider.setChatList(chatList);
+      snackbar(context, "New data fetched");
+    }
+    else{
+      snackbar(context, "Something went wrong please try again later");
+    }
+
   }
 
   chooseImage(sendCallBack, String msgId) async {
