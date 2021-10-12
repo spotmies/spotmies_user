@@ -56,6 +56,7 @@ class ProfileController extends ControllerMVC {
     Icons.power_settings_new
   ];
   List routes = [];
+  String uuId = FirebaseAuth.instance.currentUser.uid;
 
   editProfile() {
     Navigator.of(context)
@@ -78,7 +79,7 @@ class ProfileController extends ControllerMVC {
   }
 
   updateProfileDetails(body) async {
-    dynamic response = await Server().editMethod(API.editPersonalInfo, body);
+    dynamic response = await Server().editMethod(API.editPersonalInfo + uuId, body);
     if (response.statusCode == 200) {
       response = jsonDecode(response.body);
       return response;

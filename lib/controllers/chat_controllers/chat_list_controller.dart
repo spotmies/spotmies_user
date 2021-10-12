@@ -4,8 +4,8 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 
 dynamic chat;
-getChatListFromDb() async {
-  dynamic response = await Server().getMethod(API.userChatsList);
+getChatListFromDb(uuId) async {
+  dynamic response = await Server().getMethod(API.userChatsList + uuId);
   if (response.statusCode == 200) {
     chat = jsonDecode(response.body);
     return chat;
@@ -13,8 +13,8 @@ getChatListFromDb() async {
   return null;
 }
 
-getResponseListFromDB() async {
-  dynamic response = await Server().getMethod(API.reponse);
+getResponseListFromDB(uuId) async {
+  dynamic response = await Server().getMethod(API.reponse+ uuId);
   if (response.statusCode == 200) {
     dynamic responseDecode = jsonDecode(response.body);
     return responseDecode;
@@ -22,8 +22,8 @@ getResponseListFromDB() async {
   return null;
 }
 
-getOrderFromDB() async {
-  dynamic response = await Server().getMethod(API.getOrders);
+getOrderFromDB(uuId) async {
+  dynamic response = await Server().getMethod(API.getOrders+ uuId);
   if (response.statusCode == 200) {
     dynamic ordersList = jsonDecode(response.body);
     return ordersList;
@@ -31,8 +31,8 @@ getOrderFromDB() async {
   return null;
 }
 
-getUserDetailsFromDB() async {
-  dynamic response = await Server().getMethod(API.userDetails);
+getUserDetailsFromDB(uuId) async {
+  dynamic response = await Server().getMethod(API.userDetails + uuId);
   if (response.statusCode == 200) {
     dynamic user = jsonDecode(response.body);
     return user;

@@ -33,6 +33,7 @@ class ChatController extends ControllerMVC {
   List imageLink = [];
   List videoLink = [];
   List audioLink = [];
+  String uuId = FirebaseAuth.instance.currentUser.uid;
   final picker = ImagePicker();
   VideoPlayerController videoPlayerController;
   @override
@@ -220,7 +221,7 @@ class ChatController extends ControllerMVC {
       return;
     }
     chatProvider.setPersonalChatLoader(true);
-    dynamic response = await Server().getMethod(API.userChatsList);
+    dynamic response = await Server().getMethod(API.userChatsList + uuId);
     chatProvider.setPersonalChatLoader(false);
     if(response.statusCode == 200){
     dynamic chatList = jsonDecode(response.body);

@@ -151,7 +151,7 @@ checkUserRegistered(uid) async {
     "userDeviceToken": deviceToken?.toString() ?? "",
   };
   // print("checkUserreg");
-  var response = await Server().editMethod(API.userDetails, obj);
+  var response = await Server().editMethod(API.userDetails + uid, obj);
   // print("36 $response");
   if (response.statusCode == 200 || response.statusCode ==204) 
     return true;

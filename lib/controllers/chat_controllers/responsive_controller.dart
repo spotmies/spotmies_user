@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -20,7 +21,7 @@ class ResponsiveController extends ControllerMVC {
   ResponsesProvider responseProvider;
   UserDetailsProvider profileProvider;
   GetOrdersProvider ordersProvider;
-
+String uuId = FirebaseAuth.instance.currentUser.uid;
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
 
@@ -92,7 +93,7 @@ class ResponsiveController extends ControllerMVC {
   FlutterLocalNotificationsPlugin localNotifications;
 
   Future fetchNewResponses() async {
-    dynamic response = await Server().getMethod(API.reponse);
+    dynamic response = await Server().getMethod(API.reponse + uuId);
     if (response.statusCode == 200) {
     dynamic responseDecode = jsonDecode(response.body);
    

@@ -16,22 +16,14 @@ class GetResponseProvider extends ChangeNotifier {
       await localData();
     }
     if (status == true) {
-      await getResponse();
+      
       await localStore();
       await localData();
       print('done all');
     }
   }
 
-  getResponse() async {
-    var response = await Server().getMethod(API.reponse).catchError((e) {
-      print(e);
-    });
-    
-    responseData = jsonDecode(response);
-    controller.getData();
-    notifyListeners();
-  }
+
 
   localStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

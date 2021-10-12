@@ -34,6 +34,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
   ResponsesProvider responseProvider;
   GetOrdersProvider ordersProvider;
   UserDetailsProvider profileProvider;
+  String uuId = FirebaseAuth.instance.currentUser.uid;
 
   UniversalProvider universalProvider;
   List icons = [
@@ -57,19 +58,19 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     ),
   ];
 
-  hitAllApis() async {
-    dynamic responsesList = await getResponseListFromDB();
+  hitAllApis(uuId) async {
+    dynamic responsesList = await getResponseListFromDB(uuId);
     if(responsesList != null)responseProvider.setResponsesList(responsesList);
 
-    dynamic user = await getUserDetailsFromDB();
+    dynamic user = await getUserDetailsFromDB(uuId);
     if (user != null) {
       profileProvider.setUser(user);
     ordersProvider.setOrdersList(user['orders'] != null ? user['orders'] : []);
     }
-    dynamic chatList = await getChatListFromDb();
+    dynamic chatList = await getChatListFromDb(uuId);
     if (chatList != null) chatProvider.setChatList(chatList);
 
-    dynamic ordersList = await getOrderFromDB();
+    dynamic ordersList = await getOrderFromDB(uuId);
     if (ordersList != null) ordersProvider.setOrdersList(ordersList);
   }
 
@@ -167,8 +168,8 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
-
-    hitAllApis();
+    log("nav bar uuid >>>> $uuId");
+    hitAllApis(uuId);
     // connectNotifications();
 
     _chatResponse = StreamController();

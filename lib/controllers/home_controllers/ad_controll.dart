@@ -28,7 +28,7 @@ class AdController extends ControllerMVC {
   TextEditingController problem = TextEditingController();
   final controller = TestController();
   GetOrdersProvider ordersProvider;
-
+String uuId = FirebaseAuth.instance.currentUser.uid.toString();
   // int currentStep = 0;
   GlobalKey<PageSliderState> sliderKey = GlobalKey();
 
@@ -362,7 +362,7 @@ class AdController extends ControllerMVC {
     log(body.toString());
 
     // controller.postData();
-    Server().postMethod(API.createOrder, body).then((response) {
+    Server().postMethod(API.createOrder + uuId, body).then((response) {
       if (response.statusCode == 200) {
         isUploading = 3;
         refresh();
