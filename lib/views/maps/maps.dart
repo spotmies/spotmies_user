@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,13 +7,23 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
-import 'package:spotmies/utilities/textWidget.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class Maps extends StatefulWidget {
   final String ordId;
   final Map coordinates;
-  Maps({this.ordId, this.coordinates});
+  final String phoneNumber;
+  final bool isNavigate;
+  final bool isSearch;
+  // final AdController addresscontroller;
+  Maps({
+    this.ordId,
+    this.coordinates,
+    this.phoneNumber,
+    this.isNavigate = true,
+    this.isSearch = true,
+    // this.addresscontroller
+  });
   @override
   _MapsState createState() => _MapsState(ordId, coordinates);
 }
@@ -34,8 +46,32 @@ class _MapsState extends State<Maps> {
     Marker _marker = Marker(
         markerId: markerId,
         position: LatLng(lat, long),
-        onTap: () {
-          bottomAddressSheet(coordinates['latitude'], coordinates['logitude']);
+        onTap: () async {
+          final coordinated = coordinates == null
+              ? Coordinates(position.latitude, position.longitude)
+              : Coordinates(coordinates['latitude'], coordinates['logitude']);
+          var address =
+              await Geocoder.local.findAddressesFromCoordinates(coordinated);
+          var firstAddress = address.first.addressLine;
+
+          setState(() {
+            lat = coordinates == null
+                ? position.latitude
+                : coordinates['latitude'];
+            long = coordinates == null
+                ? position.latitude
+                : coordinates['logitude'];
+            addressline = firstAddress;
+          });
+          coordinates == null
+              ? bottomAddressSheet(
+                  position.latitude,
+                  position.longitude,
+                )
+              : bottomAddressSheet(
+                  coordinates['latitude'],
+                  coordinates['logitude'],
+                );
         },
         draggable: true,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
@@ -61,6 +97,10 @@ class _MapsState extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
+    final _hight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        kToolbarHeight;
+    final _width = MediaQuery.of(context).size.width;
     if (position == null)
       return Scaffold(
         body: Center(
@@ -87,11 +127,15 @@ class _MapsState extends State<Maps> {
                 long = tapped.longitude;
                 addressline = firstAddress;
               });
-              bottomAddressSheet(lat, long);
+              bottomAddressSheet(
+                lat,
+                long,
+              );
             },
             // mapType: MapType.satellite,
+
             buildingsEnabled: true,
-            compassEnabled: true,
+            compassEnabled: false,
             trafficEnabled: true,
             myLocationButtonEnabled: true,
 
@@ -105,17 +149,54 @@ class _MapsState extends State<Maps> {
                     ? navigateMaps(
                         coordinates['latitude'], coordinates['logitude'])
                     //LatLng(coordinates['latitude'], coordinates['logitude'])
-                    : LatLng(position.latitude, position.longitude),
+                    : navigateMaps(position.latitude, position.longitude),
                 zoom: 17),
             markers: Set<Marker>.of(markers.values),
           ),
+          if (widget.isSearch)
+            Positioned(
+                top: _hight * 0.07,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: _width * 0.05, right: _width * 0.03),
+                    height: _hight * 0.07,
+                    width: _width * 0.9,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[300],
+                              blurRadius: 5,
+                              spreadRadius: 3)
+                        ],
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWid(
+                          text: 'Search',
+                          size: _width * 0.05,
+                          color: Colors.grey[500],
+                        ),
+                        Icon(
+                          Icons.search,
+                          color: Colors.grey[500],
+                        ),
+                      ],
+                    ),
+                  ),
+                ))
         ]),
       ),
     );
   }
 
   navigateMaps(lati, logi) {
-    if (markers.isNotEmpty) markers.clear();
+    // if (markers.isNotEmpty) markers.clear();
     if (markers.isEmpty) getmarker(lati, logi);
     return LatLng(lati, logi);
   }
@@ -125,7 +206,10 @@ class _MapsState extends State<Maps> {
     super.dispose();
   }
 
-  bottomAddressSheet(double lat, double long) {
+  bottomAddressSheet(
+    double lat,
+    double long,
+  ) {
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
@@ -147,7 +231,7 @@ class _MapsState extends State<Maps> {
                   padding: EdgeInsets.all(width * 0.05),
                   child: ListView(
                     children: [
-                      TextWidget(
+                      TextWid(
                         text: 'Your Address:',
                         size: width * 0.06,
                         weight: FontWeight.w600,
@@ -156,14 +240,14 @@ class _MapsState extends State<Maps> {
                       SizedBox(
                         height: hight * 0.01,
                       ),
-                      TextWidget(
+                      TextWid(
                         text: addressline,
                         size: width * 0.055,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
                         color: Colors.grey[700],
                       ),
-                      TextWidget(
+                      TextWid(
                         text: lat.toString() + ", " + long.toString(),
                         size: width * 0.055,
                         weight: FontWeight.w600,
@@ -194,25 +278,76 @@ class _MapsState extends State<Maps> {
                         Navigator.pop(context);
                       },
                     ),
-                    ElevatedButtonWidget(
-                      minWidth: width * 0.5,
-                      height: hight * 0.05,
-                      bgColor: Colors.indigo[900],
-                      onClick: () {
-                        launch(
-                            'https://www.google.com/maps/search/?api=1&query=$lat,$long');
-                      },
-                      buttonName: 'Navigate',
-                      textColor: Colors.white,
-                      borderRadius: 15.0,
-                      textSize: width * 0.04,
-                      trailingIcon: Icon(
-                        Icons.near_me,
-                        size: width * 0.03,
-                        color: Colors.white,
-                      ),
-                      borderSideColor: Colors.indigo[900],
-                    )
+                    widget.isNavigate == true
+                        ? ElevatedButtonWidget(
+                            minWidth: width * 0.5,
+                            height: hight * 0.05,
+                            bgColor: Colors.indigo[900],
+                            onClick: () async {
+                              // try {
+                              //   launch(
+                              //       'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                              // } catch (e) {}
+                            },
+                            buttonName: 'Change',
+                            textColor: Colors.white,
+                            borderRadius: 15.0,
+                            textSize: width * 0.04,
+                            trailingIcon: Icon(
+                              Icons.near_me,
+                              size: width * 0.03,
+                              color: Colors.white,
+                            ),
+                            borderSideColor: Colors.indigo[900],
+                          )
+                        : ElevatedButtonWidget(
+                            minWidth: width * 0.5,
+                            height: hight * 0.05,
+                            bgColor: Colors.indigo[900],
+                            onClick: () async {
+                              log(lat.toString() + '\n' + long.toString());
+
+                              final coordinates = Coordinates(lat, long);
+                              var addresses = await Geocoder.local
+                                  .findAddressesFromCoordinates(coordinates);
+
+                              Map<String, String> val = {
+                                "subLocality": "${addresses.first.subLocality}",
+                                "locality": "${addresses.first.locality}",
+                                "latitude":
+                                    "${addresses.first.coordinates.latitude}",
+                                "logitude":
+                                    "${addresses.first.coordinates.longitude}",
+                                "addressLine": "${addresses.first.addressLine}",
+                                "subAdminArea":
+                                    "${addresses.first.subAdminArea}",
+                                "postalCode": "${addresses.first.postalCode}",
+                                "adminArea": "${addresses.first.adminArea}",
+                                "subThoroughfare":
+                                    "${addresses.first.subThoroughfare}",
+                                "featureName": "${addresses.first.featureName}",
+                                "thoroughfare":
+                                    "${addresses.first.thoroughfare}",
+                              };
+                              log(val.toString());
+                              // setState(() {
+                              //   addresscontroller.fullAddress = val;
+                              // });
+                              // }
+                              // Navigator.of(context)
+                              //     .popUntil(ModalRoute.withName("/postad"));
+                            },
+                            buttonName: 'Save',
+                            textColor: Colors.white,
+                            borderRadius: 15.0,
+                            textSize: width * 0.04,
+                            trailingIcon: Icon(
+                              Icons.gps_fixed,
+                              size: width * 0.03,
+                              color: Colors.white,
+                            ),
+                            borderSideColor: Colors.indigo[900],
+                          )
                   ],
                 )
               ],
@@ -221,270 +356,3 @@ class _MapsState extends State<Maps> {
         });
   }
 }
-
-
-
-
-
-
-
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:geocoder/geocoder.dart';
-// import 'package:geolocator/geolocator.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:provider/provider.dart';
-// import 'package:spotmies/providers/mapsProvider.dart';
-// import 'package:spotmies/views/profile/profile_shimmer.dart';
-
-// class Maps extends StatefulWidget {
-//   String ordId;
-//   Maps({
-//     this.ordId,
-//   });
-//   @override
-//   _MapsState createState() => _MapsState(ordId);
-// }
-
-// class _MapsState extends State<Maps> {
-//   TextEditingController searchController = TextEditingController();
-//   String ordId;
-//   _MapsState(
-//     this.ordId,
-//   );
-//   var formkey = GlobalKey<FormState>();
-//   var scaffoldkey = GlobalKey<ScaffoldState>();
-//   GoogleMapController googleMapController;
-//   Position position;
-//   double lat;
-//   double long;
-//   String addressline = "";
-//   // Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-//   // void getmarker(double lat, double long) {
-//   //   MarkerId markerId = MarkerId(lat.toString() + long.toString());
-//   //   Marker _marker = Marker(
-//   //       markerId: markerId,
-//   //       position: LatLng(lat, long),
-//   //       draggable: true,
-//   //       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
-//   //       infoWindow: InfoWindow(snippet: 'Address'));
-//   //   setState(() {
-//   //     markers[markerId] = _marker;
-//   //   });
-//   // }
-
-//   // void getCurrentLocation() async {
-//   //   Position currentPosition =
-//   //       await GeolocatorPlatform.instance.getCurrentPosition();
-//   //   setState(() {
-//   //     position = currentPosition;
-//   //   });
-//   // }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     var details = Provider.of<MapsProvider>(context, listen: false);
-//     details.getmarker(lat, long);
-//     details.getCurrentLocation();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     CircularProgressIndicator();
-//     return Scaffold(
-//       key: scaffoldkey,
-//       resizeToAvoidBottomInset: false,
-//       body: Consumer<MapsProvider>(builder: (context, data, child) {
-//         if (data.position == null)
-//           return Center(child: profileShimmer(context));
-//         var m = data.markers;
-//         var p = data.position;
-//         print(p);
-//         print(m);
-
-//         return Container(
-//           child: Stack(alignment: Alignment.topCenter, children: [
-//             GoogleMap(
-//               onTap: (tapped) async {
-//                 final coordinated =
-//                     Coordinates(tapped.latitude, tapped.longitude);
-//                 var address = await Geocoder.local
-//                     .findAddressesFromCoordinates(coordinated);
-//                 var firstAddress = address.first.addressLine;
-//                 if (data.markers.isNotEmpty) data.markers.clear();
-//                 if (data.markers.isEmpty)
-//                   MapsProvider().getmarker(tapped.latitude, tapped.longitude);
-
-//                 setState(() {
-//                   lat = tapped.latitude;
-//                   long = tapped.longitude;
-//                   addressline = firstAddress;
-//                 });
-//                 bottomSheet();
-//               },
-//               // myLocationButtonEnabled: true,
-
-//               buildingsEnabled: true,
-//               compassEnabled: true,
-//               trafficEnabled: true,
-//               // myLocationButtonEnabled: true,
-//               onMapCreated: (GoogleMapController controller) {
-//                 setState(() {
-//                   googleMapController = controller;
-//                 });
-//               },
-//               initialCameraPosition: CameraPosition(
-//                   target: LatLng(
-//                       //17.356, 21.654
-//                       p.latitude,
-//                       p.longitude),
-//                   zoom: 15),
-//               markers: Set<Marker>.of(m.values),
-//             ),
-//             // FloatingSearchAppBar(
-//             //   title: const Text('Title'),
-//             //   transitionDuration: const Duration(milliseconds: 800),
-//             //   color: Colors.greenAccent.shade100,
-//             //   colorOnScroll: Colors.greenAccent.shade200,
-//             //   automaticallyImplyBackButton: false,
-//             //   clearQueryOnClose: true,
-//             //   hint: 'Search...',
-//             //   iconColor: Colors.grey,
-//             //   transitionCurve: Curves.easeInOutCubic,
-//             //   // actions: [],
-//             //   // progress: true,
-//             //   debounceDelay: const Duration(milliseconds: 500),
-//             //   body: ListView.separated(
-//             //     padding: EdgeInsets.zero,
-//             //     itemCount: 100,
-//             //     separatorBuilder: (context, index) => const Divider(),
-//             //     itemBuilder: (context, index) {
-//             //       return ListTile(
-//             //         onTap: () {
-//             //           print(val[index]);
-//             //         },
-//             //         // title: Text('Item $index'),
-//             //       );
-//             //     },
-//             //   ),
-//             // )
-
-//             // SafeArea(
-//             //   child: Padding(
-//             //     padding: EdgeInsets.only(top: 10),
-//             //     child: Container(
-//             //       padding: EdgeInsets.only(
-//             //         right: 10,
-//             //         left: 10,
-//             //       ),
-//             //       constraints: BoxConstraints(
-//             //           maxHeight: _hight * 0.11, minHeight: _hight * 0.09),
-//             //       width: _width * 0.9,
-//             //       // height: _hight * 0.09,
-//             //       decoration: BoxDecoration(
-//             //           boxShadow: [
-//             //             BoxShadow(
-//             //                 color: Colors.grey[400],
-//             //                 blurRadius: 5,
-//             //                 spreadRadius: 2,
-//             //                 offset: Offset(0, 4))
-//             //           ],
-//             //           color: Colors.white,
-//             //           borderRadius: BorderRadius.only(
-//             //               topLeft: Radius.circular(30),
-//             //               topRight: Radius.circular(30),
-//             //               bottomLeft: Radius.circular(30),
-//             //               bottomRight: Radius.circular(30))),
-//             //       child: Form(
-//             //         key: formkey,
-//             //         child: TextFormField(
-//             //           textInputAction: TextInputAction.search,
-
-//             //           onFieldSubmitted: (value) {
-//             //             print(value);
-//             //           },
-//             //           textCapitalization: TextCapitalization.sentences,
-//             //           decoration: InputDecoration(
-//             //             suffixIcon: IconButton(
-//             //               icon: Icon(
-//             //                 Icons.search,
-//             //                 color: Colors.grey[600],
-//             //               ),
-//             //               onPressed: () {
-//             //                 if (formkey.currentState.validate()) {
-//             //                   formkey.currentState.save();
-//             //                   print('$searchController');
-//             //                 }
-//             //               },
-//             //             ),
-//             //             errorStyle: TextStyle(color: Colors.blue[900]),
-//             //             focusedErrorBorder: OutlineInputBorder(
-//             //                 borderRadius: BorderRadius.all(Radius.circular(15)),
-//             //                 borderSide:
-//             //                     BorderSide(width: 1, color: Colors.white)),
-//             //             focusedBorder: OutlineInputBorder(
-//             //                 borderRadius: BorderRadius.all(Radius.circular(15)),
-//             //                 borderSide:
-//             //                     BorderSide(width: 1, color: Colors.white)),
-//             //             enabledBorder: OutlineInputBorder(
-//             //                 borderRadius: BorderRadius.all(Radius.circular(15)),
-//             //                 borderSide:
-//             //                     BorderSide(width: 1, color: Colors.white)),
-//             //             hintStyle: TextStyle(fontSize: 17),
-//             //             hintText: 'Search',
-//             //           ),
-//             //           controller: searchController,
-//             //           validator: (value) {
-//             //             if (value.isEmpty) {
-//             //               return 'Please enter input to get service';
-//             //             }
-//             //             return null;
-//             //           },
-//             //           //maxLength: 10,
-//             //           keyboardType: TextInputType.streetAddress,
-//             //         ),
-//             //       ),
-//             //     ),
-//             //   ),
-//             // )
-//           ]),
-//         );
-//       }),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-//   }
-
-//   bottomSheet() {
-//     showModalBottomSheet(
-//         context: context,
-//         builder: (BuildContext context) {
-//           // BorderRadius.only(
-//           //     topLeft: Radius.circular(30), topRight: Radius.circular(30));
-//           return Container(
-//             color: Colors.transparent,
-//             child: Container(
-//               height: MediaQuery.of(context).size.height * 0.2,
-//               decoration: BoxDecoration(
-//                   color: Colors.white,
-//                   borderRadius: BorderRadius.only(
-//                       topLeft: Radius.circular(30),
-//                       topRight: Radius.circular(30))),
-//               width: double.infinity,
-//               child: Column(
-//                 children: [
-//                   Text(
-//                     addressline,
-//                     style: TextStyle(fontSize: 25),
-//                   )
-//                 ],
-//               ),
-//             ),
-//           );
-//         });
-//   }
-// }

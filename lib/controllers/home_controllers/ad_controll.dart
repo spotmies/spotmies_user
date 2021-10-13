@@ -28,7 +28,7 @@ class AdController extends ControllerMVC {
   TextEditingController problem = TextEditingController();
   final controller = TestController();
   GetOrdersProvider ordersProvider;
-String uuId = FirebaseAuth.instance.currentUser.uid.toString();
+  String uuId = FirebaseAuth.instance.currentUser.uid.toString();
   // int currentStep = 0;
   GlobalKey<PageSliderState> sliderKey = GlobalKey();
 
@@ -162,10 +162,13 @@ String uuId = FirebaseAuth.instance.currentUser.uid.toString();
     pickedTime = TimeOfDay.now();
   }
 
-  getAddressofLocation() async {
+  getAddressofLocation({double lat, double long}) async {
+    log('message');
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    final coordinates = Coordinates(position.latitude, position.longitude);
+    final coordinates = (lat == null && long == null)
+        ? Coordinates(position.latitude, position.longitude)
+        : Coordinates(lat, long);
     var addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     log("address ${addresses.first}");

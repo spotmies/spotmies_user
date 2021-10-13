@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -49,7 +50,10 @@ Widget page3(double hight, double width, user, AdController adController,
                     ),
                     Container(
                       height: hight * 0.3,
-                      child: Maps(),
+                      child: Maps(
+                        isSearch: false,
+                        isNavigate: false,
+                      ),
                       decoration: BoxDecoration(boxShadow: [
                         BoxShadow(
                             color: Colors.grey[200],
@@ -88,7 +92,7 @@ Widget page3(double hight, double width, user, AdController adController,
                           ),
                           Container(
                             height: hight * 0.1,
-                            width: width,
+                            width: width * 1,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -114,11 +118,13 @@ Widget page3(double hight, double width, user, AdController adController,
                                   height: hight * 0.07,
                                   minWidth: width * 0.35,
                                   onClick: () {
+                                    // var add =
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 OnlinePlaceSearch()));
+                                    // log(add.toString());
                                   },
                                 )
                               ],
