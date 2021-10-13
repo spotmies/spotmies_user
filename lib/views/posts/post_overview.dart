@@ -136,14 +136,14 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               toolbarHeight: d['orderState'] < 9 && d['orderState'] != 3
                   ? _hight * 0.16
                   : _hight * 0.08,
-              // elevation: 0,
+              elevation: 0,
               leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.arrow_back,
-                  color: Colors.grey[900],
+                  color: d['orderState'] > 8 ? Colors.white : Colors.grey[900],
                 ),
               ),
               title: Column(
@@ -166,8 +166,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     children: [
                       Icon(
                         orderStateIcon(ordState: d['orderState']),
-                        color: Colors.indigo[900],
-                        size: _width * 0.045,
+                        color: d['orderState'] > 8
+                            ? Colors.white
+                            : Colors.indigo[900],
+                        size: _width * 0.035,
                       ),
                       SizedBox(
                         width: _width * 0.01,
@@ -178,8 +180,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             color: d['orderState'] > 8
                                 ? Colors.white
                                 : Colors.grey[700],
+                            flow: TextOverflow.visible,
                             weight: FontWeight.w700,
-                            size: _width * 0.04),
+                            size: _width * 0.03),
                       ),
                     ],
                   )
@@ -252,7 +255,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     onPressed: () {},
                     icon: Icon(
                       Icons.help,
-                      color: Colors.grey[900],
+                      color:
+                          d['orderState'] > 8 ? Colors.white : Colors.grey[900],
                     )),
                 IconButton(
                     onPressed: () {
@@ -261,7 +265,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     },
                     icon: Icon(
                       Icons.more_vert,
-                      color: Colors.grey[900],
+                      color:
+                          d['orderState'] > 8 ? Colors.white : Colors.grey[900],
                     )),
               ],
             ),
@@ -367,6 +372,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           .push(MaterialPageRoute(
                                               builder: (context) => Maps(
                                                     coordinates: coordiantes,
+                                                    isSearch: false,
+                                                    isNavigate: true,
                                                   )));
                                     },
                                     icon: Icon(Icons.near_me)))

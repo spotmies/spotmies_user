@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotmies/views/chat/chatapp/chat_list.dart';
 import 'package:spotmies/views/chat/response.dart';
@@ -9,6 +11,7 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
+  var name = 'Response';
   var list = [
     Center(
       child: Responsee(),
@@ -27,16 +30,18 @@ class _ChatState extends State<Chat> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: _hight * 0.09,
-            // title: Text('Responses',
-            //     style: TextStyle(
-            //         color: Colors.grey.shade800, fontWeight: FontWeight.bold)),
+            toolbarHeight: _hight * 0.00,
+            // title: TextWidget(
+            //   text: '$name',
+            //   size: _width * 0.060,
+            //   weight: FontWeight.w600,
+            // ),
             // actions: [
             //   Icon(
             //     Icons.person,
             //     color: Colors.grey[800],
             //   )
-            // ],
+            //],
             backgroundColor: Colors.white,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(_hight * 0.09),
@@ -47,11 +52,11 @@ class _ChatState extends State<Chat> {
                     unselectedLabelColor: Colors.grey[700],
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicatorColor: Colors.indigo[900],
-                    // indicatorPadding: EdgeInsets.all(10),
-                    // indicatorWeight: 0,
-                    // indicator: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(5),
-                    //     color: Colors.indigo[50]),
+                    onTap: (tab) {
+                      setState(() {
+                        name = (tab == 0) ? 'Responses' : 'Chat';
+                      });
+                    },
                     tabs: [
                       Tab(
                         icon: Container(

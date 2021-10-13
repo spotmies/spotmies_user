@@ -57,47 +57,56 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
               buildSearch(),
               geoLocations.length == 0
                   ? Container(
-                    height: 600,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          color: Colors.indigo[900],
-                          backgroundColor: Colors.grey[100],
-                        ),
-                        SizedBox(height: 25,),
-                        TextWidget(
-                          text: 'Please Wait Data is Fetching ....',
-                        )
-                      ],
-                    ),
-                  )
+                      height: 600,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            color: Colors.indigo[900],
+                            backgroundColor: Colors.grey[100],
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          TextWidget(
+                            text: 'Please Wait Data is Fetching ....',
+                          )
+                        ],
+                      ),
+                    )
                   : Expanded(
                       child: ListView.builder(
                         itemCount: geoLocations.length,
                         itemBuilder: (context, index) {
                           final book = geoLocations[index];
 
-                          //return 
-                          
-                          if(index == 0){
+                          //return
+
+                          if (index == 0) {
                             return ListTile(
-                              onTap: (){
-                                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Maps()));
-                              },
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.grey[200],
-                                child:Icon(Icons.gps_fixed)),
-                              title: TextWidget(
-                                text: 'Your Location',
-                                size: 15,
-                                 weight: FontWeight.w700,
-                              ),
-                              trailing: IconButton(onPressed: (){}, icon: Icon(Icons.directions),)
-                            );
-                          }else{
-                            return buildBook(book);}
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Maps(
+                                                isNavigate: false,
+                                              )));
+                                },
+                                leading: CircleAvatar(
+                                    backgroundColor: Colors.grey[200],
+                                    child: Icon(Icons.gps_fixed)),
+                                title: TextWidget(
+                                  text: 'Your Location',
+                                  size: 15,
+                                  weight: FontWeight.w700,
+                                ),
+                                trailing: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.directions),
+                                ));
+                          } else {
+                            return buildBook(book);
+                          }
                         },
                       ),
                     ),
@@ -125,42 +134,38 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
       });
 
   Widget buildBook(Places geo) => ListTile(
-        onTap: () {
-          log(geo.coordinates.toString());
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Maps(coordinates: geo.coordinates)));
-        },
-        leading: CircleAvatar(
-          backgroundColor: Colors.grey[200],
-          child: Icon(Icons.near_me,color: Colors.grey[700],),
+      onTap: () {
+        log(geo.coordinates.toString());
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Maps(
+                      coordinates: geo.coordinates,
+                      isNavigate: false,
+                      isSearch: true,
+                    )));
+      },
+      leading: CircleAvatar(
+        backgroundColor: Colors.grey[200],
+        child: Icon(
+          Icons.near_me,
+          color: Colors.grey[700],
         ),
-        title: TextWidget(
-          text: geo.subLocality,
-          size: 15,
-          weight: FontWeight.w600,
-        ),
-        subtitle: TextWidget(
-          text: geo.addressLine,
-          size: 12,
-        ),
-        trailing: IconButton(onPressed: (){}, icon: Icon(Icons.directions),)
-      );
+      ),
+      title: TextWidget(
+        text: geo.subLocality,
+        size: 15,
+        weight: FontWeight.w600,
+      ),
+      subtitle: TextWidget(
+        text: geo.addressLine,
+        size: 12,
+      ),
+      trailing: IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.directions),
+      ));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'dart:convert';
 // import 'dart:developer';
@@ -301,6 +306,3 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
 //         'https://images.unsplash.com/photo-1615347497551-277d6616b959?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=692&q=80',
 //   ),
 // ];
-
-
-

@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotmies/apiCalls/apiCalling.dart';
-import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 
 class GetResponseProvider extends ChangeNotifier {

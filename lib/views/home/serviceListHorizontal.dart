@@ -13,7 +13,7 @@ Widget servicelistBuilder(
 ) {
   return Container(
     padding: EdgeInsets.all(width * 0.04),
-    height: hight * 0.20,
+    height: hight * 0.22,
     margin: EdgeInsets.only(
       top: 15,
     ),
