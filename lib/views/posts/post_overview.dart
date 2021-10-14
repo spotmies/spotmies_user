@@ -101,10 +101,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     return Consumer<GetOrdersProvider>(builder: (context, data, child) {
       dynamic d = data.getOrderById(widget.ordId);
       _postOverViewController.orderDetails = d;
-      _postOverViewController.pickedDate =
-          DateTime.fromMillisecondsSinceEpoch(d['schedule']);
-      _postOverViewController.pickedTime =
-          TimeOfDay.fromDateTime(_postOverViewController.pickedDate);
+
       log("ord $d");
       if (d == null)
         return Scaffold(
@@ -121,6 +118,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
             ),
           ],
         )));
+      _postOverViewController.pickedDate =
+          DateTime.fromMillisecondsSinceEpoch(d['schedule']);
+      _postOverViewController.pickedTime =
+          TimeOfDay.fromDateTime(_postOverViewController.pickedDate);
 
       List<String> images = List.from(d['media']);
       dynamic fullAddress = jsonDecode(d['address']);
