@@ -80,7 +80,7 @@ Future invites(BuildContext context, double hight, double width) {
                       child: ElevatedButtonWidget(
                         bgColor: Colors.indigo[900],
                         minWidth: width,
-                        height: hight * 0.06,
+                        height: hight * 0.05,
                         textColor: Colors.white,
                         buttonName: 'Invite my friend',
                         textSize: width * 0.05,
@@ -96,7 +96,7 @@ Future invites(BuildContext context, double hight, double width) {
                       child: ElevatedButtonWidget(
                         bgColor: Colors.indigo[50],
                         minWidth: width,
-                        height: hight * 0.06,
+                        height: hight * 0.05,
                         textColor: Colors.grey[900],
                         buttonName: 'Close',
                         textSize: width * 0.05,
