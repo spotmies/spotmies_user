@@ -243,7 +243,26 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                         "Partner accepted your order",
                                                     size: _width * 0.04,
                                                     weight: FontWeight.bold,
-                                                  ))
+                                                  )),
+                                              Expanded(
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        _responsiveController
+                                                            .deleteResponse(
+                                                                responseData[
+                                                                        'responseId']
+                                                                    .toString());
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.delete_sweep,
+                                                        color: Colors.red,
+                                                        size: _width * 0.056,
+                                                      )),
+                                                ),
+                                              )
                                             ])
                                       : Row(
                                           mainAxisAlignment:
