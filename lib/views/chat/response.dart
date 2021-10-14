@@ -12,6 +12,7 @@ import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
+import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class Responsee extends StatefulWidget {
@@ -50,7 +51,7 @@ class _ResponseeState extends StateMVC<Responsee> {
         key: _responsiveController.scaffoldkey,
         body: Consumer<ResponsesProvider>(builder: (context, data, child) {
           List listResponse = data.getResponsesList;
-          if (data.loader) return Center(child: profileShimmer(context));
+          // if (data.loader) return Center(child: profileShimmer(context));
           if (listResponse.length < 1)
             return Center(
               child: TextWid(
@@ -243,7 +244,26 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                         "Partner accepted your order",
                                                     size: _width * 0.04,
                                                     weight: FontWeight.bold,
-                                                  ))
+                                                  )),
+                                              Expanded(
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        _responsiveController
+                                                            .deleteResponse(
+                                                                responseData[
+                                                                        'responseId']
+                                                                    .toString());
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.delete_sweep,
+                                                        color: Colors.red,
+                                                        size: _width * 0.056,
+                                                      )),
+                                                ),
+                                              )
                                             ])
                                       : Row(
                                           mainAxisAlignment:
@@ -295,178 +315,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                     }),
               ),
             ),
-            // Visibility(
-            //   visible: data.loader,
-            //   child: Positioned.fill(
-            //       child: BackdropFilter(
-            //     filter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
-            //     child: Center(child: CircularProgressIndicator()),
-            //   )),
-            // ),
+            ProgressWaiter(contextt: context, loaderState: data.loader)
           ]);
         }));
   }
 }
-
-
-
-
-
-  // return StreamBuilder(
-                //   stream: stream,
-                //   builder: (context, snapshot) {
-                //     // if (!snapshot.hasData) {
-                //     //   return Center(
-                //     //     child: CircularProgressIndicator(),
-                //     //   );
-                //     // }
-                //     res.add(snapshot.data);
-                //     return ListView(
-                //       //itemCount: snapshot.data.length,
-                //       //itemBuilder: (context, index) {
-                //       children: [Text(res.toString())],
-                //       // return Text('data');
-                //       // Text(
-                //       //     "${snapshot.data[index]["name"]} : ${snapshot.data[index]["symbol"]} : ${snapshot.data[index]["current_price"]}");
-                //     );
-                //   },
-                // );
-
-
-
-// void connect() {
-//     // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
-//     socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
-//       "transports": ["websocket", "polling", "flashsocket"],
-//       "autoConnect": false,
-//     });
-
-//     socket.onConnect((data) {
-//       print("Connected");
-//       socket.on("message", (msg) {
-//         print(msg);
-//       });
-//     });
-//     socket.connect();
-//     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
-//     socket.on('newResponse', (socket) {
-//       _socketResponse.add(socket);
-//       // res.add(socket);
-//       log('satish kumar');
-//     });
-
-//     print(socket.connected);
-//   }
-
-
-
-
-
-// Container(
-//                                             width: _width * 0.63,
-//                                             child: Column(
-//                                               mainAxisAlignment:
-//                                                   MainAxisAlignment
-//                                                       .spaceBetween,
-//                                               children: [
-//                                                 Visibility(
-//                                                   visible: responseData[
-//                                                       'isAccepted'],
-//                                                   child: Container(
-//                                                       child: TextWid(
-//                                                           text:
-//                                                               "Partner accepted you service request")),
-//                                                 ),
-//                                                 Visibility(
-//                                                   visible: !responseData[
-//                                                       'isAccepted'],
-//                                                   child: InkWell(
-//                                                     onTap: () {
-//                                                       _responsiveController
-//                                                           .acceptOrRejectResponse(
-//                                                               responseData,
-//                                                               "reject");
-//                                                     },
-//                                                     child: Container(
-//                                                       // width: _width * 0.63,
-//                                                       alignment:
-//                                                           Alignment.center,
-//                                                       child: Text('Reject',
-//                                                           style: TextStyle(
-//                                                             color: Colors
-//                                                                 .grey[300],
-//                                                           )),
-//                                                     ),
-//                                                   ),
-//                                                 ),
-//                                                 Visibility(
-//                                                   visible: !responseData[
-//                                                       'isAccepted'],
-//                                                   child: InkWell(
-//                                                     onTap: () {
-                                                      // _responsiveController
-                                                      //     .acceptOrRejectResponse(
-                                                      //         responseData,
-                                                      //         "accept");
-//                                                     },
-//                                                     child: Container(
-//                                                       // width: _width * 0.63,
-//                                                       alignment:
-//                                                           Alignment.center,
-//                                                       child: Text('Accept',
-//                                                           style: TextStyle(
-//                                                             color: Colors
-//                                                                 .grey[300],
-//                                                           )),
-//                                                     ),
-//                                                   ),
-//                                                 ),
-//                                                 InkWell(
-//                                                   onTap: () {
-//                                                     chatWithPatner(
-//                                                         responseData);
-//                                                   },
-//                                                   child: Container(
-//                                                     // width: _width * 0.63,
-//                                                     alignment: Alignment.center,
-//                                                     child: Text('Tap to chat',
-//                                                         style: TextStyle(
-//                                                           color:
-//                                                               Colors.grey[300],
-//                                                         )),
-//                                                   ),
-//                                                 ),
-//                                               ],
-//                                             ),
-//                                           ),
-//                                           IconButton(
-//                                             onPressed: () {
-//                                               Navigator.of(context).push(
-//                                                   MaterialPageRoute(
-//                                                       builder: (context) =>
-//                                                           MyCalling(
-//                                                             ordId: responseData[
-//                                                                     'ordId']
-//                                                                 .toString(),
-//                                                             uId: FirebaseAuth
-//                                                                 .instance
-//                                                                 .currentUser
-//                                                                 .uid
-//                                                                 .toString(),
-//                                                             pId: responseData[
-//                                                                     'pId']
-//                                                                 .toString(),
-//                                                             isIncoming: false,
-//                                                             name:
-//                                                                 pDetails['name']
-//                                                                     .toString(),
-//                                                             profile: pDetails[
-//                                                                     'partnerPic']
-//                                                                 .toString(),
-//                                                           )));
-//                                             },
-//                                             icon: Icon(
-//                                               Icons.phone,
-//                                               color: Colors.grey[900],
-//                                             ),
-//                                           ),

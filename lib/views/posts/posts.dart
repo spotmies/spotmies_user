@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,7 @@ class _PostListState extends StateMVC<PostList> {
                       //     .findAddressesFromCoordinates(coordinates);
 
                       var orderid = o[index]['ordId'];
-                      print(o[index]['ordId']);
+                      log(o[index].toString());
 
                       // var firstAddress = addresses.first.locality;
                       return Container(
@@ -215,7 +216,10 @@ class _PostListState extends StateMVC<PostList> {
                                             color: Colors.grey[50],
                                             shape: BoxShape.rectangle,
                                           ),
-                                          child: (images.length == 0)
+                                          child: (images.length == 0) ||
+                                                  checkFileType(images.first
+                                                          .toString()) !=
+                                                      "image"
                                               ? Icon(
                                                   Icons.engineering,
                                                   color: Colors.grey[900],
@@ -279,7 +283,7 @@ class _PostListState extends StateMVC<PostList> {
                                                     backgroundColor:
                                                         Colors.grey[200],
                                                     child: Icon(
-                                                      Icons.chat_bubble,
+                                                      Icons.notifications,
                                                       color: Colors.grey[500],
                                                     ),
                                                   ),
@@ -292,7 +296,11 @@ class _PostListState extends StateMVC<PostList> {
                                                               Colors
                                                                   .indigo[900],
                                                           child: TextWidget(
-                                                            text: '5',
+                                                            text: o[index][
+                                                                        'responses']
+                                                                    .length
+                                                                    .toString() ??
+                                                                "0",
                                                             color: Colors.white,
                                                             size:
                                                                 _width * 0.025,

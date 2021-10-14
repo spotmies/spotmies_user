@@ -44,10 +44,12 @@ class ResponsesProvider extends ChangeNotifier {
   }
 
   void removeResponseById(id) {
-    responsesList.removeWhere(
-        (element) => element['responseId'].toString() == id.toString());
-    sortListByTime();
-    notifyListeners();
+    try {
+      responsesList.removeWhere(
+          (element) => element['responseId'].toString() == id.toString());
+      sortListByTime();
+      notifyListeners();
+    } catch (e) {}
   }
 
   void addNewResponse(newResponse) {

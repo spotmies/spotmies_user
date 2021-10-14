@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +29,7 @@ class _ChatState extends State<Chat> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: _hight * 0.00,
+            toolbarHeight: _hight * 0.09,
             // title: TextWidget(
             //   text: '$name',
             //   size: _width * 0.060,
