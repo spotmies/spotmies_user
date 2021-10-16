@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -116,7 +115,7 @@ Widget page3(double hight, double width, user, AdController adController,
                                   borderRadius: 15.0,
                                   textSize: width * 0.035,
                                   height: hight * 0.07,
-                                  minWidth: width * 0.35,
+                                  minWidth: width * 0.4,
                                   onClick: () {
                                     // var add =
                                     Navigator.push(

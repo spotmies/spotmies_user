@@ -139,7 +139,8 @@ class _PostListState extends StateMVC<PostList> {
                                                         .spaceBetween,
                                                 children: [
                                                   TextWidget(
-                                                    text: _postsController.jobs
+                                                    text: Constants
+                                                        .jobCategoriesSmall
                                                         .elementAt(
                                                       o[index]['job'],
                                                     ),
@@ -217,7 +218,7 @@ class _PostListState extends StateMVC<PostList> {
                                             shape: BoxShape.rectangle,
                                           ),
                                           child: (images.length == 0) ||
-                                                  checkFileType(images.first
+                                                  checkFileType(images?.first
                                                           .toString()) !=
                                                       "image"
                                               ? Icon(
@@ -377,7 +378,8 @@ class _PostListState extends StateMVC<PostList> {
         return Container(
           padding: EdgeInsets.only(top: 10),
           color: Colors.white,
-          height: hight * 0.18,
+          // height: hight * 0.18,
+          height: 115,
           child: Center(
             child: Column(
               children: [

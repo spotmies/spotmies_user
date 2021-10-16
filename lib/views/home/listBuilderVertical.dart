@@ -9,7 +9,7 @@ Widget serviceIndividualBuilder(
   List<Map<String, Object>> buildData,
 ) {
   return Container(
-      height: hight,
+      height: hight * 0.7,
       width: width,
       padding: EdgeInsets.all(10),
       child: Column(

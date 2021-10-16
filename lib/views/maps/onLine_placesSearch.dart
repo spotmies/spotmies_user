@@ -53,11 +53,10 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
           child: Column(
-            children: <Widget>[
+            children: [
               buildSearch(),
               geoLocations.length == 0
                   ? Container(
-                      height: 600,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
