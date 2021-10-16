@@ -134,7 +134,8 @@ Future attachments(BuildContext context, double hight, double width,
       ),
       builder: (BuildContext context) {
         return Container(
-          height: hight * 0.1,
+          // height: hight * 0.1,
+          height: 80,
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

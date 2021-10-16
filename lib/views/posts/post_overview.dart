@@ -308,7 +308,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     color: Colors.white,
                   ),
                   Container(
-                    height: _hight * 0.45,
+                    //height: _hight * 0.45,
                     width: _width,
                     color: Colors.white,
                     child: Column(
@@ -655,10 +655,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         children: [
           Container(
             // alignment: Alignment.topLeft,
-            padding: EdgeInsets.only(top: 15, left: 20, right: 10),
+            padding: EdgeInsets.only(left: 20, right: 10),
             width: width * 0.5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextWidget(
                   text: 'Warranty Card',
@@ -666,23 +667,22 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   size: width * 0.05,
                   weight: FontWeight.w600,
                 ),
-                SizedBox(
-                  height: hight * 0.02,
-                ),
-                TextWidget(
-                  text: 'VALID TILL',
-                  color: Colors.indigo[200],
-                  size: width * 0.035,
-                  weight: FontWeight.w600,
-                ),
-                TextWidget(
-                  text: '09 Oct,2021',
-                  color: Colors.white,
-                  size: width * 0.04,
-                  weight: FontWeight.w600,
-                ),
-                SizedBox(
-                  height: hight * 0.045,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextWidget(
+                      text: 'VALID TILL',
+                      color: Colors.indigo[200],
+                      size: width * 0.035,
+                      weight: FontWeight.w600,
+                    ),
+                    TextWidget(
+                      text: '09 Oct,2021',
+                      color: Colors.white,
+                      size: width * 0.04,
+                      weight: FontWeight.w600,
+                    ),
+                  ],
                 ),
                 TextWidget(
                   text: 'Claim Warranty >>',
@@ -771,7 +771,7 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
     chatWithPatner) {
   dynamic pDetails = orderDetails['pDetails'];
   return Container(
-    height: hight * 0.24,
+    // height: hight * 0.24,
     child: Column(
       children: [
         Container(

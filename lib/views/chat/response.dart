@@ -98,7 +98,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                             },
                             child: Container(
                               padding: EdgeInsets.only(bottom: 10),
-                              height: _hight * 0.27,
+                              // height: _hight * 0.27,
                               width: _width * 1,
                               decoration: BoxDecoration(
                                   color: Colors.white,
