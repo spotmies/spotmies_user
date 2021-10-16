@@ -62,7 +62,7 @@ Future promotions(BuildContext context, double hight, double width) {
                                             FontWeight.w600, Colors.grey[900]),
                                       ),
                                       Container(
-                                        height: hight * 0.2,
+                                        // height: hight * 0.2,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,

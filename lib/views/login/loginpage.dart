@@ -44,7 +44,7 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
             Form(
               key: _loginPageController.formkey,
               child: Container(
-                height: _hight * 1.06,
+                // height: _hight * 1.06,
                 width: _width * 1,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
