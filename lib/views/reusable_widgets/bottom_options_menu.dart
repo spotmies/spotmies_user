@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -38,11 +40,12 @@ bottomOptionsMenu(context,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: 4,
+                    itemCount: options.length,
                     // physics: ClampingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
+                          Navigator.pop(context);
                           switch (index) {
                             case 0:
                               if (option1Click != null) option1Click();
@@ -60,7 +63,7 @@ bottomOptionsMenu(context,
                               break;
                             default:
                           }
-                          Navigator.pop(context);
+                          // Navigator.pop(context);
                         },
                         child: Container(
                           // padding: EdgeInsets.only(right: 20),

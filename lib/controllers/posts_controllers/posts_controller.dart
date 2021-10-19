@@ -15,6 +15,25 @@ class PostsController extends ControllerMVC {
   final controller = TestController();
   GetOrdersProvider ordersProvider;
   String uuId = FirebaseAuth.instance.currentUser.uid;
+
+//options list must be this form
+
+  List postMenuOptions = [
+    {
+      "name": "View",
+      "icon": Icons.remove_red_eye,
+    },
+    {"name": "Edit", "icon": Icons.edit},
+    {
+      "name": "Delete",
+      "icon": Icons.delete_sweep,
+    },
+    {
+      "name": "Close",
+      "icon": Icons.cancel_rounded,
+    },
+  ];
+
   List jobs = [
     'AC Service',
     'Computer',
@@ -34,9 +53,6 @@ class PostsController extends ControllerMVC {
     super.initState();
   }
 
-
-
-
   getAddressofLocation(addresses) async {
     // Position position = await Geolocator.getCurrentPosition(
     //     desiredAccuracy: LocationAccuracy.high);
@@ -47,15 +63,12 @@ class PostsController extends ControllerMVC {
 
   Future getOrderFromDB() async {
     var response = await Server().getMethod(API.getOrders + uuId);
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
+      var ordersList = jsonDecode(response.body);
+      ordersProvider.setOrdersList(ordersList);
 
-    
-    var ordersList = jsonDecode(response.body);
-    ordersProvider.setOrdersList(ordersList);
-
-    snackbar(context, "sync with new changes");
-    }
-    else{
+      snackbar(context, "sync with new changes");
+    } else {
       snackbar(context, "Something went wrong");
     }
   }

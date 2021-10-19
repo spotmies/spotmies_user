@@ -15,6 +15,7 @@ import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
+import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -350,8 +351,90 @@ class _PostListState extends StateMVC<PostList> {
                                           ),
                                           borderSideColor: Colors.grey[50],
                                           onClick: () {
-                                            postmenu(
-                                                orderid, _hight, _width, index);
+                                            bottomOptionsMenu(context,
+                                                menuTitle: "More options",
+                                                option1Click: () {
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PostOverView(
+                                                        ordId:
+                                                            orderid.toString()),
+                                              ));
+                                            }, option3Click: () {
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      // insetAnimationCurve:
+                                                      //     Curves.decelerate,
+                                                      title: Text('Alert'),
+                                                      content: Text(
+                                                          'Are you sure,you want delete the post ?'),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: Text(
+                                                              'Deny',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      800],
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            )),
+                                                        TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              ordersProvider
+                                                                  .setLoader(
+                                                                      true);
+                                                              String ordid =
+                                                                  API.deleteOrder +
+                                                                      '$orderid';
+                                                              var response =
+                                                                  await Server()
+                                                                      .deleteMethod(
+                                                                          ordid);
+                                                              ordersProvider
+                                                                  .setLoader(
+                                                                      false);
+                                                              if (response
+                                                                      .statusCode ==
+                                                                  200) {
+                                                                response =
+                                                                    jsonDecode(
+                                                                        response
+                                                                            .body);
+                                                                ordersProvider
+                                                                    .removeOrderById(
+                                                                        response[
+                                                                            'ordId']);
+                                                              }
+                                                            },
+                                                            child: Text(
+                                                              'Delete',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ))
+                                                      ],
+                                                    );
+                                                  });
+                                            },
+                                                options: _postsController
+                                                    .postMenuOptions);
                                           },
                                         ),
                                       ],
@@ -368,393 +451,4 @@ class _PostListState extends StateMVC<PostList> {
           ),
         ));
   }
-
-  postmenu(orderid, double hight, double width, int index) {
-    showModalBottomSheet(
-      context: context,
-      elevation: 22,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.only(top: 10),
-          color: Colors.white,
-          // height: hight * 0.18,
-          height: 115,
-          child: Center(
-            child: Column(
-              children: [
-                TextWidget(
-                  text: 'Select Menu',
-                  size: width * 0.04,
-                  color: Colors.grey[900],
-                  weight: FontWeight.w600,
-                ),
-                Divider(
-                  thickness: width * 0.005,
-                  indent: width * 0.15,
-                  endIndent: width * 0.15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              PostOverView(ordId: orderid.toString()),
-                        ));
-                      },
-                      child: Container(
-                        child: CircleAvatar(
-                          radius: width * 0.099,
-                          backgroundColor: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.remove_red_eye,
-                                color: Colors.grey[900],
-                              ),
-                              SizedBox(
-                                height: hight * 0.01,
-                              ),
-                              TextWidget(
-                                text: 'View',
-                                color: Colors.grey[900],
-                                weight: FontWeight.w600,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //   builder: (context) => PostAdEdit(value: orderid),
-                        // ));
-                      },
-                      child: Container(
-                        child: CircleAvatar(
-                          radius: width * 0.099,
-                          backgroundColor: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: Colors.grey[900],
-                              ),
-                              SizedBox(
-                                height: hight * 0.01,
-                              ),
-                              TextWidget(
-                                text: 'Edit',
-                                color: Colors.grey[900],
-                                weight: FontWeight.w600,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showCupertinoDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (BuildContext context) {
-                              return CupertinoAlertDialog(
-                                insetAnimationCurve: Curves.decelerate,
-                                title: Text('Alert'),
-                                content: Text(
-                                    'Are you sure,you want delete the post ?'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        'Deny',
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                  TextButton(
-                                      onPressed: () async {
-                                        ordersProvider.setLoader(true);
-                                        String ordid =
-                                            API.deleteOrder + '$orderid';
-                                        var response =
-                                            await Server().deleteMethod(ordid);
-                                        ordersProvider.setLoader(false);
-                                        if (response.statusCode == 200) {
-                                          response = jsonDecode(response.body);
-                                          ordersProvider.removeOrderById(
-                                              response['ordId']);
-                                        }
-
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        'Delete',
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontWeight: FontWeight.bold),
-                                      ))
-                                ],
-                              );
-                            });
-                      },
-                      child: Container(
-                        child: CircleAvatar(
-                          radius: width * 0.099,
-                          backgroundColor: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.delete,
-                                color: Colors.grey[900],
-                              ),
-                              SizedBox(
-                                height: hight * 0.01,
-                              ),
-                              TextWidget(
-                                text: 'Delete',
-                                color: Colors.grey[900],
-                                weight: FontWeight.w600,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        child: CircleAvatar(
-                          radius: width * 0.099,
-                          backgroundColor: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.backspace,
-                                color: Colors.grey[900],
-                              ),
-                              SizedBox(
-                                height: hight * 0.01,
-                              ),
-                              TextWidget(
-                                text: 'Close',
-                                color: Colors.grey[900],
-                                weight: FontWeight.w600,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
-
-
-
-
-
-
-
-// Container(
-//                                     padding:
-//                                         EdgeInsets.only(left: 10, right: 10),
-//                                     height: _hight * 0.08,
-//                                     child: Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceEvenly,
-//                                       children: [
-//                                         Container(
-//                                           width: _width * 0.2,
-//                                           child: Column(
-//                                             crossAxisAlignment:
-//                                                 CrossAxisAlignment.center,
-//                                             mainAxisAlignment:
-//                                                 MainAxisAlignment.center,
-//                                             children: [
-//                                               TextWidget(
-//                                                   text: getDate(
-//                                                       o[index]['schedule']),
-//                                                   flow: TextOverflow.ellipsis,
-//                                                   weight: FontWeight.w600,
-//                                                   size: _width * 0.03),
-//                                               Row(
-//                                                 mainAxisAlignment:
-//                                                     MainAxisAlignment.center,
-//                                                 children: [
-//                                                   Icon(
-//                                                     Icons.schedule,
-//                                                     color: Colors.grey[700],
-//                                                     size: _width * 0.025,
-//                                                   ),
-//                                                   SizedBox(
-//                                                     width: _width * 0.01,
-//                                                   ),
-//                                                   TextWidget(
-//                                                       text: 'Schedule',
-//                                                       flow:
-//                                                           TextOverflow.ellipsis,
-//                                                       size: _width * 0.025),
-//                                                 ],
-//                                               )
-//                                             ],
-//                                           ),
-//                                         ),
-//                                         Container(
-//                                           width: _width * 0.2,
-//                                           child: Column(
-//                                             crossAxisAlignment:
-//                                                 CrossAxisAlignment.center,
-//                                             mainAxisAlignment:
-//                                                 MainAxisAlignment.center,
-//                                             children: [
-//                                               // Text(document['scheduletime']),
-
-//                                               TextWidget(
-//                                                   text: 'Rs.' +
-//                                                       o[index]['money']
-//                                                           .toString(),
-//                                                   flow: TextOverflow.ellipsis,
-//                                                   weight: FontWeight.w600,
-//                                                   size: _width * 0.03),
-
-//                                               Row(
-//                                                 mainAxisAlignment:
-//                                                     MainAxisAlignment.center,
-//                                                 children: [
-//                                                   Icon(
-//                                                     Icons
-//                                                         .account_balance_wallet,
-//                                                     color: Colors.grey[700],
-//                                                     size: _width * 0.025,
-//                                                   ),
-//                                                   SizedBox(
-//                                                     width: _width * 0.01,
-//                                                   ),
-//                                                   TextWidget(
-//                                                       text: 'Money',
-//                                                       flow:
-//                                                           TextOverflow.ellipsis,
-//                                                       size: _width * 0.025),
-//                                                 ],
-//                                               )
-//                                             ],
-//                                           ),
-//                                         ),
-//                                         Container(
-//                                           width: _width * 0.25,
-//                                           child: Column(
-//                                             crossAxisAlignment:
-//                                                 CrossAxisAlignment.center,
-//                                             mainAxisAlignment:
-//                                                 MainAxisAlignment.center,
-//                                             children: [
-//                                               // Text(document['scheduletime']),
-
-//                                               TextWidget(
-//                                                   text: 'Visakhaptnam',
-//                                                   // _postsController
-//                                                   //     .getAddressofLocation(
-//                                                   //         addresses),
-//                                                   flow: TextOverflow.ellipsis,
-//                                                   color: Colors.grey[900],
-//                                                   weight: FontWeight.w600,
-//                                                   size: _width * 0.03),
-
-//                                               Row(
-//                                                 mainAxisAlignment:
-//                                                     MainAxisAlignment.center,
-//                                                 children: [
-//                                                   Icon(
-//                                                     Icons.location_on,
-//                                                     color: Colors.grey[700],
-//                                                     size: _width * 0.025,
-//                                                   ),
-//                                                   SizedBox(
-//                                                     width: _width * 0.01,
-//                                                   ),
-//                                                   TextWidget(
-//                                                       text: 'Location',
-//                                                       flow:
-//                                                           TextOverflow.ellipsis,
-//                                                       size: _width * 0.025),
-//                                                 ],
-//                                               )
-//                                             ],
-//                                           ),
-//                                         )
-//                                       ],
-//                                     ),
-//                                   ),
-
-
-
-
-
-
-// Row(
-                                        //   mainAxisAlignment:
-                                        //       MainAxisAlignment
-                                        //           .spaceBetween,
-                                        //   children: [
-                                        //     Row(
-                                        //       children: [
-                                        //         Icon(
-                                        //           _postsController
-                                        //               .orderStateIcon(
-                                        //                   o[index]
-                                        //                       ['ordState']),
-                                        //           color: Colors.indigo[900],
-                                        //           size: _width * 0.04,
-                                        //         ),
-                                        //         SizedBox(
-                                        //           width: _width * 0.01,
-                                        //         ),
-                                        //         TextWidget(
-                                        //             text: _postsController
-                                        //                 .orderStateText(o[
-                                        //                         index]
-                                        //                     ['ordState']),
-                                        //             color:
-                                        //                 Colors.indigo[900],
-                                        //             weight: FontWeight.w600,
-                                        //             size: _width * 0.03)
-                                        //       ],
-                                        //     ),
-                                        //     IconButton(
-                                        //         padding: EdgeInsets.zero,
-                                        //         constraints:
-                                        //             BoxConstraints(),
-                                        //         icon: Icon(
-                                        //           Icons.more_horiz,
-                                        //           color: Colors.indigo[900],
-                                        //           size: _width * 0.06,
-                                        //         ),
-                                        //         onPressed: () {
-                                        //           postmenu(orderid, _hight,
-                                        //               _width);
-                                        //         })
-                                        //   ],
-                                        // ),
-                                        // SizedBox(
-                                        //   height: _hight * 0.007,
-                                        // ),
