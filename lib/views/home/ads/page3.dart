@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -122,7 +124,16 @@ Widget page3(double hight, double width, user, AdController adController,
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                OnlinePlaceSearch()));
+                                                OnlinePlaceSearch(
+                                                  onSave: (cords, fullAddress) {
+                                                    log("cor $cords $fullAddress");
+                                                    adController
+                                                        .updateLocations(
+                                                            cords['lat'],
+                                                            cords['log'],
+                                                            fullAddress);
+                                                  },
+                                                )));
                                     // log(add.toString());
                                   },
                                 )
