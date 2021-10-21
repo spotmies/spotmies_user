@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies/controllers/chat_controllers/chatScreen_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/chat/chatapp/partnerprofile.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -25,10 +26,6 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
 
     Timer(
         Duration(milliseconds: 300),
@@ -90,7 +87,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                         backgroundColor: Colors.grey[50],
                       ),
                       SizedBox(
-                        width: _width * 0.03,
+                        width: width(context) * 0.03,
                       ),
                       Container(
                         // padding: EdgeInsets.only(top: 10),
@@ -99,7 +96,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               ? 'Costumer'
                               : document['pname'],
                           style: TextStyle(
-                              color: Colors.white, fontSize: _width * 0.055),
+                              color: Colors.white, fontSize: width(context) * 0.055),
                         ),
                       )
                     ],
@@ -135,21 +132,21 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                   ),
                   if (document['orderstate'] == 0)
                     Container(
-                      height: _hight * 0.08,
-                      width: _width * 1,
+                      height: height(context) * 0.08,
+                      width: width(context) * 1,
                       color: Colors.white,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                            width: _width * 0.45,
+                            width: width(context) * 0.45,
                             child: ElevatedButton(
                                 onPressed: () {},
                                 child: Text('Cancel',
                                     style: TextStyle(color: Colors.white))),
                           ),
                           Container(
-                            width: _width * 0.45,
+                            width: width(context) * 0.45,
                             child: ElevatedButton(
                                 onPressed: () {
                                   //print(document['partnerid']);
@@ -166,9 +163,9 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                   Container(
                     padding: EdgeInsets.all(10),
                     height: document['orderstate'] == 0
-                        ? _hight * 0.78
-                        : _hight * 0.86,
-                    width: _width * 1,
+                        ? height(context) * 0.78
+                        : height(context) * 0.86,
+                    width: width(context) * 1,
                     child: ListView.builder(
                         controller: _chatScreenController.scrollController,
                         itemCount: msgs.length,
@@ -186,8 +183,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                        height: _hight * 0.04,
-                                        width: _width * 0.3,
+                                        height: height(context) * 0.04,
+                                        width: width(context) * 0.3,
                                         decoration: BoxDecoration(
                                             color: Colors.blueGrey[800],
                                             borderRadius:
@@ -213,7 +210,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                     top: 10,
                                                     left: 15,
                                                     right: 15),
-                                                width: _width * 0.55,
+                                                width: width(context) * 0.55,
                                                 decoration: BoxDecoration(
                                                     color: Colors.grey[200],
                                                     borderRadius:
@@ -228,7 +225,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                               Container(
                                                 padding: EdgeInsets.only(
                                                     bottom: 2, right: 15),
-                                                width: _width * 0.55,
+                                                width: width(context) * 0.55,
                                                 decoration: BoxDecoration(
                                                     color: Colors.grey[200],
                                                     borderRadius:
@@ -272,8 +269,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                        height: _hight * 0.04,
-                                        width: _width * 0.3,
+                                        height: height(context) * 0.04,
+                                        width: width(context) * 0.3,
                                         decoration: BoxDecoration(
                                             color: Colors.blueGrey[800],
                                             borderRadius:
@@ -299,7 +296,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                     top: 10,
                                                     right: 15,
                                                     left: 15),
-                                                width: _width * 0.55,
+                                                width: width(context) * 0.55,
                                                 decoration: BoxDecoration(
                                                     color: Colors.grey[100],
                                                     borderRadius:
@@ -316,7 +313,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                               Container(
                                                 padding: EdgeInsets.only(
                                                     bottom: 2, left: 15),
-                                                width: _width * 0.55,
+                                                width: width(context) * 0.55,
                                                 decoration: BoxDecoration(
                                                     color: Colors.grey[100],
                                                     borderRadius:
@@ -360,8 +357,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                        height: _hight * 0.04,
-                                        width: _width * 0.3,
+                                        height: height(context) * 0.04,
+                                        width: width(context) * 0.3,
                                         decoration: BoxDecoration(
                                             color: Colors.blueGrey[800],
                                             borderRadius:
@@ -382,8 +379,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                         children: [
                                           Container(
                                             padding: EdgeInsets.all(10),
-                                            // height: _hight * 0.3,
-                                            width: _width * 0.5,
+                                            // height: height(context) * 0.3,
+                                            width: width(context) * 0.5,
                                             decoration: BoxDecoration(
                                                 color: Colors.grey[50],
                                                 borderRadius: BorderRadius.only(
@@ -415,7 +412,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                           Container(
                                             padding: EdgeInsets.only(
                                                 bottom: 2, left: 15),
-                                            width: _width * 0.55,
+                                            width: width(context) * 0.55,
                                             decoration: BoxDecoration(
                                                 color: Colors.grey[50],
                                                 borderRadius: BorderRadius.only(
@@ -457,8 +454,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                        height: _hight * 0.04,
-                                        width: _width * 0.3,
+                                        height: height(context) * 0.04,
+                                        width: width(context) * 0.3,
                                         decoration: BoxDecoration(
                                             color: Colors.blueGrey[800],
                                             borderRadius:
@@ -479,8 +476,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                         children: [
                                           Container(
                                             padding: EdgeInsets.all(10),
-                                            // height: _hight * 0.3,
-                                            width: _width * 0.5,
+                                            // height: height(context) * 0.3,
+                                            width: width(context) * 0.5,
                                             decoration: BoxDecoration(
                                                 color: Colors.grey[50],
                                                 borderRadius: BorderRadius.only(
@@ -512,7 +509,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                           Container(
                                             padding: EdgeInsets.only(
                                                 bottom: 2, left: 15),
-                                            width: _width * 0.5,
+                                            width: width(context) * 0.5,
                                             decoration: BoxDecoration(
                                                 color: Colors.grey[50],
                                                 borderRadius: BorderRadius.only(
@@ -555,7 +552,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                       Container(
                           color: Colors.transparent,
                           padding: EdgeInsets.only(right: 20),
-                          height: _hight * 0.035,
+                          height: height(context) * 0.035,
                           child: Row(
                             children: [
                               Icon(
@@ -577,8 +574,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.all(5),
-                            height: _hight * 0.1,
-                            width: _width * 0.85,
+                            height: height(context) * 0.1,
+                            width: width(context) * 0.85,
                             child: TextField(
                               maxLines: 4,
                               controller: _chatScreenController.controller,
@@ -618,8 +615,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               bottomappbar(msgcount, pread);
                             }),
                         Container(
-                          height: _hight * 0.1,
-                          width: _width * 0.14,
+                          height: height(context) * 0.1,
+                          width: width(context) * 0.14,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle, color: Colors.blue[900]),
                           padding: EdgeInsets.all(10),
@@ -694,10 +691,6 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
   //images
 
   bottomappbar(int msgcount, int pread) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -710,7 +703,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
         builder: (BuildContext context) {
           return Container(
             padding: EdgeInsets.all(15),
-            height: _hight * 0.50,
+            height: height(context) * 0.50,
             child: Column(
               children: [
                 Container(
@@ -744,8 +737,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                     : Column(
                         children: [
                           Container(
-                            height: _hight * 0.34,
-                            width: _width * 1,
+                            height: height(context) * 0.34,
+                            width: width(context) * 1,
                             child: GridView.builder(
                                 itemCount:
                                     _chatScreenController.profilepic.length + 1,
@@ -831,8 +824,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                 },
                                 child: Container(
                                     padding: EdgeInsets.all(12),
-                                    height: _hight * 0.07,
-                                    //             //width: _width * 0.1,
+                                    height: height(context) * 0.07,
+                                    //             //width: width(context) * 0.1,
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -894,8 +887,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                           //         },
                           //         child: Container(
                           //             padding: EdgeInsets.all(12),
-                          //             height: _hight * 0.07,
-                          //             //width: _width * 0.1,
+                          //             height: height(context) * 0.07,
+                          //             //width: width(context) * 0.1,
                           //             decoration: BoxDecoration(
                           //                 boxShadow: [
                           //                   BoxShadow(

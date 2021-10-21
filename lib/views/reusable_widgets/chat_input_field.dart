@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 // import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';
@@ -23,11 +24,6 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
       "icon": Icons.mic,
     },
   ];
-  // var formkey = GlobalKey<FormState>();
-  final hight = MediaQuery.of(context).size.height -
-      MediaQuery.of(context).padding.top -
-      kToolbarHeight;
-  final width = MediaQuery.of(context).size.width;
   return Container(
     padding: EdgeInsets.all(10),
     color: Colors.transparent,
@@ -37,7 +33,7 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
         Expanded(
           child: Container(
             // padding: EdgeInsets.symmetric(horizontal: 14),
-            height: hight * 0.08,
+            height: height(context) * 0.08,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -52,7 +48,7 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                   child: Stack(children: [
                     TextField(
                       style: fonts(
-                          width * 0.05, FontWeight.w500, Colors.grey[900]),
+                          width(context) * 0.05, FontWeight.w500, Colors.grey[900]),
                       controller: inputController,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
@@ -61,12 +57,12 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                           icon: Icon(
                             Icons.mic,
                             color: Colors.grey[500],
-                            size: width * 0.07,
+                            size: width(context) * 0.07,
                           ),
                         ),
                         border: InputBorder.none,
                         hintStyle: fonts(
-                            width * 0.05, FontWeight.w400, Colors.grey[400]),
+                            width(context) * 0.05, FontWeight.w400, Colors.grey[400]),
                         hintText: 'Type Message......',
                       ),
                     ),
@@ -85,14 +81,14 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                                       sendCallBack, controller.currentMsgId);
                                 }, option4Click: () {
                                   audioRecoder(
-                                      context, hight, width, controller,
+                                      context, height(context), width(context), controller,
                                       from: "personalChat");
                                 });
                               },
                               icon: Icon(
                                 Icons.attach_file,
                                 color: Colors.grey[500],
-                                size: width * 0.05,
+                                size: width(context) * 0.05,
                               ),
                             )
                           : IconButton(
@@ -102,7 +98,7 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                               icon: Icon(
                                 Icons.clear,
                                 color: Colors.grey[500],
-                                size: width * 0.05,
+                                size: width(context) * 0.05,
                               ),
                             ),
                     )
@@ -113,7 +109,7 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
           ),
         ),
         SizedBox(
-          width: width * 0.03,
+          width: width(context) * 0.03,
         ),
         InkWell(
           onTap: () {
@@ -128,7 +124,7 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
           },
           child: CircleAvatar(
             backgroundColor: Colors.blueGrey[500],
-            radius: width * 0.065,
+            radius: width(context) * 0.065,
             child: Icon(
               Icons.send,
               color: Colors.white,

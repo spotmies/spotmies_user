@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 bottomOptionsMenu(context,
@@ -9,8 +10,8 @@ bottomOptionsMenu(context,
     option2Click,
     option3Click,
     option4Click}) {
-  final _width = MediaQuery.of(context).size.width;
-  final _height = MediaQuery.of(context).size.height;
+  // final width(context) = MediaQuery.of(context).size.width;
+  // final height(context) = MediaQuery.of(context).size.height;
 
   showModalBottomSheet(
     context: context,
@@ -20,7 +21,7 @@ bottomOptionsMenu(context,
       return Container(
         padding: EdgeInsets.only(top: 10),
         color: Colors.white,
-        height: _height * 0.18,
+        height: height(context) * 0.18,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -28,12 +29,12 @@ bottomOptionsMenu(context,
               TextWid(
                   text: menuTitle,
                   color: Colors.grey[800],
-                  size: _width * 0.04,
+                  size: width(context) * 0.04,
                   weight: FontWeight.w300),
               Divider(
-                thickness: _width * 0.005,
-                indent: _width * 0.15,
-                endIndent: _width * 0.15,
+                thickness: width(context) * 0.005,
+                indent: width(context) * 0.15,
+                endIndent: width(context) * 0.15,
               ),
               Expanded(
                 child: ListView.builder(
@@ -67,7 +68,7 @@ bottomOptionsMenu(context,
                         child: Container(
                           // padding: EdgeInsets.only(right: 20),
                           child: CircleAvatar(
-                            radius: _width * 0.099,
+                            radius: width(context) * 0.099,
                             backgroundColor: Colors.white,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +78,7 @@ bottomOptionsMenu(context,
                                   color: Colors.grey[700],
                                 ),
                                 SizedBox(
-                                  height: _height * 0.01,
+                                  height: height(context) * 0.01,
                                 ),
                                 TextWid(
                                   text: options[index]['name'],

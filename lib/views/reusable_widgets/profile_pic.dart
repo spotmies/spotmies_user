@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class ProfilePic extends StatelessWidget {
@@ -59,10 +60,10 @@ class ProfilePic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("type ${profile.runtimeType} ");
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
         if (onClick != null) onClick();
@@ -77,7 +78,7 @@ class ProfilePic extends StatelessWidget {
                       ? CircleAvatar(
                           backgroundColor: bgColor ??
                               ([...Colors.primaries]..shuffle()).first,
-                          radius: size ?? _width * 0.07,
+                          radius: size ?? width(context) * 0.07,
                           backgroundImage: NetworkImage(profile ?? ""),
                         )
                       : Container(
@@ -85,13 +86,13 @@ class ProfilePic extends StatelessWidget {
                         ),
                   Visibility(
                     visible: onClick != null,
-                    child: changeLable(_width),
+                    child: changeLable(width(context)),
                   ),
                   Positioned(
                     right: 0,
                     bottom: 0,
                     child: badge == true
-                        ? _activeIcon(_hight, _width)
+                        ? _activeIcon(height(context), width(context))
                         : Container(),
                   ),
                 ],
@@ -106,12 +107,12 @@ class ProfilePic extends StatelessWidget {
                                   //  this is circular avatar with name
                                   backgroundColor: bgColor ??
                                       avatarColor(name[0].toLowerCase()),
-                                  radius: size ?? _width * 0.07,
+                                  radius: size ?? width(context) * 0.07,
                                   child: Center(
                                     child: TextWid(
                                       text: toBeginningOfSentenceCase(name[0]),
                                       color: textColor ?? Colors.white,
-                                      size: textSize ?? _width * 0.06,
+                                      size: textSize ?? width(context) * 0.06,
                                     ),
                                   ),
                                 )
@@ -121,7 +122,7 @@ class ProfilePic extends StatelessWidget {
                                     child: TextWid(
                                       text: toBeginningOfSentenceCase(name[0]),
                                       color: textColor ?? Colors.white,
-                                      size: textSize ?? _width * 0.06,
+                                      size: textSize ?? width(context) * 0.06,
                                     ),
                                   ),
                                 ),
@@ -131,7 +132,7 @@ class ProfilePic extends StatelessWidget {
                               ? CircleAvatar(
                                   // this is file image
                                   backgroundImage: FileImage(profile),
-                                  radius: size ?? _width * 0.07,
+                                  radius: size ?? width(context) * 0.07,
                                 )
                               : Container(
                                   child: Image.file(profile),
@@ -139,13 +140,13 @@ class ProfilePic extends StatelessWidget {
                         ),
                   Visibility(
                     visible: onClick != null,
-                    child: changeLable(_width),
+                    child: changeLable(width(context)),
                   ),
                   Positioned(
                     right: 0,
                     bottom: 0,
                     child: badge == true
-                        ? _activeIcon(_hight, _width)
+                        ? _activeIcon(height(context), width(context))
                         : Container(),
                   ),
                 ],
@@ -154,15 +155,15 @@ class ProfilePic extends StatelessWidget {
     );
   }
 
-  Positioned changeLable(double _width) {
+  Positioned changeLable(double width) {
     return Positioned(
-        left: _width * 0.065,
-        bottom: _width * 0.04,
+        left: width * 0.065,
+        bottom: width * 0.04,
         child: Container(
           child: TextWid(
             text: onClickLabel ?? "change",
             color: Colors.grey[400],
-            size: _width * 0.04,
+            size: width * 0.04,
             weight: FontWeight.bold,
           ),
         ));

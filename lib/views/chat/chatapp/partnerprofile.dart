@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PartnerDetails extends StatefulWidget {
@@ -18,10 +19,6 @@ class _PartnerDetailsState extends State<PartnerDetails> {
   // bool isSwitch = false;
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -65,7 +62,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                               title: Text(document['pname']),
                               snap: false,  
                               floating: true,
-                              expandedHeight: _hight * 0.5,
+                              expandedHeight: height(context) * 0.5,
                               flexibleSpace: FlexibleSpaceBar(
                                 stretchModes: <StretchMode>[
                                   
@@ -73,7 +70,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                   StretchMode.fadeTitle,
                                 ],
                                 background: Container(
-                                  width: _width * 1,
+                                  width: width(context) * 1,
                                   color: Colors.black,
                                   child: Image.network(
                                     document['ppic'],
@@ -90,37 +87,37 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                     color: Colors.white,
                                   ),
                                   Container(
-                                    height: _hight * 0.25,
+                                    height: height(context) * 0.25,
                                     child: Column(
                                       children: [
                                         Container(
                                             padding: EdgeInsets.only(
-                                                left: _width * 0.03,
-                                                top: _width * 0.03,
-                                                bottom: _width * 0.03),
+                                                left: width(context) * 0.03,
+                                                top: width(context) * 0.03,
+                                                bottom: width(context) * 0.03),
                                             alignment: Alignment.bottomLeft,
                                             child: Text(
                                               'About and Phone Number',
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: _width * 0.05),
+                                                  fontSize: width(context) * 0.05),
                                             )),
                                         Container(
                                           alignment: Alignment.bottomLeft,
                                           padding: EdgeInsets.only(
-                                            left: _width * 0.03,
-                                            top: _width * 0.03,
+                                            left: width(context) * 0.03,
+                                            top: width(context) * 0.03,
                                           ),
                                           child: Text('Chating From',
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: _width * 0.05)),
+                                                  fontSize: width(context) * 0.05)),
                                         ),
                                         Container(
                                           alignment: Alignment.bottomLeft,
                                           padding: EdgeInsets.only(
-                                            left: _width * 0.03,
-                                            top: _width * 0.01,
+                                            left: width(context) * 0.03,
+                                            top: width(context) * 0.01,
                                           ),
                                           child: Text(
                                               DateFormat('dd MMM, yyyy (EEE)')
@@ -131,11 +128,11 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                               style: TextStyle(
                                                   color: Colors.grey,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: _width * 0.04)),
+                                                  fontSize: width(context) * 0.04)),
                                         ),
                                         Divider(
-                                          indent: _width * 0.04,
-                                          endIndent: _width * 0.04,
+                                          indent: width(context) * 0.04,
+                                          endIndent: width(context) * 0.04,
                                           thickness: 1,
                                           color: Colors.grey[300],
                                         ),
@@ -145,8 +142,8 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                 flex: 2,
                                                 child: Container(
                                                   padding: EdgeInsets.only(
-                                                    left: _width * 0.03,
-                                                    top: _width * 0.01,
+                                                    left: width(context) * 0.03,
+                                                    top: width(context) * 0.01,
                                                   ),
                                                   child: Column(
                                                     children: [
@@ -157,15 +154,15 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                                 color: Colors
                                                                     .black,
                                                                 fontSize:
-                                                                    _width *
+                                                                    width(context) *
                                                                         0.05)),
                                                       ),
                                                       Container(
                                                         padding:
                                                             EdgeInsets.only(
-                                                                left: _width *
+                                                                left: width(context) *
                                                                     0.1,
-                                                                top: _width *
+                                                                top: width(context) *
                                                                     0.01),
                                                         width: double.infinity,
                                                         child: Text('Mobile',
@@ -176,7 +173,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                                     FontWeight
                                                                         .bold,
                                                                 fontSize:
-                                                                    _width *
+                                                                    width(context) *
                                                                         0.04)),
                                                       ),
                                                     ],
@@ -224,9 +221,9 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                   ),
                                   Container(
                                     padding: EdgeInsets.only(
-                                      left: _width * 0.07,
+                                      left: width(context) * 0.07,
                                     ),
-                                    height: _hight * 0.1,
+                                    height: height(context) * 0.1,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -238,13 +235,13 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                               color: Colors.blue[900],
                                             ),
                                             SizedBox(
-                                              width: _width * 0.07,
+                                              width: width(context) * 0.07,
                                             ),
                                             Text(
                                               'Reveal My Profile',
                                               style: TextStyle(
                                                   color: Colors.blue[900],
-                                                  fontSize: _width * 0.05,
+                                                  fontSize: width(context) * 0.05,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ],
@@ -298,9 +295,9 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                   ),
                                   Container(
                                     padding: EdgeInsets.only(
-                                      left: _width * 0.07,
+                                      left: width(context) * 0.07,
                                     ),
-                                    height: _hight * 0.1,
+                                    height: height(context) * 0.1,
                                     child: Row(
                                       children: [
                                         Icon(
@@ -308,13 +305,13 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                           color: Colors.blue[900],
                                         ),
                                         SizedBox(
-                                          width: _width * 0.07,
+                                          width: width(context) * 0.07,
                                         ),
                                         Text(
                                           'Available on Message',
                                           style: TextStyle(
                                               color: Colors.blue[900],
-                                              fontSize: _width * 0.05,
+                                              fontSize: width(context) * 0.05,
                                               fontWeight: FontWeight.bold),
                                         )
                                       ],
@@ -327,36 +324,36 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                   Row(
                                     children: [
                                       Flexible(
-                                        // height: _hight * 0.2,
+                                        // height: height(context) * 0.2,
                                         child: Column(
                                           children: [
                                             Container(
-                                              height: _hight * 0.05,
+                                              height: height(context) * 0.05,
                                               // color: Colors.amber,
                                               alignment: Alignment.centerLeft,
                                               padding: EdgeInsets.only(
-                                                left: _width * 0.03,
-                                                // top: _width * 0.03,
+                                                left: width(context) * 0.03,
+                                                // top: width(context) * 0.03,
                                               ),
                                               child: Text('Business address:',
                                                   style: TextStyle(
                                                       color: Colors.black,
-                                                      fontSize: _width * 0.05)),
+                                                      fontSize: width(context) * 0.05)),
                                             ),
                                             Container(
-                                                // height: _hight * 0.15,
+                                                // height: height(context) * 0.15,
                                                 padding: EdgeInsets.only(
-                                                  left: _width * 0.03,
-                                                  top: _width * 0.03,
-                                                  right: _width * 0.03,
-                                                  bottom: _width * 0.03,
+                                                  left: width(context) * 0.03,
+                                                  top: width(context) * 0.03,
+                                                  right: width(context) * 0.03,
+                                                  bottom: width(context) * 0.03,
                                                 ),
                                                 child: Text(
                                                     document['location'],
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize:
-                                                            _width * 0.045)))
+                                                            width(context) * 0.045)))
                                           ],
                                         ),
                                       ),
@@ -368,9 +365,9 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                   ),
                                   Container(
                                     padding: EdgeInsets.only(
-                                      left: _width * 0.07,
+                                      left: width(context) * 0.07,
                                     ),
-                                    height: _hight * 0.1,
+                                    height: height(context) * 0.1,
                                     child: Row(
                                       children: [
                                         Icon(
@@ -378,7 +375,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                           color: Colors.red,
                                         ),
                                         SizedBox(
-                                          width: _width * 0.07,
+                                          width: width(context) * 0.07,
                                         ),
                                         Text(
                                           'Block ' +
@@ -386,7 +383,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                   document['pname']),
                                           style: TextStyle(
                                               color: Colors.red,
-                                              fontSize: _width * 0.05,
+                                              fontSize: width(context) * 0.05,
                                               fontWeight: FontWeight.bold),
                                         )
                                       ],
@@ -402,9 +399,9 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                     },
                                     child: Container(
                                       padding: EdgeInsets.only(
-                                        left: _width * 0.07,
+                                        left: width(context) * 0.07,
                                       ),
-                                      height: _hight * 0.1,
+                                      height: height(context) * 0.1,
                                       // decoration: BoxDecoration(boxShadow: [
                                       //   BoxShadow(
                                       //       color: Colors.grey[200],
@@ -418,7 +415,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                             color: Colors.red,
                                           ),
                                           SizedBox(
-                                            width: _width * 0.07,
+                                            width: width(context) * 0.07,
                                           ),
                                           Text(
                                             'Report on ' +
@@ -426,7 +423,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                     document['pname']),
                                             style: TextStyle(
                                                 color: Colors.red,
-                                                fontSize: _width * 0.05,
+                                                fontSize: width(context) * 0.05,
                                                 fontWeight: FontWeight.bold),
                                           )
                                         ],

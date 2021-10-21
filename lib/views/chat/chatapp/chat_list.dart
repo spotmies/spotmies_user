@@ -7,6 +7,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates.dart';
@@ -35,17 +36,8 @@ class _ChatListState extends StateMVC<ChatList> {
 
   @override
   Widget build(BuildContext context) {
-    // final _width = MediaQuery.of(context).size.width;
     print('======render chatList screen =======');
     return Scaffold(
-      // appBar: AppBar(
-      //     backgroundColor: Colors.white,
-      //     elevation: 0,
-      //     title: TextWid(
-      //       text: 'My Conversations',
-      //       size: _width * 0.045,
-      //       weight: FontWeight.w600,
-      //     )),
       key: _chatController.scaffoldkey,
       body: Container(
         padding: EdgeInsets.only(top: 10),
@@ -74,7 +66,7 @@ class _ChatListState extends StateMVC<ChatList> {
                         return Center(
                             child: TextWid(
                           text: "No Chats Available",
-                          size: 30,
+                          size: width(context) * 0.045,
                         ));
                       }
                       return RefreshIndicator(

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/media_player.dart';
@@ -94,10 +95,6 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
     return Consumer<GetOrdersProvider>(builder: (context, data, child) {
       dynamic d = data.getOrderById(widget.ordId);
       _postOverViewController.orderDetails = d;
@@ -110,11 +107,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.manage_search_rounded,
-                color: Colors.grey[700], size: _width * 0.3),
+                color: Colors.grey[700], size: width(context) * 0.3),
             TextWid(
               text: "Unable to Load this order",
               weight: FontWeight.bold,
-              size: _width * 0.05,
+              size: width(context) * 0.05,
             ),
           ],
         )));
@@ -135,8 +132,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
             appBar: AppBar(
               backgroundColor: appBarColor(d['orderState']),
               toolbarHeight: d['orderState'] < 9 && d['orderState'] != 3
-                  ? _hight * 0.16
-                  : _hight * 0.08,
+                  ? height(context) * 0.16
+                  : height(context) * 0.08,
               elevation: 0,
               leading: IconButton(
                 onPressed: () {
@@ -154,14 +151,14 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     text: Constants.jobCategories[d['job'].runtimeType == String
                         ? int.parse(d['job'])
                         : d['job']],
-                    size: _width * 0.04,
+                    size: width(context) * 0.04,
                     color:
                         d['orderState'] > 8 ? Colors.white : Colors.grey[500],
                     lSpace: 1.5,
                     weight: FontWeight.w600,
                   ),
                   SizedBox(
-                    height: _hight * 0.007,
+                    height: height(context) * 0.007,
                   ),
                   Row(
                     children: [
@@ -170,10 +167,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         color: d['orderState'] > 8
                             ? Colors.white
                             : Colors.indigo[900],
-                        size: _width * 0.035,
+                        size: width(context) * 0.035,
                       ),
                       SizedBox(
-                        width: _width * 0.01,
+                        width: width(context) * 0.01,
                       ),
                       Expanded(
                         child: TextWid(
@@ -183,7 +180,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 : Colors.grey[700],
                             flow: TextOverflow.visible,
                             weight: FontWeight.w700,
-                            size: _width * 0.03),
+                            size: width(context) * 0.03),
                       ),
                     ],
                   )
@@ -192,8 +189,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               bottom: PreferredSize(
                   child: d['orderState'] < 9 && d['orderState'] != 3
                       ? Container(
-                          margin: EdgeInsets.only(bottom: _width * 0.01),
-                          height: _hight * 0.06,
+                          margin: EdgeInsets.only(bottom: width(context) * 0.01),
+                          height: height(context) * 0.06,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -204,17 +201,17 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           d['orderState'], d['ordId'],
                                           isReschedule: false);
                                 },
-                                height: _hight * 0.05,
-                                minWidth: _width * 0.4,
+                                height: height(context) * 0.05,
+                                minWidth: width(context) * 0.4,
                                 bgColor: Colors.white,
                                 borderSideColor: Colors.grey[200],
                                 borderRadius: 10.0,
                                 buttonName: 'Cancel',
-                                textSize: _width * 0.04,
+                                textSize: width(context) * 0.04,
                                 leadingIcon: Icon(
                                   Icons.cancel,
                                   color: Colors.grey[900],
-                                  size: _width * 0.045,
+                                  size: width(context) * 0.045,
                                 ),
                               ),
                               ElevatedButtonWidget(
@@ -232,18 +229,18 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                             d['orderState'], d['ordId']);
                                   }
                                 },
-                                height: _hight * 0.05,
-                                minWidth: _width * 0.55,
+                                height: height(context) * 0.05,
+                                minWidth: width(context) * 0.55,
                                 bgColor: Colors.indigo[900],
                                 borderSideColor: Colors.grey[200],
                                 borderRadius: 10.0,
                                 buttonName: 'Re-schedule',
                                 textColor: Colors.white,
-                                textSize: _width * 0.04,
+                                textSize: width(context) * 0.04,
                                 trailingIcon: Icon(
                                   Icons.refresh,
                                   color: Colors.white,
-                                  size: _width * 0.045,
+                                  size: width(context) * 0.045,
                                 ),
                               )
                             ],
@@ -272,8 +269,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               ],
             ),
             body: Container(
-              height: _hight,
-              width: _width,
+              height: height(context),
+              width: width(context),
               color: Colors.grey[100],
               child: ListView(
                 children: [
@@ -308,8 +305,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     color: Colors.white,
                   ),
                   Container(
-                    //height: _hight * 0.45,
-                    width: _width,
+                    //height: height(context) * 0.45,
+                    width: width(context),
                     color: Colors.white,
                     child: Column(
                       children: [
@@ -322,7 +319,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             children: [
                               TextWidget(
                                 text: 'Service Details :',
-                                size: _width * 0.055,
+                                size: width(context) * 0.055,
                                 weight: FontWeight.w600,
                               ),
                               IconButton(
@@ -334,15 +331,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           ),
                         ),
                         serviceDetailsListTile(
-                          _width,
-                          _hight,
+                          width(context),
+                          height(context),
                           'Issue/Problem',
                           Icons.settings,
                           d['problem'],
                         ),
                         serviceDetailsListTile(
-                          _width,
-                          _hight,
+                          width(context),
+                          height(context),
                           'Schedule',
                           Icons.schedule,
                           getDate(d['schedule']) + "-" + getTime(d['schedule']),
@@ -350,15 +347,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         Stack(
                           children: [
                             serviceDetailsListTile(
-                                _width,
-                                _hight,
+                                width(context),
+                                height(context),
                                 'Location',
                                 Icons.location_on,
                                 fullAddress['addressLine'] ??
                                     "Unable to get service address"),
                             Positioned(
-                                right: _width * 0.02,
-                                top: _hight * 0.02,
+                                right: width(context) * 0.02,
+                                top: height(context) * 0.02,
                                 child: IconButton(
                                     onPressed: () {
                                       var coordiantes = {
@@ -386,18 +383,18 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  mediaView(_hight, _width, images),
+                  mediaView(height(context), width(context), images),
 
                   Divider(
                     color: Colors.white,
                   ),
-                  warrentyCard(_hight, _width),
+                  warrentyCard(height(context), width(context)),
                   Divider(
                     color: Colors.white,
                   ),
                   (d['orderState'] > 6)
                       ? Container(
-                          // height: _hight * 0.3,
+                          // height: height(context) * 0.3,
                           color: Colors.white,
                           child: Column(
                             children: [
@@ -411,7 +408,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                   children: [
                                     TextWidget(
                                       text: 'Technician Details :',
-                                      size: _width * 0.055,
+                                      size: width(context) * 0.055,
                                       weight: FontWeight.w600,
                                     ),
                                   ],
@@ -419,8 +416,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                               ),
                               d['pDetails'] != null
                                   ? partnerDetails(
-                                      _hight,
-                                      _width,
+                                      height(context),
+                                      width(context),
                                       context,
                                       _postOverViewController,
                                       d,
@@ -437,7 +434,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Container(
                     height: 500,
                     padding: EdgeInsets.only(left: 30, bottom: 50, top: 30),
-                    // width: _width * 0.7,
+                    // width: width(context) * 0.7,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -448,21 +445,21 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                     alignment: Alignment.centerLeft,
                                     child: TextWid(
                                       text: 'Is this order completed ?',
-                                      size: _width * 0.055,
+                                      size: width(context) * 0.055,
                                       weight: FontWeight.w600,
                                     ),
                                   ),
                                   Container(
                                     margin:
                                         EdgeInsets.only(top: 20, bottom: 40),
-                                    height: _hight * 0.06,
+                                    height: height(context) * 0.06,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         ElevatedButtonWidget(
-                                          height: _hight * 0.05,
-                                          minWidth: _width * 0.35,
+                                          height: height(context) * 0.05,
+                                          minWidth: width(context) * 0.35,
                                           onClick: () {
                                             isThisOrderCompleted(false);
                                           },
@@ -470,16 +467,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           borderSideColor: Colors.grey[200],
                                           borderRadius: 10.0,
                                           buttonName: 'Not yet',
-                                          textSize: _width * 0.04,
+                                          textSize: width(context) * 0.04,
                                           leadingIcon: Icon(
                                             Icons.cancel,
                                             color: Colors.grey[900],
-                                            size: _width * 0.045,
+                                            size: width(context) * 0.045,
                                           ),
                                         ),
                                         ElevatedButtonWidget(
-                                          height: _hight * 0.05,
-                                          minWidth: _width * 0.45,
+                                          height: height(context) * 0.05,
+                                          minWidth: width(context) * 0.45,
                                           bgColor: Colors.indigo[900],
                                           borderSideColor: Colors.grey[200],
                                           borderRadius: 10.0,
@@ -489,11 +486,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                 orderID: d['ordId']);
                                           },
                                           textColor: Colors.white,
-                                          textSize: _width * 0.04,
+                                          textSize: width(context) * 0.04,
                                           leadingIcon: Icon(
                                             Icons.check_circle,
                                             color: Colors.white,
-                                            size: _width * 0.045,
+                                            size: width(context) * 0.045,
                                           ),
                                         )
                                       ],
@@ -506,7 +503,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           alignment: Alignment.centerLeft,
                           child: TextWid(
                             text: 'Service Status :',
-                            size: _width * 0.055,
+                            size: width(context) * 0.055,
                             weight: FontWeight.w600,
                           ),
                         ),
@@ -988,7 +985,6 @@ class _Timeline2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(contextt).size.width;
     final data = _TimelineStatus.values;
     return Flexible(
       child: Timeline.tileBuilder(
@@ -1000,7 +996,7 @@ class _Timeline2 extends StatelessWidget {
             color: Color(0xffd3d3d3),
           ),
           indicatorTheme: IndicatorThemeData(
-            size: _width * 0.06,
+            size: width(context) * 0.06,
           ),
         ),
         //padding: EdgeInsets.symmetric(vertical: 5.0),
@@ -1044,7 +1040,7 @@ class _Timeline2 extends StatelessWidget {
                   child: Icon(
                     Icons.work_rounded,
                     color: Colors.grey[300],
-                    size: _width * 0.035,
+                    size: width(context) * 0.035,
                   ),
                 );
               case _TimelineStatus.accept:
@@ -1054,7 +1050,7 @@ class _Timeline2 extends StatelessWidget {
                       : Colors.grey,
                   child: Icon(
                     Icons.how_to_reg_rounded,
-                    size: _width * 0.035,
+                    size: width(context) * 0.035,
                     color: Colors.grey[300],
                   ),
                 );
@@ -1063,7 +1059,7 @@ class _Timeline2 extends StatelessWidget {
                   color: isServiceStarted() ? Colors.indigo[900] : Colors.grey,
                   child: Icon(
                     Icons.build,
-                    size: _width * 0.035,
+                    size: width(context) * 0.035,
                     color: Colors.grey[300],
                   ),
                 );
@@ -1074,7 +1070,7 @@ class _Timeline2 extends StatelessWidget {
                       : Colors.grey,
                   child: Icon(
                     Icons.verified_rounded,
-                    size: _width * 0.035,
+                    size: width(context) * 0.035,
                     color: Colors.grey[300],
                   ),
                 );
@@ -1085,7 +1081,7 @@ class _Timeline2 extends StatelessWidget {
                       : Colors.grey,
                   child: Icon(
                     Icons.reviews,
-                    size: _width * 0.035,
+                    size: width(context) * 0.035,
                     color: Colors.grey[300],
                   ),
                 );
@@ -1094,7 +1090,7 @@ class _Timeline2 extends StatelessWidget {
                   color: Colors.indigo[900],
                   child: Icon(
                     Icons.verified_rounded,
-                    size: _width * 0.035,
+                    size: width(context) * 0.035,
                     color: Colors.white,
                   ),
                 );
@@ -1152,12 +1148,11 @@ class TimeLineTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(contextt).size.width;
     return Container(
-        padding: EdgeInsets.only(left: _width * 0.03),
+        padding: EdgeInsets.only(left: width(context) * 0.03),
         child: TextWid(
           text: getStatus(),
-          size: _width * 0.04,
+          size: width(context) * 0.04,
           weight: FontWeight.w600,
           color: isCompleted() ? Colors.grey[850] : Colors.grey[600],
         ));
@@ -1178,7 +1173,7 @@ class TimeLineTitle extends StatelessWidget {
         //         pinned: true,
         //         snap: false,
         //         floating: true,
-        //         expandedHeight: _hight * 0.5,
+        //         expandedHeight: height(context) * 0.5,
         //         flexibleSpace: FlexibleSpaceBar(
         //             stretchModes: <StretchMode>[
         //               StretchMode.zoomBackground,
@@ -1188,17 +1183,17 @@ class TimeLineTitle extends StatelessWidget {
         //               _postOverViewController.jobs.elementAt(d['job']),
         //             ),
         //             background: Container(
-        //               width: _width * 1,
+        //               width: width(context) * 1,
         //               color: Colors.black,
         //               child: GestureDetector(
         //                   onTap: () {
-        //                     imageslider(images, _hight, _width);
+        //                     imageslider(images, height(context), width(context));
         //                   },
         //                   child: (images.isEmpty)
         //                       ? Icon(
         //                           Icons.tungsten_rounded,
         //                           color: Colors.amber,
-        //                           size: _width * 0.5,
+        //                           size: width(context) * 0.5,
         //                         )
         //                       : Image.network(
         //                           images.first,
@@ -1209,8 +1204,8 @@ class TimeLineTitle extends StatelessWidget {
         //         delegate: SliverChildListDelegate([
         //       Container(
         //         padding:
-        //             EdgeInsets.only(left: _width * 0.08, top: _width * 0.03),
-        //         height: _hight * 0.07,
+        //             EdgeInsets.only(left: width(context) * 0.08, top: width(context) * 0.03),
+        //         height: height(context) * 0.07,
         //         child: Column(
         //           mainAxisAlignment: MainAxisAlignment.center,
         //           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1229,7 +1224,7 @@ class TimeLineTitle extends StatelessWidget {
         //       ),
         //       Container(
         //         padding: EdgeInsets.only(right: 5, left: 5),
-        //         height: _hight * 0.032,
+        //         height: height(context) * 0.032,
         //         decoration: BoxDecoration(
         //             color: Colors.white,
         //             borderRadius: BorderRadius.circular(5)),
@@ -1239,29 +1234,29 @@ class TimeLineTitle extends StatelessWidget {
         //             Icon(
         //               _postOverViewController.orderStateIcon(d['ordState']),
         //               color: Colors.indigo[900],
-        //               size: _width * 0.04,
+        //               size: width(context) * 0.04,
         //             ),
         //             SizedBox(
-        //               width: _width * 0.01,
+        //               width: width(context) * 0.01,
         //             ),
         //             TextWidget(
         //                 text: _postOverViewController
         //                     .orderStateText(d['ordState']),
         //                 color: Colors.indigo[900],
         //                 weight: FontWeight.w600,
-        //                 size: _width * 0.03)
+        //                 size: width(context) * 0.03)
         //           ],
         //         ),
         //       ),
         //       Container(
         //         padding:
-        //             EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
-        //         height: _hight * 0.1,
+        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+        //         height: height(context) * 0.1,
         //         child: Row(
         //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //           children: [
         //             Container(
-        //               width: _width * 0.7,
+        //               width: width(context) * 0.7,
         //               child: Column(
         //                 mainAxisAlignment: MainAxisAlignment.center,
         //                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1296,8 +1291,8 @@ class TimeLineTitle extends StatelessWidget {
         //       ),
         //       Container(
         //         padding:
-        //             EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
-        //         height: _hight * 0.1,
+        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+        //         height: height(context) * 0.1,
         //         child: Row(
         //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //           children: [
@@ -1332,8 +1327,8 @@ class TimeLineTitle extends StatelessWidget {
         //       ),
         //       Container(
         //         padding:
-        //             EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
-        //         height: _hight * 0.1,
+        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+        //         height: height(context) * 0.1,
         //         child: Row(
         //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //           children: [
@@ -1370,8 +1365,8 @@ class TimeLineTitle extends StatelessWidget {
         //       ),
         //       Container(
         //         padding:
-        //             EdgeInsets.only(left: _width * 0.09, right: _width * 0.02),
-        //         height: _hight * 0.1,
+        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+        //         height: height(context) * 0.1,
         //         child: Row(
         //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //           children: [
@@ -1416,7 +1411,7 @@ class TimeLineTitle extends StatelessWidget {
         //                         'Rate',
         //                         style: TextStyle(
         //                             color: Colors.white,
-        //                             fontSize: _width * 0.05),
+        //                             fontSize: width(context) * 0.05),
         //                       ),
         //                       Icon(
         //                         Icons.star,

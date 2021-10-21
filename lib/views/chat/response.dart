@@ -6,6 +6,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
@@ -42,10 +43,10 @@ class _ResponseeState extends StateMVC<Responsee> {
   @override
   Widget build(BuildContext context) {
     log("======= Render responses page ========");
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _responsiveController.scaffoldkey,
         body: Consumer<ResponsesProvider>(builder: (context, data, child) {
@@ -55,7 +56,7 @@ class _ResponseeState extends StateMVC<Responsee> {
             return Center(
               child: TextWid(
                 text: "No Responses",
-                size: 30,
+                size: width(context) * 0.045,
               ),
             );
           return Stack(children: [
@@ -81,8 +82,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                             onTap: () {
                               partnerDetailsSummury(
                                   context,
-                                  _hight,
-                                  _width,
+                                  height(context),
+                                  width(context),
                                   pDetails,
                                   _responsiveController,
                                   responseData,
@@ -97,8 +98,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                             },
                             child: Container(
                               padding: EdgeInsets.only(bottom: 10),
-                              // height: _hight * 0.27,
-                              width: _width * 1,
+                              // height: height(context) * 0.27,
+                              width: width(context) * 1,
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
@@ -117,7 +118,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    height: _hight * 0.1,
+                                    height: height(context) * 0.1,
                                     padding: EdgeInsets.only(
                                         left: 10, right: 10, top: 10),
                                     alignment: Alignment.topCenter,
@@ -137,7 +138,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               text: _responsiveController.jobs
                                                   .elementAt(ord['job']),
                                               color: Colors.indigo[900],
-                                              size: _width * 0.035,
+                                              size: width(context) * 0.035,
                                               weight: FontWeight.w500,
                                               lSpace: 0.2,
                                             ),
@@ -147,13 +148,13 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                 onPressed: () {},
                                                 icon: Icon(
                                                   Icons.more_horiz,
-                                                  size: _width * 0.06,
+                                                  size: width(context) * 0.06,
                                                   color: Colors.indigo[900],
                                                 ))
                                           ],
                                         ),
                                         SizedBox(
-                                          height: _width * 0.015,
+                                          height: width(context) * 0.015,
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -162,10 +163,10 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             Icon(
                                               Icons.schedule,
                                               color: Colors.indigo[900],
-                                              size: _width * 0.045,
+                                              size: width(context) * 0.045,
                                             ),
                                             SizedBox(
-                                              width: _width * 0.015,
+                                              width: width(context) * 0.015,
                                             ),
                                             TextWidget(
                                               text: getDate(ord['schedule']) +
@@ -173,7 +174,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                   getTime(ord['schedule']),
                                               color: Colors.indigo[900],
                                               weight: FontWeight.w600,
-                                              size: _width * 0.045,
+                                              size: width(context) * 0.045,
                                             ),
                                           ],
                                         )
@@ -193,7 +194,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                         ),
                                       ),
                                       Container(
-                                        width: _width * 0.35,
+                                        width: width(context) * 0.35,
                                         child: TextWidget(
                                           text: ord['problem'],
                                           flow: TextOverflow.visible,
@@ -204,7 +205,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             responseData['money'] != null ||
                                                 ord['money'] != null,
                                         child: Container(
-                                          // width: _width * 0.08,
+                                          // width: width(context) * 0.08,
                                           child: TextWidget(
                                             text:
                                                 "₹ ${responseData['money'] ?? ord['money']}",
@@ -217,7 +218,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                           icon: Icon(
                                             Icons.info,
                                             color: Colors.grey,
-                                            size: _width * 0.05,
+                                            size: width(context) * 0.05,
                                           ))
                                     ],
                                   ),
@@ -232,7 +233,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                 child: Icon(
                                                   Icons.check_circle,
                                                   color: Colors.green[700],
-                                                  size: _width * 0.056,
+                                                  size: width(context) * 0.056,
                                                 ),
                                               ),
                                               Container(
@@ -241,7 +242,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                   child: TextWid(
                                                     text:
                                                         "Partner accepted your order",
-                                                    size: _width * 0.04,
+                                                    size: width(context) * 0.04,
                                                     weight: FontWeight.bold,
                                                   )),
                                               Expanded(
@@ -259,7 +260,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                       icon: Icon(
                                                         Icons.delete_sweep,
                                                         color: Colors.red,
-                                                        size: _width * 0.056,
+                                                        size: width(context) *
+                                                            0.056,
                                                       )),
                                                 ),
                                               )
@@ -269,13 +271,13 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             ElevatedButtonWidget(
-                                              minWidth: _width * 0.3,
-                                              height: _hight * 0.045,
+                                              minWidth: width(context) * 0.3,
+                                              height: height(context) * 0.045,
                                               bgColor: Colors.indigo[50],
                                               buttonName: 'Decline',
                                               textColor: Colors.grey[900],
                                               borderRadius: 15.0,
-                                              textSize: _width * 0.04,
+                                              textSize: width(context) * 0.04,
                                               borderSideColor:
                                                   Colors.indigo[50],
                                               onClick: () {
@@ -285,13 +287,13 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               },
                                             ),
                                             ElevatedButtonWidget(
-                                              minWidth: _width * 0.5,
-                                              height: _hight * 0.045,
+                                              minWidth: width(context) * 0.5,
+                                              height: height(context) * 0.045,
                                               bgColor: Colors.indigo[900],
                                               buttonName: 'Accept',
                                               textColor: Colors.white,
                                               borderRadius: 15.0,
-                                              textSize: _width * 0.04,
+                                              textSize: width(context) * 0.04,
                                               borderSideColor:
                                                   Colors.indigo[900],
                                               onClick: () {
