@@ -318,6 +318,13 @@ class AdController extends ControllerMVC {
     adbutton(userDetails);
   }
 
+  updateLocations(lat, log, fulladdress) {
+    latitude = lat.toString();
+    longitude = log.toString();
+    fullAddress = fulladdress;
+    setState(() {});
+  }
+
   getDateAndTime() {
     DateTime pickedDateTime = new DateTime(pickedDate.year, pickedDate.month,
         pickedDate.day, pickedTime.hour, pickedTime.minute);
