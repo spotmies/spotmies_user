@@ -53,8 +53,8 @@ class Server {
     }
   }
 
-  Future<dynamic> deleteMethod(String api) async {
-    var uri = Uri.https(API.host, api);
+  Future<dynamic> deleteMethod(String api, {Map params}) async {
+    var uri = Uri.https(API.host, api, params ?? {});
 
     try {
       var response = await http.delete(uri).timeout(Duration(seconds: 30));

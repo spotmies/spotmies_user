@@ -27,7 +27,16 @@ class RoundedButton extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(15 / 64 * size),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(60), color: color),
+              borderRadius: BorderRadius.circular(60),
+              color: color,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[700],
+                  offset: Offset(2, 3.0), //(x,y)
+                  blurRadius: 10.0,
+                ),
+              ],
+            ),
             child: SvgPicture.asset(
               iconSrc,
               color: iconColor,

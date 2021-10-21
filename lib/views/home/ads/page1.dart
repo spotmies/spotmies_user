@@ -248,7 +248,7 @@ Widget page1(double hight, double width, BuildContext context,
                                 ],
                                 color: Colors.grey[50],
                                 borderRadius: BorderRadius.circular(15)),
-                            height: hight * 0.12,
+                            // height: hight * 0.12,
                             width: width * 0.8,
                             child: Column(
                               children: [

@@ -19,6 +19,25 @@ class Constants {
     "CC Tv Installation",
     "Catering",
   ];
+
+  static var jobCategoriesSmall = [
+    "Ac/Fridge Service",
+    "Computer Service",
+    "Tv Repair",
+    "Development",
+    "Tutor",
+    "Beauty",
+    "Photographer",
+    "Driver",
+    "Events",
+    "Electrician",
+    "Carpenter",
+    "Plumber",
+    "Interior Design",
+    "Design",
+    "CC Tv Installation",
+    "Catering",
+  ];
 }
 
 orderStateString({ordState = 0}) {
