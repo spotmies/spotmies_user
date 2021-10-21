@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -97,10 +98,10 @@ class _MapsState extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     if (position == null)
       return Scaffold(
         body: Center(
@@ -155,16 +156,16 @@ class _MapsState extends State<Maps> {
           ),
           if (widget.isSearch)
             Positioned(
-                top: _hight * 0.07,
+                top: height(context) * 0.07,
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
                   },
                   child: Container(
                     padding: EdgeInsets.only(
-                        left: _width * 0.05, right: _width * 0.03),
-                    height: _hight * 0.07,
-                    width: _width * 0.9,
+                        left: width(context) * 0.05, right: width(context) * 0.03),
+                    height: height(context) * 0.07,
+                    width: width(context) * 0.9,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -179,7 +180,7 @@ class _MapsState extends State<Maps> {
                       children: [
                         TextWid(
                           text: 'Search',
-                          size: _width * 0.05,
+                          size: width(context) * 0.05,
                           color: Colors.grey[500],
                         ),
                         Icon(

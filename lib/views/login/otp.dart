@@ -9,6 +9,7 @@ import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/navBar.dart';
@@ -103,10 +104,10 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue[900],
@@ -122,7 +123,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height: _hight * 0.5,
+                      height: height(context) * 0.5,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -157,15 +158,15 @@ class _OTPScreenState extends State<OTPScreen> {
                       ),
                     ),
                     Container(
-                      height: _hight * 0.2,
+                      height: height(context) * 0.2,
                       child: Padding(
                         padding: const EdgeInsets.all(30.0),
                         child: PinPut(
                           fieldsCount: 6,
                           textStyle: const TextStyle(
                               fontSize: 25.0, color: Colors.blueGrey),
-                          eachFieldWidth: _width * 0.1,
-                          eachFieldHeight: _hight * 0.08,
+                          eachFieldWidth: width(context) * 0.1,
+                          eachFieldHeight: height(context) * 0.08,
                           focusNode: _pinPutFocusNode,
                           controller: _pinPutController,
                           submittedFieldDecoration: pinPutDecoration,
@@ -183,7 +184,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     ),
                     data.countDown > 1
                         ? Container(
-                            height: _hight * 0.3,
+                            height: height(context) * 0.3,
                             child: CircularPercentIndicator(
                                 radius: 60,
                                 lineWidth: 5,
@@ -204,7 +205,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     data.countDown > 1
                         ? Container(
                             padding: EdgeInsets.only(
-                                top: data.countDown > 2 ? 0 : _hight * 0.25),
+                                top: data.countDown > 2 ? 0 : height(context) * 0.25),
                             child: ElevatedButtonWidget(
                               onClick: () {
                                 loginUserWithOtp(data.getOtp);

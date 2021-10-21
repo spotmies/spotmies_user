@@ -7,3 +7,14 @@ class AppColors {
   static var dark = Colors.grey[900];
   static var grey = Colors.grey;
 }
+
+
+
+ height(context) {
+  return MediaQuery.of(context).size.height -
+      MediaQuery.of(context).padding.top -
+      kToolbarHeight;
+}
+ width(context) {
+  return MediaQuery.of(context).size.width;
+}

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/home/ServiceListHorizontal.dart';
 import 'package:spotmies/views/home/listBuilderVertical.dart';
@@ -100,26 +101,26 @@ class _ServicesState extends State<Services> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     if (value == 0) {
       return Container(
-        height: _hight,
+        height: height(context),
         padding: EdgeInsets.all(0),
         child: ListView(
           children: [
             Container(
-                height: _hight * 0.30,
-                width: _width * 0.8,
+                height: height(context) * 0.30,
+                width: width(context) * 0.8,
                 padding: EdgeInsets.only(top: 10, bottom: 0),
                 child: CarouselSlider.builder(
                   itemCount: images.length,
                   itemBuilder: (ctx, index, realIdx) {
                     return Container(
-                      height: _hight * 0.30,
-                      width: _width * 0.8,
+                      height: height(context) * 0.30,
+                      width: width(context) * 0.8,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(30),
@@ -134,13 +135,13 @@ class _ServicesState extends State<Services> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                              height: _hight * 0.18,
-                              width: _width * 0.7,
+                              height: height(context) * 0.18,
+                              width: width(context) * 0.7,
                               padding: EdgeInsets.all(10),
                               child: SvgPicture.asset(images[index])),
                           Text(
                             titles[index],
-                            style: fonts(_width * 0.05, FontWeight.w600,
+                            style: fonts(width(context) * 0.05, FontWeight.w600,
                                 Colors.grey[900]),
                           )
                         ],
@@ -157,16 +158,16 @@ class _ServicesState extends State<Services> {
                 )),
             Container(
               child: servicelistBuilder(context, 'Popular Domestic Services',
-                  _width, _hight, tradesman),
+                  width(context), height(context), tradesman),
             ),
 
             Container(
               child: serviceBlocksMore(
-                  context, 'Categories', _width, _hight, tradesman),
+                  context, 'Categories', width(context), height(context), tradesman),
             ),
             Container(
               child: servicelistBuilder(
-                  context, 'Corparate Services', _width, _hight, software),
+                  context, 'Corparate Services', width(context), height(context), software),
             ),
 
            
@@ -177,38 +178,38 @@ class _ServicesState extends State<Services> {
     if (value == 1) {
       return Center(
           child: serviceIndividualBuilder(
-              context, 'Tradesman', _width, _hight, tradesman));
+              context, 'Tradesman', width(context), height(context), tradesman));
     }
     if (value == 2) {
       return Center(
         child:
-            serviceIndividualBuilder(context, 'Beauty', _width, _hight, beauty),
+            serviceIndividualBuilder(context, 'Beauty', width(context), height(context), beauty),
       );
     }
     if (value == 3) {
       return Center(
           child: serviceIndividualBuilder(
-              context, 'Domestic', _width, _hight, tradesman));
+              context, 'Domestic', width(context), height(context), tradesman));
     }
     if (value == 4) {
       return Center(
           child: serviceIndividualBuilder(
-              context, 'Software', _width, _hight, software));
+              context, 'Software', width(context), height(context), software));
     }
     if (value == 5) {
       return Center(
           child: serviceIndividualBuilder(
-              context, 'Designing', _width, _hight, tradesman));
+              context, 'Designing', width(context), height(context), tradesman));
     }
     if (value == 6) {
       return Center(
           child: serviceIndividualBuilder(
-              context, 'Education', _width, _hight, beauty));
+              context, 'Education', width(context), height(context), beauty));
     }
     if (value == 7) {
       return Center(
           child: serviceIndividualBuilder(
-              context, 'Filming', _width, _hight, software));
+              context, 'Filming', width(context), height(context), software));
     } else {
       return Container();
     }

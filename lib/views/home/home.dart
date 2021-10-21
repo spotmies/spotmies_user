@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/controllers/home_controllers/home_controller.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/home/ServiceListVertical.dart';
 import 'package:spotmies/views/home/searchJobs/search.dart';
@@ -49,10 +50,10 @@ class _HomeState extends StateMVC<Home> {
   @override
   Widget build(BuildContext context) {
     //getToken();
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 8,
       child: Scaffold(
@@ -63,7 +64,7 @@ class _HomeState extends StateMVC<Home> {
             color: Colors.indigo[900],
           ),
           title: Container(
-            width: _width * 0.5,
+            width: width(context) * 0.5,
             child: InkWell(
               onTap: () async {
                 await _homeController.getAddressofLocation();
@@ -75,7 +76,7 @@ class _HomeState extends StateMVC<Home> {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: GoogleFonts.josefinSans(
-                    fontSize: _width * 0.045,
+                    fontSize: width(context) * 0.045,
                     fontWeight: FontWeight.bold,
                     color: Colors.indigo[900],
                   )),
@@ -104,8 +105,8 @@ class _HomeState extends StateMVC<Home> {
                 padding: EdgeInsets.only(right: 10),
                 child: IconButton(
                   onPressed: () {
-                    // promotions(context, _hight, _width);
-                    // partnerDetailsSummury(context, _hight, _width);
+                    // promotions(context, height(context), width(context));
+                    // partnerDetailsSummury(context, height(context), width(context));
                   },
                   icon: Icon(
                     Icons.local_offer_sharp,
@@ -114,9 +115,9 @@ class _HomeState extends StateMVC<Home> {
                 )),
           ],
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(_hight * 0.09),
+            preferredSize: Size.fromHeight(height(context) * 0.09),
             child: Container(
-              height: _hight * 0.06,
+              height: height(context) * 0.06,
               padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: TabBar(
                   isScrollable: true,
@@ -127,7 +128,7 @@ class _HomeState extends StateMVC<Home> {
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.indigo[900]),
                   labelStyle:
-                      fonts(_width * 0.04, FontWeight.w600, Colors.white),
+                      fonts(width(context) * 0.04, FontWeight.w600, Colors.white),
                   tabs: [
                     Tab(
                       icon: Center(
@@ -180,7 +181,7 @@ class _HomeState extends StateMVC<Home> {
         //   backgroundColor: Colors.white,
         //   elevation: 0,
         //   title: Container(
-        //     width: _width * 0.5,
+        //     width: width(context) * 0.5,
         //     child: Row(
         //       children: [
         //         Icon(
@@ -195,7 +196,7 @@ class _HomeState extends StateMVC<Home> {
         //                   : _homeController.add2,
         //               overflow: TextOverflow.ellipsis,
         //               style: GoogleFonts.josefinSans(
-        //                 fontSize: _width * 0.04,
+        //                 fontSize: width(context) * 0.04,
         //                 fontWeight: FontWeight.bold,
         //                 color: Colors.blue[900],
         //               )),
@@ -220,7 +221,7 @@ class _HomeState extends StateMVC<Home> {
         // ),
         // body: Container(
         //   padding: EdgeInsets.only(top: 15, left: 5, right: 5),
-        //   width: _width * 1,
+        //   width: width(context) * 1,
         //   child: GridView.builder(
         //     itemCount: _homeController.jobs.length,
         //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -237,7 +238,7 @@ class _HomeState extends StateMVC<Home> {
         //                 child: Icon(
         //                   _homeController.icons[index],
         //                   color: Colors.white,
-        //                   size: _width * 0.05,
+        //                   size: width(context) * 0.05,
         //                 ),
         //                 onPressed: () {
         //                   Navigator.push(
@@ -249,11 +250,11 @@ class _HomeState extends StateMVC<Home> {
         //                 }),
         //           ),
         //           SizedBox(
-        //             height: _hight * 0.005,
+        //             height: height(context) * 0.005,
         //           ),
         //           Text(_homeController.jobs[index],
         //               style: GoogleFonts.josefinSans(
-        //                 fontSize: _width * 0.03,
+        //                 fontSize: width(context) * 0.03,
         //                 color: Colors.black,
         //               ))
         //         ],
@@ -311,10 +312,10 @@ class _HomeState extends StateMVC<Home> {
 //   ];
 //   @override
 //   Widget build(BuildContext context) {
-//     final _hight = MediaQuery.of(context).size.height -
+//     final height(context) = MediaQuery.of(context).size.height -
 //         MediaQuery.of(context).padding.top -
 //         kToolbarHeight;
-//     final _width = MediaQuery.of(context).size.width;
+//     final width(context) = MediaQuery.of(context).size.width;
 //     return DefaultTabController(
 //       length: 8,
 //       child: Scaffold(
@@ -325,7 +326,7 @@ class _HomeState extends StateMVC<Home> {
 //             color: Colors.indigo[900],
 //           ),
 //           title: Container(
-//             width: _width * 0.5,
+//             width: width(context) * 0.5,
 //             child:  TextButton(
 //                   child: Text(
 //                       _homeController.add2 == null
@@ -333,7 +334,7 @@ class _HomeState extends StateMVC<Home> {
 //                           : _homeController.add2,
 //                       overflow: TextOverflow.ellipsis,
 //                       style: GoogleFonts.josefinSans(
-//                         fontSize: _width * 0.04,
+//                         fontSize: width(context) * 0.04,
 //                         fontWeight: FontWeight.bold,
 //                         color: Colors.blue[900],
 //                       )),
@@ -345,7 +346,7 @@ class _HomeState extends StateMVC<Home> {
 //             // Text(
 //             //   'MMTC,Seethammadhara',
 //             //   overflow: TextOverflow.ellipsis,
-//             //   style: fonts(_width * 0.045, FontWeight.w600, Colors.indigo[900]),
+//             //   style: fonts(width(context) * 0.045, FontWeight.w600, Colors.indigo[900]),
 //             // ),
 //           ),
 //           actions: [
@@ -371,8 +372,8 @@ class _HomeState extends StateMVC<Home> {
 //                 padding: EdgeInsets.only(right: 10),
 //                 child: IconButton(
 //                   onPressed: () {
-//                     // promotions(context, _hight, _width);
-//                     // partnerDetailsSummury(context, _hight, _width);
+//                     // promotions(context, height(context), width(context));
+//                     // partnerDetailsSummury(context, height(context), width(context));
 //                   },
 //                   icon: Icon(
 //                     Icons.local_offer_sharp,
@@ -381,9 +382,9 @@ class _HomeState extends StateMVC<Home> {
 //                 )),
 //           ],
 //           bottom: PreferredSize(
-//             preferredSize: Size.fromHeight(_hight * 0.09),
+//             preferredSize: Size.fromHeight(height(context) * 0.09),
 //             child: Container(
-//               height: _hight * 0.06,
+//               height: height(context) * 0.06,
 //               padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
 //               child: TabBar(
 //                   isScrollable: true,
@@ -394,7 +395,7 @@ class _HomeState extends StateMVC<Home> {
 //                       borderRadius: BorderRadius.circular(5),
 //                       color: Colors.indigo[900]),
 //                   labelStyle:
-//                       fonts(_width * 0.04, FontWeight.w600, Colors.white),
+//                       fonts(width(context) * 0.04, FontWeight.w600, Colors.white),
 //                   tabs: [
 //                     Tab(
 //                       icon: Center(

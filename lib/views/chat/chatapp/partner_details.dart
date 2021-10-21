@@ -7,6 +7,7 @@ import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
@@ -49,10 +50,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+  
 
     return Scaffold(
         key: _chatController.scaffoldkey,
@@ -78,23 +76,23 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
               pinned: true,
               snap: false,
               floating: true,
-              expandedHeight: _hight * 0.4,
+              expandedHeight: height(context) * 0.4,
               flexibleSpace: FlexibleSpaceBar(
                 stretchModes: <StretchMode>[
                   StretchMode.zoomBackground,
                   StretchMode.fadeTitle,
                 ],
-                // titlePadding: EdgeInsets.only(left: _width*0.15,bottom: _width*0.04),
+                // titlePadding: EdgeInsets.only(left: width(context)*0.15,bottom: width(context)*0.04),
                 title: TextWid(
                   text:
                       toBeginningOfSentenceCase(widget.profileDetails['name']),
-                  size: _width * 0.06,
+                  size: width(context) * 0.06,
                   color: Colors.grey[900],
                   weight: FontWeight.w600,
                 ),
                 centerTitle: false,
                 background: Container(
-                  width: _width * 1,
+                  width: width(context) * 1,
                   color: Colors.white,
                   child: !Uri.parse(
                               widget.profileDetails['partnerPic'].runtimeType ==
@@ -109,8 +107,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                             status: false,
                             bgColor: Colors.grey[100],
                             textColor: Colors.grey[900],
-                            textSize: _width * 0.25,
-                            size: _width * 0.25,
+                            textSize: width(context) * 0.25,
+                            size: width(context) * 0.25,
                             badge: false,
                           ),
                         )
@@ -129,63 +127,63 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                     color: Colors.white,
                   ),
                   Container(
-                    // height: _hight * 0.27,
+                    // height: height(context) * 0.27,
                     child: Column(
                       children: [
                         Container(
                             padding: EdgeInsets.only(
-                                left: _width * 0.03,
-                                top: _width * 0.03,
-                                bottom: _width * 0.03),
+                                left: width(context) * 0.03,
+                                top: width(context) * 0.03,
+                                bottom: width(context) * 0.03),
                             alignment: Alignment.bottomLeft,
                             child: TextWid(
                               text: 'About and phone number',
-                              size: _width * 0.055,
+                              size: width(context) * 0.055,
                               weight: FontWeight.w600,
                             )),
                         Container(
                             alignment: Alignment.bottomLeft,
                             padding: EdgeInsets.only(
-                              left: _width * 0.03,
-                              top: _width * 0.03,
+                              left: width(context) * 0.03,
+                              top: width(context) * 0.03,
                             ),
                             child: TextWid(
                               text: 'Spotmies Using From',
-                              size: _width * 0.05,
+                              size: width(context) * 0.05,
                               color: Colors.grey[700],
                               weight: FontWeight.w600,
                             )),
                         Container(
                             alignment: Alignment.bottomLeft,
                             padding: EdgeInsets.only(
-                              left: _width * 0.03,
-                              top: _width * 0.01,
+                              left: width(context) * 0.03,
+                              top: width(context) * 0.01,
                             ),
                             child: TextWid(
                               text: getDate(
                                   widget.profileDetails['join'].toString()),
-                              size: _width * 0.035,
+                              size: width(context) * 0.035,
                               color: Colors.grey[700],
                               weight: FontWeight.w600,
                             )),
                         SizedBox(
-                          height: _hight * 0.01,
+                          height: height(context) * 0.01,
                         ),
                         Divider(
-                          indent: _width * 0.04,
-                          endIndent: _width * 0.04,
+                          indent: width(context) * 0.04,
+                          endIndent: width(context) * 0.04,
                           thickness: 1,
                           color: Colors.grey[300],
                         ),
                         Container(
-                          // height: _hight * 0.10,
-                          padding: EdgeInsets.only(left: _width * 0.03),
+                          // height: height(context) * 0.10,
+                          padding: EdgeInsets.only(left: width(context) * 0.03),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextWid(
                                 text: 'Contact',
-                                size: _width * 0.05,
+                                size: width(context) * 0.05,
                                 color: Colors.grey[700],
                                 weight: FontWeight.w600,
                                 align: TextAlign.start,
@@ -194,10 +192,10 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                 child: Row(
                                   children: [
                                     Container(
-                                      width: _width * 0.45,
+                                      width: width(context) * 0.45,
                                       padding: EdgeInsets.only(
-                                        left: _width * 0.03,
-                                        top: _width * 0.01,
+                                        left: width(context) * 0.03,
+                                        top: width(context) * 0.01,
                                       ),
                                       child: Column(
                                         crossAxisAlignment:
@@ -217,7 +215,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                                             .toString()
                                                             .substring(0, 5) +
                                                         "*****",
-                                                size: _width * 0.04,
+                                                size: width(context) * 0.04,
                                                 color: Colors.grey[800],
                                                 weight: FontWeight.w600,
                                               )),
@@ -225,7 +223,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                       ),
                                     ),
                                     Container(
-                                      width: _width * 0.45,
+                                      width: width(context) * 0.45,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
@@ -270,9 +268,9 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                   ),
                   Container(
                     padding: EdgeInsets.only(
-                      left: _width * 0.07,
+                      left: width(context) * 0.07,
                     ),
-                    height: _hight * 0.1,
+                    height: height(context) * 0.1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -283,11 +281,11 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                               color: Colors.grey[900],
                             ),
                             SizedBox(
-                              width: _width * 0.07,
+                              width: width(context) * 0.07,
                             ),
                             TextWid(
                               text: 'Reveal My Profile',
-                              size: _width * 0.05,
+                              size: width(context) * 0.05,
                               color: Colors.grey[800],
                               weight: FontWeight.w600,
                             )
@@ -323,15 +321,15 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                     ),
                   ),
                   actionButton(
-                    _width,
-                    _hight,
+                    width(context),
+                    height(context),
                     "Available to Recieve Calls",
                     Colors.grey[900],
                     Icons.call,
                   ),
                   actionButton(
-                      _width,
-                      _hight,
+                      width(context),
+                      height(context),
                       "Block ${toBeginningOfSentenceCase(widget.profileDetails['name'])}",
                       Colors.redAccent,
                       Icons.block, onTap: () {
@@ -344,7 +342,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
 
                     _chatController.deleteOrBlockThisChat(widget.msgId);
                   }),
-                  actionButton(_width, _hight, "Delete Chat", Colors.redAccent,
+                  actionButton(width(context), height(context), "Delete Chat", Colors.redAccent,
                       Icons.delete_sweep_rounded, onTap: () {
                     log("delete");
                     _chatController.sendMessageHandler(
@@ -357,8 +355,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                         isChatDelete: true);
                   }),
                   actionButton(
-                      _width,
-                      _hight,
+                      width(context),
+                      height(context),
                       'Report on ' +
                           toBeginningOfSentenceCase(
                                   widget.profileDetails['name'])
@@ -375,7 +373,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                     height: 250.0,
                     child: Center(
                         child: Container(
-                            height: _hight * 0.15,
+                            height: height(context) * 0.15,
                             child: SvgPicture.asset('assets/like.svg'))),
                   ),
                 ],
@@ -386,7 +384,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
   }
 
   Column actionButton(
-      double _width, double _hight, String text, Color color, IconData icon,
+      double width(context), double height(context), String text, Color color, IconData icon,
       {Callback onTap}) {
     Divider divider = Divider(
       thickness: 10,
@@ -396,8 +394,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
       children: [
         divider,
         Container(
-          padding: EdgeInsets.only(left: _width * 0.07),
-          height: _hight * 0.1,
+          padding: EdgeInsets.only(left: width(context) * 0.07),
+          height: height(context) * 0.1,
           child: InkWell(
             onTap: () {
               if (onTap != null) onTap();
@@ -409,13 +407,13 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                   color: color,
                 ),
                 SizedBox(
-                  width: _width * 0.07,
+                  width: width(context) * 0.07,
                 ),
                 TextWid(
                   text: text,
                   // text: 'Block ' +
                   //     toBeginningOfSentenceCase(widget.profileDetails['name']),
-                  size: _width * 0.05,
+                  size: width(context) * 0.05,
                   color: color,
                   weight: FontWeight.w600,
                 )

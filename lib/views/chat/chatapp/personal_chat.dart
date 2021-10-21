@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/media_player.dart';
@@ -76,19 +77,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     _chatController.sendMessageHandler(widget.msgId, value,
         sender: sender, action: action);
   }
-
-  // disableChat() {
-  //   print("disable chat");
-  //   _chatController.chatStreamSocket(_chatController.targetChat,
-  //       typeOfAction: "disable");
-  // }
-
-  // deleteChat() {
-  //   print("delete chat");
-  //   _chatController.chatStreamSocket(_chatController.targetChat,
-  //       typeOfAction: "delete");
-  //   Navigator.pop(context, false);
-  // }
 
   revealMyProfile(bool state) {
     print("reveal profile $state");
@@ -265,10 +253,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return Consumer<ChatProvider>(builder: (context, data, child) {
       _chatController.currentMsgId = widget.msgId;
       _chatController.chatList = data.getChatList2();
@@ -289,7 +277,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         children: [
           Scaffold(
               key: _chatController.scaffoldkey,
-              appBar: _buildAppBar(context, _hight, _width,
+              appBar: _buildAppBar(context, height(context), width(context),
                   showConfirmation: showConfirmation, onClickYes: () {
                 acceptRejectPartner("accept");
               }, onClickNo: () {
@@ -380,9 +368,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                         children: [
                                           Container(
                                             constraints: BoxConstraints(
-                                                minHeight: _hight * 0.05,
+                                                minHeight: height(context) * 0.05,
                                                 minWidth: 30,
-                                                maxWidth: _width * 0.50),
+                                                maxWidth: width(context) * 0.50),
                                             decoration: BoxDecoration(
                                                 color: messageColorTheme(
                                                     sender.toString())[0],
@@ -416,8 +404,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                       type,
                                                       message,
                                                       sender,
-                                                      _hight,
-                                                      _width,
+                                                      height(context),
+                                                      width(context),
                                                       _chatController,
                                                       context),
                                                 ),
@@ -429,7 +417,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                   child: TextWid(
                                                     text: getTime(
                                                         rawMsgData['time']),
-                                                    size: _width * 0.03,
+                                                    size: width(context) * 0.03,
                                                     color: sender == "user"
                                                         ? Colors.grey[50]
                                                         : Colors.grey[500],
@@ -445,7 +433,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                             visible:
                                                 index == 0 && sender == "user",
                                             child: readReciept(
-                                                _width,
+                                                width(context),
                                                 _chatController
                                                     .targetChat['uState']),
                                           )
@@ -469,8 +457,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               ),
               // }),
               floatingActionButton: Container(
-                height: _hight * 0.2,
-                padding: EdgeInsets.only(bottom: _hight * 0.1),
+                height: height(context) * 0.2,
+                padding: EdgeInsets.only(bottom: height(context) * 0.1),
                 child: Consumer<ChatProvider>(
                   builder: (context, data, child) {
                     return data.getFloat()
@@ -487,7 +475,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                             child: Icon(
                               Icons.keyboard_arrow_down,
                               color: Colors.blue[900],
-                              size: _width * 0.07,
+                              size: width(context) * 0.07,
                             ),
                           )
                         : Container();
@@ -506,7 +494,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     });
   }
 
-  Container readReciept(double _width, status) {
+  Container readReciept(double width(context), status) {
     getIcon() {
       switch (status) {
         case 0:
@@ -532,7 +520,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           // Icons.done_all,
           // Icons.watch_later,
           color: status == 3 ? Colors.blue : Colors.grey[400],
-          size: _width * 0.05,
+          size: width(context) * 0.05,
         ));
   }
 

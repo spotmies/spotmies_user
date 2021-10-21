@@ -5,11 +5,11 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/login/loginpage.dart';
 
-Future signOut(BuildContext context) {
-  final hight = MediaQuery.of(context).size.height -
-      MediaQuery.of(context).padding.top -
-      kToolbarHeight;
-  final width = MediaQuery.of(context).size.width;
+Future signOut(BuildContext context, hight, width) {
+  // final hight = MediaQuery.of(context).size.height -
+  //     MediaQuery.of(context).padding.top -
+  //     kToolbarHeight;
+  // final width = MediaQuery.of(context).size.width;
   return showModalBottomSheet(
       context: context,
       elevation: 22,
