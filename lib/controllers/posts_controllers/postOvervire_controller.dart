@@ -346,15 +346,41 @@ class PostOverViewController extends ControllerMVC {
     return pickedDateTime.millisecondsSinceEpoch.toString();
   }
 
-  rescheduleServiceOrCancel(orderState, orderId, {isReschedule = true}) async {
+  static const dummyLocation = {"lat": 0.00, "log": 0.00};
+  rescheduleServiceOrCancel(orderState, orderId,
+      {isReschedule = true,
+      Map<String, double> updatedCoordinate = dummyLocation,
+      dynamic updatedAddress,
+      String action = "UPDATE_SCHEDULE"}) async {
     Map<String, dynamic> body = {
       "schedule": getDateAndTime(),
       "orderState": orderState > 6 ? "7" : "2"
     };
     Map<String, String> cancelBody = {"orderState": "3"};
+    Map<String, dynamic> updateLocationBody = {
+      "loc.0": updatedCoordinate['lat'].toString(),
+      "loc.1": updatedCoordinate['log'].toString(),
+      "address": jsonEncode(updatedAddress).toString()
+    };
+    log("new loc $updateLocationBody");
+
+    Map<String, dynamic> getBody() {
+      switch (action) {
+        case "UPDATE_SCHEDULE":
+          return body;
+        case "UPDATE_LOCATION":
+          return updateLocationBody;
+        case "CANCEL_ORDER":
+          return cancelBody;
+
+          break;
+        default:
+          return body;
+      }
+    }
+
     ordersProvider.setOrderViewLoader(true);
-    dynamic response = await updateOrder(
-        body: isReschedule ? body : cancelBody, ordId: orderId);
+    dynamic response = await updateOrder(body: getBody(), ordId: orderId);
     ordersProvider.setOrderViewLoader(false);
     if (response != null) {
       ordersProvider.setOrderViewLoader(true);
@@ -419,6 +445,8 @@ class PostOverViewController extends ControllerMVC {
 }
 
 updateOrder({body, ordId}) async {
+  log("update content $body");
+  print(body);
   dynamic response =
       await Server().editMethod(API.editOrder + ordId.toString(), body);
   if (response.statusCode == 200 || response.statusCode == 204) {

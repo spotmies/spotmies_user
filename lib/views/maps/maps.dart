@@ -19,13 +19,15 @@ class Maps extends StatefulWidget {
   final bool isSearch;
   final Function onSave;
   final bool popBackTwice;
+  final String actionLabel;
   // final AdController addresscontroller;
   Maps(
       {this.coordinates,
       this.isNavigate = true,
       this.isSearch = true,
       this.onSave,
-      this.popBackTwice = false
+      this.popBackTwice = false,
+      this.actionLabel = "save"
       // this.addresscontroller
       });
   @override
@@ -167,7 +169,8 @@ class _MapsState extends State<Maps> {
                   },
                   child: Container(
                     padding: EdgeInsets.only(
-                        left: width(context) * 0.05, right: width(context) * 0.03),
+                        left: width(context) * 0.05,
+                        right: width(context) * 0.03),
                     height: height(context) * 0.07,
                     width: width(context) * 0.9,
                     decoration: BoxDecoration(
@@ -337,7 +340,7 @@ class _MapsState extends State<Maps> {
                               // Navigator.of(context)
                               //     .popUntil(ModalRoute.withName("/postad"));
                             },
-                            buttonName: 'Save',
+                            buttonName: widget.actionLabel,
                             textColor: Colors.white,
                             borderRadius: 15.0,
                             textSize: width * 0.04,

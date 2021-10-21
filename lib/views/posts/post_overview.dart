@@ -189,7 +189,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               bottom: PreferredSize(
                   child: d['orderState'] < 9 && d['orderState'] != 3
                       ? Container(
-                          margin: EdgeInsets.only(bottom: width(context) * 0.01),
+                          margin:
+                              EdgeInsets.only(bottom: width(context) * 0.01),
                           height: height(context) * 0.06,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -199,7 +200,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                   _postOverViewController
                                       .rescheduleServiceOrCancel(
                                           d['orderState'], d['ordId'],
-                                          isReschedule: false);
+                                          action: "CANCEL_ORDER");
                                 },
                                 height: height(context) * 0.05,
                                 minWidth: width(context) * 0.4,
@@ -226,7 +227,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           .getDateAndTime()) {
                                     await _postOverViewController
                                         .rescheduleServiceOrCancel(
-                                            d['orderState'], d['ordId']);
+                                            d['orderState'], d['ordId'],
+                                            action: "UPDATE_SCHEDULE");
                                   }
                                 },
                                 height: height(context) * 0.05,
@@ -371,10 +373,26 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                               builder: (context) => Maps(
                                                     coordinates: coordiantes,
                                                     isSearch: false,
-                                                    isNavigate: true,
+                                                    isNavigate: false,
+                                                    actionLabel:
+                                                        "Update Location",
+                                                    onSave: (cords, address) {
+                                                      log("$cords $address");
+                                                      Navigator.pop(context);
+                                                      _postOverViewController
+                                                          .rescheduleServiceOrCancel(
+                                                              d['orderState'],
+                                                              d['ordId'],
+                                                              action:
+                                                                  "UPDATE_LOCATION",
+                                                              updatedAddress:
+                                                                  address,
+                                                              updatedCoordinate:
+                                                                  cords);
+                                                    },
                                                   )));
                                     },
-                                    icon: Icon(Icons.near_me)))
+                                    icon: Icon(Icons.edit_location_outlined)))
                           ],
                         )
                       ],
