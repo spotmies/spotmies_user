@@ -70,6 +70,8 @@ dependencies:
   firebase_messaging: ^10.0.7
   rxdart:
   flutter_native_timezone: ^2.0.0
+  awesome_notifications: ^0.0.6+10
+
 
   
 
@@ -138,6 +140,7 @@ flutter:
     - assets/fail.json
     - assets/login.svg
     - assets/logo.png
+    - assets/waiting.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

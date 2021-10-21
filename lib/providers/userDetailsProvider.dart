@@ -9,6 +9,7 @@ class UserDetailsProvider extends ChangeNotifier {
   final controller = TestController();
   dynamic user;
   bool loader = true;
+  bool uploadLocader = true;
 
   bool get getLoader => loader;
   void setLoader(state) {

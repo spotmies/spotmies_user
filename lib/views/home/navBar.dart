@@ -138,7 +138,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       log(token.toString());
     });
     //notifications
-    LocalNotificationService.initialize(context);
+    awesomeInitilize();
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message.data["route"];
       log(routefromMessage);
@@ -150,14 +150,14 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       if (message.notification != null) {
         print(message.notification.title);
         print(message.notification.body);
-        LocalNotificationService.display(message);
+        displayAwesomeNotification(message, context);
       }
     });
     // when app background but in recent
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       final routefromMessage = message.data["route"];
       log(routefromMessage);
-      LocalNotificationService.display(message);
+      displayAwesomeNotification(message, context);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
     });

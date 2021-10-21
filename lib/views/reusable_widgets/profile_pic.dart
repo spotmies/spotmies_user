@@ -156,8 +156,8 @@ class ProfilePic extends StatelessWidget {
 
   Positioned changeLable(double _width) {
     return Positioned(
-        left: 35,
-        bottom: 10,
+        left: _width * 0.065,
+        bottom: _width * 0.04,
         child: Container(
           child: TextWid(
             text: onClickLabel ?? "change",
