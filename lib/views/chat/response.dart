@@ -10,7 +10,6 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
-import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';

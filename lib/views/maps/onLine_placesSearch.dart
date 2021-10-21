@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/placesAPI.dart';
-
-import 'package:spotmies/models/placesModel.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
@@ -63,10 +61,6 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
           return SafeArea(
             child: Column(
               children: [
-                // LinearProgressIndicator(
-                //   color: Colors.indigo[900],
-                //   backgroundColor: Colors.grey[100],
-                // ),
                 buildSearch(),
                 data.locationsLoader
                     ? Container(
@@ -144,7 +138,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   }
 
   Future searchBook(String query) async => debounce(() async {
-        final geoLocations = await PlacesApi.getLoc(query);
+        // final geoLocations = await PlacesApi.getLoc(query);
 
         if (!mounted) return;
 

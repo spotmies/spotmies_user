@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
