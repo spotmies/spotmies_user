@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/placesAPI.dart';
 
 import 'package:spotmies/models/placesModel.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/maps/maps.dart';
@@ -15,13 +17,15 @@ class OnlinePlaceSearch extends StatefulWidget {
 }
 
 class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
-  List<Places> geoLocations = [];
+  // List<Places> geoLocations = [];
   String query = '';
   Timer debouncer;
+  UniversalProvider universalProvider;
 
   @override
   void initState() {
     super.initState();
+    universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
     init();
   }
@@ -44,102 +48,121 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   }
 
   Future init() async {
-    final geoLocations = await PlacesApi.getLoc(query);
-
-    setState(() => this.geoLocations = geoLocations);
+    if (universalProvider.geoLocations.length > 0) return;
+    // var geoLocationss = await PlacesApi.getLoc(query);
+    universalProvider.setLocationsLoader(true);
+    List geoLocationss = await PlacesApi.getAllLocations();
+    universalProvider.setLocationsLoader(false);
+    universalProvider.setGeoLocations(geoLocationss);
+    // setState(() => this.geoLocations = geoLocations);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              buildSearch(),
-              geoLocations.length == 0
-                  ? Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            color: Colors.indigo[900],
-                            backgroundColor: Colors.grey[100],
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          TextWidget(
-                            text: 'Please Wait Data is Fetching ....',
-                          )
-                        ],
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: geoLocations.length,
-                        itemBuilder: (context, index) {
-                          final book = geoLocations[index];
+        body: Consumer<UniversalProvider>(builder: (context, data, child) {
+          return SafeArea(
+            child: Column(
+              children: [
+                // LinearProgressIndicator(
+                //   color: Colors.indigo[900],
+                //   backgroundColor: Colors.grey[100],
+                // ),
+                buildSearch(),
+                data.locationsLoader
+                    ? Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              color: Colors.indigo[900],
+                              backgroundColor: Colors.grey[100],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            TextWidget(
+                              text: 'Please Wait Data is Fetching ....',
+                            )
+                          ],
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: data.searchLocations.length,
+                          itemBuilder: (context, index) {
+                            final book = data.searchLocations[index];
 
-                          //return
+                            //return
 
-                          if (index == 0) {
-                            return ListTile(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Maps(
-                                                isNavigate: false,
-                                              )));
-                                },
-                                leading: CircleAvatar(
-                                    backgroundColor: Colors.grey[200],
-                                    child: Icon(Icons.gps_fixed)),
-                                title: TextWidget(
-                                  text: 'Your Location',
-                                  size: 15,
-                                  weight: FontWeight.w700,
-                                ),
-                                trailing: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.directions),
-                                ));
-                          } else {
-                            return buildBook(book);
-                          }
-                        },
+                            if (index == 0) {
+                              return ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Maps(
+                                                  isNavigate: false,
+                                                )));
+                                  },
+                                  leading: CircleAvatar(
+                                      backgroundColor: Colors.grey[200],
+                                      child: Icon(Icons.gps_fixed)),
+                                  title: TextWidget(
+                                    text: 'Your Location',
+                                    size: 15,
+                                    weight: FontWeight.w700,
+                                  ),
+                                  trailing: IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.directions),
+                                  ));
+                            } else {
+                              return buildBook(book);
+                            }
+                          },
+                        ),
                       ),
-                    ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       );
 
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: 'Find Place',
         icon: Icons.location_searching,
-        onChanged: searchBook,
+        onChanged: searchLocations,
       );
+  searchLocations(String query) {
+    if (query.length > 3) {
+      dynamic searches = getArea(query, universalProvider.geoLocations);
+      universalProvider.setSearchLocations(searches);
+    } else if (query.length == 0) {
+      universalProvider.showAllLocation();
+    }
+  }
 
   Future searchBook(String query) async => debounce(() async {
         final geoLocations = await PlacesApi.getLoc(query);
 
         if (!mounted) return;
 
-        setState(() {
-          this.query = query;
-          this.geoLocations = geoLocations;
-        });
+        // setState(() {
+        //   this.query = query;
+        //   this.geoLocations = geoLocations;
+        // });
       });
 
-  Widget buildBook(Places geo) => ListTile(
+  Widget buildBook(dynamic geo) => ListTile(
       onTap: () {
-        log(geo.coordinates.toString());
+        log(geo['coordinates'].toString());
+
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => Maps(
-                      coordinates: geo.coordinates,
+                      coordinates: geo['coordinates'],
                       isNavigate: false,
                       isSearch: true,
                     )));
@@ -152,12 +175,12 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
         ),
       ),
       title: TextWidget(
-        text: geo.subLocality,
+        text: geo['subLocality'],
         size: 15,
         weight: FontWeight.w600,
       ),
       subtitle: TextWidget(
-        text: geo.addressLine,
+        text: geo['addressLine'],
         size: 12,
       ),
       trailing: IconButton(

@@ -16,6 +16,7 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
 import 'package:spotmies/models/admodel.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/addressExtractor.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/uploadFilesToCloud.dart';
@@ -171,23 +172,9 @@ class AdController extends ControllerMVC {
         : Coordinates(lat, long);
     var addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    log("address ${addresses.first}");
-
-    Map<String, String> val = {
-      "subLocality": "${addresses.first.subLocality}",
-      "locality": "${addresses.first.locality}",
-      "latitude": "${addresses.first.coordinates.latitude}",
-      "logitude": "${addresses.first.coordinates.longitude}",
-      "addressLine": "${addresses.first.addressLine}",
-      "subAdminArea": "${addresses.first.subAdminArea}",
-      "postalCode": "${addresses.first.postalCode}",
-      "adminArea": "${addresses.first.adminArea}",
-      "subThoroughfare": "${addresses.first.subThoroughfare}",
-      "featureName": "${addresses.first.featureName}",
-      "thoroughfare": "${addresses.first.thoroughfare}",
-    };
+    log("address ${addresses.first.subLocality}");
     setState(() {
-      fullAddress = val;
+      fullAddress = addressExtractor(addresses.first);
     });
   }
 
