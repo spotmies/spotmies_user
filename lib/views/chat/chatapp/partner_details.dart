@@ -50,8 +50,6 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
 
   @override
   Widget build(BuildContext context) {
-  
-
     return Scaffold(
         key: _chatController.scaffoldkey,
         body: CustomScrollView(
@@ -342,8 +340,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
 
                     _chatController.deleteOrBlockThisChat(widget.msgId);
                   }),
-                  actionButton(width(context), height(context), "Delete Chat", Colors.redAccent,
-                      Icons.delete_sweep_rounded, onTap: () {
+                  actionButton(width(context), height(context), "Delete Chat",
+                      Colors.redAccent, Icons.delete_sweep_rounded, onTap: () {
                     log("delete");
                     _chatController.sendMessageHandler(
                         widget.msgId, "User deleted this chat",
@@ -384,7 +382,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
   }
 
   Column actionButton(
-      double width(context), double height(context), String text, Color color, IconData icon,
+      double width, double height, String text, Color color, IconData icon,
       {Callback onTap}) {
     Divider divider = Divider(
       thickness: 10,
@@ -394,8 +392,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
       children: [
         divider,
         Container(
-          padding: EdgeInsets.only(left: width(context) * 0.07),
-          height: height(context) * 0.1,
+          padding: EdgeInsets.only(left: width * 0.07),
+          height: height * 0.1,
           child: InkWell(
             onTap: () {
               if (onTap != null) onTap();
@@ -407,13 +405,13 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                   color: color,
                 ),
                 SizedBox(
-                  width: width(context) * 0.07,
+                  width: width * 0.07,
                 ),
                 TextWid(
                   text: text,
                   // text: 'Block ' +
                   //     toBeginningOfSentenceCase(widget.profileDetails['name']),
-                  size: width(context) * 0.05,
+                  size: width * 0.05,
                   color: color,
                   weight: FontWeight.w600,
                 )

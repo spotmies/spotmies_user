@@ -368,9 +368,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                         children: [
                                           Container(
                                             constraints: BoxConstraints(
-                                                minHeight: height(context) * 0.05,
+                                                minHeight:
+                                                    height(context) * 0.05,
                                                 minWidth: 30,
-                                                maxWidth: width(context) * 0.50),
+                                                maxWidth:
+                                                    width(context) * 0.50),
                                             decoration: BoxDecoration(
                                                 color: messageColorTheme(
                                                     sender.toString())[0],
@@ -494,7 +496,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     });
   }
 
-  Container readReciept(double width(context), status) {
+  Container readReciept(double width, int status) {
     getIcon() {
       switch (status) {
         case 0:
@@ -520,7 +522,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           // Icons.done_all,
           // Icons.watch_later,
           color: status == 3 ? Colors.blue : Colors.grey[400],
-          size: width(context) * 0.05,
+          size: width * 0.05,
         ));
   }
 
