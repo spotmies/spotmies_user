@@ -114,6 +114,7 @@ class _ProfileState extends StateMVC<Profile> {
 
           if (data.getLoader || u == null)
             return Center(child: profileShimmer(context));
+
           // return TextButton(
           //     onPressed: () {
           //       signOut(context);
@@ -123,7 +124,8 @@ class _ProfileState extends StateMVC<Profile> {
             children: [
               profilePic(context, u['pic'], u['name'], onClick: () {
                 editDetails(context, _width, _hight, profileProvider, editpic,
-                    _profileController, details: u);
+                    _profileController,
+                    details: u);
               }),
               Container(
                 height: _hight * 0.08,

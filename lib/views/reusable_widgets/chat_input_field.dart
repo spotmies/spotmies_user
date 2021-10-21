@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 // import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';

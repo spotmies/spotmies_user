@@ -20,12 +20,13 @@ import 'package:spotmies/utilities/notifications.dart';
 Future<void> backGroundHandler(RemoteMessage message) async {
   // print(message.data.toString());
   // print(message.notification.title);
-  LocalNotificationService.display(message);
+  displayAwesomeNotificationBackground(message);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  awesomeInitilize();
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onBackgroundMessage(backGroundHandler);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

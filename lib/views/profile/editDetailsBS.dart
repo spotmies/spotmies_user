@@ -1,16 +1,18 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spotmies/controllers/profile_controllers/profile_controller.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
-import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textFormFieldWidget.dart';
 import 'package:spotmies/utilities/uploadFilesToCloud.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 Future editDetails(
     BuildContext context,
@@ -30,7 +32,7 @@ Future editDetails(
   var nameformkey = GlobalKey<FormState>();
   var emailformkey = GlobalKey<FormState>();
   var mobileformkey = GlobalKey<FormState>();
-  Future<void> submitChange() async {
+  Future<void> submitChange(BuildContext context) async {
     profileProvider.setLoader(true);
     Navigator.pop(context);
     String profilePicLink =
@@ -78,17 +80,17 @@ Future editDetails(
       ),
       builder: (BuildContext context) {
         return Container(
-          // padding: EdgeInsets.only(top: _width * 0.04),
-          height: _hight * 0.9,
+          padding: EdgeInsets.only(top: _hight * 0.04),
+          height: _hight * 0.76,
           child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setStatee) {
-            return ListView(
+            return Column(
               children: [
                 Center(
                   child: ProfilePic(
                     profile: editpic,
                     name: details['name'],
-                    size: _width * 0.22,
+                    size: _width * 0.18,
                     onClick: () {
                       pickImage(setStatee);
                     },
@@ -96,130 +98,157 @@ Future editDetails(
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 20, left: 20),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Edit Profile',
-                    style:
-                        fonts(_width * 0.05, FontWeight.w600, Colors.grey[900]),
-                  ),
-                ),
+                    margin: EdgeInsets.only(top: 20, left: 20),
+                    alignment: Alignment.centerLeft,
+                    child: TextWid(
+                        text: 'Edit Profile',
+                        size: _width * 0.05,
+                        weight: FontWeight.w600,
+                        color: AppColors.dark)),
                 Container(
-                    height: _hight * 0.55,
+                    height: _hight * 0.4,
                     padding: EdgeInsets.only(top: 20),
                     child: ListView(children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(0),
-                            bottomLeft: Radius.circular(0),
-                            topLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          ),
-                          child: Form(
-                              key: nameformkey,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(15),
-                                    child: TextFieldWidget(
-                                      controller: nameController,
-                                      hint: 'Enter your name Here',
-                                      label: "Name",
-                                      enableBorderColor: Colors.grey,
-                                      focusBorderColor: Colors.indigo[900],
-                                      enableBorderRadius: 15,
-                                      focusBorderRadius: 15,
-                                      errorBorderRadius: 15,
-                                      focusErrorRadius: 15,
-                                      validateMsg: 'Enter Valid Name',
-                                      maxLines: 1,
-                                      postIcon: Icon(Icons.edit),
-                                      postIconColor: Colors.indigo[900],
-                                    ),
+                      Form(
+                          key: nameformkey,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: _hight * 0.085,
+                                padding: EdgeInsets.only(
+                                    left: 15, right: 15, top: 5, bottom: 10),
+                                child: TextFieldWidget(
+                                  controller: nameController,
+                                  hint: 'Enter your name Here',
+                                  label: "Name",
+                                  enableBorderColor: AppColors.grey,
+                                  focusBorderColor: AppColors.primaryColorLite,
+                                  enableBorderRadius: 15,
+                                  focusBorderRadius: 15,
+                                  errorBorderRadius: 15,
+                                  focusErrorRadius: 15,
+                                  validateMsg: 'Enter Valid Name',
+                                  maxLines: 1,
+                                  postIcon: Icon(
+                                    Icons.edit,
+                                    size: _width * 0.045,
+                                    color: AppColors.dark,
                                   ),
-                                ],
-                              ))),
-                      ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(0),
-                            bottomLeft: Radius.circular(0),
-                            topLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          ),
-                          child: Form(
-                              key: emailformkey,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(15),
-                                    child: TextFieldWidget(
-                                      controller: emailController,
-                                      hint: 'Enter your Email Here',
-                                      label: "Email",
-                                      enableBorderColor: Colors.grey,
-                                      focusBorderColor: Colors.indigo[900],
-                                      enableBorderRadius: 15,
-                                      focusBorderRadius: 15,
-                                      errorBorderRadius: 15,
-                                      focusErrorRadius: 15,
-                                      validateMsg: 'Enter Valid Name',
-                                      maxLines: 1,
-                                      postIcon: Icon(Icons.email_rounded),
-                                      postIconColor: Colors.indigo[900],
-                                    ),
+                                  postIconColor: AppColors.primaryColorLite,
+                                ),
+                              ),
+                            ],
+                          )),
+                      Form(
+                          key: emailformkey,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: _hight * 0.085,
+                                padding: EdgeInsets.only(
+                                    left: 15, right: 15, top: 5, bottom: 10),
+                                child: TextFieldWidget(
+                                  controller: emailController,
+                                  hint: 'Enter your Email Here',
+                                  label: "Email",
+                                  enableBorderColor: AppColors.grey,
+                                  focusBorderColor: AppColors.primaryColorLite,
+                                  enableBorderRadius: 15,
+                                  focusBorderRadius: 15,
+                                  errorBorderRadius: 15,
+                                  focusErrorRadius: 15,
+                                  validateMsg: 'Enter Valid Name',
+                                  maxLines: 1,
+                                  postIcon: Icon(
+                                    Icons.email_rounded,
+                                    size: _width * 0.045,
+                                    color: AppColors.dark,
                                   ),
-                                ],
-                              ))),
-                      ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(0),
-                            bottomLeft: Radius.circular(0),
-                            topLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          ),
-                          child: Form(
-                              key: mobileformkey,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(15),
-                                    child: TextFieldWidget(
-                                      maxLength: 10,
-                                      formatter: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9]')),
-                                      ],
-                                      controller: mobileNoController,
-                                      hint: 'Alternative',
-                                      enableBorderColor: Colors.grey,
-                                      focusBorderColor: Colors.indigo[900],
-                                      enableBorderRadius: 15,
-                                      focusBorderRadius: 15,
-                                      errorBorderRadius: 15,
-                                      focusErrorRadius: 15,
-                                      validateMsg: 'Enter Valid Number',
-                                      maxLines: 1,
-                                      label: "Alternative Number",
-                                      postIcon: Icon(Icons.phone),
-                                      postIconColor: Colors.indigo[900],
-                                    ),
+                                  postIconColor: AppColors.primaryColorLite,
+                                ),
+                              ),
+                            ],
+                          )),
+                      Form(
+                          key: mobileformkey,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: _hight * 0.085,
+                                padding: EdgeInsets.only(
+                                    left: 15, right: 15, top: 5, bottom: 10),
+                                child: TextFieldWidget(
+                                  maxLength: 10,
+                                  formatter: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]')),
+                                  ],
+                                  controller: mobileNoController,
+                                  hint: 'Alternative',
+                                  enableBorderColor: AppColors.grey,
+                                  focusBorderColor: AppColors.primaryColorLite,
+                                  enableBorderRadius: 15,
+                                  focusBorderRadius: 15,
+                                  errorBorderRadius: 15,
+                                  focusErrorRadius: 15,
+                                  validateMsg: 'Enter Valid Number',
+                                  maxLines: 1,
+                                  label: "Alternative Number",
+                                  postIcon: Icon(
+                                    Icons.phone,
+                                    size: _width * 0.045,
+                                    color: AppColors.dark,
                                   ),
-                                ],
-                              ))),
+                                  postIconColor: AppColors.primaryColorLite,
+                                ),
+                              ),
+                            ],
+                          )),
                     ])),
                 Container(
                   padding: EdgeInsets.all(5),
-                  child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900],
-                    minWidth: _width,
-                    height: _hight * 0.06,
-                    textColor: Colors.grey[50],
-                    buttonName: 'Save',
-                    textSize: _width * 0.05,
-                    textStyle: FontWeight.w600,
-                    borderRadius: 5.0,
-                    borderSideColor: Colors.indigo[900],
-                    onClick: submitChange,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButtonWidget(
+                        bgColor: AppColors.secondaryColorLite,
+                        minWidth: _width * 0.35,
+                        height: _hight * 0.06,
+                        textColor: AppColors.primaryColorLite,
+                        buttonName: 'Discard',
+                        textSize: _width * 0.035,
+                        textStyle: FontWeight.w600,
+                        borderRadius: 15.0,
+                        borderSideColor: AppColors.secondaryColorLite,
+                        leadingIcon: Icon(
+                          Icons.close,
+                          color: AppColors.primaryColorLite,
+                          size: _width * 0.04,
+                        ),
+                        onClick: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ElevatedButtonWidget(
+                        bgColor: AppColors.primaryColorLite,
+                        minWidth: _width * 0.55,
+                        height: _hight * 0.06,
+                        textColor: AppColors.white,
+                        buttonName: 'Change & Save',
+                        textSize: _width * 0.035,
+                        textStyle: FontWeight.w600,
+                        borderRadius: 15.0,
+                        borderSideColor: AppColors.primaryColorLite,
+                        trailingIcon: Icon(
+                          Icons.published_with_changes,
+                          color: AppColors.white,
+                          size: _width * 0.04,
+                        ),
+                        onClick: () {
+                          submitChange(context);
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],
