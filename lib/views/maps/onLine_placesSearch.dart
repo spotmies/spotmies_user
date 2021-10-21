@@ -8,10 +8,13 @@ import 'package:spotmies/apiCalls/placesAPI.dart';
 import 'package:spotmies/models/placesModel.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/maps/maps.dart';
 
 class OnlinePlaceSearch extends StatefulWidget {
+  final Function onSave;
+  OnlinePlaceSearch({this.onSave});
   @override
   OnlinePlaceSearchState createState() => OnlinePlaceSearchState();
 }
@@ -102,6 +105,15 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                         MaterialPageRoute(
                                             builder: (context) => Maps(
                                                   isNavigate: false,
+                                                  popBackTwice: true,
+                                                  onSave: (cords, fullAddress) {
+                                                    if (widget.onSave == null)
+                                                      return snackbar(context,
+                                                          "something went wrong");
+                                                    widget.onSave(
+                                                        cords, fullAddress);
+                                                    Navigator.pop(context);
+                                                  },
                                                 )));
                                   },
                                   leading: CircleAvatar(
@@ -165,6 +177,13 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                       coordinates: geo['coordinates'],
                       isNavigate: false,
                       isSearch: true,
+                      popBackTwice: true,
+                      onSave: (cords, fullAddress) {
+                        if (widget.onSave == null)
+                          return snackbar(context, "something went wrong");
+                        widget.onSave(cords, fullAddress);
+                        Navigator.pop(context);
+                      },
                     )));
       },
       leading: CircleAvatar(

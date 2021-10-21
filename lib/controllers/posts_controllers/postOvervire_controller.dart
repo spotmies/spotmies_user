@@ -79,9 +79,7 @@ class PostOverViewController extends ControllerMVC {
         }
         if (field == 'location') {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Maps(
-              ordId: ordId,
-            ),
+            builder: (context) => Maps(),
           ));
         }
       },

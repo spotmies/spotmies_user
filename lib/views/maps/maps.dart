@@ -6,36 +6,40 @@ import 'package:flutter/rendering.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:spotmies/utilities/addressExtractor.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Maps extends StatefulWidget {
-  final String ordId;
   final Map coordinates;
-  final String phoneNumber;
   final bool isNavigate;
   final bool isSearch;
+  final Function onSave;
+  final bool popBackTwice;
   // final AdController addresscontroller;
-  Maps({
-    this.ordId,
-    this.coordinates,
-    this.phoneNumber,
-    this.isNavigate = true,
-    this.isSearch = true,
-    // this.addresscontroller
-  });
+  Maps(
+      {this.coordinates,
+      this.isNavigate = true,
+      this.isSearch = true,
+      this.onSave,
+      this.popBackTwice = false
+      // this.addresscontroller
+      });
   @override
-  _MapsState createState() => _MapsState(ordId, coordinates);
+  _MapsState createState() => _MapsState(coordinates);
 }
 
 class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
-  String ordId;
+
   Map coordinates;
-  _MapsState(this.ordId, this.coordinates);
+  _MapsState(this.coordinates);
   var formkey = GlobalKey<FormState>();
   var scaffoldkey = GlobalKey<ScaffoldState>();
   GoogleMapController googleMapController;
+  Map<String, double> generatedCoordinates = {"lat": 0.00, "log": 0.00};
   Position position;
   double lat;
   double long;
@@ -212,6 +216,8 @@ class _MapsState extends State<Maps> {
   ) {
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    generatedCoordinates['lat'] = lat;
+    generatedCoordinates['log'] = long;
     showModalBottomSheet(
         context: context,
         elevation: 22,
@@ -284,12 +290,14 @@ class _MapsState extends State<Maps> {
                             height: hight * 0.05,
                             bgColor: Colors.indigo[900],
                             onClick: () async {
-                              // try {
-                              //   launch(
-                              //       'https://www.google.com/maps/search/?api=1&query=$lat,$long');
-                              // } catch (e) {}
+                              try {
+                                launch(
+                                    'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                              } catch (e) {
+                                snackbar(context, "something went worng");
+                              }
                             },
-                            buttonName: 'Change',
+                            buttonName: 'Navigate',
                             textColor: Colors.white,
                             borderRadius: 15.0,
                             textSize: width * 0.04,
@@ -311,25 +319,16 @@ class _MapsState extends State<Maps> {
                               var addresses = await Geocoder.local
                                   .findAddressesFromCoordinates(coordinates);
 
-                              Map<String, String> val = {
-                                "subLocality": "${addresses.first.subLocality}",
-                                "locality": "${addresses.first.locality}",
-                                "latitude":
-                                    "${addresses.first.coordinates.latitude}",
-                                "logitude":
-                                    "${addresses.first.coordinates.longitude}",
-                                "addressLine": "${addresses.first.addressLine}",
-                                "subAdminArea":
-                                    "${addresses.first.subAdminArea}",
-                                "postalCode": "${addresses.first.postalCode}",
-                                "adminArea": "${addresses.first.adminArea}",
-                                "subThoroughfare":
-                                    "${addresses.first.subThoroughfare}",
-                                "featureName": "${addresses.first.featureName}",
-                                "thoroughfare":
-                                    "${addresses.first.thoroughfare}",
-                              };
-                              log(val.toString());
+                              Map<String, String> generatedAddress =
+                                  addressExtractor(addresses.first);
+                              log(generatedAddress.toString());
+                              if (widget.onSave == null)
+                                return snackbar(
+                                    context, "something went wrong");
+                              widget.onSave(
+                                  generatedCoordinates, generatedAddress);
+                              Navigator.pop(context);
+                              if (widget.popBackTwice) Navigator.pop(context);
                               // setState(() {
                               //   addresscontroller.fullAddress = val;
                               // });
