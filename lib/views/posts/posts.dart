@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
@@ -40,10 +41,10 @@ class _PostListState extends StateMVC<PostList> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _postsController.scaffoldkey,
         // backgroundColor: Colors.blue[900],
@@ -52,7 +53,7 @@ class _PostListState extends StateMVC<PostList> {
           title: TextWidget(
             text: 'My Bookings',
             color: Colors.grey[900],
-            size: _width * 0.05,
+            size: width(context) * 0.05,
             weight: FontWeight.w600,
           ),
           backgroundColor: Colors.white,
@@ -61,8 +62,8 @@ class _PostListState extends StateMVC<PostList> {
         ),
         body: Container(
           // padding: EdgeInsets.all(10),
-          height: _hight * 1,
-          width: _width * 1,
+          height: height(context) * 1,
+          width: width(context) * 1,
           decoration: BoxDecoration(
             color: Colors.white,
           ),
@@ -103,8 +104,8 @@ class _PostListState extends StateMVC<PostList> {
                             ));
                           },
                           child: Container(
-                              height: _hight * 0.265,
-                              width: _width * 1,
+                              height: height(context) * 0.265,
+                              width: width(context) * 1,
                               decoration: BoxDecoration(
                                 color: Colors.grey[50],
                                 // borderRadius: BorderRadius.circular(15),
@@ -112,8 +113,8 @@ class _PostListState extends StateMVC<PostList> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: _hight * 0.09,
-                                    width: _width * 1,
+                                    height: height(context) * 0.09,
+                                    width: width(context) * 1,
                                     alignment: Alignment.topCenter,
                                     decoration: BoxDecoration(
                                       color: Colors.blueGrey[50],
@@ -125,7 +126,7 @@ class _PostListState extends StateMVC<PostList> {
                                     child: Column(
                                       children: [
                                         Container(
-                                          height: _hight * 0.08,
+                                          height: height(context) * 0.08,
                                           padding: const EdgeInsets.only(
                                               left: 8.0, right: 8.0, top: 10),
                                           child: Column(
@@ -145,13 +146,13 @@ class _PostListState extends StateMVC<PostList> {
                                                         .elementAt(
                                                       o[index]['job'],
                                                     ),
-                                                    size: _width * 0.045,
+                                                    size: width(context) * 0.045,
                                                     weight: FontWeight.w600,
                                                   ),
                                                   Container(
                                                     padding: EdgeInsets.only(
                                                         right: 5, left: 5),
-                                                    height: _hight * 0.032,
+                                                    height: height(context) * 0.032,
                                                     decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius:
@@ -169,10 +170,10 @@ class _PostListState extends StateMVC<PostList> {
                                                                   'orderState']),
                                                           color: Colors
                                                               .indigo[900],
-                                                          size: _width * 0.04,
+                                                          size: width(context) * 0.04,
                                                         ),
                                                         SizedBox(
-                                                          width: _width * 0.01,
+                                                          width: width(context) * 0.01,
                                                         ),
                                                         TextWidget(
                                                             text: orderStateString(
@@ -183,7 +184,7 @@ class _PostListState extends StateMVC<PostList> {
                                                                 .indigo[900],
                                                             weight:
                                                                 FontWeight.w600,
-                                                            size: _width * 0.03)
+                                                            size: width(context) * 0.03)
                                                       ],
                                                     ),
                                                   )
@@ -196,7 +197,7 @@ class _PostListState extends StateMVC<PostList> {
                                                     getTime(
                                                         o[index]['schedule']),
                                                 color: Colors.grey[600],
-                                                size: _width * 0.03,
+                                                size: width(context) * 0.03,
                                                 weight: FontWeight.w600,
                                               ),
                                             ],
@@ -210,8 +211,8 @@ class _PostListState extends StateMVC<PostList> {
                                     child: Row(
                                       children: [
                                         Container(
-                                          width: _hight * 0.06,
-                                          height: _hight * 0.06,
+                                          width: height(context) * 0.06,
+                                          height: height(context) * 0.06,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -229,15 +230,15 @@ class _PostListState extends StateMVC<PostList> {
                                               : Image.network(images.first),
                                         ),
                                         Container(
-                                          height: _hight * 0.11,
-                                          // width: _width * 0.6,
+                                          height: height(context) * 0.11,
+                                          // width: width(context) * 0.6,
                                           padding: EdgeInsets.only(
-                                              left: _width * 0.06,
-                                              top: _width * 0.02),
+                                              left: width(context) * 0.06,
+                                              top: width(context) * 0.02),
                                           child: Row(
                                             children: [
                                               Container(
-                                                width: _width * 0.65,
+                                                width: width(context) * 0.65,
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -252,17 +253,17 @@ class _PostListState extends StateMVC<PostList> {
                                                               .account_balance_wallet,
                                                           color:
                                                               Colors.grey[900],
-                                                          size: _width * 0.04,
+                                                          size: width(context) * 0.04,
                                                         ),
                                                         SizedBox(
-                                                          width: _width * 0.01,
+                                                          width: width(context) * 0.01,
                                                         ),
                                                         TextWidget(
                                                           text: 'Rs.1500',
                                                           // +
                                                           // o[index]['money']
                                                           //     .toString(),
-                                                          size: _width * 0.035,
+                                                          size: width(context) * 0.035,
                                                           weight:
                                                               FontWeight.w600,
                                                         )
@@ -275,7 +276,7 @@ class _PostListState extends StateMVC<PostList> {
                                                                     'problem']),
                                                         flow: TextOverflow
                                                             .ellipsis,
-                                                        size: _width * 0.045),
+                                                        size: width(context) * 0.045),
                                                   ],
                                                 ),
                                               ),
@@ -293,7 +294,7 @@ class _PostListState extends StateMVC<PostList> {
                                                       right: 0,
                                                       top: 0,
                                                       child: CircleAvatar(
-                                                          radius: _width * 0.02,
+                                                          radius: width(context) * 0.02,
                                                           backgroundColor:
                                                               Colors
                                                                   .indigo[900],
@@ -305,7 +306,7 @@ class _PostListState extends StateMVC<PostList> {
                                                                 "0",
                                                             color: Colors.white,
                                                             size:
-                                                                _width * 0.025,
+                                                                width(context) * 0.025,
                                                           )))
                                                 ],
                                               )
@@ -322,31 +323,31 @@ class _PostListState extends StateMVC<PostList> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         ElevatedButtonWidget(
-                                          minWidth: _width * 0.498,
-                                          height: _hight * 0.06,
+                                          minWidth: width(context) * 0.498,
+                                          height: height(context) * 0.06,
                                           bgColor: Colors.grey[50],
                                           buttonName: 'Need Help ?',
                                           textColor: Colors.grey[900],
                                           borderRadius: 0.0,
-                                          textSize: _width * 0.04,
+                                          textSize: width(context) * 0.04,
                                           leadingIcon: Icon(
                                             Icons.help,
-                                            size: _width * 0.04,
+                                            size: width(context) * 0.04,
                                             color: Colors.grey[900],
                                           ),
                                           borderSideColor: Colors.grey[50],
                                         ),
                                         ElevatedButtonWidget(
-                                          minWidth: _width * 0.498,
-                                          height: _hight * 0.06,
+                                          minWidth: width(context) * 0.498,
+                                          height: height(context) * 0.06,
                                           bgColor: Colors.grey[50],
                                           buttonName: 'View Menu',
                                           textColor: Colors.grey[900],
                                           borderRadius: 0.0,
-                                          textSize: _width * 0.04,
+                                          textSize: width(context) * 0.04,
                                           trailingIcon: Icon(
                                             Icons.menu,
-                                            size: _width * 0.04,
+                                            size: width(context) * 0.04,
                                             color: Colors.grey[900],
                                           ),
                                           borderSideColor: Colors.grey[50],

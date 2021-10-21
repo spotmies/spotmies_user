@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 Widget profilePic(BuildContext context, upic, name, {onClick}) {
-  final _width = MediaQuery.of(context).size.width;
+  // final width(context) = MediaQuery.of(context).size.width;
   // final _hight = MediaQuery.of(context).size.height -
       // MediaQuery.of(context).padding.top -
       // kToolbarHeight;
@@ -11,10 +12,10 @@ Widget profilePic(BuildContext context, upic, name, {onClick}) {
       ClipOval(
         child: Uri.parse(upic).isAbsolute
             ? Image.network(upic,
-                height: _width * 0.4, width: _width * 0.4, fit: BoxFit.fill)
+                height: width(context) * 0.4, width: width(context) * 0.4, fit: BoxFit.fill)
             : Container(
-                height: _width * 0.4,
-                width: _width * 0.4,
+                height: width(context) * 0.4,
+                width: width(context) * 0.4,
                 alignment: Alignment.center,
                 child: TextWid(
                   text: "${name[0] ?? "J"}",
@@ -44,6 +45,6 @@ Widget profilePic(BuildContext context, upic, name, {onClick}) {
             ),
           ))
     ]),
-    radius: _width * 0.2,
+    radius: width(context) * 0.2,
   );
 }

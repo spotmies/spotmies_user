@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/stepperPersonalInfo_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
@@ -28,10 +29,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
 
   @override
   Widget build(BuildContext context) {
-    // final _hight = MediaQuery.of(context).size.height -
-    //     MediaQuery.of(context).padding.top -
-    //     kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+  
     return Scaffold(
       key: _stepperPersonalInfo.scaffoldkey,
       appBar: AppBar(
@@ -62,7 +60,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
-                          width: _width * 0.35,
+                          width: width(context) * 0.35,
                           child: ElevatedButton(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,7 +82,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                         _stepperPersonalInfo.currentStep ==
                                 2 // this is the last step
                             ? Container(
-                                width: _width * 0.35,
+                                width: width(context) * 0.35,
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     CircularProgressIndicator();
@@ -113,7 +111,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 ),
                               )
                             : Container(
-                                width: _width * 0.35,
+                                width: width(context) * 0.35,
                                 child: ElevatedButton(
                                   onPressed: onStepContinue,
                                   child: Row(
@@ -185,17 +183,14 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   }
 
   Widget step1() {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+  
     return Column(
       children: [
         Container(
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          height: _hight * 0.75,
+          height: height(context) * 0.75,
           child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('terms')
@@ -267,7 +262,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 child: Text(
                                   'I agree to accept the terms and Conditions',
                                   maxLines: 4,
-                                  style: TextStyle(fontSize: _width * 0.035),
+                                  style: TextStyle(fontSize: width(context) * 0.035),
                                 ),
                               ),
                             ],
@@ -282,20 +277,17 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   }
 
   Widget step2() {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+   
     return Column(
       children: [
         Container(
-          height: _hight * 0.75,
+          height: height(context) * 0.75,
           child: ListView(
             children: [
               Container(
                 // padding: EdgeInsets.all(10),
-                height: _hight * 0.1,
-                width: _width * 1,
+                height: height(context) * 0.1,
+                width: width(context) * 1,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15)),
@@ -335,8 +327,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               ),
               Container(
                 //padding: EdgeInsets.all(10),
-                height: _hight * 0.1,
-                width: _width * 1,
+                height: height(context) * 0.1,
+                width: width(context) * 1,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15)),
@@ -374,8 +366,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               ),
               Container(
                 //padding: EdgeInsets.all(10),
-                height: _hight * 0.1,
-                width: _width * 1,
+                height: height(context) * 0.1,
+                width: width(context) * 1,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15)),
@@ -421,14 +413,10 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   }
 
   Widget step3() {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    //final _width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Container(
-          height: _hight * 0.75,
+          height: height(context) * 0.75,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(
               'Profile Picture',
@@ -458,7 +446,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             size: 200,
                           )
                         : Container(
-                            height: _hight * 0.27,
+                            height: height(context) * 0.27,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),

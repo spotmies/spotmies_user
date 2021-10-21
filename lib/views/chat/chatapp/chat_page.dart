@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/chat/chatapp/chat_screen.dart';
 import 'package:spotmies/controllers/chat_controllers/chatPage_controller.dart';
 
@@ -20,36 +21,12 @@ class _ChatHomeState extends StateMVC<ChatHome> {
   String value;
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    
     return Scaffold(
         key: _chatPageController.scaffoldkey,
-        // appBar: AppBar(
-        //   actions: [
-        //     IconButton(
-        //         icon: Icon(
-        //           Icons.person_pin_rounded,
-        //           size: 27,
-        //           color: Colors.blue[900],
-        //         ),
-        //         onPressed: () {
-        //           Navigator.push(context,
-        //               MaterialPageRoute(builder: (context) => Setting()));
-        //         })
-        //   ],
-        //   backgroundColor: Colors.white,
-        //   elevation: 0,
-        //   title: Text('Conversations',
-        //       style: TextStyle(
-        //           color: Colors.black,
-        //           fontSize: 22,
-        //           fontWeight: FontWeight.bold)),
-        // ),
         body: Container(
-          height: _hight * 1,
-          width: _width * 1,
+          height: height(context) * 1,
+          width: width(context) * 1,
           child: Column(
             children: [
               StreamBuilder(
@@ -80,8 +57,8 @@ class _ChatHomeState extends StateMVC<ChatHome> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(10),
-                                  height: _hight * 0.14,
-                                  width: _width * 0.95,
+                                  height: height(context) * 0.14,
+                                  width: width(context) * 0.95,
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(20.0),
@@ -132,13 +109,13 @@ class _ChatHomeState extends StateMVC<ChatHome> {
                                             // ),
                                             Container(
                                               padding: EdgeInsets.only(
-                                                  left: _width * 0.04,
-                                                  right: _width * 0.04,
-                                                  top: _width * 0.02,
-                                                  bottom: _width * 0.02),
+                                                  left: width(context) * 0.04,
+                                                  right: width(context) * 0.04,
+                                                  top: width(context) * 0.02,
+                                                  bottom: width(context) * 0.02),
                                               // color: Colors.amber,
-                                              width: _width * 0.69,
-                                              height: _hight * 0.12,
+                                              width: width(context) * 0.69,
+                                              height: height(context) * 0.12,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -184,7 +161,7 @@ class _ChatHomeState extends StateMVC<ChatHome> {
                                                             )
                                                           : SizedBox(
                                                               width:
-                                                                  _width * 0.3,
+                                                                  width(context) * 0.3,
                                                               child: Text(
                                                                 data['msg'],
                                                                 overflow:

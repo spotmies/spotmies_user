@@ -3,6 +3,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/profile_controllers/settings_controller.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 
 class Setting extends StatefulWidget {
@@ -27,10 +28,10 @@ class _SettingState extends StateMVC<Setting> {
 
   @override
   Widget build(BuildContext context) {
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _settingsController.scaffoldkey,
       appBar: AppBar(
@@ -57,7 +58,7 @@ class _SettingState extends StateMVC<Setting> {
             children: [
               Container(
                 padding: EdgeInsets.all(20),
-                height: _hight * 0.15,
+                height: height(context) * 0.15,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
@@ -66,8 +67,8 @@ class _SettingState extends StateMVC<Setting> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      height: _width * 0.15,
-                      width: _width * 0.15,
+                      height: width(context) * 0.15,
+                      width: width(context) * 0.15,
                       child: CircleAvatar(
                         backgroundColor: Colors.grey[100],
                         child: ClipOval(
@@ -76,7 +77,7 @@ class _SettingState extends StateMVC<Setting> {
                                 ? Icon(
                                     Icons.person,
                                     color: Colors.blueGrey,
-                                    size: _width * 0.12,
+                                    size: width(context) * 0.12,
                                   )
                                 : Image.network(
                                     u['pic'],

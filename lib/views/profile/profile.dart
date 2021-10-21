@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/profile/editDetailsBS.dart';
 // import 'package:spotmies/views/profile/editDetailsBS.dart';
 import 'package:spotmies/views/profile/feedBack.dart';
@@ -75,10 +76,10 @@ class _ProfileState extends StateMVC<Profile> {
   @override
   Widget build(BuildContext context) {
     log("============ Render Profile ==============");
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
+    // final height(context) = MediaQuery.of(context).size.height -
+    //     MediaQuery.of(context).padding.top -
+    //     kToolbarHeight;
+    // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _profileController.scaffoldkey,
       backgroundColor: Colors.white,
@@ -92,7 +93,7 @@ class _ProfileState extends StateMVC<Profile> {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: CircleAvatar(
-                radius: _width * 0.046,
+                radius: width(context) * 0.046,
                 backgroundColor: Colors.indigo[100],
                 child: IconButton(
                     onPressed: () {
@@ -102,7 +103,7 @@ class _ProfileState extends StateMVC<Profile> {
                     },
                     icon: Icon(
                       !mode ? Icons.light_mode : Icons.dark_mode,
-                      size: _width * 0.05,
+                      size: width(context) * 0.05,
                       color: mode ? Colors.grey[800] : Colors.white,
                     ))),
           )
@@ -114,6 +115,7 @@ class _ProfileState extends StateMVC<Profile> {
 
           if (data.getLoader || u == null)
             return Center(child: profileShimmer(context));
+
           // return TextButton(
           //     onPressed: () {
           //       signOut(context);
@@ -122,11 +124,12 @@ class _ProfileState extends StateMVC<Profile> {
           return ListView(
             children: [
               profilePic(context, u['pic'], u['name'], onClick: () {
-                editDetails(context, _width, _hight, profileProvider, editpic,
-                    _profileController, details: u);
+                editDetails(context, width(context), height(context), profileProvider, editpic,
+                    _profileController,
+                    details: u);
               }),
               Container(
-                height: _hight * 0.08,
+                height: height(context) * 0.08,
                 // color: Colors.amber,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -134,47 +137,47 @@ class _ProfileState extends StateMVC<Profile> {
                     Text(
                       u['name'] ?? 'Spotmies User',
                       style: fonts(
-                          _width * 0.05, FontWeight.w600, Colors.grey[900]),
+                          width(context) * 0.05, FontWeight.w600, Colors.grey[900]),
                     ),
                     Text(
                       u['phNum'].toString(),
                       style: fonts(
-                          _width * 0.03, FontWeight.w500, Colors.grey[900]),
+                          width(context) * 0.03, FontWeight.w500, Colors.grey[900]),
                     )
                   ],
                 ),
               ),
               Container(
-                height: _hight * 0.08,
+                height: height(context) * 0.08,
                 // color: Colors.amber,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: _width * 0.4,
+                      width: width(context) * 0.4,
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               '₹ ' + '1234',
-                              style: fonts(_width * 0.04, FontWeight.w600,
+                              style: fonts(width(context) * 0.04, FontWeight.w600,
                                   Colors.grey[900]),
                             ),
                             Text(
                               'Total Savings',
-                              style: fonts(_width * 0.02, FontWeight.w500,
+                              style: fonts(width(context) * 0.02, FontWeight.w500,
                                   Colors.grey[900]),
                             ),
                           ]),
                     ),
                     Container(
-                      width: _width * 0.002,
-                      height: _hight * 0.04,
+                      width: width(context) * 0.002,
+                      height: height(context) * 0.04,
                       color: Colors.grey[500],
                     ),
                     Container(
-                      width: _width * 0.4,
+                      width: width(context) * 0.4,
                       child: Consumer<GetOrdersProvider>(
                           builder: (context, data, child) {
                         return Column(
@@ -183,11 +186,11 @@ class _ProfileState extends StateMVC<Profile> {
                             children: [
                               Text(
                                 data.getOrdersList.length.toString(),
-                                style: fonts(_width * 0.04, FontWeight.w600,
+                                style: fonts(width(context) * 0.04, FontWeight.w600,
                                     Colors.grey[900]),
                               ),
                               Text('Total orders',
-                                  style: fonts(_width * 0.02, FontWeight.w500,
+                                  style: fonts(width(context) * 0.02, FontWeight.w500,
                                       Colors.grey[900])),
                             ]);
                       }),
@@ -196,7 +199,7 @@ class _ProfileState extends StateMVC<Profile> {
                 ),
               ),
               Container(
-                height: _hight * 0.6,
+                height: height(context) * 0.6,
                 child: ListView.builder(
                     itemCount: tabnames.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -206,7 +209,7 @@ class _ProfileState extends StateMVC<Profile> {
                               right: 10,
                               top: 10,
                               bottom: index == tabnames.length - 1
-                                  ? _hight * 0.09
+                                  ? height(context) * 0.09
                                   : 0),
                           child: Container(
                             decoration: BoxDecoration(
@@ -221,7 +224,7 @@ class _ProfileState extends StateMVC<Profile> {
                             child: ListTile(
                               onTap: () {
                                 if (index == 0) {
-                                  invites(context, _hight, _width);
+                                  invites(context, height(context), width(context));
                                 }
                                 if (index == 1) {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -229,36 +232,36 @@ class _ProfileState extends StateMVC<Profile> {
                                           PrivacyPolicyWebView()));
                                 }
                                 if (index == 2) {
-                                  history(context, _hight, _width);
+                                  history(context, height(context), width(context));
                                 }
                                 if (index == 3) {
-                                  promotions(context, _hight, _width);
+                                  promotions(context, height(context), width(context));
                                 }
                                 if (index == 4) {
-                                  helpAndSupport(context, _hight, _width);
+                                  helpAndSupport(context, height(context), width(context));
                                 }
                                 if (index == 5) {
-                                  rating(context, _hight, _width);
+                                  rating(context, height(context), width(context));
                                 }
                                 if (index == 6) {
-                                  settings(context, _hight, _width);
+                                  settings(context, height(context), width(context));
                                 }
                                 if (index == 7) {
-                                  signOut(context);
+                                  signOut(context, height(context), width(context));
                                 }
                               },
                               leading: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(icons[index], size: _width * 0.04),
+                                  Icon(icons[index], size: width(context) * 0.04),
                                 ],
                               ),
                               title: Text(tabnames[index],
-                                  style: fonts(_width * 0.04, FontWeight.w500,
+                                  style: fonts(width(context) * 0.04, FontWeight.w500,
                                       Colors.blueGrey[900])),
                               trailing: Icon(
                                 Icons.arrow_forward_ios,
-                                size: _width * 0.04,
+                                size: width(context) * 0.04,
                               ),
                             ),
                           ));

@@ -13,8 +13,8 @@ import 'package:spotmies/views/reusable_widgets/onFailure.dart';
 import 'package:spotmies/views/reusable_widgets/onPending.dart';
 import 'package:spotmies/views/reusable_widgets/onSuccuss.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 
-//path for adding post data
 
 class PostAd extends StatefulWidget {
   final int jobFromHome;
@@ -48,22 +48,17 @@ class _PostAdState extends StateMVC<PostAd> {
   @override
   Widget build(BuildContext context) {
     log("============ Render AdPost ==============");
-    final _hight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        kToolbarHeight;
-    final _width = MediaQuery.of(context).size.width;
     return Consumer<UserDetailsProvider>(builder: (context, data, child) {
-      // if (data.user == null) return circleProgress();
       var user = data.user;
       if (data.getLoader || user == null)
         return Center(child: profileShimmer(context));
       switch (_adController.isUploading) {
         case 1:
-          return onPending(_hight, _width);
+          return onPending(height(context), width(context));
         case 2:
-          return onFail(_hight, _width, context);
+          return onFail(height(context), width(context), context);
         case 3:
-          return onSuccess(_hight, _width, context);
+          return onSuccess(height(context), width(context), context);
 
           break;
         default:
@@ -78,15 +73,17 @@ class _PostAdState extends StateMVC<PostAd> {
             child: Column(children: [
               PageSlider(key: _adController.sliderKey, pages: [
                 Container(
-                    height: _hight * 1.08,
-                    child: page1(_hight, _width, context, _adController)),
-                // child: page1(_hight, _width, context, _adController)),
+                    height: height(context) * 1.08,
+                    child: page1(height(context), width(context), context,
+                        _adController)),
                 Container(
-                    height: _hight * 1.08,
-                    child: page2(_hight, _width, context, _adController)),
+                    height: height(context) * 1.08,
+                    child: page2(height(context), width(context), context,
+                        _adController)),
                 Container(
-                    height: _hight * 1.08,
-                    child: page3(_hight, _width, user, _adController, context)),
+                    height: height(context) * 1.08,
+                    child: page3(height(context), width(context), user,
+                        _adController, context)),
               ]),
             ]),
           )));

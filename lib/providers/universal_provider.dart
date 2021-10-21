@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spotmies/models/placesModel.dart';
 
 class UniversalProvider extends ChangeNotifier {
   int currentNavigationPage = 0; //0 - home 1- chat 2-my booking 3 - account

@@ -107,6 +107,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             widget.hintColor ?? Colors.grey),
         hintText: widget.hint ?? '',
         labelText: widget.label,
+        labelStyle: fonts(
+            widget.hintSize ?? 15.0,
+            widget.hintWeight ?? FontWeight.w500,
+            widget.hintColor ?? Colors.grey),
       ),
       autofocus: true,
       maxLines: widget.maxLines,

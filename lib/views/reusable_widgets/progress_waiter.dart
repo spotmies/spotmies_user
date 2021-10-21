@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class ProgressWaiter extends StatelessWidget {
@@ -15,7 +16,6 @@ class ProgressWaiter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(contextt).size.width;
     return Visibility(
       visible: loaderState,
       // visible: true,
@@ -38,7 +38,7 @@ class ProgressWaiter extends StatelessWidget {
                   text: loadingName,
                   color: Colors.black,
                   weight: FontWeight.bold,
-                  size: _width * 0.06,
+                  size: width(context) * 0.06,
                 ),
               ),
             ],

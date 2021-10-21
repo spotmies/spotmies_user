@@ -1,66 +1,67 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 
 Widget profileShimmer(BuildContext context) {
-  final _hight = MediaQuery.of(context).size.height -
-      MediaQuery.of(context).padding.top -
-      kToolbarHeight;
-  final _width = MediaQuery.of(context).size.width;
+  // final height(context) = MediaQuery.of(context).size.height -
+  //     MediaQuery.of(context).padding.top -
+  //     kToolbarHeight;
+  // final width(context) = MediaQuery.of(context).size.width;
   return Shimmer.fromColors(
       baseColor: Colors.grey[300],
       highlightColor: Colors.grey[100],
       enabled: true,
       child: Container(
-        height: _hight,
-        width: _width,
+        height: height(context),
+        width: width(context),
         child: Column(
           children: [
             Container(
-              // padding: EdgeInsets.only(bottom: _hight * 0.006),
+              // padding: EdgeInsets.only(bottom: height(context) * 0.006),
               child: Icon(
                 Icons.account_circle,
-                size: _width * 0.4,
+                size: width(context) * 0.4,
                 color: Colors.white,
               ),
             ),
             Container(
               height: 10,
-              width: _width * 0.4,
+              width: width(context) * 0.4,
               decoration: decorator(10),
             ),
             SizedBox(
-              height: _hight * 0.06,
+              height: height(context) * 0.06,
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              smallBlock(_width),
+              smallBlock(width(context)),
               Container(
                 height: 30,
                 width: 2,
                 color: Colors.white,
               ),
-              smallBlock(_width)
+              smallBlock(width(context))
             ]),
             SizedBox(
-              height: _hight * 0.03,
+              height: height(context) * 0.03,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: _hight * 0.001,
+                  height: height(context) * 0.001,
                   color: Colors.white,
-                  width: _width * 0.32,
+                  width: width(context) * 0.32,
                 ),
                 Container(
-                  height: _hight * 0.001,
+                  height: height(context) * 0.001,
                   color: Colors.white,
-                  width: _width * 0.32,
+                  width: width(context) * 0.32,
                 )
               ],
             ),
             SizedBox(
-              height: _hight * 0.03,
+              height: height(context) * 0.03,
             ),
             Expanded(
               child: ListView.builder(
@@ -68,9 +69,9 @@ Widget profileShimmer(BuildContext context) {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       padding: EdgeInsets.only(
-                          bottom: _hight * 0.025, right: 20, left: 20),
+                          bottom: height(context) * 0.025, right: 20, left: 20),
                       child: Container(
-                        height: _hight * 0.065,
+                        height: height(context) * 0.065,
                         decoration: decorator(20),
                       ),
                     );
@@ -88,10 +89,10 @@ BoxDecoration decorator(double border) {
   );
 }
 
-Container smallBlock(double _width) {
+Container smallBlock(double width) {
   return Container(
     height: 35,
-    width: _width * 0.3,
+    width: width * 0.3,
     decoration: decorator(10),
   );
 }
