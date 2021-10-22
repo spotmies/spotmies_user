@@ -71,6 +71,7 @@ dependencies:
   rxdart:
   flutter_native_timezone: ^2.0.0
   awesome_notifications: ^0.0.6+10
+  country_code_picker: ^2.0.2
 
 
   
