@@ -8,11 +8,11 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
-import 'package:spotmies/miscellaneous/login/otp.dart';
 import 'package:spotmies/models/loginModel.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/navBar.dart';
+import 'package:spotmies/views/login/otp.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 
 class LoginPageController extends ControllerMVC {

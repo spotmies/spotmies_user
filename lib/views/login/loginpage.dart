@@ -1,6 +1,8 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -55,7 +57,8 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                         children: [
                           Container(
                               margin: EdgeInsets.only(
-                                  top: width(context) * 0.07, bottom: width(context) * 0.07),
+                                  top: width(context) * 0.07,
+                                  bottom: width(context) * 0.07),
                               child: Row(
                                 children: [
                                   Container(
@@ -94,7 +97,8 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                           Container(
                             width: width(context),
                             margin: EdgeInsets.only(
-                                left: width(context) * 0.05, right: width(context) * 0.05),
+                                left: width(context) * 0.05,
+                                right: width(context) * 0.05),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -136,65 +140,102 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                     color: Colors.grey[50],
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                        top: 0, right: 5, left: 5),
-                                    width: width(context),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: TextFormField(
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9]')),
-                                      ],
-                                      onSaved: (item) => _loginPageController
-                                          .loginModel.loginnum,
-                                      decoration: InputDecoration(
-                                        border: new OutlineInputBorder(
-                                            borderSide: new BorderSide(
-                                                color: Colors.white),
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                        suffixIcon: Icon(
-                                          Icons.phone_android,
-                                          color: Colors.indigo[900],
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(15)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.white)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(15)),
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.white)),
-                                        hintStyle: fonts(width(context) * 0.045,
-                                            FontWeight.w600, Colors.grey[400]),
-                                        hintText: 'Phone number',
-                                        prefix: Padding(
-                                          padding: EdgeInsets.all(4),
-                                          child: Text('+91'),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: width(context) * 0.26,
+                                        child: CountryCodePicker(
+                                          // flagWidth: width(context) * 0.04,
+                                          dialogSize: Size.fromWidth(
+                                              width(context) * 0.8),
+                                          showFlagDialog: true,
+                                          initialSelection: "IN",
+                                          favorite: ["IN"],
+                                          onChanged: (item) {
+                                            print(item.name);
+                                          },
                                         ),
                                       ),
-                                      validator: (value) {
-                                        if (value.length != 10) {
-                                          return 'Please Enter Valid Mobile Number';
-                                        }
-                                        return null;
-                                      },
-                                      maxLength: 10,
-                                      keyboardAppearance: Brightness.dark,
-                                      buildCounter: (BuildContext context,
-                                              {int currentLength,
-                                              int maxLength,
-                                              bool isFocused}) =>
-                                          null,
-                                      keyboardType: TextInputType.number,
-                                      controller: _loginPageController.loginnum,
-                                    ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            top: 0, right: 0, left: 0),
+                                        width: width(context) * 0.69,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: TextFormField(
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          onSaved: (item) =>
+                                              _loginPageController
+                                                  .loginModel.loginnum,
+                                          style: fonts(
+                                              width(context) * 0.045,
+                                              FontWeight.w600,
+                                              Colors.grey[900]),
+                                          decoration: InputDecoration(
+                                            border: new OutlineInputBorder(
+                                                borderSide: new BorderSide(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            suffixIcon: Icon(
+                                              Icons.phone_android,
+                                              color: Colors.indigo[900],
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15)),
+                                                borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.white)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15)),
+                                                borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.white)),
+                                            hintStyle: fonts(
+                                                width(context) * 0.045,
+                                                FontWeight.w600,
+                                                Colors.grey[400]),
+                                            hintText: 'Phone number',
+                                            // prefix: CountryCodePicker(
+                                            //   initialSelection: "IN",
+                                            //   favorite: ["+91", "IN"],
+                                            //   // onChanged: (item) {
+                                            //   //   print(item.name);
+                                            //   // },
+                                            //   // showCountryOnly: false,
+                                            //   // // optional. Shows only country name and flag when popup is closed.
+                                            //   // showOnlyCountryWhenClosed: false,
+                                            //   // // optional. aligns the flag and the Text left
+                                            //   // alignLeft: false,
+                                            // ),
+                                          ),
+                                          validator: (value) {
+                                            if (value.length != 10) {
+                                              return 'Please Enter Valid Mobile Number';
+                                            }
+                                            return null;
+                                          },
+                                          maxLength: 10,
+                                          keyboardAppearance: Brightness.dark,
+                                          buildCounter: (BuildContext context,
+                                                  {int currentLength,
+                                                  int maxLength,
+                                                  bool isFocused}) =>
+                                              null,
+                                          keyboardType: TextInputType.number,
+                                          controller:
+                                              _loginPageController.loginnum,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

@@ -59,35 +59,33 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // SizedBox(
+              //   height: _hight * 0.1,
+              // ),
               Container(
                   height: _hight * 0.23,
                   // width: 150,
                   child: Lottie.asset('assets/spotmies_logo.json')),
               SizedBox(
-                height: _hight * 0.06,
+                height: _hight * 0.15,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
                 children: [
                   TextWidget(
-                      text: 'Spot',
-                      size: _width * 0.1,
+                      text: 'SPOTMIES',
+                      size: _width * 0.08,
                       color: Colors.indigo[900],
+                      lSpace: 6.0,
                       weight: FontWeight.w600),
                   TextWidget(
-                      text: 'mies',
-                      size: _width * 0.1,
-                      color: Colors.indigo[900],
-                      weight: FontWeight.w600)
+                      text: 'Experience the Excellence',
+                      size: _width * 0.05,
+                      color: Colors.grey[700],
+                      weight: FontWeight.w500),
+                  // SizedBox(
+                  //   height: _hight * 0.1,
+                  // ),
                 ],
-              ),
-              TextWidget(
-                  text: 'Experience the Excellence',
-                  size: _width * 0.06,
-                  color: Colors.grey[700],
-                  weight: FontWeight.w500),
-              SizedBox(
-                height: _hight * 0.1,
               ),
             ],
           ),

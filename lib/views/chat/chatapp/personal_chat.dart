@@ -253,10 +253,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
-    // final height(context) = MediaQuery.of(context).size.height -
-    //     MediaQuery.of(context).padding.top -
-    //     kToolbarHeight;
-    // final width(context) = MediaQuery.of(context).size.width;
     return Consumer<ChatProvider>(builder: (context, data, child) {
       _chatController.currentMsgId = widget.msgId;
       _chatController.chatList = data.getChatList2();

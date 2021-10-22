@@ -5,16 +5,15 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/home/ads/page3.dart';
 import 'package:spotmies/views/home/ads/page1.dart';
-import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/onFailure.dart';
 import 'package:spotmies/views/reusable_widgets/onPending.dart';
 import 'package:spotmies/views/reusable_widgets/onSuccuss.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
-
 
 class PostAd extends StatefulWidget {
   final int jobFromHome;
@@ -50,8 +49,7 @@ class _PostAdState extends StateMVC<PostAd> {
     log("============ Render AdPost ==============");
     return Consumer<UserDetailsProvider>(builder: (context, data, child) {
       var user = data.user;
-      if (data.getLoader || user == null)
-        return Center(child: profileShimmer(context));
+      if (data.getLoader || user == null) return circleProgress();
       switch (_adController.isUploading) {
         case 1:
           return onPending(height(context), width(context));
