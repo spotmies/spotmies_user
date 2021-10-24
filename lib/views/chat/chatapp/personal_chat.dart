@@ -221,7 +221,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                 children: [
                   Icon(
                     Icons.audiotrack,
-                    color: Colors.grey,
+                    color: Colors.white,
                   ),
                   SizedBox(
                     width: width * 0.05,
@@ -229,7 +229,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                   TextWid(
                       text: 'Play Audio',
                       weight: FontWeight.w600,
-                      color: Colors.indigo,
+                      color: Colors.white,
                       decoration: TextDecoration.underline),
                 ],
               ));
