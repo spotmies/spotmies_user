@@ -12,6 +12,7 @@ import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/notifications.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/ads/adpost.dart';
 import 'package:spotmies/views/home/home.dart';
@@ -57,21 +58,40 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       child: Profile(),
     ),
   ];
+  retriveDataFromSF() async {
+    dynamic user = await getMyProfile();
+    dynamic chats = await getChats();
+    dynamic responses = await getResponses();
+    dynamic orders = await getOrders();
+
+    if (user != null) profileProvider.setUser(user);
+
+    if (chats != null) chatProvider.setChatList(chats);
+    if (responses != null) responseProvider.setResponsesList(responses);
+    if (orders != null) ordersProvider.setOrdersList(orders);
+    if (user != null && chats != null && responses != null && orders != null) {
+      universalProvider.setEnableRoute(true);
+    } else
+      universalProvider.setEnableRoute(false);
+  }
 
   hitAllApis(uuId) async {
     dynamic responsesList = await getResponseListFromDB(uuId);
-    if(responsesList != null)responseProvider.setResponsesList(responsesList);
+    if (responsesList != null) responseProvider.setResponsesList(responsesList);
 
     dynamic user = await getUserDetailsFromDB(uuId);
     if (user != null) {
       profileProvider.setUser(user);
-    ordersProvider.setOrdersList(user['orders'] != null ? user['orders'] : []);
+      ordersProvider
+          .setOrdersList(user['orders'] != null ? user['orders'] : []);
     }
     dynamic chatList = await getChatListFromDb(uuId);
     if (chatList != null) chatProvider.setChatList(chatList);
 
     dynamic ordersList = await getOrderFromDB(uuId);
     if (ordersList != null) ordersProvider.setOrdersList(ordersList);
+    log("hitting all apis completed");
+    universalProvider.setEnableRoute(true);
   }
 
   StreamController _chatResponse;
@@ -168,7 +188,8 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
-    log("nav bar uuid >>>> $uuId");
+
+    retriveDataFromSF();
     hitAllApis(uuId);
     // connectNotifications();
 
@@ -294,7 +315,10 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
                 leftCornerRadius: 32,
                 rightCornerRadius: 32,
                 onTap: (index) {
-                  data.setCurrentPage(index);
+                  if (data.enableRoute)
+                    data.setCurrentPage(index);
+                  else
+                    snackbar(context, "Please wait");
                 }),
             floatingActionButton: FloatingActionButton(
               elevation: 8,
