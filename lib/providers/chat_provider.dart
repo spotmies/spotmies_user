@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 
 class ChatProvider extends ChangeNotifier {
   List<dynamic> chatList = [];
@@ -38,12 +39,13 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setChatList(var list) {
+  setChatList(dynamic list) {
     print("loading chats ..........>>>>>>>>> $list");
     chatList = list;
     confirmReceiveAllMessages();
     loader = false;
     notifyListeners();
+    saveChats(list);
   }
 
   getChatList2() => chatList;
