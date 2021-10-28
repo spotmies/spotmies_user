@@ -26,12 +26,11 @@ class _ChatState extends State<Chat> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: height(context) * 0.0,
+            toolbarHeight: height(context) * 0.07,
             backgroundColor: Colors.white,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(height(context) * 0.09),
               child: Container(
-              
                 child: TabBar(
                     unselectedLabelColor: Colors.grey[700],
                     indicatorSize: TabBarIndicatorSize.tab,
