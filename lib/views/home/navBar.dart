@@ -23,19 +23,24 @@ import 'package:spotmies/views/profile/profile.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-void main() => runApp(GoogleNavBar());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(GoogleNavBar());
+}
 
 class GoogleNavBar extends StatefulWidget {
   @override
   _GoogleNavBarState createState() => _GoogleNavBarState();
 }
 
-class _GoogleNavBarState extends State<GoogleNavBar> {
+class _GoogleNavBarState extends State<GoogleNavBar>
+    with WidgetsBindingObserver {
   ChatProvider chatProvider;
   ResponsesProvider responseProvider;
   GetOrdersProvider ordersProvider;
   UserDetailsProvider profileProvider;
   String uuId = FirebaseAuth.instance.currentUser.uid;
+  bool isSocketDisconnected = false;
 
   UniversalProvider universalProvider;
   List icons = [
@@ -106,10 +111,15 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       "autoConnect": false,
     });
     socket.onConnect((data) {
+      isSocketDisconnected = false;
       print("Connected");
       socket.on("message", (msg) {
         print(msg);
       });
+    });
+    socket.onDisconnect((data) {
+      log("disconnect $data");
+      isSocketDisconnected = true;
     });
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
@@ -153,6 +163,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
 
   @override
   initState() {
+    WidgetsBinding.instance.addObserver(this);
     FirebaseMessaging.instance.getToken().then((value) {
       String token = value;
       log(token.toString());
@@ -182,7 +193,6 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
           MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
     });
 
-    super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
@@ -260,6 +270,49 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
         log("loop end");
       }
     });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        log("APP is inactive");
+        break;
+      case AppLifecycleState.detached:
+        log("APP is detached");
+        break;
+      case AppLifecycleState.paused:
+        log("APP is background");
+        break;
+      case AppLifecycleState.resumed:
+        log("APP is resumed");
+
+        if (isSocketDisconnected) {
+          snackbar(context, "socket disconnected trying to connect again");
+          log("socket disconnected trying to connect again");
+          socket.connect();
+          hitAllApis(uuId);
+        }
+        break;
+
+      default:
+    }
+
+    /* if (isBackground) {
+      // service.stop();
+    } else {
+      // service.start();
+    }*/
   }
 
   @override
