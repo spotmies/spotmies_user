@@ -261,6 +261,11 @@ class _GoogleNavBarState extends State<GoogleNavBar>
                   }
                   break;
                 default:
+                  if (i == newMessageObject.length - 1) {
+                    chatProvider.clearMessageQueue2();
+                  }
+                  log("socket name with no ack");
+                  break;
               }
             } else {
               log('notSuccess');

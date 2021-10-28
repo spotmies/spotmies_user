@@ -10,6 +10,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
+import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
@@ -38,6 +39,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   _PostOverViewState() : super(PostOverViewController()) {
     this._postOverViewController = controller;
   }
+  ChatProvider chatProvider;
   int ordId;
   bool showOrderStatusQuestion = false;
   GetOrdersProvider ordersProvider;
@@ -50,6 +52,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   @override
   void initState() {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
     try {
       ordersProvider.getOrderById(widget.ordId)['orderState'] < 9 &&
@@ -279,30 +282,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  TextWidget(
-                    text: orderStateString(ordState: d['orderState']),
-                    align: TextAlign.center,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextWidget(
+                        text: orderStateString(ordState: d['orderState']),
+                        // align: TextAlign.center,
+                      ),
+                      TextWidget(text: "orderId : ${d['ordId']}")
+                    ],
                   ),
-                  // (d['orderState'] == 8)
-                  //     ? TextWidget(
-                  //         text: 'Service was started on ' +
-                  //             getDate(d['schedule']) +
-                  //             "-" +
-                  //             getTime(d['schedule']),
-                  //         align: TextAlign.center,
-                  //       )
-                  //     : (d['orderState'] == 9)
-                  //         ? TextWidget(
-                  //             text: 'Service was completed on ' +
-                  //                 getDate(d['schedule']) +
-                  //                 "-" +
-                  //                 getTime(d['schedule']),
-                  //             align: TextAlign.center,
-                  //           )
-                  //         : TextWidget(
-                  //             text: 'Service will start soon',
-                  //             align: TextAlign.center,
-                  //           ),
                   Divider(
                     color: Colors.white,
                   ),
@@ -402,7 +391,6 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     color: Colors.white,
                   ),
                   mediaView(height(context), width(context), images),
-
                   Divider(
                     color: Colors.white,
                   ),
@@ -455,6 +443,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     // width: width(context) * 0.7,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         showOrderStatusQuestion
                             ? Column(
@@ -517,6 +506,30 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 ],
                               )
                             : Container(),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 10, right: 10),
+                          child: ElevatedButtonWidget(
+                            height: height(context) * 0.05,
+                            minWidth: width(context) * 0.7,
+                            onClick: () {
+                              Map<String, dynamic> sendPayload = {
+                                "socketName": "broadCastOrder",
+                                "ordId": d['ordId']
+                              };
+                              chatProvider.setSendMessage(sendPayload);
+                            },
+                            bgColor: Colors.white,
+                            borderSideColor: Colors.grey[200],
+                            borderRadius: 10.0,
+                            buttonName: 'Broadcast my order again',
+                            textSize: width(context) * 0.04,
+                            leadingIcon: Icon(
+                              Icons.refresh_rounded,
+                              color: Colors.grey[900],
+                              size: width(context) * 0.045,
+                            ),
+                          ),
+                        ),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: TextWid(
