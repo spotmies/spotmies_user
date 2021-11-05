@@ -6,6 +6,12 @@ class UniversalProvider extends ChangeNotifier {
   List geoLocations = [];
   List searchLocations = [];
   bool locationsLoader = false;
+  bool enableRoute = false;
+
+  void setEnableRoute(bool state) {
+    enableRoute = state ?? false;
+    notifyListeners();
+  }
 
   void setLocationsLoader(bool state) {
     locationsLoader = state;

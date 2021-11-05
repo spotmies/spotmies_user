@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 
 class ResponsesProvider extends ChangeNotifier {
   List responsesList = [];
@@ -41,6 +42,7 @@ class ResponsesProvider extends ChangeNotifier {
     sortListByTime();
     loader = false;
     notifyListeners();
+    saveResponses(list);
   }
 
   void removeResponseById(id) {

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:spotmies/apiCalls/testController.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 
 class GetOrdersProvider extends ChangeNotifier {
   final controller = TestController();
@@ -31,6 +32,7 @@ class GetOrdersProvider extends ChangeNotifier {
     sortListByTime();
     loader = false;
     notifyListeners();
+    saveOrders(list);
   }
 
   List get getOrdersList => ordersList;

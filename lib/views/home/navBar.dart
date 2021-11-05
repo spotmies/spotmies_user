@@ -12,6 +12,7 @@ import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/notifications.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/home/ads/adpost.dart';
 import 'package:spotmies/views/home/home.dart';
@@ -22,19 +23,24 @@ import 'package:spotmies/views/profile/profile.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-void main() => runApp(GoogleNavBar());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(GoogleNavBar());
+}
 
 class GoogleNavBar extends StatefulWidget {
   @override
   _GoogleNavBarState createState() => _GoogleNavBarState();
 }
 
-class _GoogleNavBarState extends State<GoogleNavBar> {
+class _GoogleNavBarState extends State<GoogleNavBar>
+    with WidgetsBindingObserver {
   ChatProvider chatProvider;
   ResponsesProvider responseProvider;
   GetOrdersProvider ordersProvider;
   UserDetailsProvider profileProvider;
   String uuId = FirebaseAuth.instance.currentUser.uid;
+  bool isSocketDisconnected = false;
 
   UniversalProvider universalProvider;
   List icons = [
@@ -57,21 +63,40 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       child: Profile(),
     ),
   ];
+  retriveDataFromSF() async {
+    dynamic user = await getMyProfile();
+    dynamic chats = await getChats();
+    dynamic responses = await getResponses();
+    dynamic orders = await getOrders();
+
+    if (user != null) profileProvider.setUser(user);
+
+    if (chats != null) chatProvider.setChatList(chats);
+    if (responses != null) responseProvider.setResponsesList(responses);
+    if (orders != null) ordersProvider.setOrdersList(orders);
+    if (user != null && chats != null && responses != null && orders != null) {
+      universalProvider.setEnableRoute(true);
+    } else
+      universalProvider.setEnableRoute(false);
+  }
 
   hitAllApis(uuId) async {
     dynamic responsesList = await getResponseListFromDB(uuId);
-    if(responsesList != null)responseProvider.setResponsesList(responsesList);
+    if (responsesList != null) responseProvider.setResponsesList(responsesList);
 
     dynamic user = await getUserDetailsFromDB(uuId);
     if (user != null) {
       profileProvider.setUser(user);
-    ordersProvider.setOrdersList(user['orders'] != null ? user['orders'] : []);
+      ordersProvider
+          .setOrdersList(user['orders'] != null ? user['orders'] : []);
     }
     dynamic chatList = await getChatListFromDb(uuId);
     if (chatList != null) chatProvider.setChatList(chatList);
 
     dynamic ordersList = await getOrderFromDB(uuId);
     if (ordersList != null) ordersProvider.setOrdersList(ordersList);
+    log("hitting all apis completed");
+    universalProvider.setEnableRoute(true);
   }
 
   StreamController _chatResponse;
@@ -86,10 +111,15 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
       "autoConnect": false,
     });
     socket.onConnect((data) {
+      isSocketDisconnected = false;
       print("Connected");
       socket.on("message", (msg) {
         print(msg);
       });
+    });
+    socket.onDisconnect((data) {
+      log("disconnect $data");
+      isSocketDisconnected = true;
     });
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
@@ -133,6 +163,7 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
 
   @override
   initState() {
+    WidgetsBinding.instance.addObserver(this);
     FirebaseMessaging.instance.getToken().then((value) {
       String token = value;
       log(token.toString());
@@ -162,13 +193,13 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
           MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
     });
 
-    super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
-    log("nav bar uuid >>>> $uuId");
+
+    retriveDataFromSF();
     hitAllApis(uuId);
     // connectNotifications();
 
@@ -230,6 +261,11 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
                   }
                   break;
                 default:
+                  if (i == newMessageObject.length - 1) {
+                    chatProvider.clearMessageQueue2();
+                  }
+                  log("socket name with no ack");
+                  break;
               }
             } else {
               log('notSuccess');
@@ -239,6 +275,49 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
         log("loop end");
       }
     });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.inactive:
+        log("APP is inactive");
+        break;
+      case AppLifecycleState.detached:
+        log("APP is detached");
+        break;
+      case AppLifecycleState.paused:
+        log("APP is background");
+        break;
+      case AppLifecycleState.resumed:
+        log("APP is resumed");
+
+        if (isSocketDisconnected) {
+          snackbar(context, "socket disconnected trying to connect again");
+          log("socket disconnected trying to connect again");
+          socket.connect();
+          hitAllApis(uuId);
+        }
+        break;
+
+      default:
+    }
+
+    /* if (isBackground) {
+      // service.stop();
+    } else {
+      // service.start();
+    }*/
   }
 
   @override
@@ -294,7 +373,10 @@ class _GoogleNavBarState extends State<GoogleNavBar> {
                 leftCornerRadius: 32,
                 rightCornerRadius: 32,
                 onTap: (index) {
-                  data.setCurrentPage(index);
+                  if (data.enableRoute)
+                    data.setCurrentPage(index);
+                  else
+                    snackbar(context, "Please wait");
                 }),
             floatingActionButton: FloatingActionButton(
               elevation: 8,
