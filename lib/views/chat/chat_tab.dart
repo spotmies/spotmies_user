@@ -68,7 +68,8 @@ class _ChatState extends State<Chat> {
             toolbarHeight: height(context) * 0.07,
             backgroundColor: Colors.white,
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(height(context) * 0.09),
+              preferredSize: Size.fromHeight(10),
+
               child: Container(
                 child: TabBar(
                     unselectedLabelColor: Colors.grey[700],
