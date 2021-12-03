@@ -6,10 +6,9 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
-import 'package:spotmies/utilities/progressIndicator.dart';
-import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
@@ -25,46 +24,24 @@ class Responsee extends StatefulWidget {
 class _ResponseeState extends StateMVC<Responsee> {
   ResponsiveController _responsiveController;
   ResponsesProvider responseProvider;
+  UniversalProvider up;
+
   _ResponseeState() : super(ResponsiveController()) {
     this._responsiveController = controller;
   }
-
-    /* -------------------------- THIS IS FOR CONSTATNS ------------------------- */
-  dynamic constants;
-  bool showUi = false;
-
-  getText(String objId) {
-    log(constants.toString());
-    if (constants == null) return "loading..";
-    int index = constants?.indexWhere(
-        (element) => element['objId'].toString() == objId.toString());
-    log(index.toString());
-    if (index == -1) return "null";
-    return constants[index]['label'];
-  }
-
-  constantsFunc() async {
-    dynamic allConstants = await getAppConstants();
-    setState(() {
-      showUi = true;
-    });
-    constants = allConstants['responses'];
-  }
-
-  /* -------------------------- END OF THE CONSTANTS -------------------------- */
 
   void chatWithPatner(responseData) {
     //need display circular indicator with z index
     _responsiveController.chatWithpatner(responseData);
   }
 
-
-
   @override
   void initState() {
     super.initState();
-    constantsFunc();
+    up = Provider.of<UniversalProvider>(context, listen: false);
+
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    up.setCurrentConstants("responses");
     // log(_chatController.data.toString());
   }
 
@@ -77,13 +54,13 @@ class _ResponseeState extends StateMVC<Responsee> {
     // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _responsiveController.scaffoldkey,
-        body: showUi ? Consumer<ResponsesProvider>(builder: (context, data, child) {
+        body: Consumer<ResponsesProvider>(builder: (context, data, child) {
           List listResponse = data.getResponsesList;
           // if (data.loader) return Center(child: profileShimmer(context));
           if (listResponse.length < 1)
             return Center(
               child: TextWid(
-                text: getText("no_responses"),
+                text: up.getText("no_responses"),
                 size: width(context) * 0.045,
               ),
             );
@@ -346,6 +323,6 @@ class _ResponseeState extends StateMVC<Responsee> {
             ),
             ProgressWaiter(contextt: context, loaderState: data.loader)
           ]);
-        }):circleProgress());
+        }));
   }
 }

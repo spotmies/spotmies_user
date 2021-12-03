@@ -9,6 +9,7 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/shared_preference.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/onboard.dart';
@@ -59,6 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
     dynamic appConstants = await constantsAPI();
     if (appConstants != null) {
       universalProvider.setAllConstants(appConstants);
+      snackbar(context, "new settings imported");
     }
     return;
   }
@@ -130,6 +132,7 @@ constantsAPI() async {
     dynamic currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       log("confirming all costanst downloaded");
+
       /* -------------- CONFIRM ALL CONSTANTS AND SETTINGS DOWNLOADED ------------- */
       Map<String, String> body = {"appConfig": "false"};
       Server().editMethod(API.userDetails + currentUser.uid.toString(), body);

@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/home/ServiceListHorizontal.dart';
@@ -16,6 +18,7 @@ class Services extends StatefulWidget {
 }
 
 class _ServicesState extends State<Services> {
+  UniversalProvider up;
   int value;
   _ServicesState(this.value);
 
@@ -100,6 +103,13 @@ class _ServicesState extends State<Services> {
   ];
 
   @override
+  void initState() {
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("home");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // final height(context) = MediaQuery.of(context).size.height -
     //     MediaQuery.of(context).padding.top -
@@ -160,30 +170,27 @@ class _ServicesState extends State<Services> {
               child: servicelistBuilder(context, 'Popular Domestic Services',
                   width(context), height(context), tradesman),
             ),
-
             Container(
-              child: serviceBlocksMore(
-                  context, 'Categories', width(context), height(context), tradesman),
+              child: serviceBlocksMore(context, 'Categories', width(context),
+                  height(context), tradesman),
             ),
             Container(
-              child: servicelistBuilder(
-                  context, 'Corparate Services', width(context), height(context), software),
+              child: servicelistBuilder(context, 'Corparate Services',
+                  width(context), height(context), software),
             ),
-
-           
           ],
         ),
       );
     }
     if (value == 1) {
       return Center(
-          child: serviceIndividualBuilder(
-              context, 'Tradesman', width(context), height(context), tradesman));
+          child: serviceIndividualBuilder(context, 'Tradesman', width(context),
+              height(context), tradesman));
     }
     if (value == 2) {
       return Center(
-        child:
-            serviceIndividualBuilder(context, 'Beauty', width(context), height(context), beauty),
+        child: serviceIndividualBuilder(
+            context, 'Beauty', width(context), height(context), beauty),
       );
     }
     if (value == 3) {
@@ -198,8 +205,8 @@ class _ServicesState extends State<Services> {
     }
     if (value == 5) {
       return Center(
-          child: serviceIndividualBuilder(
-              context, 'Designing', width(context), height(context), tradesman));
+          child: serviceIndividualBuilder(context, 'Designing', width(context),
+              height(context), tradesman));
     }
     if (value == 6) {
       return Center(

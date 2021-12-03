@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
@@ -34,6 +35,7 @@ class _PostAdState extends StateMVC<PostAd> {
   String add1 = "";
   String add2 = "";
   String add3 = "";
+  UniversalProvider up;
 
   UserDetailsProvider uDetailsProvider;
 
@@ -41,6 +43,9 @@ class _PostAdState extends StateMVC<PostAd> {
   void initState() {
     _adController.isUploading = 0;
     uDetailsProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("serviceRequest");
+
     super.initState();
   }
 

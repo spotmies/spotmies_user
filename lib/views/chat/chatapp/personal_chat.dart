@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -39,6 +40,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
   ChatProvider chatProvider;
   ResponsesProvider responseProvider;
+  UniversalProvider up;
 
   ScrollController _scrollController = ScrollController();
 
@@ -55,6 +57,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("chatScreen");
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {

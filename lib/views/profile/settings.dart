@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/profile_controllers/settings_controller.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
@@ -13,6 +14,8 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends StateMVC<Setting> {
   SettingsController _settingsController;
+  UniversalProvider up;
+
   _SettingState() : super(SettingsController()) {
     this._settingsController = controller;
   }
@@ -20,6 +23,8 @@ class _SettingState extends StateMVC<Setting> {
   @override
   void initState() {
     var details = Provider.of<UserDetailsProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("profile");
 
     details.userDetails();
 

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/stepperPersonalInfo_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 
@@ -16,6 +17,8 @@ class StepperPersonalInfo extends StatefulWidget {
 
 class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   StepperPersonal _stepperPersonalInfo;
+  UniversalProvider up;
+
   _StepperPersonalInfoState() : super(StepperPersonal()) {
     this._stepperPersonalInfo = controller;
   }
@@ -23,13 +26,14 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("signup");
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       key: _stepperPersonalInfo.scaffoldkey,
       appBar: AppBar(
@@ -183,7 +187,6 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   }
 
   Widget step1() {
-  
     return Column(
       children: [
         Container(
@@ -262,7 +265,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 child: Text(
                                   'I agree to accept the terms and Conditions',
                                   maxLines: 4,
-                                  style: TextStyle(fontSize: width(context) * 0.035),
+                                  style: TextStyle(
+                                      fontSize: width(context) * 0.035),
                                 ),
                               ),
                             ],
@@ -277,7 +281,6 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
   }
 
   Widget step2() {
-   
     return Column(
       children: [
         Container(

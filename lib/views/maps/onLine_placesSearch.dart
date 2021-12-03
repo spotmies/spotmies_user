@@ -21,12 +21,13 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   // List<Places> geoLocations = [];
   String query = '';
   Timer debouncer;
-  UniversalProvider universalProvider;
+  UniversalProvider up;
 
   @override
   void initState() {
     super.initState();
-    universalProvider = Provider.of<UniversalProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("maps");
 
     init();
   }
@@ -49,12 +50,12 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   }
 
   Future init() async {
-    if (universalProvider.geoLocations.length > 0) return;
+    if (up.geoLocations.length > 0) return;
     // var geoLocationss = await PlacesApi.getLoc(query);
-    universalProvider.setLocationsLoader(true);
+    up.setLocationsLoader(true);
     List geoLocationss = await PlacesApi.getAllLocations();
-    universalProvider.setLocationsLoader(false);
-    universalProvider.setGeoLocations(geoLocationss);
+    up.setLocationsLoader(false);
+    up.setGeoLocations(geoLocationss);
     // setState(() => this.geoLocations = geoLocations);
   }
 
@@ -142,10 +143,10 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
       );
   searchLocations(String query) {
     if (query.length > 3) {
-      dynamic searches = getArea(query, universalProvider.geoLocations);
-      universalProvider.setSearchLocations(searches);
+      dynamic searches = getArea(query, up.geoLocations);
+      up.setSearchLocations(searches);
     } else if (query.length == 0) {
-      universalProvider.showAllLocation();
+      up.showAllLocation();
     }
   }
 

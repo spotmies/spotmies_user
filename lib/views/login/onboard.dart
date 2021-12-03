@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies/models/onboardingModel.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/views/login/loginpage.dart';
 import 'package:spotmies/miscellaneous/model/config.dart';
 
@@ -11,9 +13,17 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   List<OnboardingModel> _list = OnboardingModel.list;
+  UniversalProvider up;
   int page = 0;
   var _controller = PageController();
   var showAnimatedContainer = false;
+  @override
+  void initState() {
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("onBoard");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -56,10 +66,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => LoginPageScreen()));
+                                          builder: (context) =>
+                                              LoginPageScreen()));
                                 });
                               }
-                            });  
+                            });
                           },
                         ),
                         SizedBox(
@@ -74,8 +85,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 //model
-
-
 
 //animated container
 class MyAnimatedContainer extends StatelessWidget {
@@ -288,7 +297,7 @@ class MainContent extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: FadeAnimation(  
+            child: FadeAnimation(
               0.5,
               Image.asset(
                 _list[index].image,

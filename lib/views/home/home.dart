@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/home_controller.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/home/ServiceListVertical.dart';
@@ -16,6 +18,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends StateMVC<Home> {
   HomeController _homeController;
+  UniversalProvider up;
+
   _HomeState() : super(HomeController()) {
     this._homeController = controller;
   }
@@ -46,6 +50,12 @@ class _HomeState extends StateMVC<Home> {
       child: Services(value: 7),
     ),
   ];
+  @override
+  void initState() {
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("home");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +137,8 @@ class _HomeState extends StateMVC<Home> {
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.indigo[900]),
-                  labelStyle:
-                      fonts(width(context) * 0.04, FontWeight.w600, Colors.white),
+                  labelStyle: fonts(
+                      width(context) * 0.04, FontWeight.w600, Colors.white),
                   tabs: [
                     Tab(
                       icon: Center(

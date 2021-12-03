@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/profile/editDetailsBS.dart';
 // import 'package:spotmies/views/profile/editDetailsBS.dart';
@@ -29,6 +30,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends StateMVC<Profile> {
   ProfileController _profileController;
+  UniversalProvider up;
   UserDetailsProvider profileProvider;
   GetOrdersProvider ordersProvider;
 
@@ -64,6 +66,8 @@ class _ProfileState extends StateMVC<Profile> {
   void initState() {
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("profile");
 
     editpic = profileProvider.getUser['pic'];
     super.initState();
@@ -124,8 +128,8 @@ class _ProfileState extends StateMVC<Profile> {
           return ListView(
             children: [
               profilePic(context, u['pic'], u['name'], onClick: () {
-                editDetails(context, width(context), height(context), profileProvider, editpic,
-                    _profileController,
+                editDetails(context, width(context), height(context),
+                    profileProvider, editpic, _profileController,
                     details: u);
               }),
               Container(
@@ -136,13 +140,13 @@ class _ProfileState extends StateMVC<Profile> {
                   children: [
                     Text(
                       u['name'] ?? 'Spotmies User',
-                      style: fonts(
-                          width(context) * 0.05, FontWeight.w600, Colors.grey[900]),
+                      style: fonts(width(context) * 0.05, FontWeight.w600,
+                          Colors.grey[900]),
                     ),
                     Text(
                       u['phNum'].toString(),
-                      style: fonts(
-                          width(context) * 0.03, FontWeight.w500, Colors.grey[900]),
+                      style: fonts(width(context) * 0.03, FontWeight.w500,
+                          Colors.grey[900]),
                     )
                   ],
                 ),
@@ -161,13 +165,13 @@ class _ProfileState extends StateMVC<Profile> {
                           children: [
                             Text(
                               '₹ ' + '1234',
-                              style: fonts(width(context) * 0.04, FontWeight.w600,
-                                  Colors.grey[900]),
+                              style: fonts(width(context) * 0.04,
+                                  FontWeight.w600, Colors.grey[900]),
                             ),
                             Text(
                               'Total Savings',
-                              style: fonts(width(context) * 0.02, FontWeight.w500,
-                                  Colors.grey[900]),
+                              style: fonts(width(context) * 0.02,
+                                  FontWeight.w500, Colors.grey[900]),
                             ),
                           ]),
                     ),
@@ -186,12 +190,12 @@ class _ProfileState extends StateMVC<Profile> {
                             children: [
                               Text(
                                 data.getOrdersList.length.toString(),
-                                style: fonts(width(context) * 0.04, FontWeight.w600,
-                                    Colors.grey[900]),
+                                style: fonts(width(context) * 0.04,
+                                    FontWeight.w600, Colors.grey[900]),
                               ),
                               Text('Total orders',
-                                  style: fonts(width(context) * 0.02, FontWeight.w500,
-                                      Colors.grey[900])),
+                                  style: fonts(width(context) * 0.02,
+                                      FontWeight.w500, Colors.grey[900])),
                             ]);
                       }),
                     )
@@ -224,7 +228,8 @@ class _ProfileState extends StateMVC<Profile> {
                             child: ListTile(
                               onTap: () {
                                 if (index == 0) {
-                                  invites(context, height(context), width(context));
+                                  invites(
+                                      context, height(context), width(context));
                                 }
                                 if (index == 1) {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -232,33 +237,40 @@ class _ProfileState extends StateMVC<Profile> {
                                           PrivacyPolicyWebView()));
                                 }
                                 if (index == 2) {
-                                  history(context, height(context), width(context));
+                                  history(
+                                      context, height(context), width(context));
                                 }
                                 if (index == 3) {
-                                  promotions(context, height(context), width(context));
+                                  promotions(
+                                      context, height(context), width(context));
                                 }
                                 if (index == 4) {
-                                  helpAndSupport(context, height(context), width(context));
+                                  helpAndSupport(
+                                      context, height(context), width(context));
                                 }
                                 if (index == 5) {
-                                  rating(context, height(context), width(context));
+                                  rating(
+                                      context, height(context), width(context));
                                 }
                                 if (index == 6) {
-                                  settings(context, height(context), width(context));
+                                  settings(
+                                      context, height(context), width(context));
                                 }
                                 if (index == 7) {
-                                  signOut(context, height(context), width(context));
+                                  signOut(
+                                      context, height(context), width(context));
                                 }
                               },
                               leading: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(icons[index], size: width(context) * 0.04),
+                                  Icon(icons[index],
+                                      size: width(context) * 0.04),
                                 ],
                               ),
                               title: Text(tabnames[index],
-                                  style: fonts(width(context) * 0.04, FontWeight.w500,
-                                      Colors.blueGrey[900])),
+                                  style: fonts(width(context) * 0.04,
+                                      FontWeight.w500, Colors.blueGrey[900])),
                               trailing: Icon(
                                 Icons.arrow_forward_ios,
                                 size: width(context) * 0.04,
