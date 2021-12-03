@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/navBar.dart';
@@ -19,6 +21,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  UniversalProvider universalProvider;
   checkUser() async {
     if (FirebaseAuth.instance.currentUser != null) {
       bool resp =
@@ -43,23 +46,31 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   getConstants({bool alwaysHit = false}) async {
-    if (await getAppConstants() != null && alwaysHit == false) {
-      log("constants already in sf");
-      return;
+    if (alwaysHit == false) {
+      dynamic constantsFromSf = await await getAppConstants();
+      if (constantsFromSf != null) {
+        universalProvider.setAllConstants(constantsFromSf);
+
+        log("constants already in sf");
+        return;
+      }
     }
 
-    await constantsAPI();
+    dynamic appConstants = await constantsAPI();
+    if (appConstants != null) {
+      universalProvider.setAllConstants(appConstants);
+    }
     return;
   }
-
 
   @override
   void initState() {
     super.initState();
+    universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
     Timer(Duration(seconds: 1), () {
       // print("18 ${FirebaseAuth.instance.currentUser}");
-      getConstants(alwaysHit: true);
+      getConstants(alwaysHit: false);
       checkUser();
     });
   }
@@ -110,7 +121,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-
 constantsAPI() async {
   dynamic response = await Server().getMethod(API.cloudConstants);
   if (response.statusCode == 200) {
@@ -124,8 +134,10 @@ constantsAPI() async {
       Map<String, String> body = {"appConfig": "false"};
       Server().editMethod(API.userDetails + currentUser.uid.toString(), body);
     }
+    return appConstants;
   } else {
     log("something went wrong status code ${response.statusCode}");
+    return null;
   }
 }
 
