@@ -31,14 +31,12 @@ class _ChatState extends State<Chat> {
     ),
   ];
 
-
-
   void initState() {
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
-    universalProvider.setCurrentScreen("chatScreen");
+    universalProvider.setCurrentConstants("chatScreen");
     setTabIndex();
     super.initState();
   }
@@ -76,62 +74,59 @@ class _ChatState extends State<Chat> {
             toolbarHeight: height(context) * 0.07,
             backgroundColor: Colors.white,
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(10),
-              child:  Container(
-                      child: TabBar(
-                          unselectedLabelColor: Colors.grey[700],
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          indicatorColor: Colors.indigo[900],
-                          onTap: (tab) {
-                            setState(() {
-                              name = (tab == 0) ? 'Responses' : 'Chat';
-                            });
-                          },
-                          tabs: [
-                            Tab(
-                              icon: Container(
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // Icon(Icons.workspaces_filled),
-                                      SizedBox(
-                                        width: width(context) * 0.02,
-                                      ),
-                                      Text(
-                                        universalProvider
-                                            .getText("response_tab"),
-                                        style: GoogleFonts.josefinSans(
-                                            color: Colors.indigo[900],
-                                            fontSize: width(context) * 0.04,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ]),
-                              ),
-                            ),
-                            Tab(
-                              icon: Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // Icon(Icons.mark_chat_read),
-                                    SizedBox(
-                                      width: width(context) * 0.02,
-                                    ),
-                                    Text(
-                                      universalProvider.getText("chat_tab"),
-                                      style: GoogleFonts.josefinSans(
-                                          color: Colors.indigo[900],
-                                          fontSize: width(context) * 0.04,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
+                preferredSize: Size.fromHeight(10),
+                child: Container(
+                  child: TabBar(
+                      unselectedLabelColor: Colors.grey[700],
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      indicatorColor: Colors.indigo[900],
+                      onTap: (tab) {
+                        setState(() {
+                          name = (tab == 0) ? 'Responses' : 'Chat';
+                        });
+                      },
+                      tabs: [
+                        Tab(
+                          icon: Container(
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Icon(Icons.workspaces_filled),
+                                  SizedBox(
+                                    width: width(context) * 0.02,
+                                  ),
+                                  Text(
+                                    universalProvider.getText("response_tab"),
+                                    style: GoogleFonts.josefinSans(
+                                        color: Colors.indigo[900],
+                                        fontSize: width(context) * 0.04,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        Tab(
+                          icon: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Icon(Icons.mark_chat_read),
+                                SizedBox(
+                                  width: width(context) * 0.02,
                                 ),
-                              ),
+                                Text(
+                                  universalProvider.getText("chat_tab"),
+                                  style: GoogleFonts.josefinSans(
+                                      color: Colors.indigo[900],
+                                      fontSize: width(context) * 0.04,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ],
                             ),
-                          ]),
-                    )
-                 
-            ),
+                          ),
+                        ),
+                      ]),
+                )),
           ),
           body: TabBarView(children: list),
         ));

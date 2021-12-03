@@ -11,18 +11,20 @@ class UniversalProvider extends ChangeNotifier {
   String currentScreen = "";
   dynamic currentConstants;
 
-  void setAllConstants(dynamic constants){
+  void setAllConstants(dynamic constants) {
     allConstants = constants;
   }
-   getAllConstants(){
+
+  getAllConstants() {
     return allConstants;
   }
-  void setCurrentScreen(String screenName){
+
+  void setCurrentConstants(String screenName) {
     currentScreen = screenName;
     currentConstants = allConstants[currentScreen];
   }
 
-    getText(String objId) {
+  getText(String objId) {
     if (currentConstants == null) return "loading..";
     int index = currentConstants?.indexWhere(
         (element) => element['objId'].toString() == objId.toString());

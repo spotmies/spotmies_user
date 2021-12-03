@@ -39,7 +39,7 @@ class _PostListState extends StateMVC<PostList> {
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
-    up.setCurrentScreen("orders");
+    up.setCurrentConstants("orders");
 
     super.initState();
   }
