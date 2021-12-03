@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/utilities/progressIndicator.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/views/call_ui/components/rounded_button.dart';
 
 import '../constants.dart';
@@ -32,6 +34,30 @@ class CallingUi extends StatefulWidget {
 class _CallingUiState extends State<CallingUi> {
   ChatProvider chatProvider;
   String screenType = '';
+      /* -------------------------- THIS IS FOR CONSTATNS ------------------------- */
+  dynamic constants;
+  bool showUi = false;
+
+  getText(String objId) {
+    if (constants == null) return "loading..";
+    int index = constants?.indexWhere(
+        (element) => element['objId'].toString() == objId.toString());
+
+    if (index == -1) return "null";
+    return constants[index]['label'];
+  }
+
+  constantsFunc() async {
+    dynamic allConstants = await getAppConstants();
+    setState(() {
+      showUi = true;
+    });
+    constants = allConstants['calling'];
+  }
+
+  /* -------------------------- END OF THE CONSTANTS -------------------------- */
+
+
   callStatus(state) {
     switch (state) {
       case 0:
@@ -52,6 +78,7 @@ class _CallingUiState extends State<CallingUi> {
 
   @override
   initState() {
+    constantsFunc();
     setState(() {
       screenType = widget.isInComingScreen ? "incoming" : "outgoing";
     });
@@ -83,7 +110,7 @@ class _CallingUiState extends State<CallingUi> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body: Consumer<ChatProvider>(builder: (context, data, child) {
+      body: showUi ? Consumer<ChatProvider>(builder: (context, data, child) {
         return Stack(
           fit: StackFit.expand,
           children: [
@@ -188,7 +215,7 @@ class _CallingUiState extends State<CallingUi> {
             )
           ],
         );
-      }),
+      }) : circleProgress(),
     );
   }
 }

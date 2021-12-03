@@ -8,6 +8,8 @@ import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/progressIndicator.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
@@ -27,15 +29,41 @@ class _ResponseeState extends StateMVC<Responsee> {
     this._responsiveController = controller;
   }
 
+    /* -------------------------- THIS IS FOR CONSTATNS ------------------------- */
+  dynamic constants;
+  bool showUi = false;
+
+  getText(String objId) {
+    log(constants.toString());
+    if (constants == null) return "loading..";
+    int index = constants?.indexWhere(
+        (element) => element['objId'].toString() == objId.toString());
+    log(index.toString());
+    if (index == -1) return "null";
+    return constants[index]['label'];
+  }
+
+  constantsFunc() async {
+    dynamic allConstants = await getAppConstants();
+    setState(() {
+      showUi = true;
+    });
+    constants = allConstants['responses'];
+  }
+
+  /* -------------------------- END OF THE CONSTANTS -------------------------- */
+
   void chatWithPatner(responseData) {
     //need display circular indicator with z index
     _responsiveController.chatWithpatner(responseData);
   }
 
+
+
   @override
   void initState() {
     super.initState();
-
+    constantsFunc();
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     // log(_chatController.data.toString());
   }
@@ -49,13 +77,13 @@ class _ResponseeState extends StateMVC<Responsee> {
     // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _responsiveController.scaffoldkey,
-        body: Consumer<ResponsesProvider>(builder: (context, data, child) {
+        body: showUi ? Consumer<ResponsesProvider>(builder: (context, data, child) {
           List listResponse = data.getResponsesList;
           // if (data.loader) return Center(child: profileShimmer(context));
           if (listResponse.length < 1)
             return Center(
               child: TextWid(
-                text: "No Responses",
+                text: getText("no_responses"),
                 size: width(context) * 0.045,
               ),
             );
@@ -318,6 +346,6 @@ class _ResponseeState extends StateMVC<Responsee> {
             ),
             ProgressWaiter(contextt: context, loaderState: data.loader)
           ]);
-        }));
+        }):circleProgress());
   }
 }

@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/onboard.dart';
@@ -37,12 +42,24 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  getConstants({bool alwaysHit = false}) async {
+    if (await getAppConstants() != null && alwaysHit == false) {
+      log("constants already in sf");
+      return;
+    }
+
+    await constantsAPI();
+    return;
+  }
+
+
   @override
   void initState() {
     super.initState();
 
     Timer(Duration(seconds: 1), () {
       // print("18 ${FirebaseAuth.instance.currentUser}");
+      getConstants(alwaysHit: true);
       checkUser();
     });
   }
@@ -94,7 +111,23 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 
-
+constantsAPI() async {
+  dynamic response = await Server().getMethod(API.cloudConstants);
+  if (response.statusCode == 200) {
+    dynamic appConstants = jsonDecode(response?.body);
+    log(appConstants.toString());
+    setAppConstants(appConstants);
+    dynamic currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      log("confirming all costanst downloaded");
+      /* -------------- CONFIRM ALL CONSTANTS AND SETTINGS DOWNLOADED ------------- */
+      Map<String, String> body = {"appConfig": "false"};
+      Server().editMethod(API.userDetails + currentUser.uid.toString(), body);
+    }
+  } else {
+    log("something went wrong status code ${response.statusCode}");
+  }
+}
 
 // import 'dart:async';
 // import 'package:firebase_auth/firebase_auth.dart';
