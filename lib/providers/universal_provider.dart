@@ -7,6 +7,31 @@ class UniversalProvider extends ChangeNotifier {
   List searchLocations = [];
   bool locationsLoader = false;
   bool enableRoute = false;
+  Map<dynamic, dynamic> allConstants = {};
+  String currentScreen = "";
+  dynamic currentConstants;
+
+  void setAllConstants(dynamic constants) {
+    allConstants = constants;
+  }
+
+  getAllConstants() {
+    return allConstants;
+  }
+
+  void setCurrentConstants(String screenName) {
+    currentScreen = screenName;
+    currentConstants = allConstants[currentScreen];
+  }
+
+  getText(String objId) {
+    if (currentConstants == null) return "loading..";
+    int index = currentConstants?.indexWhere(
+        (element) => element['objId'].toString() == objId.toString());
+
+    if (index == -1) return "null";
+    return currentConstants[index]['label'];
+  }
 
   void setEnableRoute(bool state) {
     enableRoute = state ?? false;

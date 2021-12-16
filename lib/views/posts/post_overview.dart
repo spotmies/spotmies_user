@@ -12,6 +12,7 @@ import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -40,6 +41,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     this._postOverViewController = controller;
   }
   ChatProvider chatProvider;
+  UniversalProvider up;
   int ordId;
   bool showOrderStatusQuestion = false;
   GetOrdersProvider ordersProvider;
@@ -53,6 +55,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   void initState() {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("orders");
 
     try {
       ordersProvider.getOrderById(widget.ordId)['orderState'] < 9 &&

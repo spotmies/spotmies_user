@@ -25,4 +25,5 @@ class API {
   static var confirmDeclineOrder = '/api/order/stateChange';
   static var revealProfile = "/api/order/revealProfile";
   static var specificChat = "/api/chat/chats/";
+  static var cloudConstants = "/api/constant/doc-id/user_app";
 }

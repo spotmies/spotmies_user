@@ -6,6 +6,8 @@ import 'package:flutter/rendering.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/addressExtractor.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -36,7 +38,7 @@ class Maps extends StatefulWidget {
 
 class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
-
+  UniversalProvider up;
   Map coordinates;
   _MapsState(this.coordinates);
   var formkey = GlobalKey<FormState>();
@@ -99,6 +101,8 @@ class _MapsState extends State<Maps> {
   @override
   void initState() {
     super.initState();
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("maps");
     getCurrentLocation();
   }
 

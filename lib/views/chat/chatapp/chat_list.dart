@@ -7,6 +7,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
@@ -26,9 +27,12 @@ class _ChatListState extends StateMVC<ChatList> {
     this._chatController = controller;
   }
   ChatProvider chatProvider;
+  UniversalProvider up;
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("chatScreen");
 
     // chatProvider.setMsgId("");
     super.initState();

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/utilities/progressIndicator.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/views/call_ui/components/rounded_button.dart';
 
 import '../constants.dart';
@@ -32,6 +35,8 @@ class CallingUi extends StatefulWidget {
 class _CallingUiState extends State<CallingUi> {
   ChatProvider chatProvider;
   String screenType = '';
+  UniversalProvider up;
+
   callStatus(state) {
     switch (state) {
       case 0:
@@ -52,6 +57,8 @@ class _CallingUiState extends State<CallingUi> {
 
   @override
   initState() {
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("calling");
     setState(() {
       screenType = widget.isInComingScreen ? "incoming" : "outgoing";
     });
