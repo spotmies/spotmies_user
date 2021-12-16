@@ -146,11 +146,8 @@ class _PostListState extends StateMVC<PostList> {
                                                         .spaceBetween,
                                                 children: [
                                                   TextWidget(
-                                                    text: Constants
-                                                        .jobCategoriesSmall
-                                                        .elementAt(
-                                                      o[index]['job'],
-                                                    ),
+                                                    text: up.getServiceNameById(
+                                                        o[index]['job']),
                                                     size:
                                                         width(context) * 0.045,
                                                     weight: FontWeight.w600,
