@@ -1,15 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/reusable_widgets/steps.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 Widget page1(double hight, double width, BuildContext context,
-    AdController adController) {
+    AdController adController, UniversalProvider up) {
   return Scaffold(
     body: SingleChildScrollView(
       child: Container(
@@ -82,41 +85,19 @@ Widget page1(double hight, double width, BuildContext context,
                                     size: width * 0.06,
                                     color: Colors.indigo[900],
                                   ),
-                                  items: <int>[
-                                    0,
-                                    1,
-                                    2,
-                                    3,
-                                    4,
-                                    5,
-                                    6,
-                                    7,
-                                    8,
-                                    9,
-                                    10,
-                                    11,
-                                    12,
-                                    13,
-                                    14,
-                                    15,
-                                    16,
-                                  ].map<DropdownMenuItem<int>>(
-                                      (int jobFromFAB) {
-                                    return DropdownMenuItem<int>(
-                                        value: jobFromFAB,
-                                        child: TextWidget(
-                                          text: adController.jobs.elementAt(
-                                              // jobFromHome == null
-                                              //     ?
-                                              jobFromFAB
-                                              // : jobFromHome,
-                                              ),
-                                          color: Colors.grey[900],
-                                          size: width * 0.04,
-                                          weight: FontWeight.w500,
-                                        ));
+                                  items: up.servicesList.map((location) {
+                                    return DropdownMenuItem(
+                                      child: TextWid(
+                                        text: location['nameOfService'],
+                                        color: Colors.grey[900],
+                                        size: width * 0.04,
+                                        weight: FontWeight.w500,
+                                      ),
+                                      value: location['serviceId'],
+                                    );
                                   }).toList(),
                                   onChanged: (newVal) {
+                                    log(newVal.toString());
                                     adController.dropDownValue = newVal;
                                     adController.refresh();
                                   },
