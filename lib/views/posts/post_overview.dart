@@ -155,9 +155,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: Constants.jobCategories[d['job'].runtimeType == String
+                    text: up.getServiceNameById(d['job'].runtimeType == String
                         ? int.parse(d['job'])
-                        : d['job']],
+                        : d['job']),
                     size: width(context) * 0.04,
                     color:
                         d['orderState'] > 8 ? Colors.white : Colors.grey[500],
@@ -431,7 +431,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                       context,
                                       _postOverViewController,
                                       d,
-                                      chatWithPatner)
+                                      chatWithPatner,
+                                      up)
                                   : Container(
                                       height: 60,
                                       alignment: Alignment.center,
@@ -800,8 +801,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 }
 
 partnerDetails(hight, width, BuildContext context, controller, orderDetails,
-    chatWithPatner) {
+    chatWithPatner, UniversalProvider up) {
   dynamic pDetails = orderDetails['pDetails'];
+  log(pDetails['lang'].toString());
+  List languages = pDetails['lang'];
   return Container(
     // height: hight * 0.24,
     child: Column(
@@ -845,8 +848,7 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                               // mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 TextWidget(
-                                  text: controller.jobs
-                                          .elementAt(pDetails['job']) +
+                                  text: up.getServiceNameById(pDetails['job']) +
                                       ' | ',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
@@ -871,27 +873,16 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                       ),
                       Container(
                         child: Row(
-                          children: [
-                            TextWid(
-                              text: 'Telugu | ',
-                              size: width * 0.03,
-                              weight: FontWeight.w600,
-                              color: Colors.grey[900],
-                            ),
-                            TextWid(
-                              text: 'English | ',
-                              size: width * 0.03,
-                              weight: FontWeight.w600,
-                              color: Colors.grey[900],
-                            ),
-                            TextWid(
-                              text: 'Hindi',
-                              size: width * 0.03,
-                              weight: FontWeight.w600,
-                              color: Colors.grey[900],
-                            ),
-                          ],
-                        ),
+                            children: languages
+                                .map((lang) => Container(
+                                      child: TextWid(
+                                        text: lang + "  ",
+                                        size: width * 0.026,
+                                        weight: FontWeight.w600,
+                                        color: Colors.grey[900],
+                                      ),
+                                    ))
+                                .toList()),
                       ),
                       Container(
                         width: width * 0.45,

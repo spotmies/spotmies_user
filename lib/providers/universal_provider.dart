@@ -77,7 +77,6 @@ class UniversalProvider extends ChangeNotifier {
   }
 
   getServiceNameById(int id) {
-    log(id.toString());
     int index =
         servicesList.indexWhere((element) => element['serviceId'] == id);
     if (index < 0) return "null";
