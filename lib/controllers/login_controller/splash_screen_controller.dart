@@ -73,6 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(seconds: 1), () {
       // print("18 ${FirebaseAuth.instance.currentUser}");
       getConstants(alwaysHit: false);
+      universalProvider.fetchServiceList();
       checkUser();
     });
   }

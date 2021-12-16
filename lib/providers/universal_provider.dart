@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 
 class UniversalProvider extends ChangeNotifier {
   int currentNavigationPage = 0; //0 - home 1- chat 2-my booking 3 - account
@@ -32,6 +38,51 @@ class UniversalProvider extends ChangeNotifier {
     if (index == -1) return "null";
     return currentConstants[index]['label'];
   }
+
+/* -------------------------- service list details -------------------------- */
+  List servicesList = [];
+  getServiceListFromServer() async {
+    dynamic resp = await Server().getMethod(API.servicesList);
+    if (resp.statusCode == 200) {
+      dynamic list = jsonDecode(resp.body);
+      log(list.toString());
+      log("confirming all serviceslist are downloaded....");
+      servicesList = list;
+      sortServiceList();
+      setListOfServices(list);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  fetchServiceList({bool alwaysHit = false}) async {
+    if (!alwaysHit) {
+      dynamic servicesListFromSf = await getListOfServices();
+      if (servicesListFromSf != null) {
+        servicesList = servicesListFromSf;
+
+        log("service list already in sf");
+        return;
+      }
+    }
+
+    getServiceListFromServer();
+  }
+
+  void sortServiceList() {
+    servicesList.sort((a, b) {
+      return a['sort'].compareTo(b['sort']);
+    });
+  }
+
+  getServiceNameById(int id) {
+    int index =
+        servicesList.indexWhere((element) => element['serviceId'] == id);
+    if (index < 0) return "null";
+    return servicesList[index]['nameOfService'];
+  }
+  /* ----------------------------------- xxx ---------------------------------- */
 
   void setEnableRoute(bool state) {
     enableRoute = state ?? false;

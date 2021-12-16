@@ -91,6 +91,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
       ordersProvider
           .setOrdersList(user['orders'] != null ? user['orders'] : []);
       if (user['appConfig'] == true) {
+        universalProvider.getServiceListFromServer();
         dynamic appConstants = await constantsAPI();
         if (appConstants != null) {
           universalProvider.setAllConstants(appConstants);

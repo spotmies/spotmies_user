@@ -78,7 +78,7 @@ class _PostAdState extends StateMVC<PostAd> {
                 Container(
                     height: height(context) * 1.08,
                     child: page1(height(context), width(context), context,
-                        _adController)),
+                        _adController, up)),
                 Container(
                     height: height(context) * 1.08,
                     child: page2(height(context), width(context), context,
