@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
-import 'package:spotmies/utilities/progressIndicator.dart';
-import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/views/call_ui/components/rounded_button.dart';
 
-import '../constants.dart';
 import '../size.config.dart';
 
 class CallingUi extends StatefulWidget {
@@ -22,11 +19,11 @@ class CallingUi extends StatefulWidget {
   final bool isInComingScreen;
   final String image;
   final String name;
-  final VoidCallback onAccept;
-  final VoidCallback onReject;
-  final VoidCallback onHangUp;
-  final VoidCallback onMic;
-  final VoidCallback onSpeaker;
+  final Function onAccept;
+  final Function onReject;
+  final Function onHangUp;
+  final Function onMic;
+  final Function onSpeaker;
 
   @override
   _CallingUiState createState() => _CallingUiState();
@@ -36,6 +33,8 @@ class _CallingUiState extends State<CallingUi> {
   ChatProvider chatProvider;
   String screenType = '';
   UniversalProvider up;
+  bool clickMic = false;
+  bool clickSpeaker = false;
 
   callStatus(state) {
     switch (state) {
@@ -135,31 +134,85 @@ class _CallingUiState extends State<CallingUi> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          RoundedButton(
-                            press: () {
-                              widget.onMic();
-                            },
-                            color: Colors.white,
-                            iconColor: Colors.black,
-                            iconSrc: "assets/icons/Icon Mic.svg",
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: !clickMic
+                                    ? Colors.white
+                                    : Colors.indigoAccent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  clickMic = !clickMic;
+                                });
+                                widget.onMic(clickMic);
+                              },
+                              icon: Icon(
+                                Icons.mic,
+                                color:
+                                    !clickMic ? Colors.grey[900] : Colors.white,
+                              ),
+                            ),
                           ),
-                          RoundedButton(
-                            press: () {
-                              widget.onHangUp();
-                              Navigator.pop(context);
-                            },
-                            color: kRedColor,
-                            iconColor: Colors.white,
-                            iconSrc: "assets/icons/call_end.svg",
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: Colors.red, shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                widget.onHangUp();
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.call_end,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                          RoundedButton(
-                            press: () {
-                              widget.onSpeaker();
-                            },
-                            color: Colors.white,
-                            iconColor: Colors.black,
-                            iconSrc: "assets/icons/Icon Volume.svg",
+                          // RoundedButton(
+                          //   press: () {
+                          //     widget.onHangUp();
+                          //     Navigator.pop(context);
+                          //   },
+                          //   color: kRedColor,
+                          //   iconColor: Colors.white,
+                          //   iconSrc: "assets/icons/call_end.svg",
+                          // ),
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                color: !clickSpeaker
+                                    ? Colors.white
+                                    : Colors.indigoAccent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  clickSpeaker = !clickSpeaker;
+                                });
+                                widget.onSpeaker(clickSpeaker);
+                                // widget.onSpeaker();
+                              },
+                              icon: Icon(
+                                Icons.volume_up,
+                                color: !clickSpeaker
+                                    ? Colors.grey[900]
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
+                          // RoundedButton(
+                          //   press: () {
+                          //     widget.onSpeaker();
+                          //   },
+                          //   color: Colors.white,
+                          //   iconColor: Colors.black,
+                          //   iconSrc: "assets/icons/Icon Volume.svg",
+                          // ),
                         ],
                       ),
                     ),

@@ -9,6 +9,7 @@ import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/views/call_ui/audioCallWithImage/components/body.dart';
 import 'package:spotmies/views/internet_calling/signaling.dart';
+import 'package:flutter_incall/flutter_incall.dart';
 
 class MyCalling extends StatefulWidget {
   final String msgId;
@@ -28,12 +29,14 @@ class MyCalling extends StatefulWidget {
       @required this.isIncoming,
       this.roomId,
       this.name,
-      this.profile,this.partnerDeviceToken});
+      this.profile,
+      this.partnerDeviceToken});
   @override
   _MyCallingState createState() => _MyCallingState();
 }
 
 class _MyCallingState extends State<MyCalling> {
+  IncallManager incallManager = new IncallManager();
   ChatProvider chatProvider;
   UserDetailsProvider _userProvider;
   Signaling signaling = Signaling();
@@ -65,7 +68,7 @@ class _MyCallingState extends State<MyCalling> {
       'roomId': roomId.toString(),
       'incomingName': _userProvider.getUser['name'],
       'incomingProfile': _userProvider.getUser['pic'],
-      'deviceToken':[widget.partnerDeviceToken]
+      'deviceToken': [widget.partnerDeviceToken]
     };
     Map<String, Object> sendPayload = {
       "object": jsonEncode(msgData),
@@ -121,9 +124,17 @@ class _MyCallingState extends State<MyCalling> {
       _remoteRenderer.srcObject = stream;
       setState(() {});
     });
+    // incallManager.start(
+    //     media: MediaType.AUDIO, auto: false, ringback: '_DEFAULT_');
     signaling.openUserMedia(_localRenderer, _remoteRenderer, context);
     if (!widget.isIncoming) {
+      incallManager.enableProximitySensor(true);
+      incallManager.turnScreenOff();
+      incallManager.setMicrophoneMute(false);
       createRoomId();
+    } else {
+      incallManager.startRingtone(RingtoneUriType.DEFAULT, 'default', 30);
+      incallManager.setSpeakerphoneOn(true);
     }
     chatProvider.addListener(() {
       int callState = chatProvider.getCallStatus;
@@ -141,6 +152,10 @@ class _MyCallingState extends State<MyCalling> {
     log("====== disporse =======");
     _localRenderer.dispose();
     _remoteRenderer.dispose();
+    incallManager.enableProximitySensor(false);
+    incallManager.turnScreenOn();
+    incallManager.setMicrophoneMute(true);
+    incallManager.stopRingtone();
     //  chatProvider.setAcceptCall(true);
     super.dispose();
   }
@@ -154,8 +169,29 @@ class _MyCallingState extends State<MyCalling> {
       return CallingUi(
         isInComingScreen: widget.isIncoming,
         onHangUp: handUpCall,
-        onAccept: joinOnRoom,
-        onReject: rejectCall,
+        onAccept: () {
+          incallManager.stopRingback();
+          incallManager.stopRingtone();
+          incallManager.enableProximitySensor(true);
+          incallManager.turnScreenOff();
+          incallManager.setMicrophoneMute(false);
+          joinOnRoom();
+        },
+        onMic: (bool state) {
+          log("mic is $state");
+          incallManager.setMicrophoneMute(state);
+          // log("enabling proxmity");
+          // incallManager.turnScreenOff();
+          // incallManager.enableProximitySensor(true);
+        },
+        onReject: () {
+          incallManager.enableProximitySensor(false);
+          rejectCall();
+        },
+        onSpeaker: (bool state) {
+          log("spelaer is $state");
+          incallManager.setSpeakerphoneOn(state);
+        },
         name: widget?.name ?? "unknown",
         image: widget?.profile ?? "",
       );
