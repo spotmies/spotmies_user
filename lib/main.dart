@@ -18,8 +18,6 @@ import 'package:spotmies/utilities/notifications.dart';
 
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
-  // print(message.data.toString());
-  // print(message.notification.title);
   displayAwesomeNotificationBackground(message);
 }
 

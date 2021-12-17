@@ -44,6 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (_) => OnboardingScreen()),
           (route) => false);
     }
+    
   }
 
   getConstants({bool alwaysHit = false}) async {
