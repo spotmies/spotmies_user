@@ -94,21 +94,22 @@ class StepperPersonal extends ControllerMVC {
     timerProvider.setLoader(true, loadingValue: "Uploading profile pic...");
     log("${timerProvider.phoneNumber}");
     await uploadimage();
-     dynamic deviceToken = await FirebaseMessaging.instance.getToken();
+    dynamic deviceToken = await FirebaseMessaging.instance.getToken();
     timerProvider.setLoader(true, loadingValue: "Registration Inprogress...");
+    log(timerProvider.phoneNumber.toString());
     var body = {
       "name": this?.name?.toString(),
-      "phNum": timerProvider?.phoneNumber?.toString(),
+      "phNum": timerProvider?.phNumber?.toString(),
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       "uId": FirebaseAuth.instance.currentUser.uid.toString(),
       "userState": "active",
       "altNum": this?.altnumber?.toString() ?? "",
-      if(this.email != null)"eMail":this.email.toString(),
+      if (this.email != null) "eMail": this.email.toString(),
       "t&a": accept?.toString(),
       "pic": imageLink?.toString() ?? "",
       "userDeviceToken": deviceToken?.toString() ?? "",
       "referalCode":
-          "${name.substring(0, 4)}${timerProvider.phoneNumber.substring(6)}"
+          "${name.substring(0, 4)}${timerProvider.phNumber.substring(6)}"
     };
     log("body $body");
     var resp =
