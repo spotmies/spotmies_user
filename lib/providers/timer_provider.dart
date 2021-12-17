@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 
 class TimeProvider extends ChangeNotifier {
@@ -14,6 +16,7 @@ class TimeProvider extends ChangeNotifier {
   }
 
   void setPhoneNumber(number) {
+    log("setting number $number");
     verifiedPhoneNumber = number;
     notifyListeners();
   }

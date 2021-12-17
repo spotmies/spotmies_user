@@ -9,6 +9,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textWidget.dart';
@@ -23,6 +24,8 @@ class LoginPageScreen extends StatefulWidget {
 class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
   LoginPageController _loginPageController;
   TimeProvider timerProvider;
+  UniversalProvider up;
+
   _LoginPageScreenState() : super(LoginPageController()) {
     this._loginPageController = controller;
   }
@@ -31,6 +34,8 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
   void initState() {
     super.initState();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("login");
   }
 
   @override
@@ -72,14 +77,14 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       TextWidget(
-                                        text: 'SPOTMIES',
+                                        text: up.getText("spotmies_title"),
                                         weight: FontWeight.w600,
                                         size: width(context) * 0.06,
                                         color: Colors.indigo[900],
                                         lSpace: 2.0,
                                       ),
                                       TextWidget(
-                                          text: 'EXPERIENCE THE EXCELLENCE',
+                                          text: up.getText("spotmies_tagline"),
                                           weight: FontWeight.w600,
                                           size: width(context) * 0.019,
                                           color: Colors.grey[900],

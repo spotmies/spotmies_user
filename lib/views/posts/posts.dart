@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -28,13 +29,17 @@ class PostList extends StatefulWidget {
 class _PostListState extends StateMVC<PostList> {
   PostsController _postsController;
   GetOrdersProvider ordersProvider;
+  UniversalProvider up;
+
   _PostListState() : super(PostsController()) {
     this._postsController = controller;
   }
 
   @override
   void initState() {
+    up = Provider.of<UniversalProvider>(context, listen: false);
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+    up.setCurrentConstants("orders");
 
     super.initState();
   }
@@ -51,7 +56,7 @@ class _PostListState extends StateMVC<PostList> {
         appBar: AppBar(
           leading: Icon(Icons.work, color: Colors.grey[900]),
           title: TextWidget(
-            text: 'My Bookings',
+            text: up.getText("navbar_title"),
             color: Colors.grey[900],
             size: width(context) * 0.05,
             weight: FontWeight.w600,
@@ -74,7 +79,7 @@ class _PostListState extends StateMVC<PostList> {
               if (o.length < 1)
                 return Center(
                   child: TextWid(
-                    text: "No Orders",
+                    text: up.getText("no_orders"),
                     size: 30,
                   ),
                 );
@@ -91,7 +96,7 @@ class _PostListState extends StateMVC<PostList> {
                       //     .findAddressesFromCoordinates(coordinates);
 
                       var orderid = o[index]['ordId'];
-                      log(o[index].toString());
+                      // log(o[index].toString());
 
                       // var firstAddress = addresses.first.locality;
                       return Container(
@@ -141,18 +146,17 @@ class _PostListState extends StateMVC<PostList> {
                                                         .spaceBetween,
                                                 children: [
                                                   TextWidget(
-                                                    text: Constants
-                                                        .jobCategoriesSmall
-                                                        .elementAt(
-                                                      o[index]['job'],
-                                                    ),
-                                                    size: width(context) * 0.045,
+                                                    text: up.getServiceNameById(
+                                                        o[index]['job']),
+                                                    size:
+                                                        width(context) * 0.045,
                                                     weight: FontWeight.w600,
                                                   ),
                                                   Container(
                                                     padding: EdgeInsets.only(
                                                         right: 5, left: 5),
-                                                    height: height(context) * 0.032,
+                                                    height:
+                                                        height(context) * 0.032,
                                                     decoration: BoxDecoration(
                                                         color: Colors.white,
                                                         borderRadius:
@@ -170,10 +174,13 @@ class _PostListState extends StateMVC<PostList> {
                                                                   'orderState']),
                                                           color: Colors
                                                               .indigo[900],
-                                                          size: width(context) * 0.04,
+                                                          size: width(context) *
+                                                              0.04,
                                                         ),
                                                         SizedBox(
-                                                          width: width(context) * 0.01,
+                                                          width:
+                                                              width(context) *
+                                                                  0.01,
                                                         ),
                                                         TextWidget(
                                                             text: orderStateString(
@@ -184,7 +191,9 @@ class _PostListState extends StateMVC<PostList> {
                                                                 .indigo[900],
                                                             weight:
                                                                 FontWeight.w600,
-                                                            size: width(context) * 0.03)
+                                                            size:
+                                                                width(context) *
+                                                                    0.03)
                                                       ],
                                                     ),
                                                   )
@@ -253,17 +262,21 @@ class _PostListState extends StateMVC<PostList> {
                                                               .account_balance_wallet,
                                                           color:
                                                               Colors.grey[900],
-                                                          size: width(context) * 0.04,
+                                                          size: width(context) *
+                                                              0.04,
                                                         ),
                                                         SizedBox(
-                                                          width: width(context) * 0.01,
+                                                          width:
+                                                              width(context) *
+                                                                  0.01,
                                                         ),
                                                         TextWidget(
                                                           text: 'Rs.1500',
                                                           // +
                                                           // o[index]['money']
                                                           //     .toString(),
-                                                          size: width(context) * 0.035,
+                                                          size: width(context) *
+                                                              0.035,
                                                           weight:
                                                               FontWeight.w600,
                                                         )
@@ -276,7 +289,8 @@ class _PostListState extends StateMVC<PostList> {
                                                                     'problem']),
                                                         flow: TextOverflow
                                                             .ellipsis,
-                                                        size: width(context) * 0.045),
+                                                        size: width(context) *
+                                                            0.045),
                                                   ],
                                                 ),
                                               ),
@@ -294,7 +308,9 @@ class _PostListState extends StateMVC<PostList> {
                                                       right: 0,
                                                       top: 0,
                                                       child: CircleAvatar(
-                                                          radius: width(context) * 0.02,
+                                                          radius:
+                                                              width(context) *
+                                                                  0.02,
                                                           backgroundColor:
                                                               Colors
                                                                   .indigo[900],
@@ -306,7 +322,8 @@ class _PostListState extends StateMVC<PostList> {
                                                                 "0",
                                                             color: Colors.white,
                                                             size:
-                                                                width(context) * 0.025,
+                                                                width(context) *
+                                                                    0.025,
                                                           )))
                                                 ],
                                               )
@@ -326,7 +343,7 @@ class _PostListState extends StateMVC<PostList> {
                                           minWidth: width(context) * 0.498,
                                           height: height(context) * 0.06,
                                           bgColor: Colors.grey[50],
-                                          buttonName: 'Need Help ?',
+                                          buttonName: up.getText("need_help"),
                                           textColor: Colors.grey[900],
                                           borderRadius: 0.0,
                                           textSize: width(context) * 0.04,
@@ -341,7 +358,7 @@ class _PostListState extends StateMVC<PostList> {
                                           minWidth: width(context) * 0.498,
                                           height: height(context) * 0.06,
                                           bgColor: Colors.grey[50],
-                                          buttonName: 'View Menu',
+                                          buttonName: up.getText("view_menu"),
                                           textColor: Colors.grey[900],
                                           borderRadius: 0.0,
                                           textSize: width(context) * 0.04,
@@ -353,7 +370,8 @@ class _PostListState extends StateMVC<PostList> {
                                           borderSideColor: Colors.grey[50],
                                           onClick: () {
                                             bottomOptionsMenu(context,
-                                                menuTitle: "More options",
+                                                menuTitle:
+                                                    up.getText("more_options"),
                                                 option1Click: () {
                                               Navigator.of(context)
                                                   .push(MaterialPageRoute(
@@ -371,9 +389,10 @@ class _PostListState extends StateMVC<PostList> {
                                                     return AlertDialog(
                                                       // insetAnimationCurve:
                                                       //     Curves.decelerate,
-                                                      title: Text('Alert'),
-                                                      content: Text(
-                                                          'Are you sure,you want delete the post ?'),
+                                                      title: Text(up.getText(
+                                                          "delete_alert_heading")),
+                                                      content: Text(up.getText(
+                                                          "delete_order_alert")),
                                                       actions: [
                                                         TextButton(
                                                             onPressed: () {
@@ -381,7 +400,8 @@ class _PostListState extends StateMVC<PostList> {
                                                                   context);
                                                             },
                                                             child: Text(
-                                                              'Deny',
+                                                              up.getText(
+                                                                  "delete_deny"),
                                                               style: TextStyle(
                                                                   color: Colors
                                                                           .grey[
@@ -422,7 +442,8 @@ class _PostListState extends StateMVC<PostList> {
                                                               }
                                                             },
                                                             child: Text(
-                                                              'Delete',
+                                                              up.getText(
+                                                                  "delete_order"),
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .red,

@@ -10,6 +10,7 @@ import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/providers/timer_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
@@ -25,6 +26,7 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends StateMVC<OTPScreen> {
   LoginPageController _loginPageController;
+  UniversalProvider up;
   _OTPScreenState() : super(LoginPageController()) {
     this._loginPageController = controller;
   }
@@ -53,6 +55,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   void initState() {
     _timer?.cancel();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("otp");
 
     super.initState();
     startTimer();

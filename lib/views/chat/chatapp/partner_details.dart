@@ -6,7 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
@@ -35,12 +37,15 @@ class PartnerDetails extends StatefulWidget {
 
 class _PartnerDetailsState extends StateMVC<PartnerDetails> {
   ChatController _chatController;
+  UniversalProvider up;
   _PartnerDetailsState() : super(ChatController()) {
     this._chatController = controller;
   }
   bool isSwitch;
   @override
   void initState() {
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up.setCurrentConstants("chatScreen");
     log("details ${widget.profileDetails} ");
     setState(() {
       isSwitch = widget.isMyProfileRevealed;

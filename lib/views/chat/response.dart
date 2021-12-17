@@ -6,6 +6,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
@@ -23,6 +24,8 @@ class Responsee extends StatefulWidget {
 class _ResponseeState extends StateMVC<Responsee> {
   ResponsiveController _responsiveController;
   ResponsesProvider responseProvider;
+  UniversalProvider up;
+
   _ResponseeState() : super(ResponsiveController()) {
     this._responsiveController = controller;
   }
@@ -35,8 +38,10 @@ class _ResponseeState extends StateMVC<Responsee> {
   @override
   void initState() {
     super.initState();
+    up = Provider.of<UniversalProvider>(context, listen: false);
 
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    up.setCurrentConstants("responses");
     // log(_chatController.data.toString());
   }
 
@@ -55,7 +60,7 @@ class _ResponseeState extends StateMVC<Responsee> {
           if (listResponse.length < 1)
             return Center(
               child: TextWid(
-                text: "No Responses",
+                text: up.getText("no_responses"),
                 size: width(context) * 0.045,
               ),
             );

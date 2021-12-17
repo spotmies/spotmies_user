@@ -340,7 +340,7 @@ class AdController extends ControllerMVC {
     // var ud = userDetails["_id"].toString();
     var body = {
       "problem": this.title.toString(),
-      "job": (this.dropDownValue - 1).toString(),
+      "job": (this.dropDownValue).toString(),
       "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
       "ordState": "req",
       "join": DateTime.now().millisecondsSinceEpoch.toString(),

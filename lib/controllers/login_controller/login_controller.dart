@@ -77,6 +77,7 @@ class LoginPageController extends ControllerMVC {
           },
           codeSent: (String verficationID, int resendToken) {
             timerProvider.setLoader(false);
+            timerProvider.setPhNumber(loginnum.text.toString());
             snackbar(context, "Otp send successfully ");
 
             _verificationCode = verficationID;
@@ -153,7 +154,7 @@ checkUserRegistered(uid) async {
   // print("checkUserreg");
   var response = await Server().editMethod(API.userDetails + uid, obj);
   // print("36 $response");
-  if (response.statusCode == 200 || response.statusCode ==204) 
+  if (response.statusCode == 200 || response.statusCode == 204)
     return true;
   else
     return false;

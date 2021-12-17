@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
+import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
@@ -89,6 +90,13 @@ class _GoogleNavBarState extends State<GoogleNavBar>
       profileProvider.setUser(user);
       ordersProvider
           .setOrdersList(user['orders'] != null ? user['orders'] : []);
+      if (user['appConfig'] == true) {
+        universalProvider.getServiceListFromServer();
+        dynamic appConstants = await constantsAPI();
+        if (appConstants != null) {
+          universalProvider.setAllConstants(appConstants);
+        }
+      }
     }
     dynamic chatList = await getChatListFromDb(uuId);
     if (chatList != null) chatProvider.setChatList(chatList);
