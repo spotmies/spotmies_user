@@ -55,7 +55,7 @@ class AdController extends ControllerMVC {
   DateTime now = DateTime.now();
 
   // drop down menu for service type
-  int dropDownValue = 0;
+  int dropDownValue;
   //dummy data for accept/reject requests condition
   String dummy = 'nothing';
   //user id
@@ -300,11 +300,12 @@ class AdController extends ControllerMVC {
   // }
 
   step1() {
-    if (dropDownValue == 0) {
-      snackbar(context, 'Please Send Job Field');
+    if (dropDownValue == null || dropDownValue < 0) {
+      snackbar(context, 'Please select service type');
+      return;
     }
     setState(() {
-      if (formkey.currentState.validate() && dropDownValue != 0) {
+      if (formkey.currentState.validate()) {
         formkey.currentState.save();
 
         sliderKey.currentState.next();
