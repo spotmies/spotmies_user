@@ -393,6 +393,47 @@ class PostOverViewController extends ControllerMVC {
     Map<String, String> body = {"orderState": "3"};
     await updateOrder(body: body, ordId: ordId);
   }
+
+  submitReview(int rating, String comment) async {
+    log(rating.toString());
+    log(comment);
+    String mappedRating = (rating * 20).toString();
+    Map<String, String> body = {
+      "rating": mappedRating,
+      "pId": orderDetails['pId'].toString(),
+      "uId": orderDetails['uId'].toString(),
+      "ordId": orderDetails['ordId'].toString(),
+      "pDetails": orderDetails['pDetails']['_id'].toString(),
+      "uDetails": orderDetails['uDetails']['_id'].toString(),
+      "orderDetails": orderDetails['_id'].toString(),
+      "createdAt": DateTime.now().millisecondsSinceEpoch.toString(),
+      "description": comment
+    };
+    // log("body $body");
+    dynamic newbody = orderDetails;
+    newbody['orderState'] = 10;
+    ordersProvider.updateOrderById(ordId: newbody['ordId'], orderData: newbody);
+    bool resp = await feedbackOrder(body: body);
+    if (resp) {
+      Map<String, String> body = {"orderState": "10"};
+      dynamic resp2 =
+          await updateOrder(body: body, ordId: orderDetails['ordId']);
+      if (resp2 != null) {
+        snackbar(context, "Thank you for your feedback");
+      } else {
+        newbody['orderState'] = 9;
+        ordersProvider.updateOrderById(
+            ordId: newbody['ordId'], orderData: newbody);
+        snackbar(context, "Something went wrong");
+      }
+    } else {
+      newbody['orderState'] = 9;
+      ordersProvider.updateOrderById(
+          ordId: newbody['ordId'], orderData: newbody);
+      snackbar(context, "Something went wrong");
+    }
+  }
+
   // getAddressofLocation(Set<double> coordinates) async {
   //   var addresses =
   //       await Geocoder.local.findAddressesFromCoordinates(coordinates);
@@ -453,4 +494,12 @@ updateOrder({body, ordId}) async {
     return jsonDecode(response.body);
   }
   return null;
+}
+
+Future<bool> feedbackOrder({body}) async {
+  dynamic response = await Server().postMethod(API.serviceFeedBack, body);
+  if (response.statusCode == 200 || response.statusCode == 204) {
+    return true;
+  }
+  return false;
 }

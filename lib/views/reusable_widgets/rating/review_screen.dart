@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -8,119 +10,26 @@ import 'package:spotmies/views/reusable_widgets/rating/rating_star.dart';
 import 'package:spotmies/views/reusable_widgets/rating/rating_textfield.dart';
 import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 
-class ReviewScreen extends StatefulWidget {
-  const ReviewScreen({Key key}) : super(key: key);
-
-  @override
-  _ReviewScreenState createState() => _ReviewScreenState();
-}
-
-class _ReviewScreenState extends State<ReviewScreen> {
-  bool hasUserGivenFeedBack = false;
-  @override
-  Widget build(BuildContext context) {
-    SizeProvider().init(context);
-
-    return Container(
-      padding: EdgeInsets.all(getProportionateSize(16)),
-      margin: EdgeInsets.only(top: getProportionateHeight(20)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            !hasUserGivenFeedBack ? "Your" : "Thank you",
-            style: Theme.of(context)
-                .textTheme
-                .subtitle2
-                ?.copyWith(fontSize: getProportionateHeight(36), height: 1),
+reviewBS(BuildContext context, Function onSubmit) {
+  return showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(
+            getProportionateSize(24),
           ),
-          Text(
-            hasUserGivenFeedBack ? "for your" : "Feedback",
-            style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                fontSize: !hasUserGivenFeedBack
-                    ? getProportionateHeight(64)
-                    : getProportionateHeight(20),
-                height: 1,
-                color: !hasUserGivenFeedBack ? Colors.amber : Colors.black),
-          ),
-          Text(hasUserGivenFeedBack ? "Feedback." : "is very important to Us.",
-              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                  fontSize: hasUserGivenFeedBack
-                      ? getProportionateHeight(64)
-                      : getProportionateHeight(20),
-                  height: 1,
-                  color: hasUserGivenFeedBack ? Colors.amber : Colors.black)),
-          SizedBox(
-            height: getProportionateHeight(16),
-          ),
-          hasUserGivenFeedBack
-              ? const SizedBox()
-              : Text(
-                  "Your feedback helps us improve our service and help us serve you better.",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.copyWith(color: Colors.grey),
-                ),
-          const Spacer(),
-          Padding(
-            padding: EdgeInsets.all(getProportionateSize(16)),
-            child: const Image(image: AssetImage("assets/feedback.png")),
-          ),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(getProportionateSize(16)),
-              child: ElevatedButton(
-                child: Padding(
-                  padding: EdgeInsets.all(getProportionateSize(18)),
-                  child: Text(
-                    hasUserGivenFeedBack ? "Go to Home" : "Rate Our Service",
-                    style: TextStyle(fontSize: getProportionateHeight(16)),
-                  ),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => getMSColor(states)),
-                  foregroundColor: MaterialStateProperty.resolveWith(
-                      (states) => getMSForegroundColor(states)),
-                ),
-                onPressed: hasUserGivenFeedBack
-                    ? null
-                    : () {
-                        showModalBottomSheet(
-                            context: context,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(
-                                  getProportionateSize(24),
-                                ),
-                              ),
-                            ),
-                            builder: (context) {
-                              return ChangeNotifierProvider<ServiceViewModel>(
-                                create: (context) => ServiceViewModel(),
-                                child: RatingCard(
-                                  onFeedbackSubmitted: () {
-                                    setState(() {
-                                      hasUserGivenFeedBack = true;
-                                    });
-                                  },
-                                ),
-                              );
-                            });
-                      },
-              ),
-            ),
-          ),
-          SizedBox(
-            height: getProportionateHeight(10),
-          )
-        ],
+        ),
       ),
-    );
-  }
+      builder: (context) {
+        return ChangeNotifierProvider<ServiceViewModel>(
+          create: (context) => ServiceViewModel(),
+          child: RatingCard(
+            onFeedbackSubmitted: (int rating, String comment) {
+              onSubmit(rating, comment);
+            },
+          ),
+        );
+      });
 }
 
 Color getMSColor(Set<MaterialState> states) {
@@ -153,7 +62,8 @@ class RatingCard extends StatefulWidget {
 }
 
 class _RatingCardState extends State<RatingCard> {
-  var starsGiven = 0;
+  int starsGiven = 0;
+  String comment = "";
 
   @override
   Widget build(BuildContext context) {
@@ -190,6 +100,7 @@ class _RatingCardState extends State<RatingCard> {
                   setState(() {
                     starsGiven = numberOfStars + 1;
                   });
+                  log(starsGiven.toString());
                 },
               ),
               const RatingTextField(),
@@ -216,7 +127,7 @@ class _RatingCardState extends State<RatingCard> {
                   if (feedbackText.isNotEmpty && starsGiven > 0) {
                     print("Submit Data - $feedbackText with $starsGiven");
                     Navigator.pop(context);
-                    widget.onFeedbackSubmitted();
+                    widget.onFeedbackSubmitted(starsGiven, feedbackText);
                   } else {
                     var textRating =
                         starsGiven > 3 ? "feedback" : "suggestions";

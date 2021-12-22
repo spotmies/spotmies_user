@@ -25,6 +25,8 @@ import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
+import 'package:spotmies/views/reusable_widgets/rating/review_screen.dart';
+import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 import 'package:timelines/timelines.dart';
 
@@ -102,6 +104,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   @override
   Widget build(BuildContext context) {
+    SizeProvider().init(context);
     return Consumer<GetOrdersProvider>(builder: (context, data, child) {
       dynamic d = data.getOrderById(widget.ordId);
       _postOverViewController.orderDetails = d;
@@ -286,8 +289,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  Wrap(
+                    alignment: WrapAlignment.spaceEvenly,
                     children: [
                       TextWidget(
                         text: orderStateString(ordState: d['orderState']),
@@ -511,27 +514,54 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 ],
                               )
                             : Container(),
-                        Container(
-                          padding: EdgeInsets.only(bottom: 10, right: 10),
-                          child: ElevatedButtonWidget(
-                            height: height(context) * 0.05,
-                            minWidth: width(context) * 0.7,
-                            onClick: () {
-                              Map<String, dynamic> sendPayload = {
-                                "socketName": "broadCastOrder",
-                                "ordId": d['ordId']
-                              };
-                              chatProvider.setSendMessage(sendPayload);
-                            },
-                            bgColor: Colors.white,
-                            borderSideColor: Colors.grey[200],
-                            borderRadius: 10.0,
-                            buttonName: 'Broadcast my order again',
-                            textSize: width(context) * 0.04,
-                            leadingIcon: Icon(
-                              Icons.refresh_rounded,
-                              color: Colors.grey[900],
-                              size: width(context) * 0.045,
+                        Visibility(
+                          visible: d['orderState'] < 3,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 10, right: 10),
+                            child: ElevatedButtonWidget(
+                              height: height(context) * 0.05,
+                              minWidth: width(context) * 0.5,
+                              onClick: () {
+                                Map<String, dynamic> sendPayload = {
+                                  "socketName": "broadCastOrder",
+                                  "ordId": d['ordId']
+                                };
+                                chatProvider.setSendMessage(sendPayload);
+                              },
+                              bgColor: Colors.white,
+                              borderSideColor: Colors.grey[200],
+                              borderRadius: 10.0,
+                              buttonName: 'Send order again',
+                              textSize: width(context) * 0.04,
+                              leadingIcon: Icon(
+                                Icons.refresh_rounded,
+                                color: Colors.grey[900],
+                                size: width(context) * 0.045,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: d['orderState'] == 9,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 10, right: 10),
+                            child: ElevatedButtonWidget(
+                              height: height(context) * 0.05,
+                              minWidth: width(context) * 0.5,
+                              onClick: () {
+                                reviewBS(context,
+                                    _postOverViewController.submitReview);
+                              },
+                              bgColor: Colors.white,
+                              borderSideColor: Colors.grey[200],
+                              borderRadius: 10.0,
+                              buttonName: 'Rate Service',
+                              textSize: width(context) * 0.04,
+                              leadingIcon: Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: width(context) * 0.045,
+                              ),
                             ),
                           ),
                         ),

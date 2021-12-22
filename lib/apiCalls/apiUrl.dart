@@ -27,4 +27,5 @@ class API {
   static var specificChat = "/api/chat/chats/";
   static var cloudConstants = "/api/constant/doc-id/user_app";
   static var servicesList = "/api/services/all-service-list";
+  static var serviceFeedBack = "/api/partner-feedback/new-feedback";
 }
