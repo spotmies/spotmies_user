@@ -542,7 +542,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                           ),
                         ),
                         Visibility(
-                          visible: d['orderState'] == 9,
+                          visible: d['orderState'] == 9 && d['pId'] != null,
                           child: Container(
                             padding: EdgeInsets.only(bottom: 10, right: 10),
                             child: ElevatedButtonWidget(

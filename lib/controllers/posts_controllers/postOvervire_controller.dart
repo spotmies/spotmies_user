@@ -398,6 +398,7 @@ class PostOverViewController extends ControllerMVC {
     log(rating.toString());
     log(comment);
     String mappedRating = (rating * 20).toString();
+    // log(orderDetails.toString());
     Map<String, String> body = {
       "rating": mappedRating,
       "pId": orderDetails['pId'].toString(),
@@ -409,7 +410,7 @@ class PostOverViewController extends ControllerMVC {
       "createdAt": DateTime.now().millisecondsSinceEpoch.toString(),
       "description": comment
     };
-    // log("body $body");
+    //  log("body $body");
     dynamic newbody = orderDetails;
     newbody['orderState'] = 10;
     ordersProvider.updateOrderById(ordId: newbody['ordId'], orderData: newbody);
