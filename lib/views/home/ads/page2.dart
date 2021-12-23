@@ -5,8 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/media_player.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';
+import 'package:spotmies/views/reusable_widgets/image_viewer.dart';
 import 'package:spotmies/views/reusable_widgets/steps.dart';
 
 Widget page2(double hight, double width, BuildContext context,
@@ -141,32 +143,53 @@ Widget page2(double hight, double width, BuildContext context,
                                                                 : null;
                                                           }),
                                                     )
-                                                  : Stack(children: [
-                                                      mediaContent(adController
-                                                              .serviceImages[
-                                                          index - 1]),
-                                                      Positioned(
-                                                          right: 0,
-                                                          top: 0,
-                                                          child: InkWell(
-                                                              onTap: () {
-                                                                adController
-                                                                    .serviceImages
-                                                                    .removeAt(
-                                                                        index -
-                                                                            1);
-
-                                                                adController
-                                                                    .refresh();
-                                                              },
-                                                              child: Icon(
-                                                                Icons.close,
-                                                                size: width *
-                                                                    0.05,
-                                                                color: Colors
-                                                                    .white,
-                                                              )))
-                                                    ]);
+                                                  : InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        MediaPlayer(
+                                                                          mediaList: [
+                                                                            adController.serviceImagesStrings[index -
+                                                                                1]
+                                                                          ],
+                                                                          isOnlinePlayer:
+                                                                              false,
+                                                                        )));
+                                                      },
+                                                      child: Stack(children: [
+                                                        mediaContent(adController
+                                                                .serviceImages[
+                                                            index - 1]),
+                                                        Positioned(
+                                                            right: 0,
+                                                            top: 0,
+                                                            child: InkWell(
+                                                                onTap: () {
+                                                                  adController
+                                                                      .serviceImages
+                                                                      .removeAt(
+                                                                          index -
+                                                                              1);
+                                                                  adController
+                                                                      .serviceImagesStrings
+                                                                      .removeAt(
+                                                                          index -
+                                                                              1);
+                                                                  adController
+                                                                      .refresh();
+                                                                },
+                                                                child: Icon(
+                                                                  Icons.close,
+                                                                  size: width *
+                                                                      0.05,
+                                                                  color: Colors
+                                                                      .white,
+                                                                )))
+                                                      ]),
+                                                    );
                                             }),
                                       ),
                                     ],
