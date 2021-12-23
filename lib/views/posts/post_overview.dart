@@ -294,7 +294,6 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     children: [
                       TextWidget(
                         text: orderStateString(ordState: d['orderState']),
-                        // align: TextAlign.center,
                       ),
                       TextWidget(text: "orderId : ${d['ordId']}")
                     ],
