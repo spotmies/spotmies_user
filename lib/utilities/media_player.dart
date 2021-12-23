@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';
@@ -6,7 +8,8 @@ import 'package:spotmies/views/reusable_widgets/video_player.dart';
 
 class MediaPlayer extends StatefulWidget {
   final List mediaList;
-  const MediaPlayer({@required this.mediaList});
+  final bool isOnlinePlayer;
+  const MediaPlayer({@required this.mediaList, this.isOnlinePlayer = true});
   // const MediaPlayer({ Key? key }) : super(key: key);
 
   @override
@@ -16,6 +19,7 @@ class MediaPlayer extends StatefulWidget {
 class _MediaPlayerState extends State<MediaPlayer> {
   @override
   void initState() {
+    log(widget.mediaList.toString());
     super.initState();
   }
 
@@ -26,10 +30,16 @@ class _MediaPlayerState extends State<MediaPlayer> {
     // final width = MediaQuery.of(context).size.width;
     switch (checkFileType(widget.mediaList[0])) {
       case "image":
-        return ImageViewer(imageLink: widget.mediaList[0]);
+        return ImageViewer(
+          imageLink: widget.mediaList[0],
+          isOnlinePlayer: widget.isOnlinePlayer,
+        );
         break;
       case "video":
-        return VideoPlayerWid(videoLink: widget.mediaList[0]);
+        return VideoPlayerWid(
+          videoLink: widget.mediaList[0],
+          isOnlinePlayer: widget.isOnlinePlayer,
+        );
         break;
       case "audio":
         // playAudio(context, hight, width, widget.mediaList[0]);

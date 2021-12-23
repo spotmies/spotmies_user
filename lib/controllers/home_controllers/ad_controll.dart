@@ -43,6 +43,7 @@ class AdController extends ControllerMVC {
   // String adtime;
   // File _profilepic;
   List<File> serviceImages = [];
+  List<String> serviceImagesStrings = [];
   bool uploading = false;
   double val = 0;
 
@@ -215,6 +216,7 @@ class AdController extends ControllerMVC {
         preferredCameraDevice: CameraDevice.rear);
     setState(() {
       serviceImages.add(File(pickedFile?.path));
+      serviceImagesStrings.add(pickedFile?.path);
     });
     if (pickedFile.path == null) retrieveLostData();
   }
@@ -227,10 +229,12 @@ class AdController extends ControllerMVC {
     PickedFile pickedFile = await picker.getVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     serviceVideo = File(pickedFile.path);
+
     videoPlayerController = VideoPlayerController.file(serviceVideo)
       ..initialize().then((_) {
         setState(() {
           serviceImages.add(serviceVideo);
+          serviceImagesStrings.add(pickedFile.path);
         });
         videoPlayerController.play();
       });
@@ -244,6 +248,7 @@ class AdController extends ControllerMVC {
     if (response.file != null) {
       setState(() {
         serviceImages.add(File(response.file.path));
+        serviceImagesStrings.add(response.file.path);
       });
     } else {
       print(response.file);
