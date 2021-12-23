@@ -39,6 +39,16 @@ class UniversalProvider extends ChangeNotifier {
     return currentConstants[index]['label'];
   }
 
+  getValue(String objId) {
+    if (currentConstants == null) return null;
+    int index = currentConstants?.indexWhere(
+        (element) => element['objId'].toString() == objId.toString());
+    if (index == -1) return null;
+    dynamic retrive = jsonDecode(currentConstants[index]['value']);
+    log("retrive $retrive");
+    return retrive;
+  }
+
 /* -------------------------- service list details -------------------------- */
   List servicesList = [];
   getServiceListFromServer() async {
