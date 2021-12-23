@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
@@ -7,7 +9,10 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerWid extends StatefulWidget {
   final String videoLink;
-  const VideoPlayerWid({this.videoLink, Key key}) : super(key: key);
+  final bool isOnlinePlayer;
+  const VideoPlayerWid(
+      {@required this.videoLink, Key key, this.isOnlinePlayer = true})
+      : super(key: key);
 
   @override
   _VideoState createState() => _VideoState();
@@ -19,7 +24,9 @@ class _VideoState extends State<VideoPlayerWid> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(widget.videoLink)
+    videoPlayerController = widget.isOnlinePlayer
+        ? VideoPlayerController.network(widget.videoLink)
+        : VideoPlayerController.file(File(widget.videoLink))
       ..addListener(() => setState(() {}))
       ..setLooping(true)
       ..initialize().then((_) => videoPlayerController.pause());
