@@ -401,7 +401,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  warrentyCard(height(context), width(context)),
+                  d['orderState'] > 8
+                      ? warrentyCard(height(context), width(context))
+                      : Container(),
                   Divider(
                     color: Colors.white,
                   ),
@@ -453,7 +455,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        showOrderStatusQuestion
+                        showOrderStatusQuestion && d['orderState'] != 3
                             ? Column(
                                 children: [
                                   Container(
