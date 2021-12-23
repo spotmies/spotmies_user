@@ -85,15 +85,15 @@ Widget page1(double hight, double width, BuildContext context,
                                     size: width * 0.06,
                                     color: Colors.indigo[900],
                                   ),
-                                  items: up.servicesList.map((location) {
+                                  items: up.servicesList.map((services) {
                                     return DropdownMenuItem(
                                       child: TextWid(
-                                        text: location['nameOfService'],
+                                        text: services['nameOfService'],
                                         color: Colors.grey[900],
                                         size: width * 0.04,
                                         weight: FontWeight.w500,
                                       ),
-                                      value: location['serviceId'],
+                                      value: services['serviceId'],
                                     );
                                   }).toList(),
                                   onChanged: (newVal) {
@@ -282,23 +282,6 @@ Widget page1(double hight, double width, BuildContext context,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ElevatedButtonWidget(
-                        onClick: () {
-                          adController.sliderKey.currentState.previous();
-                        },
-                        buttonName: 'Back',
-                        bgColor: Colors.indigo[50],
-                        textColor: Colors.indigo[900],
-                        height: hight * 0.05,
-                        minWidth: width * 0.30,
-                        textSize: hight * 0.02,
-                        leadingIcon: Icon(
-                          Icons.arrow_back_ios,
-                          size: hight * 0.015,
-                          color: Colors.indigo[900],
-                        ),
-                        borderRadius: 10.0,
-                      ),
                       ElevatedButtonWidget(
                         onClick: () async {
                           await adController.step1();

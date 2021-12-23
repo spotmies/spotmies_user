@@ -8,6 +8,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
+import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
@@ -28,7 +29,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
     up.setCurrentConstants("signup");
-
+    _stepperPersonalInfo.termsAndConditions =
+        up.getValue("terms_and_conditions") ??
+            _stepperPersonalInfo.offlineTermsAndConditions;
     super.initState();
   }
 
@@ -151,7 +154,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   Step(
                     title: Text('Step1'),
                     subtitle: Text('Terms'),
-                    content: step1(),
+                    content: step1(_stepperPersonalInfo.termsAndConditions),
                     isActive: _stepperPersonalInfo.currentStep >= 0,
                     state: _stepperPersonalInfo.currentStep >= 0
                         ? StepState.complete
@@ -186,7 +189,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     );
   }
 
-  Widget step1() {
+  Widget step1(List termsAndConditions) {
     return Column(
       children: [
         Container(
@@ -194,87 +197,56 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           height: height(context) * 0.75,
-          child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('terms')
-                  .doc('eXiU3vxjO7qeVObTqvmQ')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                var document = snapshot.data;
-                return ListView(
-                    controller: _stepperPersonalInfo.scrollController,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '1. ' + document['1'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '2.' + document['2'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '3.' + document['3'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '4.' + document['4'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '5.' + document['5'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '6.' + document['6'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '7.' + document['7'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '8.' + document['8'],
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                  activeColor: Colors.white,
-                                  checkColor: Colors.lightGreen,
-                                  value: _stepperPersonalInfo.accept,
-                                  onChanged: (bool value) {
-                                    setState(
-                                      () {
+          child: termsAndConditions.length != 0
+              ? Container(
+                  height: height(context) * 0.7,
+                  child: ListView.builder(
+                      controller: _stepperPersonalInfo.scrollController,
+                      itemCount: termsAndConditions.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          children: [
+                            TextWidget(
+                              text: "${index + 1}.  " +
+                                  termsAndConditions[index].toString(),
+                              size: width(context) * 0.06,
+                              flow: TextOverflow.visible,
+                            ),
+                            if (index != 7)
+                              Divider(
+                                color: Colors.grey[400],
+                                indent: width(context) * 0.1,
+                                endIndent: width(context) * 0.1,
+                              ),
+                            if (index == termsAndConditions.length - 1)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Checkbox(
+                                      activeColor: Colors.teal,
+                                      checkColor: Colors.white,
+                                      value: _stepperPersonalInfo.accept,
+                                      shape: CircleBorder(),
+                                      onChanged: (bool value) {
                                         _stepperPersonalInfo.accept = value;
                                         if (_stepperPersonalInfo.accept ==
                                             true) {
                                           _stepperPersonalInfo.tca = 'accepted';
                                         }
-                                      },
-                                    );
-                                  }),
-                              Flexible(
-                                child: Text(
-                                  'I agree to accept the terms and Conditions',
-                                  maxLines: 4,
-                                  style: TextStyle(
-                                      fontSize: width(context) * 0.035),
-                                ),
+                                        _stepperPersonalInfo.refresh();
+                                      }),
+                                  Text(
+                                    'I agree to accept the terms and Conditions',
+                                    style: TextStyle(
+                                        fontSize: width(context) * 0.03),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ]);
-              }),
+                          ],
+                        );
+                      }),
+                )
+              : CircularProgressIndicator(),
         ),
       ],
     );
