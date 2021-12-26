@@ -4,13 +4,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
+import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
+import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-Future partnerDetailsSummury(BuildContext context, double hight, double width,
-    pDetails, ResponsiveController _responsiveController, responseData, chatWithPatner,{onClick}) {
+Future partnerDetailsSummury(
+    BuildContext context,
+    double hight,
+    double width,
+    pDetails,
+    ResponsiveController _responsiveController,
+    responseData,
+    chatWithPatner,
+    {onClick}) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -140,17 +150,24 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width,
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MyCalling(
-                                ordId: responseData['ordId'].toString(),
-                                uId: FirebaseAuth.instance.currentUser.uid
-                                    .toString(),
-                                pId: responseData['pId'].toString(),
-                                isIncoming: false,
-                                name: pDetails['name'].toString(),
-                                profile: pDetails['partnerPic'].toString(),
-                                partnerDeviceToken: pDetails['partnerDeviceToken'].toString(),
-                              )));
+                      bottomOptionsMenu(context,
+                          options: Constants.bottomSheetOptionsForCalling,
+                          option1Click: () {
+                        launch("tel://${pDetails['phNum']}");
+                      }, option2Click: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MyCalling(
+                                  ordId: responseData['ordId'].toString(),
+                                  uId: FirebaseAuth.instance.currentUser.uid
+                                      .toString(),
+                                  pId: responseData['pId'].toString(),
+                                  isIncoming: false,
+                                  name: pDetails['name'].toString(),
+                                  profile: pDetails['partnerPic'].toString(),
+                                  partnerDeviceToken:
+                                      pDetails['partnerDeviceToken'].toString(),
+                                )));
+                      });
                     },
                     child: Row(
                       children: [
@@ -177,7 +194,7 @@ Future partnerDetailsSummury(BuildContext context, double hight, double width,
                   ),
                   InkWell(
                     onTap: () {
-                       chatWithPatner(responseData);
+                      chatWithPatner(responseData);
                     },
                     child: Row(
                       children: [

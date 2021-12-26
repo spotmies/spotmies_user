@@ -38,6 +38,10 @@ class Constants {
     "CC Tv Installation",
     "Catering",
   ];
+  static List<Map<String, Object>> bottomSheetOptionsForCalling = [
+    {"name": "Normal call", "icon": Icons.phone},
+    {"name": "Spotmies call", "icon": Icons.wifi_calling_3},
+  ];
 }
 
 orderStateString({ordState = 0}) {
