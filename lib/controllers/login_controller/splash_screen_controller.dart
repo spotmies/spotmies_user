@@ -25,18 +25,20 @@ class _SplashScreenState extends State<SplashScreen> {
   UniversalProvider universalProvider;
   checkUser() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      bool resp =
+      String resp =
           await checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
-      if (resp != false) {
+      if (resp == "true") {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => GoogleNavBar()),
             (route) => false);
-      } else {
+      } else if (resp == "false") {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => OnboardingScreen()),
             (route) => false);
+      } else {
+        snackbar(context, "something went wrong $resp");
       }
     } else {
       Navigator.pushAndRemoveUntil(
@@ -44,7 +46,6 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (_) => OnboardingScreen()),
           (route) => false);
     }
-    
   }
 
   getConstants({bool alwaysHit = false}) async {
