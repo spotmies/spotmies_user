@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
+import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
@@ -19,6 +20,7 @@ import 'package:spotmies/views/home/ads/adpost.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
+import 'package:spotmies/views/login/onboard.dart';
 import 'package:spotmies/views/posts/posts.dart';
 import 'package:spotmies/views/profile/profile.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
@@ -82,8 +84,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   }
 
   hitAllApis(uuId) async {
-    dynamic responsesList = await getResponseListFromDB(uuId);
-    if (responsesList != null) responseProvider.setResponsesList(responsesList);
+    checkUser();
 
     dynamic user = await getUserDetailsFromDB(uuId);
     if (user != null) {
@@ -98,6 +99,8 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         }
       }
     }
+    dynamic responsesList = await getResponseListFromDB(uuId);
+    if (responsesList != null) responseProvider.setResponsesList(responsesList);
     dynamic chatList = await getChatListFromDb(uuId);
     if (chatList != null) chatProvider.setChatList(chatList);
 
@@ -167,6 +170,28 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   connectNotifications() async {
     log("devic id ${await FirebaseMessaging.instance.getToken()}");
     await FirebaseMessaging.instance.subscribeToTopic("spotmiesUser");
+  }
+
+  checkUser() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      String resp =
+          await checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
+      if (resp == "true") {
+        log("login successfully");
+      } else if (resp == "false") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => OnboardingScreen()),
+            (route) => false);
+      } else {
+        snackbar(context, "something went wrong $resp");
+      }
+    } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => OnboardingScreen()),
+          (route) => false);
+    }
   }
 
   @override
