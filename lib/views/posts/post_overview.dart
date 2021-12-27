@@ -29,6 +29,7 @@ import 'package:spotmies/views/reusable_widgets/rating/review_screen.dart';
 import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 import 'package:timelines/timelines.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostOverView extends StatefulWidget {
   final String ordId;
@@ -945,19 +946,25 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
           children: [
             InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MyCalling(
-                          ordId: orderDetails['ordId'].toString(),
-                          uId: orderDetails['uDetails']['uId'],
-                          pId: orderDetails['pDetails']['pId'],
-                          isIncoming: false,
-                          name: orderDetails['pDetails']['name'].toString(),
-                          profile:
-                              orderDetails['pDetails']['partnerPic'].toString(),
-                          partnerDeviceToken: orderDetails['pDetails']
-                                  ['partnerDeviceToken']
-                              .toString(),
-                        )));
+                bottomOptionsMenu(context,
+                    options: Constants.bottomSheetOptionsForCalling,
+                    option1Click: () {
+                  launch("tel://${orderDetails['pDetails']['phNum']}");
+                }, option2Click: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MyCalling(
+                            ordId: orderDetails['ordId'].toString(),
+                            uId: orderDetails['uDetails']['uId'],
+                            pId: orderDetails['pDetails']['pId'],
+                            isIncoming: false,
+                            name: orderDetails['pDetails']['name'].toString(),
+                            profile: orderDetails['pDetails']['partnerPic']
+                                .toString(),
+                            partnerDeviceToken: orderDetails['pDetails']
+                                    ['partnerDeviceToken']
+                                .toString(),
+                          )));
+                });
               },
               child: Row(
                 children: [
