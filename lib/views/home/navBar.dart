@@ -130,6 +130,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     });
     socket.onDisconnect((data) {
       log("disconnect $data");
+      log("socket disconnected >>>>>>>>>");
       isSocketDisconnected = true;
     });
     socket.connect();
@@ -344,6 +345,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         break;
 
       default:
+        break;
     }
 
     /* if (isBackground) {
