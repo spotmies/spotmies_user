@@ -155,9 +155,10 @@ checkUserRegistered(uid) async {
   Map<String, String> obj = {
     "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
     "userDeviceToken": deviceToken?.toString() ?? "",
+    "uId": uid.toString()
   };
   // print("checkUserreg");
-  dynamic response = await Server().editMethod(API.userDetails + uid, obj);
+  dynamic response = await Server().postMethod(API.userDetails, obj);
   print("36 ${response.statusCode}");
   if (response.statusCode == 200 || response.statusCode == 204)
     return 'true';
