@@ -8,6 +8,7 @@ class API {
   static var particularOrder = '/api/order/orders/'; //get with order id
   static var userRegister = '/api/user/newUser'; //post
   static var userDetails = '/api/user/login'; //get with user id
+  static var userLogout = "/api/user/logout";
   static var editOrder = '/api/order/orders/'; //put with order id
   static var deleteOrder = '/api/order/orders/'; //delete with order id
   static var confirmOrder = '/api/order/orders/'; //put with order id

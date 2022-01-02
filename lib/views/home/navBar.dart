@@ -43,7 +43,6 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   GetOrdersProvider ordersProvider;
   UserDetailsProvider profileProvider;
   String uuId = FirebaseAuth.instance.currentUser.uid;
-  bool isSocketDisconnected = false;
 
   UniversalProvider universalProvider;
   List icons = [
@@ -99,15 +98,19 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         }
       }
     }
-    dynamic responsesList = await getResponseListFromDB(uuId);
-    if (responsesList != null) responseProvider.setResponsesList(responsesList);
-    dynamic chatList = await getChatListFromDb(uuId);
-    if (chatList != null) chatProvider.setChatList(chatList);
+    getImportantApis(uuId);
 
     dynamic ordersList = await getOrderFromDB(uuId);
     if (ordersList != null) ordersProvider.setOrdersList(ordersList);
     log("hitting all apis completed");
     universalProvider.setEnableRoute(true);
+  }
+
+  getImportantApis(String uuId) async {
+    dynamic responsesList = await getResponseListFromDB(uuId);
+    if (responsesList != null) responseProvider.setResponsesList(responsesList);
+    dynamic chatList = await getChatListFromDb(uuId);
+    if (chatList != null) chatProvider.setChatList(chatList);
   }
 
   StreamController _chatResponse;
@@ -122,7 +125,8 @@ class _GoogleNavBarState extends State<GoogleNavBar>
       "autoConnect": false,
     });
     socket.onConnect((data) {
-      isSocketDisconnected = false;
+      setStringToSF(id: "isSocketConnected", value: false);
+
       print("Connected");
       socket.on("message", (msg) {
         print(msg);
@@ -131,7 +135,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     socket.onDisconnect((data) {
       log("disconnect $data");
       log("socket disconnected >>>>>>>>>");
-      isSocketDisconnected = true;
+      setStringToSF(id: "isSocketConnected", value: false);
     });
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
@@ -319,6 +323,22 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     super.dispose();
   }
 
+  checkSocketStatus() async {
+    bool socketStatus = await getStringValuesSF("isSocketConnected") ?? true;
+    if (!socketStatus) {
+      snackbar(context, "socket disconnected trying to connect again");
+      log("socket disconnected trying to connect again");
+      socket.disconnect();
+      socket.connect();
+      socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+
+      checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
+      getImportantApis(FirebaseAuth.instance.currentUser.uid);
+    } else {
+      log("socket on connection");
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -329,19 +349,14 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         break;
       case AppLifecycleState.detached:
         log("APP is detached");
+        logoutUser(FirebaseAuth.instance.currentUser.uid);
         break;
       case AppLifecycleState.paused:
         log("APP is background");
         break;
       case AppLifecycleState.resumed:
         log("APP is resumed");
-
-        if (isSocketDisconnected) {
-          snackbar(context, "socket disconnected trying to connect again");
-          log("socket disconnected trying to connect again");
-          socket.connect();
-          hitAllApis(uuId);
-        }
+        checkSocketStatus();
         break;
 
       default:

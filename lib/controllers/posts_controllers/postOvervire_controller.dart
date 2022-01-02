@@ -36,10 +36,9 @@ class PostOverViewController extends ControllerMVC {
     // getAddressofLocation();
   }
 
-  isOrderCompleted({orderID: 175642365745}) async {
-    Map<String, String> body = {"orderState": "9"};
-    dynamic response =
-        await Server().editMethod(API.editOrder + orderID.toString(), body);
+  isOrderCompleted(String money, String orderID) async {
+    Map<String, String> body = {"orderState": "9", "moneyGivenByUser": money};
+    dynamic response = await Server().editMethod(API.editOrder + orderID, body);
     if (response.statusCode == 200 || response.statusCode == 204) {
       snackbar(context, "Your order completed now");
       await getOrderAndUpdate(orderID);

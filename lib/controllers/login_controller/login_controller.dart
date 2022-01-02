@@ -155,7 +155,8 @@ checkUserRegistered(uid) async {
   Map<String, String> obj = {
     "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
     "userDeviceToken": deviceToken?.toString() ?? "",
-    "uId": uid.toString()
+    "uId": uid.toString(),
+    "isActive": "true"
   };
   // print("checkUserreg");
   dynamic response = await Server().postMethod(API.userDetails, obj);
@@ -164,4 +165,10 @@ checkUserRegistered(uid) async {
     return 'true';
   else if (response.statusCode == 404) return 'false';
   return 'server_error';
+}
+
+logoutUser(String uId) async {
+  Map<String, String> body = {"uId": uId};
+  await Server().postMethod(API.userLogout, body);
+  return;
 }
