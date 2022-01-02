@@ -25,6 +25,7 @@ import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
+import 'package:spotmies/views/reusable_widgets/queryBS.dart';
 import 'package:spotmies/views/reusable_widgets/rating/review_screen.dart';
 import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -73,9 +74,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     super.initState();
   }
 
-  isThisOrderCompleted(state, {orderID = 123}) {
+  isThisOrderCompleted(state, {String orderID = "123", String money = "0"}) {
     if (state) {
-      _postOverViewController.isOrderCompleted(orderID: orderID);
+      _postOverViewController.isOrderCompleted(money, orderID);
     }
     showOrderStatusQuestion = false;
     refresh();
@@ -499,8 +500,19 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           borderRadius: 10.0,
                                           buttonName: 'Completed',
                                           onClick: () {
-                                            isThisOrderCompleted(true,
-                                                orderID: d['ordId']);
+                                            newQueryBS(context,
+                                                type: "number",
+                                                heading: "How much you paid",
+                                                hint:
+                                                    "Enter amount you paid to partner",
+                                                label: "Enter Money",
+                                                onSubmit: (String value) {
+                                              // log(value);
+                                              isThisOrderCompleted(true,
+                                                  orderID:
+                                                      d['ordId'].toString(),
+                                                  money: value);
+                                            });
                                           },
                                           textColor: Colors.white,
                                           textSize: width(context) * 0.04,
