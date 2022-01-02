@@ -88,6 +88,8 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     dynamic user = await getUserDetailsFromDB(uuId);
     if (user != null) {
       profileProvider.setUser(user);
+      universalProvider.setUser(user);
+      log("setting user details>>>>>>>");
       ordersProvider
           .setOrdersList(user['orders'] != null ? user['orders'] : []);
       if (user['appConfig'] == true) {

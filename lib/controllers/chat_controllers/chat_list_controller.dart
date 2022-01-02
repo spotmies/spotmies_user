@@ -14,7 +14,7 @@ getChatListFromDb(uuId) async {
 }
 
 getResponseListFromDB(uuId) async {
-  dynamic response = await Server().getMethod(API.reponse+ uuId);
+  dynamic response = await Server().getMethod(API.reponse + uuId);
   if (response.statusCode == 200) {
     dynamic responseDecode = jsonDecode(response.body);
     return responseDecode;
@@ -23,7 +23,7 @@ getResponseListFromDB(uuId) async {
 }
 
 getOrderFromDB(uuId) async {
-  dynamic response = await Server().getMethod(API.getOrders+ uuId);
+  dynamic response = await Server().getMethod(API.getOrders + uuId);
   if (response.statusCode == 200) {
     dynamic ordersList = jsonDecode(response.body);
     return ordersList;
@@ -32,7 +32,7 @@ getOrderFromDB(uuId) async {
 }
 
 getUserDetailsFromDB(uuId) async {
-  dynamic response = await Server().getMethod(API.userDetails + uuId);
+  dynamic response = await Server().getMethod(API.editPersonalInfo + uuId);
   if (response.statusCode == 200) {
     dynamic user = jsonDecode(response.body);
     return user;
