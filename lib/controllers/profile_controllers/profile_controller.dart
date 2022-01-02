@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:share/share.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/controllers/profile_controllers/help.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/profile/privacyPolicies.dart';
 import 'package:spotmies/views/login/loginpage.dart';
 import 'package:spotmies/views/profile/settings.dart';
@@ -79,7 +81,8 @@ class ProfileController extends ControllerMVC {
   }
 
   updateProfileDetails(body) async {
-    dynamic response = await Server().editMethod(API.editPersonalInfo + uuId, body);
+    dynamic response =
+        await Server().editMethod(API.editPersonalInfo + uuId, body);
     if (response.statusCode == 200) {
       response = jsonDecode(response.body);
       return response;
@@ -101,10 +104,29 @@ class ProfileController extends ControllerMVC {
     );
   }
 
-  // var profileSteam = FirebaseFirestore.instance
-  //     .collection('users')
-  //     .doc(FirebaseAuth.instance.currentUser.uid)
-  //     .snapshots();
+  submitQuery(String subject, String pDID, BuildContext context,
+      {String suggestionFor: "faq"}) async {
+    Map<String, String> body = {
+      "subject": subject,
+      "suggestionFor": suggestionFor,
+      "suggestionFrom": "userApp",
+      "uId": FirebaseAuth.instance.currentUser.uid,
+      "uDetails": pDID,
+    };
+    dynamic response = await Server().postMethod(API.newSuggestion, body);
+    // print("36 $response");
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      log(response.body.toString());
+      snackbar(context, 'Done');
+    } else if (response.statusCode == 404) {
+      log(response.body.toString());
+      snackbar(context, 'Something went wrong');
+    } else {
+      log(response.body.toString());
+      snackbar(context, 'server error');
+      // loader = false;
+    }
+  }
 
   signout() async {
     await FirebaseAuth.instance.signOut().then((action) {

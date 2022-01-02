@@ -16,6 +16,12 @@ class UniversalProvider extends ChangeNotifier {
   Map<dynamic, dynamic> allConstants = {};
   String currentScreen = "";
   dynamic currentConstants;
+  List faqList = [];
+  dynamic user;
+
+  void setUser(data) {
+    user = data;
+  }
 
   void setAllConstants(dynamic constants) {
     allConstants = constants;
@@ -93,6 +99,15 @@ class UniversalProvider extends ChangeNotifier {
     return servicesList[index]['nameOfService'];
   }
   /* ----------------------------------- xxx ---------------------------------- */
+
+  fetchFAQfromDB() async {
+    dynamic response = await Server().getMethod(API.faq);
+    if (response.statusCode == 200) {
+      dynamic responseDecode = jsonDecode(response.body);
+      faqList = responseDecode;
+      notifyListeners();
+    }
+  }
 
   void setEnableRoute(bool state) {
     enableRoute = state ?? false;

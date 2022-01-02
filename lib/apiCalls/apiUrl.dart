@@ -29,4 +29,6 @@ class API {
   static var cloudConstants = "/api/constant/doc-id/user_app";
   static var servicesList = "/api/services/all-service-list";
   static var serviceFeedBack = "/api/partner-feedback/new-feedback";
+  static var newSuggestion = "/api/suggestion/new-suggestion";
+  static var faq = "/api/support/faq/all-faqs";
 }
