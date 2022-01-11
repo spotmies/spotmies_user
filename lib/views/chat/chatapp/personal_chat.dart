@@ -660,17 +660,22 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   void calling(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MyCalling(
-              msgId: widget.msgId,
-              ordId: _chatController.targetChat['ordId'],
-              uId: FirebaseAuth.instance.currentUser.uid,
-              pId: _chatController.targetChat['pId'],
-              isIncoming: false,
-              name: _chatController.partner['name'],
-              profile: _chatController.partner['partnerPic'],
-              partnerDeviceToken:
-                  _chatController.partner['partnerDeviceToken'].toString(),
-            )));
+    bottomOptionsMenu(context, options: Constants.bottomSheetOptionsForCalling,
+        option1Click: () {
+      launch("tel://${_chatController.partner['phNum']}");
+    }, option2Click: () {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => MyCalling(
+                msgId: widget.msgId,
+                ordId: _chatController.targetChat['ordId'],
+                uId: FirebaseAuth.instance.currentUser.uid,
+                pId: _chatController.targetChat['pId'],
+                isIncoming: false,
+                name: _chatController.partner['name'],
+                profile: _chatController.partner['partnerPic'],
+                partnerDeviceToken:
+                    _chatController.partner['partnerDeviceToken'].toString(),
+              )));
+    });
   }
 }

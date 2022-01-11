@@ -38,6 +38,10 @@ class Constants {
     "CC Tv Installation",
     "Catering",
   ];
+  static List<Map<String, Object>> bottomSheetOptionsForCalling = [
+    {"name": "Normal call", "icon": Icons.phone},
+    {"name": "Spotmies call", "icon": Icons.wifi_calling_3},
+  ];
 }
 
 orderStateString({ordState = 0}) {
@@ -63,9 +67,9 @@ orderStateString({ordState = 0}) {
     case 8:
       return "Service is Ongoing";
     case 9:
-      return "Service completed successfully";
+      return "Service completed";
     case 10:
-      return "Service successfully completed and feedback given by You";
+      return "Order completed";
 
     default:
       return "Something went wrong";

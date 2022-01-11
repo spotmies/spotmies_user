@@ -25,8 +25,12 @@ import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
+import 'package:spotmies/views/reusable_widgets/queryBS.dart';
+import 'package:spotmies/views/reusable_widgets/rating/review_screen.dart';
+import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 import 'package:timelines/timelines.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostOverView extends StatefulWidget {
   final String ordId;
@@ -70,9 +74,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     super.initState();
   }
 
-  isThisOrderCompleted(state, {orderID = 123}) {
+  isThisOrderCompleted(state, {String orderID = "123", String money = "0"}) {
     if (state) {
-      _postOverViewController.isOrderCompleted(orderID: orderID);
+      _postOverViewController.isOrderCompleted(money, orderID);
     }
     showOrderStatusQuestion = false;
     refresh();
@@ -102,6 +106,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   @override
   Widget build(BuildContext context) {
+    SizeProvider().init(context);
     return Consumer<GetOrdersProvider>(builder: (context, data, child) {
       dynamic d = data.getOrderById(widget.ordId);
       _postOverViewController.orderDetails = d;
@@ -286,12 +291,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  Wrap(
+                    alignment: WrapAlignment.spaceEvenly,
                     children: [
                       TextWidget(
                         text: orderStateString(ordState: d['orderState']),
-                        // align: TextAlign.center,
                       ),
                       TextWidget(text: "orderId : ${d['ordId']}")
                     ],
@@ -398,7 +402,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   Divider(
                     color: Colors.white,
                   ),
-                  warrentyCard(height(context), width(context)),
+                  d['orderState'] > 8
+                      ? warrentyCard(height(context), width(context))
+                      : Container(),
                   Divider(
                     color: Colors.white,
                   ),
@@ -450,7 +456,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        showOrderStatusQuestion
+                        showOrderStatusQuestion && d['orderState'] != 3
                             ? Column(
                                 children: [
                                   Container(
@@ -494,8 +500,19 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           borderRadius: 10.0,
                                           buttonName: 'Completed',
                                           onClick: () {
-                                            isThisOrderCompleted(true,
-                                                orderID: d['ordId']);
+                                            newQueryBS(context,
+                                                type: "number",
+                                                heading: "How much you paid",
+                                                hint:
+                                                    "Enter amount you paid to partner",
+                                                label: "Enter Money",
+                                                onSubmit: (String value) {
+                                              // log(value);
+                                              isThisOrderCompleted(true,
+                                                  orderID:
+                                                      d['ordId'].toString(),
+                                                  money: value);
+                                            });
                                           },
                                           textColor: Colors.white,
                                           textSize: width(context) * 0.04,
@@ -511,27 +528,54 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 ],
                               )
                             : Container(),
-                        Container(
-                          padding: EdgeInsets.only(bottom: 10, right: 10),
-                          child: ElevatedButtonWidget(
-                            height: height(context) * 0.05,
-                            minWidth: width(context) * 0.7,
-                            onClick: () {
-                              Map<String, dynamic> sendPayload = {
-                                "socketName": "broadCastOrder",
-                                "ordId": d['ordId']
-                              };
-                              chatProvider.setSendMessage(sendPayload);
-                            },
-                            bgColor: Colors.white,
-                            borderSideColor: Colors.grey[200],
-                            borderRadius: 10.0,
-                            buttonName: 'Broadcast my order again',
-                            textSize: width(context) * 0.04,
-                            leadingIcon: Icon(
-                              Icons.refresh_rounded,
-                              color: Colors.grey[900],
-                              size: width(context) * 0.045,
+                        Visibility(
+                          visible: d['orderState'] < 3,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 10, right: 10),
+                            child: ElevatedButtonWidget(
+                              height: height(context) * 0.05,
+                              minWidth: width(context) * 0.5,
+                              onClick: () {
+                                Map<String, dynamic> sendPayload = {
+                                  "socketName": "broadCastOrder",
+                                  "ordId": d['ordId']
+                                };
+                                chatProvider.setSendMessage(sendPayload);
+                              },
+                              bgColor: Colors.white,
+                              borderSideColor: Colors.grey[200],
+                              borderRadius: 10.0,
+                              buttonName: 'Send order again',
+                              textSize: width(context) * 0.04,
+                              leadingIcon: Icon(
+                                Icons.refresh_rounded,
+                                color: Colors.grey[900],
+                                size: width(context) * 0.045,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: d['orderState'] == 9 && d['pId'] != null,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 10, right: 10),
+                            child: ElevatedButtonWidget(
+                              height: height(context) * 0.05,
+                              minWidth: width(context) * 0.5,
+                              onClick: () {
+                                reviewBS(context,
+                                    _postOverViewController.submitReview);
+                              },
+                              bgColor: Colors.white,
+                              borderSideColor: Colors.grey[200],
+                              borderRadius: 10.0,
+                              buttonName: 'Rate Service',
+                              textSize: width(context) * 0.04,
+                              leadingIcon: Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: width(context) * 0.045,
+                              ),
                             ),
                           ),
                         ),
@@ -914,19 +958,25 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
           children: [
             InkWell(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MyCalling(
-                          ordId: orderDetails['ordId'].toString(),
-                          uId: orderDetails['uDetails']['uId'],
-                          pId: orderDetails['pDetails']['pId'],
-                          isIncoming: false,
-                          name: orderDetails['pDetails']['name'].toString(),
-                          profile:
-                              orderDetails['pDetails']['partnerPic'].toString(),
-                          partnerDeviceToken: orderDetails['pDetails']
-                                  ['partnerDeviceToken']
-                              .toString(),
-                        )));
+                bottomOptionsMenu(context,
+                    options: Constants.bottomSheetOptionsForCalling,
+                    option1Click: () {
+                  launch("tel://${orderDetails['pDetails']['phNum']}");
+                }, option2Click: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MyCalling(
+                            ordId: orderDetails['ordId'].toString(),
+                            uId: orderDetails['uDetails']['uId'],
+                            pId: orderDetails['pDetails']['pId'],
+                            isIncoming: false,
+                            name: orderDetails['pDetails']['name'].toString(),
+                            profile: orderDetails['pDetails']['partnerPic']
+                                .toString(),
+                            partnerDeviceToken: orderDetails['pDetails']
+                                    ['partnerDeviceToken']
+                                .toString(),
+                          )));
+                });
               },
               child: Row(
                 children: [

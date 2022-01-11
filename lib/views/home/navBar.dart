@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
+import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
@@ -19,6 +20,7 @@ import 'package:spotmies/views/home/ads/adpost.dart';
 import 'package:spotmies/views/home/home.dart';
 import 'package:spotmies/views/chat/chat_tab.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
+import 'package:spotmies/views/login/onboard.dart';
 import 'package:spotmies/views/posts/posts.dart';
 import 'package:spotmies/views/profile/profile.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
@@ -41,7 +43,6 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   GetOrdersProvider ordersProvider;
   UserDetailsProvider profileProvider;
   String uuId = FirebaseAuth.instance.currentUser.uid;
-  bool isSocketDisconnected = false;
 
   UniversalProvider universalProvider;
   List icons = [
@@ -82,12 +83,13 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   }
 
   hitAllApis(uuId) async {
-    dynamic responsesList = await getResponseListFromDB(uuId);
-    if (responsesList != null) responseProvider.setResponsesList(responsesList);
+    checkUser();
 
     dynamic user = await getUserDetailsFromDB(uuId);
     if (user != null) {
       profileProvider.setUser(user);
+      universalProvider.setUser(user);
+      log("setting user details>>>>>>>");
       ordersProvider
           .setOrdersList(user['orders'] != null ? user['orders'] : []);
       if (user['appConfig'] == true) {
@@ -98,13 +100,19 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         }
       }
     }
-    dynamic chatList = await getChatListFromDb(uuId);
-    if (chatList != null) chatProvider.setChatList(chatList);
+    getImportantApis(uuId);
 
     dynamic ordersList = await getOrderFromDB(uuId);
     if (ordersList != null) ordersProvider.setOrdersList(ordersList);
     log("hitting all apis completed");
     universalProvider.setEnableRoute(true);
+  }
+
+  getImportantApis(String uuId) async {
+    dynamic responsesList = await getResponseListFromDB(uuId);
+    if (responsesList != null) responseProvider.setResponsesList(responsesList);
+    dynamic chatList = await getChatListFromDb(uuId);
+    if (chatList != null) chatProvider.setChatList(chatList);
   }
 
   StreamController _chatResponse;
@@ -119,7 +127,8 @@ class _GoogleNavBarState extends State<GoogleNavBar>
       "autoConnect": false,
     });
     socket.onConnect((data) {
-      isSocketDisconnected = false;
+      setStringToSF(id: "isSocketConnected", value: false);
+
       print("Connected");
       socket.on("message", (msg) {
         print(msg);
@@ -127,7 +136,8 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     });
     socket.onDisconnect((data) {
       log("disconnect $data");
-      isSocketDisconnected = true;
+      log("socket disconnected >>>>>>>>>");
+      setStringToSF(id: "isSocketConnected", value: false);
     });
     socket.connect();
     socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
@@ -167,6 +177,28 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   connectNotifications() async {
     log("devic id ${await FirebaseMessaging.instance.getToken()}");
     await FirebaseMessaging.instance.subscribeToTopic("spotmiesUser");
+  }
+
+  checkUser() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      String resp =
+          await checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
+      if (resp == "true") {
+        log("login successfully");
+      } else if (resp == "false") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => OnboardingScreen()),
+            (route) => false);
+      } else {
+        snackbar(context, "something went wrong $resp");
+      }
+    } else {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => OnboardingScreen()),
+          (route) => false);
+    }
   }
 
   @override
@@ -293,6 +325,22 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     super.dispose();
   }
 
+  checkSocketStatus() async {
+    bool socketStatus = await getStringValuesSF("isSocketConnected") ?? true;
+    if (!socketStatus) {
+      snackbar(context, "socket disconnected trying to connect again");
+      log("socket disconnected trying to connect again");
+      socket.disconnect();
+      socket.connect();
+      socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+
+      checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
+      getImportantApis(FirebaseAuth.instance.currentUser.uid);
+    } else {
+      log("socket on connection");
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -303,22 +351,18 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         break;
       case AppLifecycleState.detached:
         log("APP is detached");
+        logoutUser(FirebaseAuth.instance.currentUser.uid);
         break;
       case AppLifecycleState.paused:
         log("APP is background");
         break;
       case AppLifecycleState.resumed:
         log("APP is resumed");
-
-        if (isSocketDisconnected) {
-          snackbar(context, "socket disconnected trying to connect again");
-          log("socket disconnected trying to connect again");
-          socket.connect();
-          hitAllApis(uuId);
-        }
+        checkSocketStatus();
         break;
 
       default:
+        break;
     }
 
     /* if (isBackground) {

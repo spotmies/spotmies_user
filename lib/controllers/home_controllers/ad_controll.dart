@@ -43,6 +43,7 @@ class AdController extends ControllerMVC {
   // String adtime;
   // File _profilepic;
   List<File> serviceImages = [];
+  List<String> serviceImagesStrings = [];
   bool uploading = false;
   double val = 0;
 
@@ -55,7 +56,7 @@ class AdController extends ControllerMVC {
   DateTime now = DateTime.now();
 
   // drop down menu for service type
-  int dropDownValue = 0;
+  int dropDownValue;
   //dummy data for accept/reject requests condition
   String dummy = 'nothing';
   //user id
@@ -215,6 +216,7 @@ class AdController extends ControllerMVC {
         preferredCameraDevice: CameraDevice.rear);
     setState(() {
       serviceImages.add(File(pickedFile?.path));
+      serviceImagesStrings.add(pickedFile?.path);
     });
     if (pickedFile.path == null) retrieveLostData();
   }
@@ -227,10 +229,12 @@ class AdController extends ControllerMVC {
     PickedFile pickedFile = await picker.getVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     serviceVideo = File(pickedFile.path);
+
     videoPlayerController = VideoPlayerController.file(serviceVideo)
       ..initialize().then((_) {
         setState(() {
           serviceImages.add(serviceVideo);
+          serviceImagesStrings.add(pickedFile.path);
         });
         videoPlayerController.play();
       });
@@ -244,6 +248,7 @@ class AdController extends ControllerMVC {
     if (response.file != null) {
       setState(() {
         serviceImages.add(File(response.file.path));
+        serviceImagesStrings.add(response.file.path);
       });
     } else {
       print(response.file);
@@ -300,11 +305,12 @@ class AdController extends ControllerMVC {
   // }
 
   step1() {
-    if (dropDownValue == 0) {
-      snackbar(context, 'Please Send Job Field');
+    if (dropDownValue == null || dropDownValue < 0) {
+      snackbar(context, 'Please select service type');
+      return;
     }
     setState(() {
-      if (formkey.currentState.validate() && dropDownValue != 0) {
+      if (formkey.currentState.validate()) {
         formkey.currentState.save();
 
         sliderKey.currentState.next();

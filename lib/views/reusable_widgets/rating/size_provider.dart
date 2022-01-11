@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class SizeProvider {
-  static  double screenWidthFactor;
-  static  double screenHeightFactor;
-  static  Orientation orientation;
+  static double screenWidthFactor;
+  static double screenHeightFactor;
+  static Orientation orientation;
   void init(BuildContext context) {
     var mediaQueryData = MediaQuery.of(context);
     orientation = mediaQueryData.orientation;

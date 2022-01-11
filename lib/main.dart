@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
   IO.Socket socket;
   @override
   void initState() {
-    connect();
+    // connect();
     super.initState();
   }
 
@@ -68,22 +68,22 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
   }
 
-  void connect() {
-    // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
-    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
-      "transports": ["websocket", "polling", "flashsocket"],
-      "autoConnect": false,
-    });
+  // void connect() {
+  //   // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
+  //   socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+  //     "transports": ["websocket", "polling", "flashsocket"],
+  //     "autoConnect": false,
+  //   });
 
-    socket.onConnect((data) {
-      print("Connected");
-      socket.on("message", (msg) {
-        print(msg);
-      });
-    });
-    socket.connect();
-    //  socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
-  }
+  //   socket.onConnect((data) {
+  //     print("Connected");
+  //     socket.on("message", (msg) {
+  //       print(msg);
+  //     });
+  //   });
+  //   socket.connect();
+  //   //  socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+  // }
 }
 
 

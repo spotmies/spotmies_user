@@ -7,7 +7,8 @@ class API {
   static var getOrders = '/api/order/user/'; //get with user id
   static var particularOrder = '/api/order/orders/'; //get with order id
   static var userRegister = '/api/user/newUser'; //post
-  static var userDetails = '/api/user/users/'; //get with user id
+  static var userDetails = '/api/user/login'; //get with user id
+  static var userLogout = "/api/user/logout";
   static var editOrder = '/api/order/orders/'; //put with order id
   static var deleteOrder = '/api/order/orders/'; //delete with order id
   static var confirmOrder = '/api/order/orders/'; //put with order id
@@ -27,4 +28,7 @@ class API {
   static var specificChat = "/api/chat/chats/";
   static var cloudConstants = "/api/constant/doc-id/user_app";
   static var servicesList = "/api/services/all-service-list";
+  static var serviceFeedBack = "/api/partner-feedback/new-feedback";
+  static var newSuggestion = "/api/suggestion/new-suggestion";
+  static var faq = "/api/support/faq/all-faqs";
 }

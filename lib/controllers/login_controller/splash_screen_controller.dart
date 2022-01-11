@@ -14,8 +14,6 @@ import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/onboard.dart';
 
-import 'login_controller.dart';
-
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -25,26 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
   UniversalProvider universalProvider;
   checkUser() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      bool resp =
-          await checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
-      if (resp != false) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => GoogleNavBar()),
-            (route) => false);
-      } else {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => OnboardingScreen()),
-            (route) => false);
-      }
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
     } else {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => OnboardingScreen()),
           (route) => false);
     }
-    
   }
 
   getConstants({bool alwaysHit = false}) async {
@@ -71,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(milliseconds: 200), () {
       // print("18 ${FirebaseAuth.instance.currentUser}");
       getConstants(alwaysHit: false);
       universalProvider.fetchServiceList();

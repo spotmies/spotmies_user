@@ -108,54 +108,67 @@ class LoginPageController extends ControllerMVC {
     log(otpValue.toString());
     timerProvider.setLoader(true);
     try {
-      await FirebaseAuth.instance
+      dynamic sekhar = await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(
               verificationId: timerProvider.verificationCode,
               smsCode: otpValue))
           .then((value) async {
+        log(value.user.toString());
         if (value.user != null) {
           // log("${value.user}");
-          // log("$value");
+          log("$value");
           timerProvider.setPhoneNumber(timerProvider.phNumber.toString());
-          // print("user already login");
-          bool resp = await checkUserRegistered(value.user.uid);
+          print("user already login");
+          String resp = await checkUserRegistered(value.user.uid);
+          log("respp 122 $resp");
           timerProvider.setLoader(false);
-          if (resp == false) {
+          if (resp == "false") {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => StepperPersonalInfo()),
                 (route) => false);
-          } else {
+          } else if (resp == "true") {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => GoogleNavBar()),
                 (route) => false);
+          } else {
+            snackbar(context, "Something went wrong");
           }
         } else {
           timerProvider.setLoader(false);
           snackbar(context, "Something went wrong");
         }
       });
+      log("sekhar $sekhar");
     } catch (e) {
       FocusScope.of(context).unfocus();
       log(e.toString());
       timerProvider.setLoader(false);
-      snackbar(context, "Invalid OTP");
+      snackbar(context, "something went wrong");
     }
   }
 }
 
 checkUserRegistered(uid) async {
   dynamic deviceToken = await FirebaseMessaging.instance.getToken();
-  var obj = {
+  Map<String, String> obj = {
     "lastLogin": DateTime.now().millisecondsSinceEpoch.toString(),
     "userDeviceToken": deviceToken?.toString() ?? "",
+    "uId": uid.toString(),
+    "isActive": "true"
   };
   // print("checkUserreg");
-  var response = await Server().editMethod(API.userDetails + uid, obj);
-  // print("36 $response");
+  dynamic response = await Server().postMethod(API.userDetails, obj);
+  print("36 ${response.statusCode}");
   if (response.statusCode == 200 || response.statusCode == 204)
-    return true;
-  else
-    return false;
+    return 'true';
+  else if (response.statusCode == 404) return 'false';
+  return 'server_error';
+}
+
+logoutUser(String uId) async {
+  Map<String, String> body = {"uId": uId};
+  await Server().postMethod(API.userLogout, body);
+  return;
 }

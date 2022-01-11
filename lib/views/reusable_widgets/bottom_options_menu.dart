@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 bottomOptionsMenu(context,
     {menuTitle = "Menu",
-    options,
+    List<dynamic> options,
     option1Click,
     option2Click,
     option3Click,
@@ -66,7 +65,11 @@ bottomOptionsMenu(context,
                           // Navigator.pop(context);
                         },
                         child: Container(
-                          // padding: EdgeInsets.only(right: 20),
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  options.length == 2 || options.length == 3
+                                      ? width(context) * 0.03
+                                      : 5),
                           child: CircleAvatar(
                             radius: width(context) * 0.099,
                             backgroundColor: Colors.white,

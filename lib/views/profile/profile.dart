@@ -22,6 +22,7 @@ import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/profile/promotionsBS.dart';
 import 'package:spotmies/views/profile/settingsBS.dart';
 import 'package:spotmies/views/profile/signoutBS.dart';
+import 'package:spotmies/views/reusable_widgets/queryBS.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -115,7 +116,7 @@ class _ProfileState extends StateMVC<Profile> {
       ),
       body: Container(
         child: Consumer<UserDetailsProvider>(builder: (context, data, child) {
-          var u = data.getUser;
+          dynamic u = data.getUser;
 
           if (data.getLoader || u == null)
             return Center(child: profileShimmer(context));
@@ -246,11 +247,18 @@ class _ProfileState extends StateMVC<Profile> {
                                 }
                                 if (index == 4) {
                                   helpAndSupport(
-                                      context, height(context), width(context));
+                                      context,
+                                      height(context),
+                                      width(context),
+                                      _profileController,
+                                      u['_id']);
                                 }
                                 if (index == 5) {
-                                  rating(
-                                      context, height(context), width(context));
+                                  newQueryBS(context, onSubmit: (String value) {
+                                    _profileController.submitQuery(
+                                        value, u['_id'].toString(), context,
+                                        suggestionFor: "feedback");
+                                  });
                                 }
                                 if (index == 6) {
                                   settings(

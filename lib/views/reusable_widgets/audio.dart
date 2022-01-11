@@ -132,6 +132,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                             case "adpost":
                               widget.adController?.serviceImages
                                   ?.add(File(_filePath));
+                              widget.adController?.serviceImagesStrings
+                                  ?.add(_filePath);
                               break;
                             case "personalChat":
                               widget.adController
