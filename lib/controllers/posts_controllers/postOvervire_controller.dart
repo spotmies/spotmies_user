@@ -415,17 +415,18 @@ class PostOverViewController extends ControllerMVC {
     ordersProvider.updateOrderById(ordId: newbody['ordId'], orderData: newbody);
     bool resp = await feedbackOrder(body: body);
     if (resp) {
-      Map<String, String> body = {"orderState": "10"};
-      dynamic resp2 =
-          await updateOrder(body: body, ordId: orderDetails['ordId']);
-      if (resp2 != null) {
-        snackbar(context, "Thank you for your feedback");
-      } else {
-        newbody['orderState'] = 9;
-        ordersProvider.updateOrderById(
-            ordId: newbody['ordId'], orderData: newbody);
-        snackbar(context, "Something went wrong");
-      }
+      snackbar(context, "Thank you for your feedback");
+      // Map<String, String> body = {"orderState": "10"};
+      // dynamic resp2 =
+      //     await updateOrder(body: body, ordId: orderDetails['ordId']);
+      // if (resp2 != null) {
+      //   snackbar(context, "Thank you for your feedback");
+      // } else {
+      //   newbody['orderState'] = 9;
+      //   ordersProvider.updateOrderById(
+      //       ordId: newbody['ordId'], orderData: newbody);
+      //   snackbar(context, "Something went wrong");
+      // }
     } else {
       newbody['orderState'] = 9;
       ordersProvider.updateOrderById(
