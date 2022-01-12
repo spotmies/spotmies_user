@@ -115,8 +115,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     onStepTapped: (int step) =>
                         setState(() => _stepperPersonalInfo.currentStep = step),
                     controlsBuilder: (BuildContext context,
-                            {VoidCallback onStepContinue,
-                            VoidCallback onStepCancel}) =>
+                            ControlsDetails controlsDetails) =>
                         Container(),
                     steps: <Step>[
                       Step(
