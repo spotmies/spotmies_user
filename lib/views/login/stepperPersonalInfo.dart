@@ -58,8 +58,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 currentStep: _stepperPersonalInfo.currentStep,
                 onStepTapped: (int step) =>
                     setState(() => _stepperPersonalInfo.currentStep = step),
-                controlsBuilder: (BuildContext context,
-                    {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                controlsBuilder:
+                    (BuildContext context, ControlsDetails details) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Row(
@@ -76,7 +76,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 Text('Back'),
                               ],
                             ),
-                            onPressed: onStepCancel,
+                            onPressed: details.onStepCancel,
                             style: ButtonStyle(
                               backgroundColor: _stepperPersonalInfo
                                           .currentStep >
@@ -120,7 +120,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             : Container(
                                 width: width(context) * 0.35,
                                 child: ElevatedButton(
-                                  onPressed: onStepContinue,
+                                  onPressed: details.onStepContinue,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,

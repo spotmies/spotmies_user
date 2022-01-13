@@ -11,14 +11,14 @@ import 'package:spotmies/views/home/listBuilderVertical.dart';
 class Services extends StatefulWidget {
   final int value;
 
-  Services({this.value});
+  Services({required this.value});
 
   @override
   _ServicesState createState() => _ServicesState(value);
 }
 
 class _ServicesState extends State<Services> {
-  UniversalProvider up;
+  UniversalProvider? up = null;
   int value;
   _ServicesState(this.value);
 
@@ -105,7 +105,7 @@ class _ServicesState extends State<Services> {
   @override
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("home");
+    up?.setCurrentConstants("home");
     super.initState();
   }
 
@@ -136,7 +136,7 @@ class _ServicesState extends State<Services> {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.grey[300],
+                                color: Colors.grey.shade300,
                                 blurRadius: 5,
                                 spreadRadius: 2)
                           ]),

@@ -10,7 +10,8 @@ class BaseController {
       var msg = error.message;
       DialogueHelper.showErrorDialogue(description: msg);
     } else if (error is APINotRespondingEXception) {
-      DialogueHelper.showErrorDialogue(description: 'Oops it took longer to respond.');
+      DialogueHelper.showErrorDialogue(
+          description: 'Oops it took longer to respond.');
     }
   }
 }
