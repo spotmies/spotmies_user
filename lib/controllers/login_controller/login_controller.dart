@@ -108,15 +108,12 @@ class LoginPageController extends ControllerMVC {
     log(otpValue.toString());
     timerProvider.setLoader(true);
     try {
-      dynamic sekhar = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(
               verificationId: timerProvider.verificationCode,
               smsCode: otpValue))
           .then((value) async {
-        log(value.user.toString());
         if (value.user != null) {
-          // log("${value.user}");
-          log("$value");
           timerProvider.setPhoneNumber(timerProvider.phNumber.toString());
           print("user already login");
           String resp = await checkUserRegistered(value.user.uid);
@@ -133,14 +130,14 @@ class LoginPageController extends ControllerMVC {
                 MaterialPageRoute(builder: (context) => GoogleNavBar()),
                 (route) => false);
           } else {
-            snackbar(context, "Something went wrong");
+            snackbar(context, "Server busy please try again later...");
           }
         } else {
           timerProvider.setLoader(false);
           snackbar(context, "Something went wrong");
         }
       });
-      log("sekhar $sekhar");
+      // log("sekhar $sekhar");
     } catch (e) {
       FocusScope.of(context).unfocus();
       log(e.toString());
