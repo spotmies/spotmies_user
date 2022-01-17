@@ -30,14 +30,14 @@ class StepperPersonal extends ControllerMVC {
   TextEditingController businessNameTf = TextEditingController();
   ScrollController scrollController = ScrollController();
   int currentStep = 0;
-  String name;
-  String email;
-  String number;
-  String altnumber;
-  String tca;
-  File profilepic;
-  bool accept = false;
-  String imageLink = "";
+  String? name;
+  String? email;
+  String? number;
+  String? altnumber;
+  String? tca;
+  File? profilepic;
+  bool? accept = false;
+  String? imageLink;
   List termsAndConditions = [];
   List offlineTermsAndConditions = [
     " offline Spotmies partner not supposed to Save customer details,as well as not supposed to give contact information to customer",
@@ -51,13 +51,13 @@ class StepperPersonal extends ControllerMVC {
   ];
   // DateTime now = DateTime.now();
 
-  StepperPersonalModel stepperPersonalModel;
+  late StepperPersonalModel stepperPersonalModel;
 
   StepperPersonal() {
     this.stepperPersonalModel = StepperPersonalModel();
   }
 
-  TimeProvider timerProvider;
+  late TimeProvider timerProvider;
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
@@ -85,10 +85,10 @@ class StepperPersonal extends ControllerMVC {
   }
 
   step2() {
-    if (formkey.currentState.validate()) {
-      formkey.currentState.save();
+    if (formkey != null && formkey.currentState!.validate()) {
+      formkey.currentState?.save();
       currentStep += 1;
-      print(FirebaseAuth.instance.currentUser.uid);
+      print(FirebaseAuth.instance.currentUser?.uid);
     } else {
       final snackBar = SnackBar(
         content: Text('Fill all the fields'),
@@ -109,18 +109,18 @@ class StepperPersonal extends ControllerMVC {
     timerProvider.setLoader(true, loadingValue: "Registration Inprogress...");
     log(timerProvider.phoneNumber.toString());
     var body = {
-      "name": this?.name?.toString(),
-      "phNum": timerProvider?.phNumber?.toString(),
+      "name": this.name.toString(),
+      "phNum": timerProvider.phNumber.toString(),
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
-      "uId": FirebaseAuth.instance.currentUser.uid.toString(),
+      "uId": FirebaseAuth.instance.currentUser?.uid.toString(),
       "userState": "active",
-      "altNum": this?.altnumber?.toString() ?? "",
+      "altNum": this.altnumber?.toString() ?? "",
       if (this.email != null) "eMail": this.email.toString(),
-      "t&a": accept?.toString(),
-      "pic": imageLink?.toString() ?? "",
+      "t&a": accept.toString(),
+      "pic": imageLink.toString(),
       "userDeviceToken": deviceToken?.toString() ?? "",
       "referalCode":
-          "${name.substring(0, 4)}${timerProvider.phNumber.substring(6)}"
+          "${name?.substring(0, 4)}${timerProvider.phNumber.substring(6)}"
     };
     log("body $body");
     var resp =
@@ -156,7 +156,9 @@ class StepperPersonal extends ControllerMVC {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      profilepic = File(front.path);
+      if (front != null) {
+        profilepic = File(front.path);
+      }
     });
   }
 
@@ -166,7 +168,7 @@ class StepperPersonal extends ControllerMVC {
     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
     UploadTask uploadTask = postImageRef
         .child(DateTime.now().toString() + ".jpg")
-        .putFile(profilepic);
+        .putFile(profilepic!);
     print(uploadTask);
     var imageUrl = await (await uploadTask).ref.getDownloadURL();
     imageLink = imageUrl.toString();

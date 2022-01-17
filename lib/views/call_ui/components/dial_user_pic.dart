@@ -3,9 +3,9 @@ import 'package:spotmies/views/call_ui/audioCallWithImage/size.config.dart';
 
 class DailUserPic extends StatelessWidget {
   const DailUserPic({
-    Key key,
+    Key? key,
     this.size = 192,
-    @required this.image,
+    required this.image,
   }) : super(key: key);
   final double size;
   final String image;

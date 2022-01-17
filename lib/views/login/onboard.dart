@@ -13,14 +13,14 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   List<OnboardingModel> _list = OnboardingModel.list;
-  UniversalProvider? up;
-  int page = 0;
+  late UniversalProvider up;
+  int? page = 0;
   var _controller = PageController();
   var showAnimatedContainer = false;
   @override
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up?.setCurrentConstants("onBoard");
+    up.setCurrentConstants("onBoard");
     super.initState();
   }
 
@@ -30,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     _controller.addListener(() {
       setState(() {
-        page = _controller.page?.round() ?? 0;
+        page = _controller.page?.round();
       });
     });
     return Scaffold(
@@ -55,7 +55,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   )),
                         ),
                         StepsContainer(
-                          page: page,
+                          page: page ?? 0,
                           list: _list,
                           controller: _controller,
                           showAnimatedContainerCallBack: (value) {
@@ -100,13 +100,13 @@ class MyAnimatedContainer extends StatelessWidget {
       duration: Duration(seconds: 1),
       curve: Curves.easeOut,
       builder: (context, child, value) {
-        //TODO replace image with welcome_image.png
         return Container(
           width: value,
           height: value,
           decoration: BoxDecoration(
               color: Colors.white,
-              image: DecorationImage(image: AssetImage("assets/images/1.png"))),
+              image: DecorationImage(
+                  image: AssetImage("images/welcome_image.png"))),
         );
       },
     );
@@ -244,7 +244,7 @@ class CommonButtonWidget extends StatelessWidget {
                   topLeft: Radius.circular(25))),
       child: Center(
         child: CommonText(
-          text: title ?? "Button".toUpperCase(),
+          text: title,
           textColor: textColor ?? Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: textSizePercentage,
@@ -257,13 +257,13 @@ class CommonButtonWidget extends StatelessWidget {
 //common text
 
 class CommonText extends StatelessWidget {
-  final String text;
+  final String? text;
   final Color? textColor;
   final double? fontSize;
   final double? padding;
   final FontWeight? fontWeight;
   CommonText(
-      {required this.text,
+      {this.text,
       this.textColor,
       this.fontWeight,
       this.padding,
@@ -271,7 +271,7 @@ class CommonText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text ?? "",
       style: TextStyle(
           color: textColor ?? Colors.black,
           fontWeight: fontWeight ?? FontWeight.w400,

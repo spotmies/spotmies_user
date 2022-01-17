@@ -60,20 +60,20 @@ Widget servicelistBuilder(
                       child: InkWell(
                         onTap: () {
                           log(
-                            buildData[index]['job'] as String,
+                            buildData[index]['job'].toString(),
                           );
                         },
                         child: CircleAvatar(
                             backgroundColor: Colors.blueGrey[50],
                             radius: width * 0.07,
                             child: Icon(
-                              buildData[index]['icon'] as IconData,
+                              buildData[index]['icon'] as IconData?,
                               color: Colors.grey[900],
                             )),
                       ),
                     ),
                     Text(
-                      buildData[index]['job'] as String,
+                      buildData[index]['job'].toString(),
                       style: fonts(
                           width * 0.03, FontWeight.w600, Colors.grey[900]),
                     )

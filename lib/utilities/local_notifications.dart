@@ -12,10 +12,10 @@ class LocalNotidication {
   static final sound = 'notification_sound.wav';
 
   static Future notificationDetails(
-      {String bigImage, String largeIcon, bool show = false}) async {
+      {String? bigImage, String? largeIcon, bool show = false}) async {
     final styleInformation = BigPictureStyleInformation(
-        FilePathAndroidBitmap(bigImage),
-        largeIcon: FilePathAndroidBitmap(largeIcon));
+        FilePathAndroidBitmap(bigImage ?? ""),
+        largeIcon: FilePathAndroidBitmap(largeIcon ?? ""));
 
     return NotificationDetails(
         android: AndroidNotificationDetails(
@@ -27,10 +27,10 @@ class LocalNotidication {
   }
 
   static Future firebasePushNotification(
-      {String bigImage, String largeIcon, bool show = false}) async {
+      {String? bigImage, String? largeIcon, bool show = false}) async {
     final styleInformation = BigPictureStyleInformation(
-        FilePathAndroidBitmap(bigImage),
-        largeIcon: FilePathAndroidBitmap(largeIcon));
+        FilePathAndroidBitmap(bigImage ?? ""),
+        largeIcon: FilePathAndroidBitmap(largeIcon ?? ""));
 
     return NotificationDetails(
         android: AndroidNotificationDetails(
@@ -52,12 +52,12 @@ class LocalNotidication {
     // when app is closed
     final details = await notifications.getNotificationAppLaunchDetails();
     if (details != null && details.didNotificationLaunchApp) {
-      onNotifications.add(details.payload);
+      onNotifications.add(details.payload ?? "");
     }
 
     await notifications.initialize(settings,
         onSelectNotification: (payload) async {
-      onNotifications.add(payload);
+      onNotifications.add(payload ?? "");
     });
 
     if (initSchedule) {
@@ -69,11 +69,11 @@ class LocalNotidication {
 
   static Future showFirebaseNotifications(
       {int id = 0,
-      String title,
-      String body,
-      String payload,
-      String bigImage,
-      String largeIcon}) async {
+      String? title,
+      String? body,
+      String? payload,
+      String? bigImage,
+      String? largeIcon}) async {
     notifications.show(
         id,
         title,
@@ -85,11 +85,11 @@ class LocalNotidication {
 
   static Future showNotifications(
       {int id = 0,
-      String title,
-      String body,
-      String payload,
-      String bigImage,
-      String largeIcon}) async {
+      String? title,
+      String? body,
+      String? payload,
+      String? bigImage,
+      String? largeIcon}) async {
     notifications.show(
         id,
         title,
@@ -101,10 +101,10 @@ class LocalNotidication {
 
   static Future showShedduleNotifications(
       {int id = 0,
-      String title,
-      String body,
-      String payload,
-      @required DateTime scheduledDate}) async {
+      String? title,
+      String? body,
+      String? payload,
+      required DateTime scheduledDate}) async {
     notifications.zonedSchedule(
       id,
       title,
@@ -142,7 +142,7 @@ class LocalNotificationService {
             android: AndroidInitializationSettings("@mipmap/ic_launcher"));
 
     _notificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String route) async {
+        onSelectNotification: (String? route) async {
       if (route != null) {
         Navigator.of(context).pushNamed(route);
       }
@@ -164,8 +164,8 @@ class LocalNotificationService {
 
       await _notificationsPlugin.show(
         id,
-        message.notification.title,
-        message.notification.body,
+        message.notification?.title,
+        message.notification?.body,
         notificationDetails,
         payload: message.data["route"],
       );

@@ -14,8 +14,8 @@ class AddImage extends StatefulWidget {
 class _AddImageState extends State<AddImage> {
   bool uploading = false;
   double val = 0;
-  CollectionReference imgRef;
-  firebase_storage.Reference ref;
+  late CollectionReference imgRef;
+  late firebase_storage.Reference ref;
 
   List<File> _image = [];
   final picker = ImagePicker();
@@ -91,9 +91,11 @@ class _AddImageState extends State<AddImage> {
   chooseImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
-      _image.add(File(pickedFile?.path));
+      if (pickedFile != null) {
+        _image.add(File(pickedFile.path));
+      }
     });
-    if (pickedFile.path == null) retrieveLostData();
+    if (pickedFile?.path == null) retrieveLostData();
   }
 
   Future<void> retrieveLostData() async {
@@ -103,7 +105,7 @@ class _AddImageState extends State<AddImage> {
     }
     if (response.file != null) {
       setState(() {
-        _image.add(File(response.file.path));
+        _image.add(File(response.file!.path));
       });
     } else {
       print(response.file);

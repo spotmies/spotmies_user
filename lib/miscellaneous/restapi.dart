@@ -35,7 +35,7 @@ class _NamedAPIState extends State<NamedAPI> {
   };
 
   // ignore: unused_field
-  DataModel _dataModel;
+  late DataModel _dataModel;
   TextEditingController namecontroller = TextEditingController();
   TextEditingController jobcontroller = TextEditingController();
   // Dio dio = Dio();
@@ -66,7 +66,7 @@ class _NamedAPIState extends State<NamedAPI> {
 
     if (response.statusCode == 200) {
       // String responseString = response?.body;
-      return response?.body;
+      return response.body;
       //dataModelFromJson(responseString);
     } else
       return null;
@@ -161,7 +161,7 @@ class _NamedAPIState extends State<NamedAPI> {
 
 class Follow extends StatefulWidget {
   final int value;
-  Follow({this.value});
+  Follow({required this.value});
   @override
   _FollowState createState() => _FollowState(value);
 }
@@ -175,12 +175,12 @@ class _FollowState extends State<Follow> {
         appBar: AppBar(
           title: Text(value.toString()),
         ),
-        body: FutureBuilder(
+        body: FutureBuilder<List<User>>(
             future: getdata(),
             builder: (context, snapshot) {
               if (snapshot.data == null)
                 return Center(child: CircularProgressIndicator());
-              var doc = snapshot.data[value];
+              var doc = snapshot.data![value];
               return Column(
                 children: [
                   Text(doc.problem),

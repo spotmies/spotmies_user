@@ -10,9 +10,9 @@ class RatingChips extends StatefulWidget {
   final int starsGiven;
   final Function(String, int) onChipSelected;
   const RatingChips({
-    Key key,
-    @required this.starsGiven,
-    @required this.onChipSelected,
+    Key? key,
+    required this.starsGiven,
+    required this.onChipSelected,
   }) : super(key: key);
 
   @override
@@ -28,21 +28,21 @@ class _RatingChipsState extends State<RatingChips> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RatingChip(
-              text: chipData[widget.starsGiven][0] ?? "Excellent!",
+              text: chipData[widget.starsGiven]?[0] ?? "Excellent!",
               onChipSelected: (text, index, chipState) {
                 widget.onChipSelected(chipState ? text : "", index);
               },
               index: 0,
             ),
             RatingChip(
-              text: chipData[widget.starsGiven][1] ?? "Superb!",
+              text: chipData[widget.starsGiven]?[1] ?? "Superb!",
               onChipSelected: (text, index, chipState) {
                 widget.onChipSelected(chipState ? text : "", index);
               },
               index: 1,
             ),
             RatingChip(
-              text: chipData[widget.starsGiven][2] ?? "Great!",
+              text: chipData[widget.starsGiven]?[2] ?? "Great!",
               onChipSelected: (text, index, chipState) {
                 widget.onChipSelected(chipState ? text : "", index);
               },
@@ -57,7 +57,7 @@ class _RatingChipsState extends State<RatingChips> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RatingChip(
-              text: chipData[widget.starsGiven][3] ?? "Wonderful!",
+              text: chipData[widget.starsGiven]?[3] ?? "Wonderful!",
               onChipSelected: (text, index, chipState) {
                 widget.onChipSelected(chipState ? text : "", index);
               },
@@ -65,7 +65,7 @@ class _RatingChipsState extends State<RatingChips> {
             ),
             (chipData[widget.starsGiven] ?? []).length > 4
                 ? RatingChip(
-                    text: chipData[widget.starsGiven][4] ?? "Sharing It Now!",
+                    text: chipData[widget.starsGiven]?[4] ?? "Sharing It Now!",
                     onChipSelected: (text, index, chipState) {
                       widget.onChipSelected(chipState ? text : "", index);
                     },
@@ -84,10 +84,10 @@ class RatingChip extends StatefulWidget {
   final int index;
   final Function(String, int, bool) onChipSelected;
   const RatingChip({
-    Key key,
-    @required this.text,
-    @required this.onChipSelected,
-    @required this.index,
+    Key? key,
+    required this.text,
+    required this.onChipSelected,
+    required this.index,
   }) : super(key: key);
   @override
   _RatingChipState createState() => _RatingChipState();

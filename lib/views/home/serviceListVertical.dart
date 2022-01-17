@@ -9,17 +9,17 @@ import 'package:spotmies/views/home/ServiceListHorizontal.dart';
 import 'package:spotmies/views/home/listBuilderVertical.dart';
 
 class Services extends StatefulWidget {
-  final int value;
+  final int? value;
 
-  Services({required this.value});
+  Services({this.value});
 
   @override
   _ServicesState createState() => _ServicesState(value);
 }
 
 class _ServicesState extends State<Services> {
-  UniversalProvider? up = null;
-  int value;
+  late UniversalProvider up;
+  int? value;
   _ServicesState(this.value);
 
   List images = [
@@ -105,7 +105,7 @@ class _ServicesState extends State<Services> {
   @override
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up?.setCurrentConstants("home");
+    up.setCurrentConstants("home");
     super.initState();
   }
 

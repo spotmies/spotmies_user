@@ -17,27 +17,27 @@ import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 
 class PostAd extends StatefulWidget {
-  final int jobFromHome;
+  final int? jobFromHome;
   PostAd({this.jobFromHome});
   @override
   _PostAdState createState() => _PostAdState(jobFromHome);
 }
 
 class _PostAdState extends StateMVC<PostAd> {
-  AdController _adController;
+  late AdController _adController;
   _PostAdState(this.jobFromHome) : super(AdController()) {
-    this._adController = controller;
+    this._adController = controller as AdController;
   }
-  int jobFromHome;
+  late int? jobFromHome;
 
   var latitude = "";
   var longitude = "";
   String add1 = "";
   String add2 = "";
   String add3 = "";
-  UniversalProvider up;
+  late UniversalProvider up;
 
-  UserDetailsProvider uDetailsProvider;
+  late UserDetailsProvider uDetailsProvider;
 
   @override
   void initState() {

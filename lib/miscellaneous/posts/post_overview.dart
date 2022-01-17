@@ -97,7 +97,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 child: Row(
                   children: [
                     Text(
-                      '₹' + (document?['money'] ?? "").toString(),
+                      '₹' + (document?['money'] ?? ""),
                       style: TextStyle(fontSize: 25),
                     ),
                   ],

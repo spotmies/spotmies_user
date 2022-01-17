@@ -11,15 +11,15 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 class SettingsController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
 
-  String updatedEmail;
-  String updatedob;
-  String updatedNum;
-  String updatedtempad;
-  File profilepic;
+  String? updatedEmail;
+  String? updatedob;
+  String? updatedNum;
+  String? updatedtempad;
+  File? profilepic;
   String imageLink1 = "";
   var updatePath = FirebaseFirestore.instance
       .collection('users')
-      .doc(FirebaseAuth.instance.currentUser.uid);
+      .doc(FirebaseAuth.instance.currentUser?.uid);
 
   Future<void> profilePic() async {
     var profile = await ImagePicker().getImage(
@@ -28,23 +28,27 @@ class SettingsController extends ControllerMVC {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      profilepic = File(profile.path);
+      if (profile != null) {
+        profilepic = File(profile.path);
+      }
     });
   }
 
 //image upload function
   Future<void> uploadprofile() async {
-    var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
-    UploadTask uploadTask = postImageRef
-        .child(DateTime.now().toString() + ".jpg")
-        .putFile(profilepic);
-    print(uploadTask);
-    var imageUrl = await (await uploadTask).ref.getDownloadURL();
-    imageLink1 = imageUrl.toString();
-    print(imageUrl);
-    FirebaseFirestore.instance
-        .collection('partner')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .update({'profilepic': imageLink1});
+    if (profilepic != null) {
+      var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
+      UploadTask uploadTask = postImageRef
+          .child(DateTime.now().toString() + ".jpg")
+          .putFile(profilepic!);
+      print(uploadTask);
+      var imageUrl = await (await uploadTask).ref.getDownloadURL();
+      imageLink1 = imageUrl.toString();
+      print(imageUrl);
+      FirebaseFirestore.instance
+          .collection('partner')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .update({'profilepic': imageLink1});
+    }
   }
 }

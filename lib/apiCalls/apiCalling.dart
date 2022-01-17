@@ -12,10 +12,11 @@ class Server {
       var response = await http.get(uri).timeout(Duration(seconds: 30));
       return processResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet Connection', uri.toString());
+      throw FetchDataException(
+          message: 'No Internet Connection', url: uri.toString());
     } on TimeoutException {
       throw APINotRespondingEXception(
-          'API Not Responding in Time', uri.toString());
+          message: 'API Not Responding in Time', url: uri.toString());
     }
   }
 
@@ -29,10 +30,11 @@ class Server {
       // return processResponse(response);
       return response;
     } on SocketException {
-      throw FetchDataException('No Internet Connection', uri.toString());
+      throw FetchDataException(
+          message: 'No Internet Connection', url: uri.toString());
     } on TimeoutException {
       throw APINotRespondingEXception(
-          'API Not Responding in Time', uri.toString());
+          message: 'API Not Responding in Time', url: uri.toString());
     }
   }
 
@@ -46,25 +48,27 @@ class Server {
 
       return processResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet Connection', uri.toString());
+      throw FetchDataException(
+          message: 'No Internet Connection', url: uri.toString());
     } on TimeoutException {
       throw APINotRespondingEXception(
-          'API Not Responding in Time', uri.toString());
+          message: 'API Not Responding in Time', url: uri.toString());
     }
   }
 
   Future<dynamic> deleteMethod(String api,
-      {Map<String, dynamic> params = const {}}) async {
-    var uri = Uri.https(API.host, api, params);
+      {Map<String, dynamic>? params}) async {
+    var uri = Uri.https(API.host, api, params ?? {});
 
     try {
       var response = await http.delete(uri).timeout(Duration(seconds: 30));
       return processResponse(response);
     } on SocketException {
-      throw FetchDataException('No Internet Connection', uri.toString());
+      throw FetchDataException(
+          message: 'No Internet Connection', url: uri.toString());
     } on TimeoutException {
       throw APINotRespondingEXception(
-          'API Not Responding in Time', uri.toString());
+          message: 'API Not Responding in Time', url: uri.toString());
     }
   }
 

@@ -6,8 +6,8 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class ProgressWaiter extends StatelessWidget {
   ProgressWaiter(
-      {@required this.contextt,
-      @required this.loaderState,
+      {required this.contextt,
+      required this.loaderState,
       this.loadingName = "Verifying Please Wait..."});
 
   final BuildContext contextt;

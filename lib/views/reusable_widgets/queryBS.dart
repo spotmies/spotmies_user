@@ -5,7 +5,7 @@ import 'package:spotmies/utilities/textFormFieldWidget.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 newQueryBS(BuildContext context,
-    {Function onSubmit,
+    {Function? onSubmit,
     String type = "text",
     String heading = "Rise a new query",
     String hint = "Ask Question",
@@ -77,10 +77,12 @@ newQueryBS(BuildContext context,
                     borderRadius: 10.0,
                     borderSideColor: Colors.indigo[50],
                     onClick: () async {
-                      if (queryForm.currentState.validate()) {
-                        if (onSubmit != null) {
-                          onSubmit(queryControl.text);
-                          Navigator.pop(context);
+                      if (queryForm.currentState != null) {
+                        if (queryForm.currentState!.validate()) {
+                          if (onSubmit != null) {
+                            onSubmit(queryControl.text);
+                            Navigator.pop(context);
+                          }
                         }
                       }
                     },

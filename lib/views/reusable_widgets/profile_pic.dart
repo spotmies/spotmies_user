@@ -6,9 +6,9 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic(
-      {Key key,
-      @required this.profile,
-      @required this.name,
+      {Key? key,
+      required this.profile,
+      required this.name,
       this.onClick,
       this.bgColor,
       this.size,
@@ -23,13 +23,13 @@ class ProfilePic extends StatelessWidget {
   final dynamic profile;
   final String name;
   final bool status;
-  final Color bgColor;
-  final double textSize;
-  final Color textColor;
-  final bool badge;
-  final Function onClick;
-  final double size;
-  final String onClickLabel;
+  final Color? bgColor;
+  final double? textSize;
+  final Color? textColor;
+  final bool? badge;
+  final Function? onClick;
+  final double? size;
+  final String? onClickLabel;
   final bool isProfile;
   Widget _activeIcon(double hight, double width) {
     if (status) {
@@ -66,7 +66,7 @@ class ProfilePic extends StatelessWidget {
     // final width(context) = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
-        if (onClick != null) onClick();
+        if (onClick != null) onClick!();
       },
       child: Container(
         child: Uri.parse(profile.runtimeType == String ? profile : "s")
@@ -110,7 +110,9 @@ class ProfilePic extends StatelessWidget {
                                   radius: size ?? width(context) * 0.07,
                                   child: Center(
                                     child: TextWid(
-                                      text: toBeginningOfSentenceCase(name[0]),
+                                      text:
+                                          toBeginningOfSentenceCase(name[0]) ??
+                                              "",
                                       color: textColor ?? Colors.white,
                                       size: textSize ?? width(context) * 0.06,
                                     ),
@@ -120,7 +122,9 @@ class ProfilePic extends StatelessWidget {
                                   color: bgColor ?? Colors.grey[300],
                                   child: Center(
                                     child: TextWid(
-                                      text: toBeginningOfSentenceCase(name[0]),
+                                      text:
+                                          toBeginningOfSentenceCase(name[0]) ??
+                                              "",
                                       color: textColor ?? Colors.white,
                                       size: textSize ?? width(context) * 0.06,
                                     ),

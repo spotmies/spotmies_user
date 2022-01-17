@@ -13,8 +13,8 @@ import 'package:spotmies/utilities/snackbar.dart';
 class PostsController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   final controller = TestController();
-  GetOrdersProvider ordersProvider;
-  String uuId = FirebaseAuth.instance.currentUser.uid;
+  late GetOrdersProvider ordersProvider;
+  String? uuId = FirebaseAuth.instance.currentUser?.uid;
 
 //options list must be this form
 
@@ -62,7 +62,7 @@ class PostsController extends ControllerMVC {
   }
 
   Future getOrderFromDB() async {
-    var response = await Server().getMethod(API.getOrders + uuId);
+    var response = await Server().getMethod(API.getOrders + (uuId ?? ""));
     if (response.statusCode == 200) {
       var ordersList = jsonDecode(response.body);
       ordersProvider.setOrdersList(ordersList);

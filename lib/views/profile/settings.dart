@@ -13,11 +13,11 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends StateMVC<Setting> {
-  SettingsController _settingsController;
-  UniversalProvider up;
+  late SettingsController _settingsController;
+  late UniversalProvider up;
 
   _SettingState() : super(SettingsController()) {
-    this._settingsController = controller;
+    this._settingsController = controller as SettingsController;
   }
 
   @override

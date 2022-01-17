@@ -209,7 +209,7 @@ Widget page2(double hight, double width, BuildContext context,
                   children: [
                     ElevatedButtonWidget(
                       onClick: () {
-                        adController.sliderKey.currentState.previous();
+                        adController.sliderKey.currentState?.previous();
                       },
                       buttonName: 'Back',
                       bgColor: Colors.indigo[50],
@@ -260,7 +260,9 @@ Container mediaContent(file, {bool isOnline = false}) {
         decoration: BoxDecoration(
             color: Colors.amber,
             image: DecorationImage(
-                image: !isOnline ? FileImage(file) : NetworkImage(file),
+                image: !isOnline
+                    ? FileImage(file)
+                    : NetworkImage(file) as ImageProvider,
                 fit: BoxFit.cover)),
       );
       break;

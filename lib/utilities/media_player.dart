@@ -9,7 +9,7 @@ import 'package:spotmies/views/reusable_widgets/video_player.dart';
 class MediaPlayer extends StatefulWidget {
   final List mediaList;
   final bool isOnlinePlayer;
-  const MediaPlayer({@required this.mediaList, this.isOnlinePlayer = true});
+  const MediaPlayer({required this.mediaList, this.isOnlinePlayer = true});
   // const MediaPlayer({ Key? key }) : super(key: key);
 
   @override
@@ -34,13 +34,11 @@ class _MediaPlayerState extends State<MediaPlayer> {
           imageLink: widget.mediaList[0],
           isOnlinePlayer: widget.isOnlinePlayer,
         );
-        break;
       case "video":
         return VideoPlayerWid(
           videoLink: widget.mediaList[0],
           isOnlinePlayer: widget.isOnlinePlayer,
         );
-        break;
       case "audio":
         // playAudio(context, hight, width, widget.mediaList[0]);
         return Scaffold(
@@ -50,11 +48,9 @@ class _MediaPlayerState extends State<MediaPlayer> {
                 child: FeatureButtonsView(message: widget.mediaList[0])),
           ),
         );
-        break;
 
       default:
         return Scaffold(body: Center(child: Text("something went wrong")));
-        break;
     }
   }
 

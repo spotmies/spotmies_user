@@ -38,13 +38,13 @@ class GoogleNavBar extends StatefulWidget {
 
 class _GoogleNavBarState extends State<GoogleNavBar>
     with WidgetsBindingObserver {
-  ChatProvider chatProvider;
-  ResponsesProvider responseProvider;
-  GetOrdersProvider ordersProvider;
-  UserDetailsProvider profileProvider;
-  String uuId = FirebaseAuth.instance.currentUser.uid;
+  late ChatProvider chatProvider;
+  late ResponsesProvider responseProvider;
+  late GetOrdersProvider ordersProvider;
+  late UserDetailsProvider profileProvider;
+  String? uuId = FirebaseAuth.instance.currentUser?.uid;
 
-  UniversalProvider universalProvider;
+  late UniversalProvider universalProvider;
   List icons = [
     Icons.home,
     Icons.chat,
@@ -115,11 +115,11 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     if (chatList != null) chatProvider.setChatList(chatList);
   }
 
-  StreamController _chatResponse;
+  late StreamController _chatResponse;
 
-  Stream stream;
+  late Stream stream;
 
-  IO.Socket socket;
+  late IO.Socket socket;
 
   void socketResponse() {
     socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
@@ -140,7 +140,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
       setStringToSF(id: "isSocketConnected", value: false);
     });
     socket.connect();
-    socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+    socket.emit('join-room', FirebaseAuth.instance.currentUser?.uid);
     socket.on('recieveNewMessage', (socket) {
       var typeCheck = socket['target']['type'];
       if (typeCheck == "call") {
@@ -182,7 +182,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   checkUser() async {
     if (FirebaseAuth.instance.currentUser != null) {
       String resp =
-          await checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
+          await checkUserRegistered(FirebaseAuth.instance.currentUser?.uid);
       if (resp == "true") {
         log("login successfully");
       } else if (resp == "false") {
@@ -203,15 +203,15 @@ class _GoogleNavBarState extends State<GoogleNavBar>
 
   @override
   initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     FirebaseMessaging.instance.getToken().then((value) {
-      String token = value;
+      String? token = value;
       log(token.toString());
     });
     //notifications
     awesomeInitilize();
     FirebaseMessaging.instance.getInitialMessage().then((message) {
-      final routefromMessage = message.data["route"];
+      final routefromMessage = message?.data["route"];
       log(routefromMessage);
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
@@ -219,8 +219,8 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     //forground
     FirebaseMessaging.onMessage.listen((message) async {
       if (message.notification != null) {
-        print(message.notification.title);
-        print(message.notification.body);
+        print(message.notification?.title);
+        print(message.notification?.body);
         displayAwesomeNotification(message, context);
       }
     });
@@ -320,7 +320,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
 
     super.dispose();
   }
@@ -332,10 +332,12 @@ class _GoogleNavBarState extends State<GoogleNavBar>
       log("socket disconnected trying to connect again");
       socket.disconnect();
       socket.connect();
-      socket.emit('join-room', FirebaseAuth.instance.currentUser.uid);
+      socket.emit('join-room', FirebaseAuth.instance.currentUser?.uid);
 
-      checkUserRegistered(FirebaseAuth.instance.currentUser.uid);
-      getImportantApis(FirebaseAuth.instance.currentUser.uid);
+      checkUserRegistered(FirebaseAuth.instance.currentUser?.uid);
+      if (FirebaseAuth.instance.currentUser != null) {
+        getImportantApis(FirebaseAuth.instance.currentUser!.uid);
+      }
     } else {
       log("socket on connection");
     }
@@ -351,7 +353,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         break;
       case AppLifecycleState.detached:
         log("APP is detached");
-        logoutUser(FirebaseAuth.instance.currentUser.uid);
+        logoutUser(FirebaseAuth.instance.currentUser?.uid);
         break;
       case AppLifecycleState.paused:
         log("APP is background");

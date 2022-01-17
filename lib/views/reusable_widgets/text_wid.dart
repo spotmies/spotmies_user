@@ -3,18 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 
 class TextWid extends StatelessWidget {
   final String text;
-  final double size;
-  final FontWeight weight;
-  final Color color;
-  final String family;
-  final double lSpace;
-  final int maxlines;
-  final TextOverflow flow;
-  final TextAlign align;
-  final TextDecoration decoration;
+  final double? size;
+  final FontWeight? weight;
+  final Color? color;
+  final String? family;
+  final double? lSpace;
+  final int? maxlines;
+  final TextOverflow? flow;
+  final TextAlign? align;
+  final TextDecoration? decoration;
 
   TextWid(
-      {this.text,
+      {required this.text,
       this.size,
       this.color,
       this.weight,

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class BadgeIcon extends StatelessWidget {
   final Icon iconData;
-  final VoidCallback onTap;
-  final Text badgeText;
-  final Color badgeColor;
+  final VoidCallback? onTap;
+  final Text? badgeText;
+  final Color? badgeColor;
 
   const BadgeIcon({
-    Key key,
+    Key? key,
     this.onTap,
-    @required this.iconData,
+    required this.iconData,
     this.badgeColor,
     this.badgeText,
   }) : super(key: key);

@@ -22,12 +22,12 @@ class LoginPageScreen extends StatefulWidget {
 }
 
 class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
-  LoginPageController _loginPageController;
-  TimeProvider timerProvider;
-  UniversalProvider up;
+  late LoginPageController _loginPageController;
+  late TimeProvider timerProvider;
+  late UniversalProvider up;
 
   _LoginPageScreenState() : super(LoginPageController()) {
-    this._loginPageController = controller;
+    this._loginPageController = controller as LoginPageController;
   }
 
   @override
@@ -223,7 +223,7 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                             // ),
                                           ),
                                           validator: (value) {
-                                            if (value.length != 10) {
+                                            if (value?.length != 10) {
                                               return 'Please Enter Valid Mobile Number';
                                             }
                                             return null;
@@ -231,10 +231,11 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                           maxLength: 10,
                                           keyboardAppearance: Brightness.dark,
                                           buildCounter: (BuildContext context,
-                                                  {int currentLength,
-                                                  int maxLength,
-                                                  bool isFocused}) =>
-                                              null,
+                                              {int? currentLength,
+                                              int? maxLength,
+                                              bool? isFocused}) {
+                                            return null;
+                                          },
                                           keyboardType: TextInputType.number,
                                           controller:
                                               _loginPageController.loginnum,
