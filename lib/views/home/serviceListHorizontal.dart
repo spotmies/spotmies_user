@@ -20,7 +20,7 @@ Widget servicelistBuilder(
     decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: Colors.grey[100], blurRadius: 5, spreadRadius: 2)
+          BoxShadow(color: Colors.grey.shade100, blurRadius: 5, spreadRadius: 2)
         ],
         borderRadius: BorderRadius.circular(15)),
     child: Column(
@@ -60,20 +60,20 @@ Widget servicelistBuilder(
                       child: InkWell(
                         onTap: () {
                           log(
-                            buildData[index]['job'],
+                            buildData[index]['job'].toString(),
                           );
                         },
                         child: CircleAvatar(
                             backgroundColor: Colors.blueGrey[50],
                             radius: width * 0.07,
                             child: Icon(
-                              buildData[index]['icon'],
+                              buildData[index]['icon'] as IconData?,
                               color: Colors.grey[900],
                             )),
                       ),
                     ),
                     Text(
-                      buildData[index]['job'],
+                      buildData[index]['job'].toString(),
                       style: fonts(
                           width * 0.03, FontWeight.w600, Colors.grey[900]),
                     )
@@ -139,14 +139,15 @@ Widget serviceBlocksMore(
                         // color: Colors.grey,
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.grey[100],
+                              color: Colors.grey.shade100,
                               blurRadius: 5,
                               spreadRadius: 2)
                         ],
                       ),
                       child: InkWell(
                         onTap: () {
-                          DefaultTabController.of(context).animateTo(index + 1);
+                          DefaultTabController.of(context)
+                              ?.animateTo(index + 1);
                         },
                         child: Container(
                             height: hight * 0.2,
@@ -156,8 +157,8 @@ Widget serviceBlocksMore(
                               // color: Colors.indigo[900],
                               gradient: LinearGradient(
                                   colors: [
-                                    Colors.indigo[900],
-                                    Colors.blue[900]
+                                    Colors.indigo.shade900,
+                                    Colors.blue.shade900
 
                                     // ([Colors.green[100],Colors.pink[100],Colors]..shuffle()).first,
                                     // Colors.green[100]

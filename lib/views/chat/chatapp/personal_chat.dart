@@ -33,14 +33,14 @@ class PersonalChat extends StatefulWidget {
 }
 
 class _PersonalChatState extends StateMVC<PersonalChat> {
-  ChatController _chatController;
+  late ChatController _chatController;
 
   _PersonalChatState() : super(ChatController()) {
-    this._chatController = controller;
+    this._chatController = controller as ChatController;
   }
-  ChatProvider chatProvider;
-  ResponsesProvider responseProvider;
-  UniversalProvider up;
+  late ChatProvider chatProvider;
+  late ResponsesProvider responseProvider;
+  late UniversalProvider up;
 
   ScrollController _scrollController = ScrollController();
 
@@ -162,7 +162,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       switch (type) {
         case 'text':
           return TextWid(
-            text: toBeginningOfSentenceCase(message),
+            text: toBeginningOfSentenceCase(message) ?? "",
             maxlines: 200,
             lSpace: 1.5,
             color: messageColorTheme(sender)[1],
@@ -377,7 +377,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                 color: messageColorTheme(
                                                     sender.toString())[0],
                                                 border: Border.all(
-                                                    color: Colors.blueGrey[500],
+                                                    color: Colors
+                                                        .blueGrey.shade500,
                                                     width: 0.3),
                                                 borderRadius: BorderRadius.only(
                                                     topLeft:
@@ -526,7 +527,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         ));
   }
 
-  Widget _buildAppBar(BuildContext context, double hight, double width,
+  PreferredSizeWidget _buildAppBar(
+      BuildContext context, double hight, double width,
       {showConfirmation: false, onClickYes, onClickNo}) {
     return AppBar(
       toolbarHeight: showConfirmation ? hight * 0.13 : hight * 0.08,
@@ -668,7 +670,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           builder: (context) => MyCalling(
                 msgId: widget.msgId,
                 ordId: _chatController.targetChat['ordId'],
-                uId: FirebaseAuth.instance.currentUser.uid,
+                uId: FirebaseAuth.instance.currentUser?.uid,
                 pId: _chatController.targetChat['pId'],
                 isIncoming: false,
                 name: _chatController.partner['name'],

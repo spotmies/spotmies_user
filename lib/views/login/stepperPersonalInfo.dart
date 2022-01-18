@@ -17,13 +17,13 @@ class StepperPersonalInfo extends StatefulWidget {
 }
 
 class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
-  StepperPersonal _stepperPersonalInfo;
-  UniversalProvider up;
+  late StepperPersonal _stepperPersonalInfo;
+  late UniversalProvider up;
 
   _StepperPersonalInfoState() : super(StepperPersonal()) {
-    this._stepperPersonalInfo = controller;
+    this._stepperPersonalInfo = controller as StepperPersonal;
   }
-  TimeProvider timerProvider;
+  late TimeProvider timerProvider;
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
@@ -76,9 +76,13 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 Text('Back'),
                               ],
                             ),
+<<<<<<< HEAD
                             onPressed: () {
                               controlsDetails.onStepCancel();
                             },
+=======
+                            onPressed: controlsDetails.onStepCancel,
+>>>>>>> 11e65545464353d5c481ae02c99890ab8ae0536f
                             style: ButtonStyle(
                               backgroundColor: _stepperPersonalInfo
                                           .currentStep >
@@ -122,9 +126,13 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             : Container(
                                 width: width(context) * 0.35,
                                 child: ElevatedButton(
+<<<<<<< HEAD
                                   onPressed: () {
                                     controlsDetails.onStepContinue();
                                   },
+=======
+                                  onPressed: controlsDetails.onStepContinue,
+>>>>>>> 11e65545464353d5c481ae02c99890ab8ae0536f
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -231,7 +239,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                       checkColor: Colors.white,
                                       value: _stepperPersonalInfo.accept,
                                       shape: CircleBorder(),
-                                      onChanged: (bool value) {
+                                      onChanged: (bool? value) {
                                         _stepperPersonalInfo.accept = value;
                                         if (_stepperPersonalInfo.accept ==
                                             true) {
@@ -289,10 +297,10 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     contentPadding: EdgeInsets.all(20),
                   ),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value != null && value.isEmpty) {
                       return 'Please Enter Your Name';
                     }
-                    if (value.length < 5)
+                    if (value != null && value.length < 5)
                       return 'name should be greater than 4 letters';
                     return null;
                   },
@@ -329,13 +337,15 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     contentPadding: EdgeInsets.all(20),
                   ),
                   validator: (value) {
-                    if (value.length > 1 && !value.contains('@')) {
+                    if (value != null &&
+                        value.length > 1 &&
+                        !value.contains('@')) {
                       return 'Please Enter Valid Email';
                     }
                     return null;
                   },
                   controller: _stepperPersonalInfo.emailTf,
-                  onChanged: (value) {
+                  onChanged: (String? value) {
                     this._stepperPersonalInfo.email = value ?? "";
                   },
                 ),
@@ -371,15 +381,19 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     counterText: "",
                   ),
                   validator: (value) {
-                    if (value.length == 10 && int.parse(value) < 5000000000) {
+                    if (value != null &&
+                        value.length == 10 &&
+                        int.parse(value) < 5000000000) {
                       return 'Please Enter Valid Mobile Number';
-                    } else if (value.length > 0 && value.length < 10) {
+                    } else if (value != null &&
+                        value.length > 0 &&
+                        value.length < 10) {
                       return 'Please Enter Valid Mobile Number';
                     }
                     return null;
                   },
                   controller: _stepperPersonalInfo.altnumberTf,
-                  onChanged: (value) {
+                  onChanged: (String? value) {
                     this._stepperPersonalInfo.altnumber = value ?? "";
                   },
                 ),
@@ -429,11 +443,13 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: CircleAvatar(
-                              backgroundImage:
-                                  FileImage(_stepperPersonalInfo.profilepic),
-                              radius: 100,
-                            ),
+                            child: _stepperPersonalInfo.profilepic != null
+                                ? CircleAvatar(
+                                    backgroundImage: FileImage(
+                                        _stepperPersonalInfo.profilepic!),
+                                    radius: 100,
+                                  )
+                                : SizedBox(),
                           ),
                   ),
                   radius: 30,

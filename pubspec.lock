@@ -28,7 +28,7 @@ packages:
       name: audioplayers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.19.1"
+    version: "0.20.1"
   awesome_notifications:
     dependency: "direct main"
     description:
@@ -182,21 +182,21 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.0"
+    version: "1.11.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.1"
+    version: "4.2.3"
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.5.3"
   firebase_messaging:
     dependency: "direct main"
     description:

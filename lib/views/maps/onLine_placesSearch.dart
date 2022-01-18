@@ -12,7 +12,7 @@ import 'package:spotmies/views/maps/maps.dart';
 
 class OnlinePlaceSearch extends StatefulWidget {
   final Function onSave;
-  OnlinePlaceSearch({this.onSave});
+  OnlinePlaceSearch({required this.onSave});
   @override
   OnlinePlaceSearchState createState() => OnlinePlaceSearchState();
 }
@@ -20,8 +20,8 @@ class OnlinePlaceSearch extends StatefulWidget {
 class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   // List<Places> geoLocations = [];
   String query = '';
-  Timer debouncer;
-  UniversalProvider up;
+  late Timer debouncer;
+  late UniversalProvider up;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
 
   @override
   void dispose() {
-    debouncer?.cancel();
+    debouncer.cancel();
     super.dispose();
   }
 

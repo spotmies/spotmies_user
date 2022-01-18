@@ -19,12 +19,12 @@ class Maps extends StatefulWidget {
   final Map coordinates;
   final bool isNavigate;
   final bool isSearch;
-  final Function onSave;
+  final Function? onSave;
   final bool popBackTwice;
   final String actionLabel;
   // final AdController addresscontroller;
   Maps(
-      {this.coordinates,
+      {this.coordinates = const {},
       this.isNavigate = true,
       this.isSearch = true,
       this.onSave,
@@ -38,16 +38,16 @@ class Maps extends StatefulWidget {
 
 class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
-  UniversalProvider up;
-  Map coordinates;
+  late UniversalProvider up;
+  late Map coordinates;
   _MapsState(this.coordinates);
   var formkey = GlobalKey<FormState>();
   var scaffoldkey = GlobalKey<ScaffoldState>();
-  GoogleMapController googleMapController;
+  late GoogleMapController googleMapController;
   Map<String, double> generatedCoordinates = {"lat": 0.00, "log": 0.00};
-  Position position;
-  double lat;
-  double long;
+  late Position position;
+  late double lat;
+  late double long;
   String addressline = "";
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   void getmarker(double lat, double long) {
@@ -181,7 +181,7 @@ class _MapsState extends State<Maps> {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.grey[300],
+                              color: Colors.grey.shade300,
                               blurRadius: 5,
                               spreadRadius: 3)
                         ],
@@ -192,7 +192,7 @@ class _MapsState extends State<Maps> {
                         TextWid(
                           text: 'Search',
                           size: width(context) * 0.05,
-                          color: Colors.grey[500],
+                          color: Colors.grey.shade500,
                         ),
                         Icon(
                           Icons.search,
@@ -259,14 +259,14 @@ class _MapsState extends State<Maps> {
                         size: width * 0.055,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
-                        color: Colors.grey[700],
+                        color: Colors.grey.shade700,
                       ),
                       TextWid(
                         text: lat.toString() + ", " + long.toString(),
                         size: width * 0.055,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
-                        color: Colors.grey[700],
+                        color: Colors.grey.shade700,
                       ),
                     ],
                   ),
@@ -330,13 +330,15 @@ class _MapsState extends State<Maps> {
                               Map<String, String> generatedAddress =
                                   addressExtractor(addresses.first);
                               log(generatedAddress.toString());
-                              if (widget.onSave == null)
+                              if (widget.onSave == null) {
                                 return snackbar(
                                     context, "something went wrong");
-                              widget.onSave(
-                                  generatedCoordinates, generatedAddress);
-                              Navigator.pop(context);
-                              if (widget.popBackTwice) Navigator.pop(context);
+                              } else {
+                                widget.onSave!(
+                                    generatedCoordinates, generatedAddress);
+                                Navigator.pop(context);
+                                if (widget.popBackTwice) Navigator.pop(context);
+                              }
                               // setState(() {
                               //   addresscontroller.fullAddress = val;
                               // });

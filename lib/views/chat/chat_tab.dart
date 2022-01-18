@@ -17,9 +17,9 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  ResponsesProvider responseProvider;
-  UniversalProvider universalProvider;
-  ChatProvider chatProvider;
+  late ResponsesProvider responseProvider;
+  late UniversalProvider universalProvider;
+  late ChatProvider chatProvider;
   String name = 'Response';
   int initialTabIndex = 0;
   List<Center> list = [

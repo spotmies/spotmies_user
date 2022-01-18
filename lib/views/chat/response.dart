@@ -22,12 +22,12 @@ class Responsee extends StatefulWidget {
 }
 
 class _ResponseeState extends StateMVC<Responsee> {
-  ResponsiveController _responsiveController;
-  ResponsesProvider responseProvider;
-  UniversalProvider up;
+  late ResponsiveController _responsiveController;
+  late ResponsesProvider responseProvider;
+  late UniversalProvider up;
 
   _ResponseeState() : super(ResponsiveController()) {
-    this._responsiveController = controller;
+    this._responsiveController = controller as ResponsiveController;
   }
 
   void chatWithPatner(responseData) {
@@ -114,7 +114,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                       bottomRight: Radius.circular(10)),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.grey[200],
+                                        color: Colors.grey.shade200,
                                         blurRadius: 2,
                                         spreadRadius: 2)
                                   ]),

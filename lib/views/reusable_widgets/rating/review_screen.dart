@@ -54,7 +54,7 @@ Color getMSForegroundColor(Set<MaterialState> states) {
 
 class RatingCard extends StatefulWidget {
   final Function onFeedbackSubmitted;
-  const RatingCard({Key key, @required this.onFeedbackSubmitted})
+  const RatingCard({Key? key, required this.onFeedbackSubmitted})
       : super(key: key);
 
   @override
@@ -167,8 +167,8 @@ void resetChips(int index, List<bool> states) {
 class RatingStars extends StatefulWidget {
   final Function(int) onStarsChanged;
   const RatingStars({
-    Key key,
-    @required this.onStarsChanged,
+    Key? key,
+    required this.onStarsChanged,
   }) : super(key: key);
 
   @override

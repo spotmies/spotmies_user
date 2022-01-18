@@ -16,7 +16,7 @@ class FAQ extends StatefulWidget {
   _FAQState createState() => _FAQState();
 }
 
-UniversalProvider up;
+late UniversalProvider up;
 GlobalKey exKey = GlobalKey();
 
 class _FAQState extends State<FAQ> {

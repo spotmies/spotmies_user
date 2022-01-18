@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ChatScreen extends StatefulWidget {
   final String value;
-  ChatScreen({this.value});
+  ChatScreen({required this.value});
 
   @override
   _ChatScreenState createState() => _ChatScreenState(value);
@@ -18,7 +18,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController _controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
-  String textInput;
+  String? textInput;
   String value;
   //images
   List<File> _profilepic = [];
@@ -57,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.blue[900],
-          title: StreamBuilder(
+          title: StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('messaging')
                   .doc(value)
@@ -68,12 +68,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: CircularProgressIndicator(),
                   );
                 var document = snapshot.data;
-                return Text(document['pname'] == null
+                return Text(document?['pname'] == null
                     ? 'technician'
-                    : document['pname']);
+                    : document?['pname']);
               }),
         ),
-        body: StreamBuilder(
+        body: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('messaging')
                 .doc(value)
@@ -84,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: CircularProgressIndicator(),
                 );
               var document = snapshot.data;
-              List<String> msgs = List.from(document['body']);
+              List<String> msgs = List.from(document?['body']);
               int msglength = msgs.length;
               if (msglength == msgs.length) {
                 Timer(
@@ -109,7 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  if (document['orderstate'] == 0)
+                  if (document?['orderstate'] == 0)
                     Container(
                       height: _hight * 0.08,
                       width: _width * 1,
@@ -130,29 +130,29 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: ElevatedButton(
                                 // color: Colors.blue[800],
                                 onPressed: () {
-                                  print(document['partnerid']);
+                                  print(document?['partnerid']);
                                   FirebaseFirestore.instance
                                       .collection('users')
-                                      .doc(
-                                          FirebaseAuth.instance.currentUser.uid)
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser?.uid)
                                       .collection('adpost')
-                                      .doc(document['orderid'])
+                                      .doc(document?['orderid'])
                                       .update({'orderstate': 2});
                                   FirebaseFirestore.instance
                                       .collection('allads')
-                                      .doc(document['orderid'])
+                                      .doc(document?['orderid'])
                                       .update({'orderstate': 2});
                                   FirebaseFirestore.instance
                                       .collection('messaging')
-                                      .doc(document['partnerid'] +
-                                          document['orderid'])
+                                      .doc(document?['partnerid'] +
+                                          document?['orderid'])
                                       .update({'orderstate': 2});
 
                                   FirebaseFirestore.instance
                                       .collection('partner')
-                                      .doc(document['partnerid'])
+                                      .doc(document?['partnerid'])
                                       .collection('orders')
-                                      .doc(document['orderid'])
+                                      .doc(document?['orderid'])
                                       .update({'orderstate': 2});
                                 },
                                 child: Text('Confirm',
@@ -163,7 +163,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   Container(
                     padding: EdgeInsets.all(10),
-                    height: document['orderstate'] == 0
+                    height: document?['orderstate'] == 0
                         ? _hight * 0.8
                         : _hight * 0.9,
                     width: _width * 1,
@@ -330,7 +330,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  'From ' + document['pname'],
+                                                  'From ' + document?['pname'],
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500,
@@ -512,9 +512,11 @@ class _ChatScreenState extends State<ChatScreen> {
     final pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      _profilepic.add(File(pickedFile?.path));
+      if (pickedFile != null) {
+        _profilepic.add(File(pickedFile.path));
+      }
     });
-    if (pickedFile.path == null) retrieveLostData();
+    if (pickedFile?.path == null) retrieveLostData();
   }
 
   Future<void> retrieveLostData() async {
@@ -524,7 +526,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     if (response.file != null) {
       setState(() {
-        _profilepic.add(File(response.file.path));
+        _profilepic.add(File(response.file!.path));
       });
     } else {
       print(response.file);
@@ -661,7 +663,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               -2.0,
                                               -1,
                                             ),
-                                            color: Colors.grey[50],
+                                            color: Colors.grey.shade50,
                                             spreadRadius: 1.0),
                                         BoxShadow(
                                             blurRadius: 2,
@@ -669,7 +671,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               2.0,
                                               1,
                                             ),
-                                            color: Colors.grey[300],
+                                            color: Colors.grey.shade300,
                                             spreadRadius: 1.0)
                                       ],
                                       color: Colors.white,

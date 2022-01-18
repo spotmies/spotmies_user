@@ -54,10 +54,11 @@ Widget page3(double hight, double width, user, AdController adController,
                       child: Maps(
                         isSearch: false,
                         isNavigate: false,
+                        onSave: () {},
                       ),
                       decoration: BoxDecoration(boxShadow: [
                         BoxShadow(
-                            color: Colors.grey[200],
+                            color: Colors.grey.shade200,
                             blurRadius: 5,
                             spreadRadius: 2)
                       ]),
@@ -154,7 +155,7 @@ Widget page3(double hight, double width, user, AdController adController,
                   children: [
                     ElevatedButtonWidget(
                       onClick: () {
-                        adController.sliderKey.currentState.previous();
+                        adController.sliderKey.currentState?.previous();
                       },
                       buttonName: 'Back',
                       bgColor: Colors.indigo[50],

@@ -6,13 +6,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-String updatedEmail;
-String updatedob;
-String updatedNum;
-String updatedtempad;
+String? updatedEmail;
+String? updatedob;
+String? updatedNum;
+String? updatedtempad;
 var updatePath = FirebaseFirestore.instance
     .collection('users')
-    .doc(FirebaseAuth.instance.currentUser.uid);
+    .doc(FirebaseAuth.instance.currentUser?.uid);
 
 class Setting extends StatefulWidget {
   @override
@@ -36,10 +36,10 @@ class _SettingState extends State<Setting> {
       ),
       backgroundColor: Colors.grey[100],
       body: Center(
-          child: StreamBuilder(
+          child: StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser.uid)
+                  .doc(FirebaseAuth.instance.currentUser?.uid)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
@@ -69,14 +69,14 @@ class _SettingState extends State<Setting> {
                             CircleAvatar(
                               child: ClipOval(
                                 child: Center(
-                                  child: document['profilepic'] == null
+                                  child: document?['profilepic'] == null
                                       ? Icon(
                                           Icons.person,
                                           color: Colors.white,
                                           size: 65,
                                         )
                                       : Image.network(
-                                          document['profilepic'],
+                                          document?['profilepic'],
                                           fit: BoxFit.cover,
                                           width:
                                               MediaQuery.of(context).size.width,
@@ -126,7 +126,7 @@ class _SettingState extends State<Setting> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              document['email'],
+                              document?['email'],
                               style: TextStyle(fontSize: 18),
                             ),
                             TextButton(
@@ -157,7 +157,7 @@ class _SettingState extends State<Setting> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              document['altNum'],
+                              document?['altNum'],
                               style: TextStyle(fontSize: 18),
                             ),
                             TextButton(
@@ -179,7 +179,7 @@ class _SettingState extends State<Setting> {
     );
   }
 
-  File _profilepic;
+  late File _profilepic;
   String imageLink1 = "";
   Future<void> profilePic() async {
     var profile = await ImagePicker().getImage(
@@ -188,7 +188,9 @@ class _SettingState extends State<Setting> {
       preferredCameraDevice: CameraDevice.rear,
     );
     setState(() {
-      _profilepic = File(profile.path);
+      if (profile != null) {
+        _profilepic = File(profile.path);
+      }
     });
   }
 
@@ -205,7 +207,7 @@ class _SettingState extends State<Setting> {
     print(imageUrl);
     FirebaseFirestore.instance
         .collection('partner')
-        .doc(FirebaseAuth.instance.currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser?.uid)
         .update({'profilepic': imageLink1});
   }
 }

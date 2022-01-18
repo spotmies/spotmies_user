@@ -58,7 +58,7 @@ Future history(BuildContext context, double hight, double width) {
                               backgroundColor: Colors.white,
                               radius: width * 0.08,
                               child: Icon(
-                                data[0]['pic'],
+                                (data[0]['pic'] as IconData?) ?? Icons.photo,
                                 color: Colors.grey[500],
                                 size: width * 0.1,
                               ),
@@ -71,7 +71,7 @@ Future history(BuildContext context, double hight, double width) {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    data[0]['service'],
+                                    data[0]['service'].toString(),
                                     style: fonts(width * 0.04, FontWeight.w600,
                                         Colors.grey[900]),
                                   ),
@@ -79,7 +79,7 @@ Future history(BuildContext context, double hight, double width) {
                                     height: hight * 0.02,
                                   ),
                                   Text(
-                                    data[0]['problem'],
+                                    data[0]['problem'].toString(),
                                     style: fonts(width * 0.04, FontWeight.w500,
                                         Colors.grey[900]),
                                   ),

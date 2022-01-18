@@ -13,8 +13,8 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   List<OnboardingModel> _list = OnboardingModel.list;
-  UniversalProvider up;
-  int page = 0;
+  late UniversalProvider up;
+  int? page = 0;
   var _controller = PageController();
   var showAnimatedContainer = false;
   @override
@@ -30,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     _controller.addListener(() {
       setState(() {
-        page = _controller.page.round();
+        page = _controller.page?.round();
       });
     });
     return Scaffold(
@@ -55,7 +55,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   )),
                         ),
                         StepsContainer(
-                          page: page,
+                          page: page ?? 0,
                           list: _list,
                           controller: _controller,
                           showAnimatedContainerCallBack: (value) {
@@ -116,7 +116,7 @@ class MyAnimatedContainer extends StatelessWidget {
 //skip button
 class SkipButton extends StatelessWidget {
   const SkipButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -149,11 +149,11 @@ class SkipButton extends StatelessWidget {
 
 class StepsContainer extends StatelessWidget {
   const StepsContainer(
-      {Key key,
-      @required this.page,
-      @required List<OnboardingModel> list,
-      @required PageController controller,
-      @required this.showAnimatedContainerCallBack})
+      {Key? key,
+      required this.page,
+      required List<OnboardingModel> list,
+      required PageController controller,
+      required this.showAnimatedContainerCallBack})
       : _list = list,
         _controller = controller,
         super(key: key);
@@ -210,15 +210,15 @@ class StepsContainer extends StatelessWidget {
 //common widget button
 
 class CommonButtonWidget extends StatelessWidget {
-  final Function onTap;
-  final Color textColor;
-  final Color bgColor;
-  final String title;
-  final double textSizePercentage;
-  final double width;
-  final double height;
-  final Color borderColor;
-  final raduis;
+  final Function? onTap;
+  final Color? textColor;
+  final Color? bgColor;
+  final String? title;
+  final double? textSizePercentage;
+  final double? width;
+  final double? height;
+  final Color? borderColor;
+  final radius;
   CommonButtonWidget(
       {this.textColor,
       this.onTap,
@@ -228,7 +228,7 @@ class CommonButtonWidget extends StatelessWidget {
       this.bgColor,
       this.textSizePercentage,
       this.borderColor,
-      this.raduis});
+      this.radius});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -238,7 +238,7 @@ class CommonButtonWidget extends StatelessWidget {
           color: bgColor ?? Colors.blue[800],
           border:
               Border.all(color: borderColor ?? Colors.transparent, width: 1),
-          borderRadius: raduis ??
+          borderRadius: radius ??
               BorderRadius.only(
                   bottomLeft: Radius.circular(25),
                   topLeft: Radius.circular(25))),
@@ -257,11 +257,11 @@ class CommonButtonWidget extends StatelessWidget {
 //common text
 
 class CommonText extends StatelessWidget {
-  final String text;
-  final Color textColor;
-  final double fontSize;
-  final double padding;
-  final FontWeight fontWeight;
+  final String? text;
+  final Color? textColor;
+  final double? fontSize;
+  final double? padding;
+  final FontWeight? fontWeight;
   CommonText(
       {this.text,
       this.textColor,
@@ -271,7 +271,7 @@ class CommonText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text ?? "",
       style: TextStyle(
           color: textColor ?? Colors.black,
           fontWeight: fontWeight ?? FontWeight.w400,
@@ -282,7 +282,7 @@ class CommonText extends StatelessWidget {
 
 class MainContent extends StatelessWidget {
   const MainContent(
-      {Key key, @required List<OnboardingModel> list, @required this.index})
+      {Key? key, required List<OnboardingModel> list, required this.index})
       : _list = list,
         super(key: key);
 
@@ -344,7 +344,7 @@ class FadeAnimation extends StatelessWidget {
   final double delay;
   final Widget child;
 
-  FadeAnimation(this.delay, this.child, {AssetImage image});
+  FadeAnimation(this.delay, this.child, {AssetImage? image});
 
   @override
   Widget build(BuildContext context) {

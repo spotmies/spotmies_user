@@ -24,19 +24,19 @@ class ProfileController extends ControllerMVC {
   );
 
   var color = LinearGradient(
-      colors: [Colors.indigo[900], Colors.blue[800]],
+      colors: [Colors.indigo.shade900, Colors.blue.shade800],
       begin: FractionalOffset(0.8, 0.4),
       end: FractionalOffset(0.2, 0.0),
       stops: [0.0, 1.0],
       tileMode: TileMode.clamp);
   var shadow = [
     BoxShadow(
-        color: Colors.grey[200],
+        color: Colors.grey.shade200,
         blurRadius: 2,
         spreadRadius: 2,
         offset: Offset(4, 4)),
     BoxShadow(
-        color: Colors.grey[50],
+        color: Colors.grey.shade50,
         blurRadius: 2,
         spreadRadius: 2,
         offset: Offset(-4, -4))
@@ -58,7 +58,7 @@ class ProfileController extends ControllerMVC {
     Icons.power_settings_new
   ];
   List routes = [];
-  String uuId = FirebaseAuth.instance.currentUser.uid;
+  String? uuId = FirebaseAuth.instance.currentUser?.uid;
 
   editProfile() {
     Navigator.of(context)
@@ -82,7 +82,7 @@ class ProfileController extends ControllerMVC {
 
   updateProfileDetails(body) async {
     dynamic response =
-        await Server().editMethod(API.editPersonalInfo + uuId, body);
+        await Server().editMethod(API.editPersonalInfo + (uuId ?? ""), body);
     if (response.statusCode == 200) {
       response = jsonDecode(response.body);
       return response;
@@ -110,7 +110,7 @@ class ProfileController extends ControllerMVC {
       "subject": subject,
       "suggestionFor": suggestionFor,
       "suggestionFrom": "userApp",
-      "uId": FirebaseAuth.instance.currentUser.uid,
+      "uId": FirebaseAuth.instance.currentUser?.uid ?? "",
       "uDetails": pDID,
     };
     dynamic response = await Server().postMethod(API.newSuggestion, body);

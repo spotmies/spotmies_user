@@ -27,6 +27,6 @@ refreshIndicator() {
     body: Center(
         child: RefreshProgressIndicator(
             backgroundColor: Colors.grey[100],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo[900]))),
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo.shade900))),
   );
 }

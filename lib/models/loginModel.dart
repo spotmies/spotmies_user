@@ -1,3 +1,3 @@
 class LoginModel {
-  int loginnum;
+  int? loginnum;
 }

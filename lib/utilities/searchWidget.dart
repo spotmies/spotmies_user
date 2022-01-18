@@ -5,15 +5,15 @@ class SearchWidget extends StatefulWidget {
   final String text;
   final ValueChanged<String> onChanged;
   final String hintText;
-  final IconData icon;
+  final IconData? icon;
 
-  const SearchWidget({
-    Key key,
-    @required this.text,
-    @required this.onChanged,
-    @required this.hintText,
-    this.icon
-  }) : super(key: key);
+  const SearchWidget(
+      {Key? key,
+      required this.text,
+      required this.onChanged,
+      required this.hintText,
+      this.icon})
+      : super(key: key);
 
   @override
   _SearchWidgetState createState() => _SearchWidgetState();
@@ -42,7 +42,8 @@ class _SearchWidgetState extends State<SearchWidget> {
           borderRadius: BorderRadius.circular(15),
           color: Colors.white,
           boxShadow: [
-            BoxShadow(color: Colors.grey[200], blurRadius: 5, spreadRadius: 3)
+            BoxShadow(
+                color: Colors.grey.shade200, blurRadius: 5, spreadRadius: 3)
           ]
           // border: Border.all(color: Colors.grey[700]),
           ),
@@ -65,7 +66,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                       FocusScope.of(context).requestFocus(FocusNode());
                     },
                   )
-                : Icon(widget.icon ?? Icons.home_repair_service, color: style.color),
+                : Icon(widget.icon ?? Icons.home_repair_service,
+                    color: style.color),
             hintText: widget.hintText,
             hintStyle: style,
             border: InputBorder.none,
