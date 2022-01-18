@@ -3,26 +3,22 @@ class APIExceptions implements Exception {
   final String prefix;
   final String url;
 
-  APIExceptions({required this.message, this.prefix = "", required this.url});
+  APIExceptions([this.message, this.prefix, this.url]);
 }
 
 class BadRequestException extends APIExceptions {
-  BadRequestException({required String message, required String url})
-      : super(message: message, prefix: 'Bad Request', url: url);
+  BadRequestException([String message, String url])
+      : super(message, 'Bad Request', url);
 }
-
 class FetchDataException extends APIExceptions {
-  FetchDataException({required String message, required String url})
-      : super(message: message, prefix: 'Fetch Data Exception', url: url);
+  FetchDataException([String message, String url])
+      : super(message, 'Fetch Data Exception', url);
 }
-
 class APINotRespondingEXception extends APIExceptions {
-  APINotRespondingEXception({required String message, required String url})
-      : super(
-            message: message, prefix: 'API Not Responding Exception', url: url);
+  APINotRespondingEXception([String message, String url])
+      : super(message, 'API Not Responding Exception', url);
 }
-
 class UnAuthorizedException extends APIExceptions {
-  UnAuthorizedException({required String message, required String url})
-      : super(message: message, prefix: 'UnAuthorized Exception', url: url);
+  UnAuthorizedException([String message, String url])
+      : super(message, 'UnAuthorized Exception', url);
 }

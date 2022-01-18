@@ -4,7 +4,7 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 bottomOptionsMenu(context,
     {menuTitle = "Menu",
-    List<dynamic>? options,
+    List<dynamic> options,
     option1Click,
     option2Click,
     option3Click,
@@ -39,7 +39,7 @@ bottomOptionsMenu(context,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: options?.length,
+                    itemCount: options.length,
                     // physics: ClampingScrollPhysics(),
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
@@ -67,7 +67,7 @@ bottomOptionsMenu(context,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               horizontal:
-                                  options?.length == 2 || options?.length == 3
+                                  options.length == 2 || options.length == 3
                                       ? width(context) * 0.03
                                       : 5),
                           child: CircleAvatar(
@@ -77,14 +77,14 @@ bottomOptionsMenu(context,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  options?[index]['icon'],
+                                  options[index]['icon'],
                                   color: Colors.grey[700],
                                 ),
                                 SizedBox(
                                   height: height(context) * 0.01,
                                 ),
                                 TextWid(
-                                  text: options?[index]['name'],
+                                  text: options[index]['name'],
                                   color: Colors.grey[800],
                                   weight: FontWeight.bold,
                                 )

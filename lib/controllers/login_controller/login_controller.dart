@@ -16,7 +16,7 @@ import 'package:spotmies/views/login/otp.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 
 class LoginPageController extends ControllerMVC {
-  late TimeProvider timerProvider;
+  TimeProvider timerProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -24,7 +24,7 @@ class LoginPageController extends ControllerMVC {
 
   TextEditingController loginnum = TextEditingController();
 
-  late LoginModel loginModel;
+  LoginModel loginModel;
 
   LoginPageController() {
     this.loginModel = LoginModel();
@@ -38,13 +38,11 @@ class LoginPageController extends ControllerMVC {
   }
 
   dataToOTP() {
-    if (formkey.currentState != null) {
-      if (formkey.currentState!.validate()) {
-        formkey.currentState?.save();
-        timerProvider.setPhNumber(loginnum.text.toString());
+    if (formkey.currentState.validate()) {
+      formkey.currentState.save();
+      timerProvider.setPhNumber(loginnum.text.toString());
 
-        verifyPhone();
-      }
+      verifyPhone();
     }
   }
 
@@ -77,7 +75,7 @@ class LoginPageController extends ControllerMVC {
             snackbar(context, e.message.toString());
             timerProvider.setLoader(false);
           },
-          codeSent: (String verficationID, int? resendToken) {
+          codeSent: (String verficationID, int resendToken) {
             timerProvider.setLoader(false);
             timerProvider.setPhNumber(loginnum.text.toString());
             snackbar(context, "Otp send successfully ");
@@ -110,18 +108,15 @@ class LoginPageController extends ControllerMVC {
     log(otpValue.toString());
     timerProvider.setLoader(true);
     try {
-      dynamic sekhar = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(
               verificationId: timerProvider.verificationCode,
               smsCode: otpValue))
           .then((value) async {
-        log(value.user.toString());
         if (value.user != null) {
-          // log("${value.user}");
-          log("$value");
           timerProvider.setPhoneNumber(timerProvider.phNumber.toString());
           print("user already login");
-          String resp = await checkUserRegistered(value.user?.uid);
+          String resp = await checkUserRegistered(value.user.uid);
           log("respp 122 $resp");
           timerProvider.setLoader(false);
           if (resp == "false") {
@@ -135,14 +130,14 @@ class LoginPageController extends ControllerMVC {
                 MaterialPageRoute(builder: (context) => GoogleNavBar()),
                 (route) => false);
           } else {
-            snackbar(context, "Something went wrong");
+            snackbar(context, "Server busy please try again later...");
           }
         } else {
           timerProvider.setLoader(false);
           snackbar(context, "Something went wrong");
         }
       });
-      log("sekhar $sekhar");
+      // log("sekhar $sekhar");
     } catch (e) {
       FocusScope.of(context).unfocus();
       log(e.toString());
@@ -169,8 +164,8 @@ checkUserRegistered(uid) async {
   return 'server_error';
 }
 
-logoutUser(String? uId) async {
-  Map<String, String?> body = {"uId": uId};
+logoutUser(String uId) async {
+  Map<String, String> body = {"uId": uId};
   await Server().postMethod(API.userLogout, body);
   return;
 }

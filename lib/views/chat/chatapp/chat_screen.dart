@@ -11,21 +11,22 @@ import 'package:spotmies/views/chat/chatapp/partnerprofile.dart';
 
 class ChatScreen extends StatefulWidget {
   final String value;
-  ChatScreen({required this.value});
+  ChatScreen({this.value});
 
   @override
   _ChatScreenState createState() => _ChatScreenState(value);
 }
 
 class _ChatScreenState extends StateMVC<ChatScreen> {
-  late String value;
-  late ChatScreenController _chatScreenController;
+  String value;
+  ChatScreenController _chatScreenController;
   _ChatScreenState(this.value) : super(ChatScreenController()) {
-    this._chatScreenController = controller as ChatScreenController;
+    this._chatScreenController = controller;
   }
 
   @override
   Widget build(BuildContext context) {
+
     Timer(
         Duration(milliseconds: 300),
         () => _chatScreenController.scrollController.animateTo(
@@ -44,7 +45,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                 _chatScreenController.uread(doc);
                 Navigator.of(context).pop();
               }),
-          title: StreamBuilder<DocumentSnapshot>(
+          title: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('messaging')
                   .doc(value)
@@ -57,7 +58,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                 var document = snapshot.data;
                 return InkWell(
                   onTap: () {
-                    var msgid = document?['id'];
+                    var msgid = document['id'];
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PartnerDetails(
                         value: msgid,
@@ -70,14 +71,14 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                         child: AspectRatio(
                           aspectRatio: 400 / 400,
                           child: ClipOval(
-                            child: document?['ppic'] == null
+                            child: document['ppic'] == null
                                 ? Icon(
                                     Icons.person,
                                     color: Colors.black,
                                     size: 30,
                                   )
                                 : Image.network(
-                                    document!['ppic'].toString(),
+                                    document['ppic'].toString(),
                                     fit: BoxFit.cover,
                                     width: MediaQuery.of(context).size.width,
                                   ),
@@ -91,12 +92,11 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                       Container(
                         // padding: EdgeInsets.only(top: 10),
                         child: Text(
-                          document?['pname'] == null
+                          document['pname'] == null
                               ? 'Costumer'
-                              : document!['pname'],
+                              : document['pname'],
                           style: TextStyle(
-                              color: Colors.white,
-                              fontSize: width(context) * 0.055),
+                              color: Colors.white, fontSize: width(context) * 0.055),
                         ),
                       )
                     ],
@@ -104,7 +104,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                 );
               }),
         ),
-        body: StreamBuilder<DocumentSnapshot>(
+        body: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('messaging')
                 .doc(value)
@@ -115,7 +115,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                   child: CircularProgressIndicator(),
                 );
               var document = snapshot.data;
-              List<String> msgs = List.from(document?['body']);
+              List<String> msgs = List.from(document['body']);
               int msglength = msgs.length;
               if (msglength == msgs.length) {
                 Timer(
@@ -130,7 +130,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  if (document?['orderstate'] == 0)
+                  if (document['orderstate'] == 0)
                     Container(
                       height: height(context) * 0.08,
                       width: width(context) * 1,
@@ -150,8 +150,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             child: ElevatedButton(
                                 onPressed: () {
                                   //print(document['partnerid']);
-                                  String id = document?['orderid'];
-                                  String pid = document?['partnerid'];
+                                  String id = document['orderid'];
+                                  String pid = document['partnerid'];
                                   _chatScreenController.confirmOrder(id, pid);
                                 },
                                 child: Text('Confirm',
@@ -162,7 +162,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                     ),
                   Container(
                     padding: EdgeInsets.all(10),
-                    height: document?['orderstate'] == 0
+                    height: document['orderstate'] == 0
                         ? height(context) * 0.78
                         : height(context) * 0.86,
                     width: width(context) * 1,
@@ -489,7 +489,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      document?['pname'],
+                                                      document['pname'],
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w500,
@@ -557,11 +557,11 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             children: [
                               Icon(
                                 Icons.done_all,
-                                color: document?['uread'] == 1
+                                color: document['uread'] == 1
                                     ? Colors.greenAccent
                                     : Colors.grey,
                               ),
-                              Text(document?['uread'] == 1 ? 'Seen' : 'Unseen'),
+                              Text(document['uread'] == 1 ? 'Seen' : 'Unseen'),
                             ],
                           )),
                     ],
@@ -610,8 +610,8 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                               color: Colors.grey,
                             ),
                             onPressed: () {
-                              var msgcount = document?['pmsgcount'];
-                              var pread = document?['pread'];
+                              var msgcount = document['pmsgcount'];
+                              var pread = document['pread'];
                               bottomappbar(msgcount, pread);
                             }),
                         Container(
@@ -627,7 +627,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                     color: Colors.white,
                                   ),
                                   onPressed: () async {
-                                    int msgcount = document?['umsgcount'] + 1;
+                                    int msgcount = document['umsgcount'] + 1;
                                     _chatScreenController.controller.clear();
 
                                     var msgData = {
@@ -646,12 +646,12 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                             .collection('messaging')
                                             .doc(value)
                                             .update({
-                                            if (document?['createdAt'] == null)
+                                            if (document['createdAt'] == null)
                                               'createdAt': _chatScreenController
                                                   .timestamp,
                                             'body':
                                                 FieldValue.arrayUnion([temp]),
-                                            'pmsgcount': document?['pread'] == 0
+                                            'pmsgcount': document['pread'] == 0
                                                 ? msgcount
                                                 : 0,
                                           });
@@ -834,7 +834,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                               -2.0,
                                               -1,
                                             ),
-                                            color: Colors.grey.shade50,
+                                            color: Colors.grey[50],
                                             spreadRadius: 1.0),
                                         BoxShadow(
                                             blurRadius: 2,
@@ -842,7 +842,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                               2.0,
                                               1,
                                             ),
-                                            color: Colors.grey.shade300,
+                                            color: Colors.grey[300],
                                             spreadRadius: 1.0)
                                       ],
                                       color: Colors.white,

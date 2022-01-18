@@ -4,12 +4,12 @@ import 'package:spotmies/views/call_ui/audioCallWithImage/size.config.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton({
-    Key? key,
+    Key key,
     this.size = 90,
-    required this.iconSrc,
-    required this.color,
-    required this.iconColor,
-    required this.press,
+    @required this.iconSrc,
+    @required this.color,
+    @required this.iconColor,
+    @required this.press,
   }) : super(key: key);
 
   final double size;
@@ -31,7 +31,7 @@ class RoundedButton extends StatelessWidget {
               color: color,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.shade700,
+                  color: Colors.grey[700],
                   offset: Offset(2, 3.0), //(x,y)
                   blurRadius: 10.0,
                 ),

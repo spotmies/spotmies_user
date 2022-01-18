@@ -56,7 +56,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late IO.Socket socket;
+  IO.Socket socket;
   @override
   void initState() {
     // connect();

@@ -38,7 +38,7 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey.shade200, blurRadius: 2, spreadRadius: 2)
+                    color: Colors.grey[200], blurRadius: 2, spreadRadius: 2)
               ],
               borderRadius: BorderRadius.circular(25),
             ),
@@ -47,8 +47,8 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                 Expanded(
                   child: Stack(children: [
                     TextField(
-                      style: fonts(width(context) * 0.05, FontWeight.w500,
-                          Colors.grey[900]),
+                      style: fonts(
+                          width(context) * 0.05, FontWeight.w500, Colors.grey[900]),
                       controller: inputController,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
@@ -61,8 +61,8 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                           ),
                         ),
                         border: InputBorder.none,
-                        hintStyle: fonts(width(context) * 0.05, FontWeight.w400,
-                            Colors.grey[400]),
+                        hintStyle: fonts(
+                            width(context) * 0.05, FontWeight.w400, Colors.grey[400]),
                         hintText: 'Type Message......',
                       ),
                     ),
@@ -80,8 +80,8 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                                   controller.pickVideo(
                                       sendCallBack, controller.currentMsgId);
                                 }, option4Click: () {
-                                  audioRecoder(context, height(context),
-                                      width(context), controller,
+                                  audioRecoder(
+                                      context, height(context), width(context), controller,
                                       from: "personalChat");
                                 });
                               },

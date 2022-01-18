@@ -22,12 +22,12 @@ class ChatList extends StatefulWidget {
 }
 
 class _ChatListState extends StateMVC<ChatList> {
-  late ChatController _chatController;
+  ChatController _chatController;
   _ChatListState() : super(ChatController()) {
-    this._chatController = controller as ChatController;
+    this._chatController = controller;
   }
-  late ChatProvider chatProvider;
-  late UniversalProvider up;
+  ChatProvider chatProvider;
+  UniversalProvider up;
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -76,7 +76,7 @@ class _ChatListState extends StateMVC<ChatList> {
                       return RefreshIndicator(
                         onRefresh: _chatController.fetchNewChatList,
                         child: ListView.builder(
-                          itemCount: chatList.length,
+                          itemCount: chatList?.length,
                           itemBuilder: (BuildContext context, int index) {
                             Map user = chatList[index]['pDetails'];
                             List messages = chatList[index]['msgs'];
@@ -125,7 +125,7 @@ class ChatListCard extends StatefulWidget {
   final String pId;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
       this.msgId, this.count, this.type, this.uId, this.pId,
-      {required this.callBack});
+      {this.callBack});
 
   @override
   _ChatListCardState createState() => _ChatListCardState();
@@ -156,7 +156,7 @@ class _ChatListCardState extends State<ChatListCard> {
             text: widget.name,
             size: _width * 0.045,
             weight: FontWeight.w600,
-            color: widget.count > 0 ? Colors.black : Colors.grey.shade700),
+            color: widget.count > 0 ? Colors.black : Colors.grey[700]),
         subtitle: Row(
           children: [
             Icon(
@@ -171,16 +171,14 @@ class _ChatListCardState extends State<ChatListCard> {
               width: _width * 0.47,
               child: TextWid(
                   text: toBeginningOfSentenceCase(
-                        typeofLastMessage(
-                            widget.type, widget.lastMessage, 'text'),
-                      ) ??
-                      "",
+                    typeofLastMessage(widget.type, widget.lastMessage, 'text'),
+                  ),
                   size: _width * 0.035,
                   flow: TextOverflow.ellipsis,
                   weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
                   color: widget.count > 0
-                      ? Colors.blueGrey.shade600
-                      : Colors.grey.shade500),
+                      ? Colors.blueGrey[600]
+                      : Colors.grey[500]),
             ),
           ],
         ),
@@ -203,8 +201,7 @@ class _ChatListCardState extends State<ChatListCard> {
                   text: widget.time,
                   size: _width * 0.035,
                   weight: FontWeight.w600,
-                  color:
-                      widget.count > 0 ? Colors.black : Colors.grey.shade700),
+                  color: widget.count > 0 ? Colors.black : Colors.grey[700]),
             ),
             widget.count > 0
                 ? Container(
@@ -219,7 +216,7 @@ class _ChatListCardState extends State<ChatListCard> {
                         text: widget.count.toString(),
                         size: _width * 0.03,
                         weight: FontWeight.w900,
-                        color: Colors.blueGrey.shade50),
+                        color: Colors.blueGrey[50]),
                   )
                 : Container(
                     width: 40.0,

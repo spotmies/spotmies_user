@@ -17,17 +17,17 @@ import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 
 class ResponsiveController extends ControllerMVC {
-  late ChatProvider chatProvider;
-  late ResponsesProvider responseProvider;
-  late UserDetailsProvider profileProvider;
-  late GetOrdersProvider ordersProvider;
-  String? uuId = FirebaseAuth.instance.currentUser?.uid;
+  ChatProvider chatProvider;
+  ResponsesProvider responseProvider;
+  UserDetailsProvider profileProvider;
+  GetOrdersProvider ordersProvider;
+  String uuId = FirebaseAuth.instance.currentUser.uid;
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
 
   var partnerid;
   var pid;
-  String value = "";
+  String value;
 
   List jobs = [
     'AC Service',
@@ -51,10 +51,7 @@ class ResponsiveController extends ControllerMVC {
     var avg = args;
 
     for (var i = 0; i < avg.length; i++) {
-      if (avg is List<int> || (avg as List<int>?) != null) {
-        var avgInt = avg as List<int>;
-        sum += avgInt[i];
-      }
+      sum += avg[i];
     }
 
     return sum;
@@ -93,10 +90,10 @@ class ResponsiveController extends ControllerMVC {
     localNotifications.initialize(initializesettings);
   }
 
-  late FlutterLocalNotificationsPlugin localNotifications;
+  FlutterLocalNotificationsPlugin localNotifications;
 
   Future fetchNewResponses() async {
-    dynamic response = await Server().getMethod(API.reponse + (uuId ?? ""));
+    dynamic response = await Server().getMethod(API.reponse + uuId);
     if (response.statusCode == 200) {
       dynamic responseDecode = jsonDecode(response.body);
 

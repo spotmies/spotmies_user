@@ -110,7 +110,7 @@ class UniversalProvider extends ChangeNotifier {
   }
 
   void setEnableRoute(bool state) {
-    enableRoute = state;
+    enableRoute = state ?? false;
     notifyListeners();
   }
 

@@ -9,8 +9,8 @@ Widget profileShimmer(BuildContext context) {
   //     kToolbarHeight;
   // final width(context) = MediaQuery.of(context).size.width;
   return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
+      baseColor: Colors.grey[300],
+      highlightColor: Colors.grey[100],
       enabled: true,
       child: Container(
         height: height(context),

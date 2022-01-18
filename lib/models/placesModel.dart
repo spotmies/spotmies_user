@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class Places {
@@ -8,11 +9,11 @@ class Places {
   final int postalCode;
 
   const Places({
-    required this.id,
-    required this.addressLine,
-    required this.subLocality,
-    required this.coordinates,
-    required this.postalCode,
+    @required this.id,
+    @required this.addressLine,
+    @required this.subLocality,
+    @required this.coordinates,
+    @required this.postalCode,
   });
 
   factory Places.fromJson(Map<String, dynamic> json) => Places(

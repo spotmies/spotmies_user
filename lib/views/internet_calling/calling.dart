@@ -12,21 +12,21 @@ import 'package:spotmies/views/internet_calling/signaling.dart';
 import 'package:flutter_incall/flutter_incall.dart';
 
 class MyCalling extends StatefulWidget {
-  final String? msgId;
+  final String msgId;
   final dynamic ordId;
   final dynamic uId;
   final dynamic pId;
   final bool isIncoming;
   final dynamic roomId;
-  final String? name;
-  final String? profile;
-  final String? partnerDeviceToken;
+  final String name;
+  final String profile;
+  final String partnerDeviceToken;
   MyCalling(
       {this.msgId,
-      required this.pId,
-      required this.uId,
-      required this.ordId,
-      required this.isIncoming,
+      @required this.pId,
+      @required this.uId,
+      @required this.ordId,
+      @required this.isIncoming,
       this.roomId,
       this.name,
       this.profile,
@@ -37,12 +37,12 @@ class MyCalling extends StatefulWidget {
 
 class _MyCallingState extends State<MyCalling> {
   IncallManager incallManager = new IncallManager();
-  late ChatProvider chatProvider;
-  late UserDetailsProvider _userProvider;
+  ChatProvider chatProvider;
+  UserDetailsProvider _userProvider;
   Signaling signaling = Signaling();
-  late RTCVideoRenderer _localRenderer;
-  late RTCVideoRenderer _remoteRenderer;
-  late String roomId;
+  RTCVideoRenderer _localRenderer;
+  RTCVideoRenderer _remoteRenderer;
+  String roomId;
   bool timerFlag = true;
   bool callDisconnectFlag = true;
   TextEditingController textEditingController = TextEditingController(text: '');
@@ -192,8 +192,8 @@ class _MyCallingState extends State<MyCalling> {
           log("spelaer is $state");
           incallManager.setSpeakerphoneOn(state);
         },
-        name: widget.name ?? "unknown",
-        image: widget.profile ?? "",
+        name: widget?.name ?? "unknown",
+        image: widget?.profile ?? "",
       );
     });
   }

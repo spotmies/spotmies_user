@@ -8,25 +8,16 @@ class CreateChat {
   String pDetails;
   String orderDetails;
   CreateChat(
-      {required this.msgId,
-      required this.msgs,
-      required this.ordId,
-      required this.pId,
-      required this.uId,
-      required this.uDetails,
-      required this.pDetails,
-      required this.orderDetails});
-
-  CreateChat.fromJson(
-      Map<String, dynamic> json,
-      this.msgId,
+      {this.msgId,
       this.msgs,
       this.ordId,
       this.pId,
       this.uId,
       this.uDetails,
       this.pDetails,
-      this.orderDetails) {
+      this.orderDetails});
+
+  CreateChat.fromJson(Map<String, dynamic> json) {
     msgId = json['msgId'];
     msgs = json['msgs'].cast<String>();
     ordId = json['ordId'];

@@ -61,7 +61,7 @@ Future editDetails(
         source: ImageSource.camera,
         imageQuality: 60,
         preferredCameraDevice: CameraDevice.rear);
-    editpic = File(pickedFile?.path ?? "");
+    editpic = File(pickedFile?.path);
     setStatee(() {});
     // refresh();
 

@@ -11,7 +11,7 @@ class HomeController extends ControllerMVC {
   var formkey = GlobalKey<FormState>();
 // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   // location and place access
-  List jobs = [
+List jobs = [
     'AC Service',
     'Computer',
     'TV Repair',
@@ -97,6 +97,7 @@ class HomeController extends ControllerMVC {
     });
   }
 
-  FlutterLocalNotificationsPlugin localNotifications =
-      FlutterLocalNotificationsPlugin();
-}
+  FlutterLocalNotificationsPlugin localNotifications;
+  
+  
+  }

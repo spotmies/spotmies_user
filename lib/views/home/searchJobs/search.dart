@@ -11,7 +11,7 @@ class FilterLocalListPage extends StatefulWidget {
 }
 
 class FilterLocalListPageState extends State<FilterLocalListPage> {
-  late List<Job> jobs;
+  List<Job> jobs;
   String query = '';
 
   @override
@@ -90,6 +90,12 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
     });
   }
 }
+
+
+
+
+
+
 
 final allJobs = [
   Job(

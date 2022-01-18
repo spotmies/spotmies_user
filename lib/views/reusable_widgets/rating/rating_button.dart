@@ -4,8 +4,8 @@ import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 class RatingButton extends StatefulWidget {
   final Function onPressed;
   const RatingButton({
-    Key? key,
-    required this.onPressed,
+    Key key,
+    @required this.onPressed,
   }) : super(key: key);
 
   @override

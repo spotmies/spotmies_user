@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 class ElevatedButtonWidget extends StatefulWidget {
-  final Color? bgColor;
-  final Color? textColor;
-  final String? buttonName;
-  final double? borderRadius;
-  final double? minWidth;
-  final double? height;
-  final Color? borderSideColor;
-  final TextStyle? style;
-  final Widget? leadingIcon;
-  final Widget? trailingIcon;
-  final double? textSize;
-  final VoidCallback? onClick;
-  final FontWeight? textStyle;
-  final double? elevation;
+  final Color bgColor;
+  final Color textColor;
+  final String buttonName;
+  final double borderRadius;
+  final double minWidth;
+  final double height;
+  final Color borderSideColor;
+  final TextStyle style;
+  final Widget leadingIcon;
+  final Widget trailingIcon;
+  final double textSize;
+  final VoidCallback onClick;
+  final FontWeight textStyle;
+  final double elevation;
 
   ElevatedButtonWidget({
     this.bgColor,
@@ -48,12 +48,10 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
           borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
       child: ElevatedButton(
           onPressed: () {
-            if (widget.onClick != null) {
-              return widget.onClick!();
-            }
+            return widget.onClick() ;
           },
           style: ButtonStyle(
-              elevation: MaterialStateProperty.all(widget.elevation ?? 0),
+            elevation: MaterialStateProperty.all(widget.elevation ?? 0),
               backgroundColor: MaterialStateProperty.all(
                 widget.bgColor ?? Colors.blue,
               ),
@@ -79,7 +77,8 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
   }
 }
 
-Widget buildLeadingIcon(Widget? leadingIcon) {
+
+Widget buildLeadingIcon(Widget leadingIcon) {
   if (leadingIcon != null) {
     return Row(
       children: <Widget>[leadingIcon, SizedBox(width: 10)],
@@ -88,7 +87,7 @@ Widget buildLeadingIcon(Widget? leadingIcon) {
   return Container();
 }
 
-Widget buildTrailingIcon(Widget? trailingIcon) {
+Widget buildTrailingIcon(Widget trailingIcon) {
   if (trailingIcon != null) {
     return Row(
       children: <Widget>[

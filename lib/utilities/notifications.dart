@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies/views/home/navBar.dart';
 
+
+
 //permisiion
 
 notificationPermmision(context) {
@@ -90,8 +92,8 @@ displayAwesomeNotification(RemoteMessage message, BuildContext context) async {
       content: NotificationContent(
           id: id,
           channelKey: 'firebasePushNotifiction',
-          title: message.notification?.title,
-          body: message.notification?.body,
+          title: message.notification.title,
+          body: message.notification.body,
           notificationLayout: NotificationLayout.BigPicture,
           displayOnBackground: true,
           displayOnForeground: true,
@@ -153,8 +155,8 @@ displayAwesomeNotificationBackground(
       content: NotificationContent(
           id: id,
           channelKey: 'firebasePushNotifictions',
-          title: message.notification?.title,
-          body: message.notification?.body,
+          title: message.notification.title,
+          body: message.notification.body,
           notificationLayout: NotificationLayout.BigPicture,
           displayOnBackground: true,
           displayOnForeground: true,
@@ -191,3 +193,4 @@ displayAwesomeNotificationBackground(
     }
   });
 }
+

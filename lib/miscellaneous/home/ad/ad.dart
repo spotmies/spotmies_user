@@ -12,7 +12,7 @@ var docc;
 Future<void> docid() async {
   docc = FirebaseFirestore.instance
       .collection('users')
-      .doc(FirebaseAuth.instance.currentUser?.uid)
+      .doc(FirebaseAuth.instance.currentUser.uid)
       .collection('adpost')
       .doc();
 }
@@ -23,14 +23,14 @@ class PostAd extends StatefulWidget {
 }
 
 class _PostAdState extends State<PostAd> {
-  String? service;
-  String? title;
-  String? time;
-  String? upload;
-  String? discription;
-  String? money;
-  String? state;
-  String? adtime;
+  String service;
+  String title;
+  String time;
+  String upload;
+  String discription;
+  String money;
+  String state;
+  String adtime;
   // File _profilepic;
   List<File> _profilepic = [];
   bool uploading = false;
@@ -38,8 +38,8 @@ class _PostAdState extends State<PostAd> {
 
   List imageLink = [];
   //date time picker
-  late DateTime pickedDate;
-  late TimeOfDay pickedTime;
+  DateTime pickedDate;
+  TimeOfDay pickedTime;
 
   DateTime now = DateTime.now();
 
@@ -48,7 +48,7 @@ class _PostAdState extends State<PostAd> {
   //dummy data for accept/reject requests condition
   String dummy = 'nothing';
   //user id
-  var uid = FirebaseAuth.instance.currentUser?.uid;
+  var uid = FirebaseAuth.instance.currentUser.uid;
   //location
   String location = 'seethammadhara,visakhapatnam';
 
@@ -133,7 +133,7 @@ class _PostAdState extends State<PostAd> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.shade50,
+                        color: Colors.grey[50],
                         spreadRadius: 3,
                         //offset: Offset.infinite,
                         blurRadius: 1,
@@ -198,9 +198,7 @@ class _PostAdState extends State<PostAd> {
                       onChanged: (newVal) {
                         print(dropDownValue);
                         setState(() {
-                          if ((newVal as int?) != null) {
-                            dropDownValue = newVal as int;
-                          }
+                          dropDownValue = newVal;
                         });
                       },
                     ),
@@ -217,7 +215,7 @@ class _PostAdState extends State<PostAd> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.shade50,
+                        color: Colors.grey[50],
                         spreadRadius: 3,
                         //offset: Offset.infinite,
                         blurRadius: 1,
@@ -255,7 +253,7 @@ class _PostAdState extends State<PostAd> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.shade50,
+                        color: Colors.grey[50],
                         spreadRadius: 3,
                         // offset: Offset.infinite,
                         blurRadius: 1,
@@ -297,7 +295,7 @@ class _PostAdState extends State<PostAd> {
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.shade50,
+                            color: Colors.grey[50],
                             spreadRadius: 3,
                             // offset: Offset.infinite,
                             blurRadius: 1,
@@ -372,7 +370,7 @@ class _PostAdState extends State<PostAd> {
                   decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.shade50,
+                          color: Colors.grey[50],
                           spreadRadius: 3,
                           // offset: Offset.infinite,
                           blurRadius: 1,
@@ -429,7 +427,7 @@ class _PostAdState extends State<PostAd> {
                   decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.shade50,
+                          color: Colors.grey[50],
                           spreadRadius: 3,
                           // offset: Offset.infinite,
                           blurRadius: 1,
@@ -566,7 +564,7 @@ class _PostAdState extends State<PostAd> {
                         var orderid = await docc.id;
                         await FirebaseFirestore.instance
                             .collection('users')
-                            .doc(FirebaseAuth.instance.currentUser?.uid)
+                            .doc(FirebaseAuth.instance.currentUser.uid)
                             .collection('adpost')
                             .doc(orderid)
                             .set({
@@ -625,7 +623,7 @@ class _PostAdState extends State<PostAd> {
   }
 
   _pickedDate() async {
-    DateTime? date = await showDatePicker(
+    DateTime date = await showDatePicker(
         context: context,
         initialDate: pickedDate,
         firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
@@ -633,7 +631,7 @@ class _PostAdState extends State<PostAd> {
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
       setState(() async {
-        TimeOfDay? t = await showTimePicker(
+        TimeOfDay t = await showTimePicker(
           context: context,
           initialTime: pickedTime,
         );
@@ -653,11 +651,9 @@ class _PostAdState extends State<PostAd> {
     final pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      if (pickedFile != null) {
-        _profilepic.add(File(pickedFile.path));
-      }
+      _profilepic.add(File(pickedFile?.path));
     });
-    if (pickedFile?.path == null) retrieveLostData();
+    if (pickedFile.path == null) retrieveLostData();
   }
 
   Future<void> retrieveLostData() async {
@@ -667,7 +663,7 @@ class _PostAdState extends State<PostAd> {
     }
     if (response.file != null) {
       setState(() {
-        _profilepic.add(File(response.file!.path));
+        _profilepic.add(File(response.file.path));
       });
     } else {
       print(response.file);
