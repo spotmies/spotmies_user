@@ -28,17 +28,17 @@ class AdController extends ControllerMVC {
   var formkey = GlobalKey<FormState>();
   TextEditingController problem = TextEditingController();
   final controller = TestController();
-  late GetOrdersProvider ordersProvider;
-  String? uuId = FirebaseAuth.instance.currentUser?.uid.toString();
+  GetOrdersProvider ordersProvider;
+  String uuId = FirebaseAuth.instance.currentUser.uid.toString();
   // int currentStep = 0;
   GlobalKey<PageSliderState> sliderKey = GlobalKey();
 
   // String service;
-  String title = "";
-  late String time;
+  String title;
+  String time;
   // String upload;
   // String discription;
-  late String money;
+  String money;
   // String state;
   // String adtime;
   // File _profilepic;
@@ -50,17 +50,17 @@ class AdController extends ControllerMVC {
   List imageLink = [];
 
   //date time picker
-  late DateTime pickedDate;
-  late TimeOfDay pickedTime;
+  DateTime pickedDate;
+  TimeOfDay pickedTime;
 
   DateTime now = DateTime.now();
 
   // drop down menu for service type
-  int dropDownValue = 0;
+  int dropDownValue;
   //dummy data for accept/reject requests condition
   String dummy = 'nothing';
   //user id
-  var uid = FirebaseAuth.instance.currentUser?.uid;
+  var uid = FirebaseAuth.instance.currentUser.uid;
   //location
   String location = 'seethammadhara,visakhapatnam';
 
@@ -92,7 +92,7 @@ class AdController extends ControllerMVC {
     "Catering",
   ];
 
-  late AdModel adModel;
+  AdModel adModel;
 
   AdController() {
     this.adModel = AdModel();
@@ -101,7 +101,7 @@ class AdController extends ControllerMVC {
   Future<void> docid() async {
     docc = FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .collection('adpost')
         .doc();
   }
@@ -164,7 +164,7 @@ class AdController extends ControllerMVC {
     pickedTime = TimeOfDay.now();
   }
 
-  getAddressofLocation({double? lat, double? long}) async {
+  getAddressofLocation({double lat, double long}) async {
     log('message');
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -180,7 +180,7 @@ class AdController extends ControllerMVC {
   }
 
   pickDate(BuildContext context) async {
-    DateTime? date = await showDatePicker(
+    DateTime date = await showDatePicker(
         confirmText: 'SET DATE',
         context: context,
         initialDate: pickedDate,
@@ -196,7 +196,7 @@ class AdController extends ControllerMVC {
   }
 
   picktime(BuildContext context) async {
-    TimeOfDay? t = await showTimePicker(
+    TimeOfDay t = await showTimePicker(
       context: context,
       initialTime: pickedTime,
     );
@@ -215,33 +215,29 @@ class AdController extends ControllerMVC {
         imageQuality: 10,
         preferredCameraDevice: CameraDevice.rear);
     setState(() {
-      if (pickedFile != null) {
-        serviceImages.add(File(pickedFile.path));
-        serviceImagesStrings.add(pickedFile.path);
-      }
+      serviceImages.add(File(pickedFile?.path));
+      serviceImagesStrings.add(pickedFile?.path);
     });
-    if (pickedFile?.path == null) retrieveLostData();
+    if (pickedFile.path == null) retrieveLostData();
   }
 
-  late File serviceVideo;
-  late final picker = ImagePicker();
-  late VideoPlayerController videoPlayerController;
+  File serviceVideo;
+  final picker = ImagePicker();
+  VideoPlayerController videoPlayerController;
 
   pickVideo() async {
-    PickedFile? pickedFile = await picker.getVideo(
+    PickedFile pickedFile = await picker.getVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
-    if (pickedFile != null) {
-      serviceVideo = File(pickedFile.path);
+    serviceVideo = File(pickedFile.path);
 
-      videoPlayerController = VideoPlayerController.file(serviceVideo)
-        ..initialize().then((_) {
-          setState(() {
-            serviceImages.add(serviceVideo);
-            serviceImagesStrings.add(pickedFile.path);
-          });
-          videoPlayerController.play();
+    videoPlayerController = VideoPlayerController.file(serviceVideo)
+      ..initialize().then((_) {
+        setState(() {
+          serviceImages.add(serviceVideo);
+          serviceImagesStrings.add(pickedFile.path);
         });
-    }
+        videoPlayerController.play();
+      });
   }
 
   Future<void> retrieveLostData() async {
@@ -251,8 +247,8 @@ class AdController extends ControllerMVC {
     }
     if (response.file != null) {
       setState(() {
-        serviceImages.add(File(response.file!.path));
-        serviceImagesStrings.add(response.file!.path);
+        serviceImages.add(File(response.file.path));
+        serviceImagesStrings.add(response.file.path);
       });
     } else {
       print(response.file);
@@ -314,12 +310,10 @@ class AdController extends ControllerMVC {
       return;
     }
     setState(() {
-      if (formkey.currentState != null) {
-        if (formkey.currentState!.validate()) {
-          formkey.currentState?.save();
+      if (formkey.currentState.validate()) {
+        formkey.currentState.save();
 
-          sliderKey.currentState?.next();
-        }
+        sliderKey.currentState.next();
       }
     });
   }
@@ -358,7 +352,7 @@ class AdController extends ControllerMVC {
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       // "schedule": pickedDate.millisecondsSinceEpoch.toString(),
       "schedule": getDateAndTime(),
-      "uId": FirebaseAuth.instance.currentUser?.uid.toString(),
+      "uId": FirebaseAuth.instance.currentUser.uid.toString(),
       if (this.money != null) "money": this.money.toString(),
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
@@ -371,7 +365,7 @@ class AdController extends ControllerMVC {
     log(body.toString());
 
     // controller.postData();
-    Server().postMethod(API.createOrder + (uuId ?? ""), body).then((response) {
+    Server().postMethod(API.createOrder + uuId, body).then((response) {
       if (response.statusCode == 200) {
         isUploading = 3;
         refresh();
@@ -397,7 +391,7 @@ class AdController extends ControllerMVC {
     var orderid = await docc.id;
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .collection('adpost')
         .doc(orderid)
         .set({
@@ -444,8 +438,8 @@ class AdController extends ControllerMVC {
     Navigator.pop(context);
   }
 
-  Future<bool?> dialogTrrigger(BuildContext context) async {
-    return showDialog<bool>(
+  Future<bool> dialogTrrigger(BuildContext context) async {
+    return showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {

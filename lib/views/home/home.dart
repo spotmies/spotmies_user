@@ -17,11 +17,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends StateMVC<Home> {
-  late HomeController _homeController;
-  late UniversalProvider up;
+  HomeController _homeController;
+  UniversalProvider up;
 
   _HomeState() : super(HomeController()) {
-    this._homeController = controller as HomeController;
+    this._homeController = controller;
   }
 
   var list = [

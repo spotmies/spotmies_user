@@ -18,7 +18,7 @@ class ChatPageController extends ControllerMVC {
 
   var chatPageStream = FirebaseFirestore.instance
       .collection('messaging')
-      .where('userid', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+      .where('userid', isEqualTo: FirebaseAuth.instance.currentUser.uid)
       .where("chatbuild", isEqualTo: true)
       .snapshots();
 }

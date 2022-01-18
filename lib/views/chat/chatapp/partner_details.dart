@@ -11,7 +11,6 @@ import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/snackbar.dart';
-import 'package:spotmies/views/chat/chat_tab.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -19,30 +18,30 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 class PartnerDetails extends StatefulWidget {
   final Map profileDetails;
   final bool isProfileRevealed;
-  final Function? onTapPhone;
-  final Function? revealMyProfile;
+  final Function onTapPhone;
+  final Function revealMyProfile;
   final bool isMyProfileRevealed;
-  final String? msgId;
+  final String msgId;
   final Map chatDetails;
   PartnerDetails(
-      {required this.profileDetails,
+      {@required this.profileDetails,
       this.isProfileRevealed = true,
       this.onTapPhone,
       this.revealMyProfile,
       this.isMyProfileRevealed = false,
       this.msgId,
-      this.chatDetails = const {}});
+      this.chatDetails});
   @override
   _PartnerDetailsState createState() => _PartnerDetailsState();
 }
 
 class _PartnerDetailsState extends StateMVC<PartnerDetails> {
-  late ChatController _chatController;
-  late UniversalProvider up;
+  ChatController _chatController;
+  UniversalProvider up;
   _PartnerDetailsState() : super(ChatController()) {
-    this._chatController = controller as ChatController;
+    this._chatController = controller;
   }
-  late bool isSwitch;
+  bool isSwitch;
   @override
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
@@ -88,9 +87,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                 ],
                 // titlePadding: EdgeInsets.only(left: width(context)*0.15,bottom: width(context)*0.04),
                 title: TextWid(
-                  text: toBeginningOfSentenceCase(
-                          widget.profileDetails['name']) ??
-                      "",
+                  text:
+                      toBeginningOfSentenceCase(widget.profileDetails['name']),
                   size: width(context) * 0.06,
                   color: Colors.grey[900],
                   weight: FontWeight.w600,
@@ -249,7 +247,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                               onPressed: () {
                                                 // launch("tel://$num");
                                                 if (widget.onTapPhone != null) {
-                                                  widget.onTapPhone!();
+                                                  widget.onTapPhone();
                                                 } else {
                                                   snackbar(context,
                                                       "something went wrong");
@@ -329,7 +327,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                     width(context),
                     height(context),
                     "Available to Recieve Calls",
-                    Colors.grey.shade900,
+                    Colors.grey[900],
                     Icons.call,
                   ),
                   actionButton(
@@ -390,7 +388,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
 
   Column actionButton(
       double width, double height, String text, Color color, IconData icon,
-      {Callback? onTap}) {
+      {Callback onTap}) {
     Divider divider = Divider(
       thickness: 10,
       color: Colors.grey[200],

@@ -6,9 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/models/rating_model.dart';
 import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 
+
 class RatingTextField extends StatelessWidget {
   const RatingTextField({
-    Key? key,
+    Key key,
   }) : super(key: key);
 
   @override
@@ -47,11 +48,11 @@ class RatingInputTextField extends StatefulWidget {
   final Function(String) onSubmitted;
   final Function onBackspacePressed;
   const RatingInputTextField({
-    Key? key,
-    required this.initialText,
-    required this.onChanged,
-    required this.onSubmitted,
-    required this.onBackspacePressed,
+    Key key,
+    @required this.initialText,
+    @required this.onChanged,
+    @required this.onSubmitted,
+    @required this.onBackspacePressed,
   }) : super(key: key);
 
   @override

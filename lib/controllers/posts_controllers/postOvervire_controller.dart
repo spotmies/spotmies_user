@@ -18,14 +18,14 @@ import 'package:spotmies/views/maps/maps.dart';
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   TextEditingController problem = TextEditingController();
-  late ChatProvider chatProvider;
-  late GetOrdersProvider ordersProvider;
-  String? title;
+  ChatProvider chatProvider;
+  GetOrdersProvider ordersProvider;
+  String title;
   int dropDownValue = 0;
   dynamic orderDetails = {};
   //date time picker
-  late DateTime pickedDate;
-  late TimeOfDay pickedTime;
+  DateTime pickedDate;
+  TimeOfDay pickedTime;
 
   @override
   void initState() {
@@ -252,10 +252,8 @@ class PostOverViewController extends ControllerMVC {
                     child: TextFormField(
                       controller: problem,
                       validator: (value) {
-                        if (value != null) {
-                          if (value.isEmpty) {
-                            return 'Please discribe your problem';
-                          }
+                        if (value.isEmpty) {
+                          return 'Please discribe your problem';
                         }
                         return null;
                       },
@@ -265,12 +263,12 @@ class PostOverViewController extends ControllerMVC {
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(
-                                width: 1, color: Colors.grey.shade100)),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.grey[100])),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(
-                                width: 1, color: Colors.grey.shade100)),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.grey[100])),
                         hintStyle: TextStyle(fontSize: 17),
                         hintText: edit == 'problem' ? 'Problem' : 'Amount',
                         suffixIcon: Icon(
@@ -310,7 +308,7 @@ class PostOverViewController extends ControllerMVC {
   }
 
   pickDate(BuildContext context) async {
-    DateTime? date = await showDatePicker(
+    DateTime date = await showDatePicker(
         confirmText: 'SET DATE',
         context: context,
         initialDate: pickedDate.millisecondsSinceEpoch <
@@ -329,7 +327,7 @@ class PostOverViewController extends ControllerMVC {
   }
 
   picktime(BuildContext context) async {
-    TimeOfDay? t = await showTimePicker(
+    TimeOfDay t = await showTimePicker(
       context: context,
       initialTime: pickedTime,
     );
@@ -417,17 +415,18 @@ class PostOverViewController extends ControllerMVC {
     ordersProvider.updateOrderById(ordId: newbody['ordId'], orderData: newbody);
     bool resp = await feedbackOrder(body: body);
     if (resp) {
-      Map<String, String> body = {"orderState": "10"};
-      dynamic resp2 =
-          await updateOrder(body: body, ordId: orderDetails['ordId']);
-      if (resp2 != null) {
-        snackbar(context, "Thank you for your feedback");
-      } else {
-        newbody['orderState'] = 9;
-        ordersProvider.updateOrderById(
-            ordId: newbody['ordId'], orderData: newbody);
-        snackbar(context, "Something went wrong");
-      }
+      snackbar(context, "Thank you for your feedback");
+      // Map<String, String> body = {"orderState": "10"};
+      // dynamic resp2 =
+      //     await updateOrder(body: body, ordId: orderDetails['ordId']);
+      // if (resp2 != null) {
+      //   snackbar(context, "Thank you for your feedback");
+      // } else {
+      //   newbody['orderState'] = 9;
+      //   ordersProvider.updateOrderById(
+      //       ordId: newbody['ordId'], orderData: newbody);
+      //   snackbar(context, "Something went wrong");
+      // }
     } else {
       newbody['orderState'] = 9;
       ordersProvider.updateOrderById(

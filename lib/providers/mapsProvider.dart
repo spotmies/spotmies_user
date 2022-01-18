@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapsProvider extends ChangeNotifier {
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-  late Position position;
+  Position position;
 
   void getmarker(double lat, double long) {
     MarkerId markerId = MarkerId(lat.toString() + long.toString());

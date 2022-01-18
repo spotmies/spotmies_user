@@ -66,9 +66,8 @@ Future partnerDetailsSummury(
                                   children: [
                                     TextWidget(
                                       text: toBeginningOfSentenceCase(
-                                            pDetails['name'],
-                                          ) ??
-                                          "",
+                                        pDetails['name'],
+                                      ),
                                       size: width * 0.04,
                                       weight: FontWeight.w600,
                                       color: Colors.grey[900],
@@ -159,7 +158,7 @@ Future partnerDetailsSummury(
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => MyCalling(
                                   ordId: responseData['ordId'].toString(),
-                                  uId: FirebaseAuth.instance.currentUser?.uid
+                                  uId: FirebaseAuth.instance.currentUser.uid
                                       .toString(),
                                   pId: responseData['pId'].toString(),
                                   isIncoming: false,

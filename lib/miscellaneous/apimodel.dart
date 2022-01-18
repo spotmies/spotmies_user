@@ -10,10 +10,10 @@ String dataModelToJson(DataModel data) => json.encode(data.toJson());
 
 class DataModel {
   DataModel({
-    required this.name,
-    required this.job,
-    required this.id,
-    required this.createdAt,
+    this.name,
+    this.job,
+    this.id,
+    this.createdAt,
   });
 
   String name;
@@ -37,6 +37,6 @@ class DataModel {
 }
 
 class User {
-  final String problem, money, ordid, schedule;
-  User(this.problem, this.money, this.ordid, this.schedule);
+  final String problem, money, ordid,schedule;
+  User(this.problem, this.money, this.ordid,this.schedule);
 }

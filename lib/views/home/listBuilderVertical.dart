@@ -30,7 +30,7 @@ Widget serviceIndividualBuilder(
                   ),
                   TextButton(
                       onPressed: () {
-                        DefaultTabController.of(context)?.animateTo(0);
+                        DefaultTabController.of(context).animateTo(0);
                       },
                       child: Text(
                         'Home',
@@ -63,7 +63,7 @@ Widget serviceIndividualBuilder(
                           backgroundColor: Colors.grey[50],
                           radius: width * 0.06,
                           child: Icon(
-                            buildData[index]['icon'] as IconData?,
+                            buildData[index]['icon'],
                             color: Colors.grey[900],
                             size: width * 0.06,
                           ),
@@ -76,7 +76,7 @@ Widget serviceIndividualBuilder(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                buildData[index]['job'].toString(),
+                                buildData[index]['job'],
                                 style: fonts(width * 0.035, FontWeight.w600,
                                     Colors.grey[900]),
                               ),
@@ -84,7 +84,7 @@ Widget serviceIndividualBuilder(
                                 height: hight * 0.008,
                               ),
                               Text(
-                                buildData[index]['desc'].toString(),
+                                buildData[index]['desc'],
                                 overflow: TextOverflow.ellipsis,
                                 style: fonts(width * 0.03, FontWeight.w500,
                                     Colors.grey[900]),

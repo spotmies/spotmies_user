@@ -10,11 +10,11 @@ class RatingStar extends StatefulWidget {
   final bool state;
   final int highestState;
   const RatingStar({
-    Key? key,
-    required this.index,
-    required this.onPressed,
-    required this.state,
-    required this.highestState,
+    Key key,
+    @required this.index,
+    @required this.onPressed,
+    @required this.state,
+    @required this.highestState,
   }) : super(key: key);
 
   @override

@@ -30,13 +30,13 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends StateMVC<Profile> {
-  late ProfileController _profileController;
-  late UniversalProvider up;
-  late UserDetailsProvider profileProvider;
-  late GetOrdersProvider ordersProvider;
+  ProfileController _profileController;
+  UniversalProvider up;
+  UserDetailsProvider profileProvider;
+  GetOrdersProvider ordersProvider;
 
   _ProfileState() : super(ProfileController()) {
-    this._profileController = controller as ProfileController;
+    this._profileController = controller;
   }
 
   var mode = true;
@@ -222,7 +222,7 @@ class _ProfileState extends StateMVC<Profile> {
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Colors.grey.shade200,
+                                      color: Colors.grey[200],
                                       blurRadius: 5,
                                       spreadRadius: 2)
                                 ]),

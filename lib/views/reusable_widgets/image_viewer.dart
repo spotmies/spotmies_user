@@ -7,8 +7,7 @@ import 'package:photo_view/photo_view.dart';
 class ImageViewer extends StatefulWidget {
   final dynamic imageLink;
   final isOnlinePlayer;
-  const ImageViewer(
-      {Key? key, required this.imageLink, this.isOnlinePlayer = true})
+  const ImageViewer({Key key, this.imageLink, this.isOnlinePlayer = true})
       : super(key: key);
 
   @override
@@ -24,13 +23,12 @@ class _ImageViewerState extends State<ImageViewer> {
 
   @override
   Widget build(BuildContext context) {
-    ImageProvider<Object>? imageProvider = widget.isOnlinePlayer
-        ? NetworkImage(widget.imageLink)
-        : FileImage(File(widget.imageLink)) as ImageProvider;
     return Scaffold(
       body: Center(
         child: PhotoView(
-          imageProvider: imageProvider,
+          imageProvider: widget.isOnlinePlayer
+              ? NetworkImage(widget.imageLink)
+              : FileImage(File(widget.imageLink)),
         ),
       ),
     );

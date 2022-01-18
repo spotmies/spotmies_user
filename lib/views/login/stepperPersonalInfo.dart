@@ -17,13 +17,13 @@ class StepperPersonalInfo extends StatefulWidget {
 }
 
 class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
-  late StepperPersonal _stepperPersonalInfo;
-  late UniversalProvider up;
+  StepperPersonal _stepperPersonalInfo;
+  UniversalProvider up;
 
   _StepperPersonalInfoState() : super(StepperPersonal()) {
-    this._stepperPersonalInfo = controller as StepperPersonal;
+    this._stepperPersonalInfo = controller;
   }
-  late TimeProvider timerProvider;
+  TimeProvider timerProvider;
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
@@ -58,8 +58,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 currentStep: _stepperPersonalInfo.currentStep,
                 onStepTapped: (int step) =>
                     setState(() => _stepperPersonalInfo.currentStep = step),
-                controlsBuilder:
-                    (BuildContext context, ControlsDetails controlsDetails) {
+                controlsBuilder: (BuildContext context,
+                    {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Row(
@@ -76,7 +76,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 Text('Back'),
                               ],
                             ),
-                            onPressed: controlsDetails.onStepCancel,
+                            onPressed: onStepCancel,
                             style: ButtonStyle(
                               backgroundColor: _stepperPersonalInfo
                                           .currentStep >
@@ -120,7 +120,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             : Container(
                                 width: width(context) * 0.35,
                                 child: ElevatedButton(
-                                  onPressed: controlsDetails.onStepContinue,
+                                  onPressed: onStepContinue,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -227,7 +227,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                       checkColor: Colors.white,
                                       value: _stepperPersonalInfo.accept,
                                       shape: CircleBorder(),
-                                      onChanged: (bool? value) {
+                                      onChanged: (bool value) {
                                         _stepperPersonalInfo.accept = value;
                                         if (_stepperPersonalInfo.accept ==
                                             true) {
@@ -285,10 +285,10 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     contentPadding: EdgeInsets.all(20),
                   ),
                   validator: (value) {
-                    if (value != null && value.isEmpty) {
+                    if (value.isEmpty) {
                       return 'Please Enter Your Name';
                     }
-                    if (value != null && value.length < 5)
+                    if (value.length < 5)
                       return 'name should be greater than 4 letters';
                     return null;
                   },
@@ -325,15 +325,13 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     contentPadding: EdgeInsets.all(20),
                   ),
                   validator: (value) {
-                    if (value != null &&
-                        value.length > 1 &&
-                        !value.contains('@')) {
+                    if (value.length > 1 && !value.contains('@')) {
                       return 'Please Enter Valid Email';
                     }
                     return null;
                   },
                   controller: _stepperPersonalInfo.emailTf,
-                  onChanged: (String? value) {
+                  onChanged: (value) {
                     this._stepperPersonalInfo.email = value ?? "";
                   },
                 ),
@@ -369,19 +367,15 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     counterText: "",
                   ),
                   validator: (value) {
-                    if (value != null &&
-                        value.length == 10 &&
-                        int.parse(value) < 5000000000) {
+                    if (value.length == 10 && int.parse(value) < 5000000000) {
                       return 'Please Enter Valid Mobile Number';
-                    } else if (value != null &&
-                        value.length > 0 &&
-                        value.length < 10) {
+                    } else if (value.length > 0 && value.length < 10) {
                       return 'Please Enter Valid Mobile Number';
                     }
                     return null;
                   },
                   controller: _stepperPersonalInfo.altnumberTf,
-                  onChanged: (String? value) {
+                  onChanged: (value) {
                     this._stepperPersonalInfo.altnumber = value ?? "";
                   },
                 ),
@@ -431,13 +425,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: _stepperPersonalInfo.profilepic != null
-                                ? CircleAvatar(
-                                    backgroundImage: FileImage(
-                                        _stepperPersonalInfo.profilepic!),
-                                    radius: 100,
-                                  )
-                                : SizedBox(),
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  FileImage(_stepperPersonalInfo.profilepic),
+                              radius: 100,
+                            ),
                           ),
                   ),
                   radius: 30,

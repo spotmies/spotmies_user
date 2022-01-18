@@ -11,7 +11,7 @@ class VideoPlayerWid extends StatefulWidget {
   final String videoLink;
   final bool isOnlinePlayer;
   const VideoPlayerWid(
-      {required this.videoLink, Key? key, this.isOnlinePlayer = true})
+      {@required this.videoLink, Key key, this.isOnlinePlayer = true})
       : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class VideoPlayerWid extends StatefulWidget {
 }
 
 class _VideoState extends State<VideoPlayerWid> {
-  late VideoPlayerController videoPlayerController;
+  VideoPlayerController videoPlayerController;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _VideoState extends State<VideoPlayerWid> {
               text: 'Media',
               size: width * 0.05,
               weight: FontWeight.w600,
-              color: Colors.grey.shade900,
+              color: Colors.grey[900],
             ),
             backgroundColor: Colors.indigo[50],
             leading: IconButton(
@@ -105,8 +105,8 @@ class VideoPlayerWidget extends StatelessWidget {
   final VideoPlayerController controller;
 
   const VideoPlayerWidget({
-    Key? key,
-    required this.controller,
+    Key key,
+    @required this.controller,
   }) : super(key: key);
 
   @override
@@ -132,8 +132,8 @@ class BasicOverlayWidget extends StatelessWidget {
   final VideoPlayerController controller;
 
   const BasicOverlayWidget({
-    Key? key,
-    required this.controller,
+    Key key,
+    @required this.controller,
   }) : super(key: key);
 
   @override

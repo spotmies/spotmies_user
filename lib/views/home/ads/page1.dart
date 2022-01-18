@@ -71,7 +71,7 @@ Widget page1(double hight, double width, BuildContext context,
                                 decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Colors.grey.shade300,
+                                          color: Colors.grey[300],
                                           blurRadius: 3,
                                           spreadRadius: 1)
                                     ],
@@ -98,7 +98,7 @@ Widget page1(double hight, double width, BuildContext context,
                                   }).toList(),
                                   onChanged: (newVal) {
                                     log(newVal.toString());
-                                    adController.dropDownValue = newVal as int;
+                                    adController.dropDownValue = newVal;
                                     adController.refresh();
                                   },
                                 ),
@@ -111,7 +111,7 @@ Widget page1(double hight, double width, BuildContext context,
                         decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.grey.shade300,
+                                  color: Colors.grey[300],
                                   blurRadius: 3,
                                   spreadRadius: 1)
                             ],
@@ -122,9 +122,7 @@ Widget page1(double hight, double width, BuildContext context,
                         child: TextFormField(
                           controller: adController.problem,
                           validator: (value) {
-                            if (value != null && value.isEmpty) {
-                              return 'Please discribe your problem';
-                            } else if (value == null) {
+                            if (value.isEmpty) {
                               return 'Please discribe your problem';
                             }
                             return null;
@@ -135,12 +133,12 @@ Widget page1(double hight, double width, BuildContext context,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15)),
                                 borderSide: BorderSide(
-                                    width: 1, color: Colors.indigo.shade50)),
+                                    width: 1, color: Colors.indigo[50])),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15)),
                                 borderSide: BorderSide(
-                                    width: 1, color: Colors.grey.shade200)),
+                                    width: 1, color: Colors.grey[200])),
                             hintStyle: fonts(width * 0.05, FontWeight.w400,
                                 Colors.grey[500]),
                             hintText: 'Problem',
@@ -225,7 +223,7 @@ Widget page1(double hight, double width, BuildContext context,
                             decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Colors.grey.shade300,
+                                      color: Colors.grey[300],
                                       blurRadius: 3,
                                       spreadRadius: 1)
                                 ],

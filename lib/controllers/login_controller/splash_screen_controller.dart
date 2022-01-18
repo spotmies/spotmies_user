@@ -20,7 +20,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late UniversalProvider universalProvider;
+  UniversalProvider universalProvider;
   checkUser() async {
     if (FirebaseAuth.instance.currentUser != null) {
       Navigator.pushAndRemoveUntil(context,
@@ -92,13 +92,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   TextWidget(
                       text: 'SPOTMIES',
                       size: _width * 0.08,
-                      color: Colors.indigo.shade900,
+                      color: Colors.indigo[900],
                       lSpace: 6.0,
                       weight: FontWeight.w600),
                   TextWidget(
                       text: 'Experience the Excellence',
                       size: _width * 0.05,
-                      color: Colors.grey.shade700,
+                      color: Colors.grey[700],
                       weight: FontWeight.w500),
                   // SizedBox(
                   //   height: _hight * 0.1,

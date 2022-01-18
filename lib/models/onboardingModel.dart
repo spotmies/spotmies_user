@@ -3,8 +3,7 @@ class OnboardingModel {
   String text;
   String title;
 
-  OnboardingModel(
-      {required this.image, required this.text, required this.title});
+  OnboardingModel({this.image, this.text, this.title});
   static List<OnboardingModel> list = [
     OnboardingModel(
         image: "assets/1.png",

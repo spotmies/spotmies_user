@@ -15,7 +15,7 @@ class ChatScreenController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   TextEditingController controller = TextEditingController();
   ScrollController scrollController = ScrollController();
-  String textInput = "";
+  String textInput;
 
   //images
   List<File> profilepic = [];
@@ -49,11 +49,9 @@ class ChatScreenController extends ControllerMVC {
     final pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      if (pickedFile != null) {
-        profilepic.add(File(pickedFile.path));
-      }
+      profilepic.add(File(pickedFile?.path));
     });
-    if (pickedFile?.path == null) retrieveLostData();
+    if (pickedFile.path == null) retrieveLostData();
   }
 
   Future<void> retrieveLostData() async {
@@ -63,7 +61,7 @@ class ChatScreenController extends ControllerMVC {
     }
     if (response.file != null) {
       setState(() {
-        profilepic.add(File(response.file!.path));
+        profilepic.add(File(response.file.path));
       });
     } else {
       print(response.file);
@@ -114,7 +112,7 @@ class ChatScreenController extends ControllerMVC {
   confirmOrder(String id, String pid) {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .collection('adpost')
         .doc(id)
         .update({'orderstate': 2});

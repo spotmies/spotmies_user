@@ -44,13 +44,13 @@ class HelpAndSupport extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.shade200,
+                              color: Colors.grey[200],
                               blurRadius: 3,
                               spreadRadius: 4,
                               offset: Offset(1, 1),
                             ),
                             BoxShadow(
-                              color: Colors.grey.shade50,
+                              color: Colors.grey[50],
                               blurRadius: 3,
                               spreadRadius: 0.1,
                               offset: Offset(-1, -1),
@@ -88,13 +88,13 @@ class HelpAndSupport extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.shade200,
+                              color: Colors.grey[200],
                               blurRadius: 3,
                               spreadRadius: 4,
                               offset: Offset(1, 1),
                             ),
                             BoxShadow(
-                              color: Colors.grey.shade50,
+                              color: Colors.grey[50],
                               blurRadius: 3,
                               spreadRadius: 0.1,
                               offset: Offset(-1, -1),
@@ -132,13 +132,13 @@ class HelpAndSupport extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.shade200,
+                              color: Colors.grey[200],
                               blurRadius: 3,
                               spreadRadius: 4,
                               offset: Offset(1, 1),
                             ),
                             BoxShadow(
-                              color: Colors.grey.shade50,
+                              color: Colors.grey[50],
                               blurRadius: 3,
                               spreadRadius: 0.1,
                               offset: Offset(-1, -1),

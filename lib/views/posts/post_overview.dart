@@ -34,21 +34,21 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PostOverView extends StatefulWidget {
   final String ordId;
-  PostOverView({required this.ordId});
+  PostOverView({@required this.ordId});
   @override
   _PostOverViewState createState() => _PostOverViewState();
 }
 
 class _PostOverViewState extends StateMVC<PostOverView> {
-  late PostOverViewController _postOverViewController;
+  PostOverViewController _postOverViewController;
   _PostOverViewState() : super(PostOverViewController()) {
-    this._postOverViewController = controller as PostOverViewController;
+    this._postOverViewController = controller;
   }
-  late ChatProvider chatProvider;
-  late UniversalProvider up;
-  late int ordId;
+  ChatProvider chatProvider;
+  UniversalProvider up;
+  int ordId;
   bool showOrderStatusQuestion = false;
-  late GetOrdersProvider ordersProvider;
+  GetOrdersProvider ordersProvider;
   // _PostOverViewState(this.value);
   // int _currentStep = 0;
   void chatWithPatner(responseData) {
@@ -189,7 +189,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                             text: orderStateString(ordState: d['orderState']),
                             color: d['orderState'] > 8
                                 ? Colors.white
-                                : Colors.grey.shade700,
+                                : Colors.grey[700],
                             flow: TextOverflow.visible,
                             weight: FontWeight.w700,
                             size: width(context) * 0.03),
@@ -726,7 +726,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       margin: EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
           color: Colors.indigo[900],
-          border: Border.all(color: Colors.indigo.shade900),
+          border: Border.all(color: Colors.indigo[900]),
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -879,9 +879,8 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                             children: [
                               TextWidget(
                                 text: toBeginningOfSentenceCase(
-                                      pDetails['name'],
-                                    ) ??
-                                    "",
+                                  pDetails['name'],
+                                ),
                                 size: width * 0.04,
                                 weight: FontWeight.w600,
                                 color: Colors.grey[900],
@@ -924,7 +923,7 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                                         text: lang + "  ",
                                         size: width * 0.026,
                                         weight: FontWeight.w600,
-                                        color: Colors.grey.shade900,
+                                        color: Colors.grey[900],
                                       ),
                                     ))
                                 .toList()),
@@ -941,7 +940,7 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                               text: 'vizag',
                               size: width * 0.03,
                               weight: FontWeight.w600,
-                              color: Colors.grey.shade900,
+                              color: Colors.grey[900],
                             ),
                           ],
                         ),
@@ -1231,9 +1230,7 @@ class TimeLineTitle extends StatelessWidget {
           text: getStatus(),
           size: width(context) * 0.04,
           weight: FontWeight.w600,
-          color: isCompleted()
-              ? Colors.grey[850] ?? Colors.grey.shade800
-              : Colors.grey.shade600,
+          color: isCompleted() ? Colors.grey[850] : Colors.grey[600],
         ));
   }
 }

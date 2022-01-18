@@ -8,7 +8,7 @@ import '../size.config.dart';
 
 class CallingUi extends StatefulWidget {
   CallingUi(
-      {required this.isInComingScreen,
+      {@required this.isInComingScreen,
       this.image = "",
       this.name = "unknown",
       this.onAccept,
@@ -19,20 +19,20 @@ class CallingUi extends StatefulWidget {
   final bool isInComingScreen;
   final String image;
   final String name;
-  final Function? onAccept;
-  final Function? onReject;
-  final Function? onHangUp;
-  final Function? onMic;
-  final Function? onSpeaker;
+  final Function onAccept;
+  final Function onReject;
+  final Function onHangUp;
+  final Function onMic;
+  final Function onSpeaker;
 
   @override
   _CallingUiState createState() => _CallingUiState();
 }
 
 class _CallingUiState extends State<CallingUi> {
-  late ChatProvider chatProvider;
+  ChatProvider chatProvider;
   String screenType = '';
-  late UniversalProvider up;
+  UniversalProvider up;
   bool clickMic = false;
   bool clickSpeaker = false;
 
@@ -118,7 +118,7 @@ class _CallingUiState extends State<CallingUi> {
                       style: Theme.of(context)
                           .textTheme
                           .headline3
-                          ?.copyWith(color: Colors.white),
+                          .copyWith(color: Colors.white),
                     ),
                     VerticalSpacing(of: 10),
                     Text(
@@ -147,9 +147,7 @@ class _CallingUiState extends State<CallingUi> {
                                 setState(() {
                                   clickMic = !clickMic;
                                 });
-                                if (widget.onMic != null) {
-                                  widget.onMic!(clickMic);
-                                }
+                                widget.onMic(clickMic);
                               },
                               icon: Icon(
                                 Icons.mic,
@@ -165,10 +163,8 @@ class _CallingUiState extends State<CallingUi> {
                                 color: Colors.red, shape: BoxShape.circle),
                             child: IconButton(
                               onPressed: () {
-                                if (widget.onHangUp != null) {
-                                  widget.onHangUp!();
-                                  Navigator.pop(context);
-                                }
+                                widget.onHangUp();
+                                Navigator.pop(context);
                               },
                               icon: Icon(
                                 Icons.call_end,
@@ -198,9 +194,7 @@ class _CallingUiState extends State<CallingUi> {
                                 setState(() {
                                   clickSpeaker = !clickSpeaker;
                                 });
-                                if (widget.onSpeaker != null) {
-                                  widget.onSpeaker!(clickSpeaker);
-                                }
+                                widget.onSpeaker(clickSpeaker);
                                 // widget.onSpeaker();
                               },
                               icon: Icon(
@@ -230,9 +224,7 @@ class _CallingUiState extends State<CallingUi> {
                           RoundedButton(
                             press: () {
                               changeScreen("outgoing");
-                              if (widget.onAccept != null) {
-                                widget.onAccept!();
-                              }
+                              widget.onAccept();
                             },
                             color: Colors.green,
                             iconColor: Colors.white,
@@ -240,10 +232,8 @@ class _CallingUiState extends State<CallingUi> {
                           ),
                           RoundedButton(
                             press: () {
-                              if (widget.onReject != null) {
-                                widget.onReject!();
-                                Navigator.pop(context);
-                              }
+                              widget.onReject();
+                              Navigator.pop(context);
                             },
                             color: Colors.red,
                             iconColor: Colors.white,

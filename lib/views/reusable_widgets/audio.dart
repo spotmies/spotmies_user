@@ -43,14 +43,14 @@ Future audioRecoder(
 }
 
 class FeatureButtonsView extends StatefulWidget {
-  final Function? onUploadComplete;
+  final Function onUploadComplete;
   final dynamic adController;
-  final Function? sendCallBack;
-  final String? message;
-  final String? msgId;
+  final Function sendCallBack;
+  final String message;
+  final String msgId;
   final String from;
   const FeatureButtonsView(
-      {Key? key,
+      {Key key,
       this.onUploadComplete,
       this.adController,
       this.sendCallBack,
@@ -63,15 +63,15 @@ class FeatureButtonsView extends StatefulWidget {
 }
 
 class _FeatureButtonsViewState extends State<FeatureButtonsView> {
-  late bool _isPlaying;
-  late bool _isUploading;
-  late bool _isRecorded;
-  late bool _isRecording;
+  bool _isPlaying;
+  bool _isUploading;
+  bool _isRecorded;
+  bool _isRecording;
 
-  late AudioPlayer _audioPlayer;
-  late String _filePath;
+  AudioPlayer _audioPlayer;
+  String _filePath;
 
-  late FlutterAudioRecorder2 _audioRecorder;
+  FlutterAudioRecorder2 _audioRecorder;
 
   @override
   void initState() {
@@ -122,7 +122,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                           size: hight * 0.05,
                         ),
                         onPressed: () {
-                          _onPlayButtonPressed(widget.message ?? "");
+                          _onPlayButtonPressed(widget.message);
                         },
                       ),
                       IconButton(
@@ -190,7 +190,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
                           size: hight * 0.05,
                         ),
                         onPressed: () {
-                          _onPlayButtonPressed(widget.message ?? "");
+                          _onPlayButtonPressed(widget.message);
                         },
                       ),
                       TextWidget(
@@ -242,7 +242,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   }
 
   Future<void> _startRecording() async {
-    final bool? hasRecordingPermission =
+    final bool hasRecordingPermission =
         await FlutterAudioRecorder2.hasPermissions;
 
     if (hasRecordingPermission ?? false) {

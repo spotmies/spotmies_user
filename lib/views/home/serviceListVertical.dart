@@ -9,7 +9,7 @@ import 'package:spotmies/views/home/ServiceListHorizontal.dart';
 import 'package:spotmies/views/home/listBuilderVertical.dart';
 
 class Services extends StatefulWidget {
-  final int? value;
+  final int value;
 
   Services({this.value});
 
@@ -18,8 +18,8 @@ class Services extends StatefulWidget {
 }
 
 class _ServicesState extends State<Services> {
-  late UniversalProvider up;
-  int? value;
+  UniversalProvider up;
+  int value;
   _ServicesState(this.value);
 
   List images = [
@@ -136,7 +136,7 @@ class _ServicesState extends State<Services> {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.grey.shade300,
+                                color: Colors.grey[300],
                                 blurRadius: 5,
                                 spreadRadius: 2)
                           ]),

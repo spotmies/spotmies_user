@@ -5,6 +5,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/models/loginmodel.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 
+
 class OTPController extends ControllerMVC {
   //  final String phone;
   // OTPController(this.phone);
@@ -13,7 +14,7 @@ class OTPController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
 
   final TextEditingController pinPutController = TextEditingController();
-  late String verificationCode;
+  String verificationCode;
   final FocusNode pinPutFocusNode = FocusNode();
   final BoxDecoration pinPutDecoration = BoxDecoration(
     color: Colors.white,
@@ -23,7 +24,7 @@ class OTPController extends ControllerMVC {
     ),
   );
   otp() {}
-  late LoginModel loginModel;
+  LoginModel loginModel;
 
   OTPController() {
     this.loginModel = LoginModel();
@@ -51,7 +52,7 @@ class OTPController extends ControllerMVC {
         verificationFailed: (FirebaseAuthException e) {
           print(e.message);
         },
-        codeSent: (String verficationID, int? resendToken) {
+        codeSent: (String verficationID, int resendToken) {
           setState(() {
             verificationCode = verficationID;
           });

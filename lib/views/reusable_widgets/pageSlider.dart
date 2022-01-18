@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 class PageSlider extends StatefulWidget {
-  PageSlider(
-      {required this.pages,
-      this.duration,
-      this.initialPage,
-      this.onFinished,
-      required Key key})
-      : super(key: key);
+  PageSlider({
+    @required this.pages,
+    this.duration,
+    this.initialPage,
+    this.onFinished,
+    @required Key key
+  }) : super(key: key);
 
   final List<Widget> pages;
-  final Duration? duration;
-  final int? initialPage;
-  final VoidCallback? onFinished;
+  final Duration duration;
+  final int initialPage;
+  final VoidCallback onFinished;
 
   PageSliderState createState() => PageSliderState();
 }
@@ -21,33 +21,41 @@ class PageSliderState extends State<PageSlider> with TickerProviderStateMixin {
   int _currentPage = 0;
   int get currentPage => _currentPage;
 
-  late List<Animation<Offset>> _positions;
-  late List<AnimationController> _controllers;
+  List<Animation<Offset>> _positions;
+  List<AnimationController> _controllers;
 
   @override
-  void initState() {
+  void initState() { 
     super.initState();
     _currentPage = widget.initialPage ?? 0;
 
     _controllers = List.generate(
-        widget.pages.length,
-        (i) => AnimationController(
-              vsync: this,
-              duration: widget.duration ?? Duration(milliseconds: 300),
-              lowerBound: 0,
-              upperBound: 1,
-              value: i == _currentPage ? 0.5 : (i > _currentPage ? 1 : 0),
-            ));
+      widget.pages.length, 
+      (i) => AnimationController(
+        vsync: this,
+        duration: widget.duration ?? Duration(milliseconds: 300),
+        lowerBound: 0,
+        upperBound: 1,
+        value: i == _currentPage
+          ? 0.5
+          : (i > _currentPage ? 1 : 0),
+      )
+    );
 
     _positions = _controllers
-        .map((controller) => Tween(begin: Offset(-1, 0), end: Offset(1, 0))
-            //.chain(CurveTween(curve: Curves.easeInCubic))
-            .animate(controller))
-        .toList();
+      .map((controller) =>
+        Tween(
+          begin: Offset(-1, 0), 
+          end: Offset(1, 0)
+        )
+        //.chain(CurveTween(curve: Curves.easeInCubic))
+        .animate(controller)
+      ).toList();
   }
 
   bool get hasNext => (_currentPage < widget.pages.length - 1);
   bool get hasPrevious => (_currentPage > 0);
+
 
   void setPage(int page) {
     assert(page >= 0 || page < widget.pages.length);
@@ -57,9 +65,7 @@ class PageSliderState extends State<PageSlider> with TickerProviderStateMixin {
 
   void next() {
     if (!hasNext) {
-      if (widget.onFinished != null) {
-        widget.onFinished!();
-      }
+      widget.onFinished();
       return;
     }
 
@@ -90,16 +96,16 @@ class PageSliderState extends State<PageSlider> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: widget.pages
-          .asMap()
-          .map((i, page) => MapEntry(
-              i,
-              SlideTransition(
-                position: _positions[i],
-                child: Center(child: page),
-              )))
-          .values
-          .toList(),
+      children: widget.pages.asMap().map((i, page) =>
+        MapEntry(
+          i, 
+          SlideTransition(
+            position: _positions[i],
+            child: Center(child: page),
+          )
+        )
+      ).values.toList(),
     );
   }
 }
+
