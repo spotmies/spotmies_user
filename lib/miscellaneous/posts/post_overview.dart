@@ -7,15 +7,15 @@ import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.d
 
 class PostOverView extends StatefulWidget {
   final String value;
-  PostOverView({this.value});
+  PostOverView({required this.value});
   @override
   _PostOverViewState createState() => _PostOverViewState(value);
 }
 
 class _PostOverViewState extends StateMVC<PostOverView> {
-  PostOverViewController _stepperPersonalInfo;
+  late PostOverViewController _stepperPersonalInfo;
   _PostOverViewState(this.value) : super(PostOverViewController()) {
-    this._stepperPersonalInfo = controller;
+    this._stepperPersonalInfo = controller as PostOverViewController;
   }
   String value;
 
@@ -35,10 +35,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         title: Text('Ad Details'),
         backgroundColor: Colors.blue[800],
       ),
-      body: StreamBuilder(
+      body: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .doc(FirebaseAuth.instance.currentUser.uid)
+              .doc(FirebaseAuth.instance.currentUser?.uid)
               .collection('adpost')
               .doc(value)
               .snapshots(),
@@ -54,7 +54,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 alignment: Alignment.centerLeft,
                 height: _hight * 0.06,
                 width: _width * 1,
-                child: Text('Order ID - ' + document['orderid']),
+                child: Text('Order ID - ' + document?['orderid']),
               ),
               Divider(
                 // height: 1,
@@ -71,9 +71,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     Container(
                       width: _width * 0.5,
                       child: Text(
-                        document['problem'] == null
+                        document?['problem'] == null
                             ? 'null'
-                            : document['problem'],
+                            : document?['problem'],
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -97,7 +97,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 child: Row(
                   children: [
                     Text(
-                      '₹' + document['money'].toString(),
+                      '₹' + (document?['money'] ?? ""),
                       style: TextStyle(fontSize: 25),
                     ),
                   ],
@@ -114,10 +114,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     currentStep: _stepperPersonalInfo.currentStep,
                     onStepTapped: (int step) =>
                         setState(() => _stepperPersonalInfo.currentStep = step),
-                    controlsBuilder: (BuildContext context,
-                            {VoidCallback onStepContinue,
-                            VoidCallback onStepCancel}) =>
-                        Container(),
+                    controlsBuilder:
+                        (BuildContext context, ControlsDetails details) =>
+                            Container(),
                     steps: <Step>[
                       Step(
                         title: Text('Ordered'),
@@ -130,8 +129,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         //   width: 100,
                         //   height: 100,
                         // ),
-                        isActive: document['orderstate'] >= 0,
-                        state: document['orderstate'] >= 0
+                        isActive: document?['orderstate'] >= 0,
+                        state: document?['orderstate'] >= 0
                             ? StepState.complete
                             : StepState.disabled,
                       ),
@@ -150,8 +149,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                     color: Colors.grey)),
                           ],
                         ),
-                        isActive: document['orderstate'] >= 1,
-                        state: document['orderstate'] >= 1
+                        isActive: document?['orderstate'] >= 1,
+                        state: document?['orderstate'] >= 1
                             ? StepState.complete
                             : StepState.disabled,
                       ),
@@ -159,8 +158,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         title: new Text('Completed'),
                         content: Text('Order Completed',
                             style: TextStyle(fontWeight: FontWeight.w600)),
-                        isActive: document['orderstate'] >= 2,
-                        state: document['orderstate'] >= 2
+                        isActive: document?['orderstate'] >= 2,
+                        state: document?['orderstate'] >= 2
                             ? StepState.complete
                             : StepState.disabled,
                       ),
@@ -170,12 +169,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 height: _hight * 0.02,
               ),
               Center(
-                child: document['orderstate'] == 2
+                child: document?['orderstate'] == 2
                     ? Container(
                         width: _width * 0.25,
                         height: _hight * 0.06,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[300])),
+                            border: Border.all(color: Colors.grey.shade300)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

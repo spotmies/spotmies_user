@@ -3,36 +3,36 @@ import 'package:flutter/services.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 class TextFieldWidget extends StatefulWidget {
-  final String text;
-  final String hint;
-  final String validateMsg;
-  final TextInputType keyBoardType;
-  final double borderRadius;
-  final Color bordercolor;
-  final double focusBorderRadius;
-  final double enableBorderRadius;
-  final Color focusBorderColor;
-  final Color enableBorderColor;
-  final double errorBorderRadius;
-  final double focusErrorRadius;
+  final String? text;
+  final String? hint;
+  final String? validateMsg;
+  final TextInputType? keyBoardType;
+  final double? borderRadius;
+  final Color? bordercolor;
+  final double? focusBorderRadius;
+  final double? enableBorderRadius;
+  final Color? focusBorderColor;
+  final Color? enableBorderColor;
+  final double? errorBorderRadius;
+  final double? focusErrorRadius;
   final Icon postIcon;
-  final Color postIconColor;
-  final Color hintColor;
-  final double hintSize;
-  final FontWeight hintWeight;
-  final Icon prefix;
-  final Color prefixColor;
-  final TextEditingController controller;
-  final Function onSubmitField;
-  final Function functionValidate;
-  final String parametersValidate;
-  final int maxLength;
-  final int maxLines;
-  final String label;
-  final List<TextInputFormatter> formatter;
+  final Color? postIconColor;
+  final Color? hintColor;
+  final double? hintSize;
+  final FontWeight? hintWeight;
+  final Icon? prefix;
+  final Color? prefixColor;
+  final TextEditingController? controller;
+  final Function? onSubmitField;
+  final Function? functionValidate;
+  final String? parametersValidate;
+  final int? maxLength;
+  final int? maxLines;
+  final String? label;
+  final List<TextInputFormatter>? formatter;
   final bool isRequired;
   final String type;
-  final bool autofocus;
+  final bool? autofocus;
 
   TextFieldWidget({
     this.text,
@@ -41,7 +41,7 @@ class TextFieldWidget extends StatefulWidget {
     this.keyBoardType,
     this.borderRadius,
     this.bordercolor,
-    this.postIcon,
+    this.postIcon = const Icon(Icons.android),
     this.postIconColor,
     this.focusBorderColor,
     this.focusBorderRadius,
@@ -85,9 +85,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             borderRadius: BorderRadius.circular(widget.borderRadius ?? 0)),
         suffixIcon: IconButton(
           onPressed: () {
-            widget.controller.clear();
+            widget.controller?.clear();
           },
-          icon: widget.postIcon ?? Icons.android,
+          icon: widget.postIcon,
           color: widget.postIconColor ?? Colors.white,
         ),
         focusedBorder: OutlineInputBorder(
@@ -141,7 +141,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         // }
       },
       onFieldSubmitted: (value) {
-        if (widget.onSubmitField != null) widget.onSubmitField();
+        if (widget.onSubmitField != null) widget.onSubmitField!();
       },
       keyboardType: widget.keyBoardType,
     );

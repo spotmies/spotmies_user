@@ -12,14 +12,14 @@ var docc;
 Future<void> docid() async {
   docc = FirebaseFirestore.instance
       .collection('users')
-      .doc(FirebaseAuth.instance.currentUser.uid)
+      .doc(FirebaseAuth.instance.currentUser?.uid)
       .collection('adpost')
       .doc();
 }
 
 class PostAdFromHome extends StatefulWidget {
   final String value;
-  PostAdFromHome({this.value});
+  PostAdFromHome({required this.value});
   @override
   _PostAdFromHomeState createState() => _PostAdFromHomeState(value);
 }
@@ -28,13 +28,13 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
   String value;
   _PostAdFromHomeState(this.value);
 
-  String service;
-  String title;
-  String upload;
-  String discription;
-  String money;
-  String state;
-  String adtime;
+  String? service;
+  String? title;
+  String? upload;
+  String? discription;
+  String? money;
+  String? state;
+  String? adtime;
   //image
   List<File> _profilepic = [];
   bool uploading = false;
@@ -42,8 +42,8 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
 
   List imageLink = [];
   //date time picker
-  DateTime pickedDate;
-  TimeOfDay pickedTime;
+  DateTime? pickedDate;
+  TimeOfDay? pickedTime;
 
   DateTime now = DateTime.now();
 
@@ -52,7 +52,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
   //dummy data for accept/reject requests condition
   String dummy = 'nothing';
   //user id
-  var uid = FirebaseAuth.instance.currentUser.uid;
+  var uid = FirebaseAuth.instance.currentUser?.uid;
   //location
   String location = 'seethammadhara,visakhapatnam';
 
@@ -138,7 +138,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey[50],
+                        color: Colors.grey.shade50,
                         spreadRadius: 3,
                         //offset: Offset.infinite,
                         blurRadius: 1,
@@ -210,7 +210,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey[50],
+                        color: Colors.grey.shade50,
                         spreadRadius: 3,
                         //offset: Offset.infinite,
                         blurRadius: 1,
@@ -252,7 +252,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey[50],
+                            color: Colors.grey.shade50,
                             spreadRadius: 3,
                             //offset: Offset.infinite,
                             blurRadius: 1,
@@ -278,10 +278,10 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                                'Date:  ${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
+                                'Date:  ${pickedDate?.day}/${pickedDate?.month}/${pickedDate?.year}',
                                 style: TextStyle(fontSize: 15)),
                             Text(
-                                'Time:  ${pickedTime.hour}:${pickedTime.minute}',
+                                'Time:  ${pickedTime?.hour}:${pickedTime?.minute}',
                                 style: TextStyle(fontSize: 15))
                           ],
                         ),
@@ -323,7 +323,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                   decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey[50],
+                          color: Colors.grey.shade50,
                           spreadRadius: 3,
                           //offset: Offset.infinite,
                           blurRadius: 1,
@@ -381,7 +381,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                   decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey[50],
+                          color: Colors.grey.shade50,
                           spreadRadius: 3,
                           // offset: Offset.infinite,
                           blurRadius: 1,
@@ -520,7 +520,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                         var orderid = await docc.id;
                         await FirebaseFirestore.instance
                             .collection('users')
-                            .doc(FirebaseAuth.instance.currentUser.uid)
+                            .doc(FirebaseAuth.instance.currentUser?.uid)
                             .collection('adpost')
                             .doc(orderid)
                             .set({
@@ -529,9 +529,9 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                           'money': this.money,
                           'posttime': this.now,
                           'scheduledate':
-                              '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
+                              '${pickedDate?.day}/${pickedDate?.month}/${pickedDate?.year}',
                           'scheduletime':
-                              '${pickedTime.hour}:${pickedTime.minute}',
+                              '${pickedTime?.hour}:${pickedTime?.minute}',
                           'userid': uid,
                           'request': dummy,
                           'orderid': orderid,
@@ -553,9 +553,9 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
                           'money': this.money,
                           'posttime': this.now,
                           'scheduledate':
-                              '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}',
+                              '${pickedDate?.day}/${pickedDate?.month}/${pickedDate?.year}',
                           'scheduletime':
-                              '${pickedTime.hour}:${pickedTime.minute}',
+                              '${pickedTime?.hour}:${pickedTime?.minute}',
                           'userid': uid,
                           'request': dummy,
                           'orderid': orderid,
@@ -579,25 +579,29 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
   }
 
   _pickedDate() async {
-    DateTime date = await showDatePicker(
-        context: context,
-        initialDate: pickedDate,
-        firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
-            DateTime.now().day - 0),
-        lastDate: DateTime(DateTime.now().year + 1));
-    if (date != null) {
-      setState(() async {
-        TimeOfDay t = await showTimePicker(
+    if (pickedDate != null) {
+      DateTime? date = await showDatePicker(
           context: context,
-          initialTime: pickedTime,
-        );
-        if (t != null) {
-          setState(() {
-            pickedTime = t;
-          });
-        }
-        pickedDate = date;
-      });
+          initialDate: pickedDate!,
+          firstDate: DateTime(DateTime.now().year - 0, DateTime.now().month - 0,
+              DateTime.now().day - 0),
+          lastDate: DateTime(DateTime.now().year + 1));
+      if (date != null) {
+        setState(() async {
+          if (pickedTime != null) {
+            TimeOfDay? t = await showTimePicker(
+              context: context,
+              initialTime: pickedTime!,
+            );
+            if (t != null) {
+              setState(() {
+                pickedTime = t;
+              });
+            }
+            pickedDate = date;
+          }
+        });
+      }
     }
   }
 
@@ -610,9 +614,11 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
     final pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
-      _profilepic.add(File(pickedFile?.path));
+      if (pickedFile != null) {
+        _profilepic.add(File(pickedFile.path));
+      }
     });
-    if (pickedFile.path == null) retrieveLostData();
+    if (pickedFile?.path == null) retrieveLostData();
   }
 
   Future<void> retrieveLostData() async {
@@ -622,7 +628,7 @@ class _PostAdFromHomeState extends State<PostAdFromHome> {
     }
     if (response.file != null) {
       setState(() {
-        _profilepic.add(File(response.file.path));
+        _profilepic.add(File(response.file!.path));
       });
     } else {
       print(response.file);

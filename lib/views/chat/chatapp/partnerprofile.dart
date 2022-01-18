@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PartnerDetails extends StatefulWidget {
   final String value;
-  PartnerDetails({this.value});
+  PartnerDetails({required this.value});
   @override
   _PartnerDetailsState createState() => _PartnerDetailsState(value);
 }
@@ -20,10 +20,10 @@ class _PartnerDetailsState extends State<PartnerDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
+      body: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .doc(FirebaseAuth.instance.currentUser.uid)
+              .doc(FirebaseAuth.instance.currentUser?.uid)
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData)
@@ -31,8 +31,8 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                 child: CircularProgressIndicator(),
               );
             var prodoc = snapshot.data;
-            print(prodoc['name']);
-            return StreamBuilder(
+            print(prodoc?['name']);
+            return StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('messaging')
                     .doc(value)
@@ -43,10 +43,10 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                       child: CircularProgressIndicator(),
                     );
                   var document = snapshot.data;
-                  var num = document['pnum'];
-                  bool isSwitch = document['revealprofile'];
+                  var num = document?['pnum'];
+                  bool isSwitch = document?['revealprofile'];
 
-                  return document['ppic'] != null
+                  return document?['ppic'] != null
                       ? CustomScrollView(
                           physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics()),
@@ -59,13 +59,12 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                               //   return Future<void>.value();
                               // },
                               pinned: true,
-                              title: Text(document['pname']),
-                              snap: false,  
+                              title: Text(document?['pname']),
+                              snap: false,
                               floating: true,
                               expandedHeight: height(context) * 0.5,
                               flexibleSpace: FlexibleSpaceBar(
                                 stretchModes: <StretchMode>[
-                                  
                                   StretchMode.zoomBackground,
                                   StretchMode.fadeTitle,
                                 ],
@@ -73,7 +72,7 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                   width: width(context) * 1,
                                   color: Colors.black,
                                   child: Image.network(
-                                    document['ppic'],
+                                    document?['ppic'],
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -100,7 +99,8 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                               'About and Phone Number',
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: width(context) * 0.05),
+                                                  fontSize:
+                                                      width(context) * 0.05),
                                             )),
                                         Container(
                                           alignment: Alignment.bottomLeft,
@@ -111,7 +111,8 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                           child: Text('Chating From',
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: width(context) * 0.05)),
+                                                  fontSize:
+                                                      width(context) * 0.05)),
                                         ),
                                         Container(
                                           alignment: Alignment.bottomLeft,
@@ -123,12 +124,13 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                               DateFormat('dd MMM, yyyy (EEE)')
                                                   .format(DateTime
                                                       .fromMillisecondsSinceEpoch(
-                                                          int.parse(document[
+                                                          int.parse(document?[
                                                               'createdAt']))),
                                               style: TextStyle(
                                                   color: Colors.grey,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: width(context) * 0.04)),
+                                                  fontSize:
+                                                      width(context) * 0.04)),
                                         ),
                                         Divider(
                                           indent: width(context) * 0.04,
@@ -153,16 +155,17 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .black,
-                                                                fontSize:
-                                                                    width(context) *
-                                                                        0.05)),
+                                                                fontSize: width(
+                                                                        context) *
+                                                                    0.05)),
                                                       ),
                                                       Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: width(context) *
+                                                        padding: EdgeInsets.only(
+                                                            left:
+                                                                width(context) *
                                                                     0.1,
-                                                                top: width(context) *
+                                                            top:
+                                                                width(context) *
                                                                     0.01),
                                                         width: double.infinity,
                                                         child: Text('Mobile',
@@ -172,9 +175,9 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize:
-                                                                    width(context) *
-                                                                        0.04)),
+                                                                fontSize: width(
+                                                                        context) *
+                                                                    0.04)),
                                                       ),
                                                     ],
                                                   ),
@@ -241,7 +244,8 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                               'Reveal My Profile',
                                               style: TextStyle(
                                                   color: Colors.blue[900],
-                                                  fontSize: width(context) * 0.05,
+                                                  fontSize:
+                                                      width(context) * 0.05,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ],
@@ -255,19 +259,20 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                               onChanged: (value) {
                                                 FirebaseFirestore.instance
                                                     .collection('messaging')
-                                                    .doc(document['id'])
+                                                    .doc(document?['id'])
                                                     .update({
                                                   'revealprofile': value,
                                                 });
-                                                if (document['uname'] == null) {
+                                                if (document?['uname'] ==
+                                                    null) {
                                                   FirebaseFirestore.instance
                                                       .collection('messaging')
-                                                      .doc(document['id'])
+                                                      .doc(document?['id'])
                                                       .update({
-                                                    'uname': prodoc['name'],
+                                                    'uname': prodoc?['name'],
                                                     'upic':
-                                                        prodoc['profilepic'],
-                                                    'unum': prodoc['num']
+                                                        prodoc?['profilepic'],
+                                                    'unum': prodoc?['num']
                                                   });
                                                 }
 
@@ -338,7 +343,8 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                               child: Text('Business address:',
                                                   style: TextStyle(
                                                       color: Colors.black,
-                                                      fontSize: width(context) * 0.05)),
+                                                      fontSize: width(context) *
+                                                          0.05)),
                                             ),
                                             Container(
                                                 // height: height(context) * 0.15,
@@ -349,11 +355,12 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                                   bottom: width(context) * 0.03,
                                                 ),
                                                 child: Text(
-                                                    document['location'],
+                                                    document?['location'],
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize:
-                                                            width(context) * 0.045)))
+                                                            width(context) *
+                                                                0.045)))
                                           ],
                                         ),
                                       ),
@@ -379,8 +386,9 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                         ),
                                         Text(
                                           'Block ' +
-                                              toBeginningOfSentenceCase(
-                                                  document['pname']),
+                                              (toBeginningOfSentenceCase(
+                                                      document?['pname']) ??
+                                                  ""),
                                           style: TextStyle(
                                               color: Colors.red,
                                               fontSize: width(context) * 0.05,
@@ -419,8 +427,9 @@ class _PartnerDetailsState extends State<PartnerDetails> {
                                           ),
                                           Text(
                                             'Report on ' +
-                                                toBeginningOfSentenceCase(
-                                                    document['pname']),
+                                                (toBeginningOfSentenceCase(
+                                                        document?['pname']) ??
+                                                    ""),
                                             style: TextStyle(
                                                 color: Colors.red,
                                                 fontSize: width(context) * 0.05,

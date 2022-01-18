@@ -20,8 +20,8 @@ import 'package:video_player/video_player.dart';
 class ChatController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
-  ChatProvider chatProvider;
-  UserDetailsProvider profileProvider;
+  late ChatProvider chatProvider;
+  late UserDetailsProvider profileProvider;
   List chatList = [];
   Map targetChat = {};
   Map partner = {};
@@ -33,9 +33,9 @@ class ChatController extends ControllerMVC {
   List imageLink = [];
   List videoLink = [];
   List audioLink = [];
-  String uuId = FirebaseAuth.instance.currentUser.uid;
+  String? uuId = FirebaseAuth.instance.currentUser?.uid;
   final picker = ImagePicker();
-  VideoPlayerController videoPlayerController;
+  late VideoPlayerController videoPlayerController;
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
@@ -108,7 +108,7 @@ class ChatController extends ControllerMVC {
     };
     Map<String, dynamic> target = {
       'pId': targetC['pId'],
-      'uId': FirebaseAuth.instance.currentUser.uid,
+      'uId': FirebaseAuth.instance.currentUser?.uid,
       'msgId': msgId,
       'ordId': targetC['ordId'],
       'incomingName': profileProvider.getUser['name'],
@@ -139,7 +139,7 @@ class ChatController extends ControllerMVC {
     dynamic response =
         await Server().editMethod(API.specificChat + msgId.toString(), body);
     chatProvider.setPersonalChatLoader(false);
-    if (response.statusCode == 200 || response.statusCode ==204) {
+    if (response.statusCode == 200 || response.statusCode == 204) {
       //need to block or delete chat here
       if (isChatDelete) {
         Navigator.pop(context);
@@ -221,17 +221,16 @@ class ChatController extends ControllerMVC {
       return;
     }
     chatProvider.setPersonalChatLoader(true);
-    dynamic response = await Server().getMethod(API.userChatsList + uuId);
+    dynamic response =
+        await Server().getMethod(API.userChatsList + (uuId ?? ""));
     chatProvider.setPersonalChatLoader(false);
-    if(response.statusCode == 200){
-    dynamic chatList = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      dynamic chatList = jsonDecode(response.body);
       chatProvider.setChatList(chatList);
       snackbar(context, "New data fetched");
-    }
-    else{
+    } else {
       snackbar(context, "Something went wrong please try again later");
     }
-
   }
 
   chooseImage(sendCallBack, String msgId) async {
@@ -244,9 +243,11 @@ class ChatController extends ControllerMVC {
       imageQuality: 10,
     );
     setState(() {
-      chatimages.add(File(pickedFile?.path));
+      if (pickedFile != null) {
+        chatimages.add(File(pickedFile.path));
+      }
     });
-    if (pickedFile.path == null) retrieveLostData();
+    if (pickedFile?.path == null) retrieveLostData();
 
     await uploadFilesLoop(msgId, fileArray: chatimages, type: "img");
     chatimages.clear();
@@ -284,9 +285,11 @@ class ChatController extends ControllerMVC {
   }
 
   pickVideo(sendCallBack, String msgId) async {
-    PickedFile pickedFile = await picker.getVideo(
+    PickedFile? pickedFile = await picker.getVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
-    chatVideo.add(File(pickedFile.path));
+    if (pickedFile != null) {
+      chatVideo.add(File(pickedFile.path));
+    }
     videoPlayerController = VideoPlayerController.file(chatVideo[0]);
     // uploadVideo(sendCallBack, msgId);
     await uploadFilesLoop(msgId, fileArray: chatVideo, type: "video");
@@ -300,7 +303,7 @@ class ChatController extends ControllerMVC {
     }
     if (response.file != null) {
       setState(() {
-        chatimages.add(File(response.file.path));
+        chatimages.add(File(response.file!.path));
       });
     } else {
       print(response.file);

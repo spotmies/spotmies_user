@@ -7,10 +7,10 @@ class Job {
   final String urlImage;
 
   const Job({
-    @required this.id,
-    @required this.job,
-    @required this.canDoWorks,
-    @required this.urlImage,
+    required this.id,
+    required this.job,
+    required this.canDoWorks,
+    required this.urlImage,
   });
 
   factory Job.fromJson(Map<String, dynamic> json) => Job(

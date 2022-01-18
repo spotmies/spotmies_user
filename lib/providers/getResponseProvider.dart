@@ -14,14 +14,11 @@ class GetResponseProvider extends ChangeNotifier {
       await localData();
     }
     if (status == true) {
-      
       await localStore();
       await localData();
       print('done all');
     }
   }
-
-
 
   localStore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,8 +29,12 @@ class GetResponseProvider extends ChangeNotifier {
 
   localData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String orderData = prefs.getString('orders');
-    List<dynamic> details = local == null ? jsonDecode(orderData) : local;
+    String? orderData = prefs.getString('orders');
+    List<dynamic> details = local == null
+        ? orderData != null
+            ? jsonDecode(orderData)
+            : null
+        : local;
     local = details;
   }
 }

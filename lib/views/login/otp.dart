@@ -25,15 +25,15 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends StateMVC<OTPScreen> {
-  LoginPageController _loginPageController;
-  UniversalProvider up;
+  late LoginPageController _loginPageController;
+  late UniversalProvider up;
   _OTPScreenState() : super(LoginPageController()) {
-    this._loginPageController = controller;
+    this._loginPageController = controller as LoginPageController;
   }
 
-  TimeProvider timerProvider;
-  Timer _timer;
-  int pinlength;
+  late TimeProvider timerProvider;
+  late Timer _timer;
+  late int pinlength;
 
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
@@ -47,13 +47,13 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   startTimer() {
     _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
       timerProvider.updateTime();
-      if (timerProvider.countDown < 2) timer?.cancel();
+      if (timerProvider.countDown < 2) timer.cancel();
     });
   }
 
   @override
   void initState() {
-    _timer?.cancel();
+    _timer.cancel();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
     up.setCurrentConstants("otp");
@@ -205,7 +205,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                   animationDuration: 99999,
                                   progressColor: Colors.indigo[50],
                                   percent: 1.0,
-                                  backgroundColor: Colors.indigo[900],
+                                  backgroundColor: Colors.indigo.shade900,
                                   center: TextWid(
                                     text: '${data.countDown}',
                                     color: Colors.indigo[900],

@@ -27,12 +27,12 @@ class PostList extends StatefulWidget {
 }
 
 class _PostListState extends StateMVC<PostList> {
-  PostsController _postsController;
-  GetOrdersProvider ordersProvider;
-  UniversalProvider up;
+  late PostsController _postsController;
+  late GetOrdersProvider ordersProvider;
+  late UniversalProvider up;
 
   _PostListState() : super(PostsController()) {
-    this._postsController = controller;
+    this._postsController = controller as PostsController;
   }
 
   @override
@@ -229,7 +229,7 @@ class _PostListState extends StateMVC<PostList> {
                                             shape: BoxShape.rectangle,
                                           ),
                                           child: (images.length == 0) ||
-                                                  checkFileType(images?.first
+                                                  checkFileType(images.first
                                                           .toString()) !=
                                                       "image"
                                               ? Icon(
@@ -283,10 +283,10 @@ class _PostListState extends StateMVC<PostList> {
                                                       ],
                                                     ),
                                                     TextWidget(
-                                                        text:
-                                                            toBeginningOfSentenceCase(
-                                                                o[index][
-                                                                    'problem']),
+                                                        text: toBeginningOfSentenceCase(o[
+                                                                    index]
+                                                                ['problem']) ??
+                                                            "",
                                                         flow: TextOverflow
                                                             .ellipsis,
                                                         size: width(context) *
@@ -316,10 +316,9 @@ class _PostListState extends StateMVC<PostList> {
                                                                   .indigo[900],
                                                           child: TextWidget(
                                                             text: o[index][
-                                                                        'responses']
-                                                                    .length
-                                                                    .toString() ??
-                                                                "0",
+                                                                    'responses']
+                                                                .length
+                                                                .toString(),
                                                             color: Colors.white,
                                                             size:
                                                                 width(context) *
