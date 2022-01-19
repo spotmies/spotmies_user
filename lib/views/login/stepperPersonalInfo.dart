@@ -76,13 +76,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 Text('Back'),
                               ],
                             ),
-<<<<<<< HEAD
-                            onPressed: () {
-                              controlsDetails.onStepCancel();
-                            },
-=======
                             onPressed: controlsDetails.onStepCancel,
->>>>>>> 11e65545464353d5c481ae02c99890ab8ae0536f
                             style: ButtonStyle(
                               backgroundColor: _stepperPersonalInfo
                                           .currentStep >
@@ -126,13 +120,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             : Container(
                                 width: width(context) * 0.35,
                                 child: ElevatedButton(
-<<<<<<< HEAD
-                                  onPressed: () {
-                                    controlsDetails.onStepContinue();
-                                  },
-=======
                                   onPressed: controlsDetails.onStepContinue,
->>>>>>> 11e65545464353d5c481ae02c99890ab8ae0536f
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,

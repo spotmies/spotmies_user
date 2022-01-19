@@ -168,7 +168,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             color: messageColorTheme(sender)[1],
             weight: sender == "partner" ? FontWeight.w600 : FontWeight.w600,
           );
-          break;
+
         case 'img':
           return InkWell(
               onTap: () {
@@ -184,7 +184,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       image: DecorationImage(
                           image: NetworkImage(message), fit: BoxFit.cover))));
 
-          break;
         case 'video':
           return TextButton(
               onPressed: () {
@@ -209,7 +208,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                       decoration: TextDecoration.underline),
                 ],
               ));
-          break;
+
         case 'audio':
           return TextButton(
               onPressed: () {
@@ -245,7 +244,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             color: messageColorTheme(sender)[1],
             weight: sender == "user" ? FontWeight.w600 : FontWeight.w600,
           );
-          break;
+
         default:
           return TextWid(
             text: message,
@@ -508,7 +507,6 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         case 3:
           return Icons.done_all;
 
-          break;
         default:
           return Icons.done;
       }

@@ -265,7 +265,7 @@ Container mediaContent(file, {bool isOnline = false}) {
                     : NetworkImage(file) as ImageProvider,
                 fit: BoxFit.cover)),
       );
-      break;
+
     case "audio":
       return Container(
         color: Colors.grey[800],
@@ -276,7 +276,7 @@ Container mediaContent(file, {bool isOnline = false}) {
           color: Colors.grey[100],
         ),
       );
-      break;
+
     case "video":
       return Container(
         color: Colors.grey[800],
@@ -287,13 +287,12 @@ Container mediaContent(file, {bool isOnline = false}) {
           color: Colors.grey[100],
         ),
       );
-      break;
+
     default:
       return Container(
         color: Colors.grey[400],
         alignment: Alignment.center,
         child: TextWidget(text: "undefined"),
       );
-      break;
   }
 }

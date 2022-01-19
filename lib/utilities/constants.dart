@@ -82,23 +82,23 @@ orderStateIcon({ordState = 0}) {
   switch (orderState) {
     case 0:
       return Icons.pending_actions;
-      break;
+
     case 1:
       return Icons.stop_circle;
-      break;
+
     case 2:
       return Icons.update;
-      break;
+
     case 8:
       return Icons.run_circle_rounded;
-      break;
+
     case 9:
     case 10:
       return Icons.verified_rounded;
-      break;
+
     case 3:
       return Icons.cancel;
-      break;
+
     default:
       return Icons.search;
   }
@@ -140,7 +140,6 @@ messageColorTheme(String sender) {
       return [Colors.grey[900], Colors.grey[50]];
     default:
       return [Colors.grey[900], Colors.grey[50]];
-      break;
   }
 }
 
@@ -149,16 +148,16 @@ typeofLastMessage(String type, String lastMessage, String data) {
     switch (type) {
       case 'text':
         return lastMessage;
-        break;
+
       case 'img':
         return 'Image File';
-        break;
+
       case 'video':
         return 'Video File';
-        break;
+
       case 'audio':
         return 'Audio File';
-        break;
+
       case "call":
         return "call";
       default:
@@ -168,16 +167,15 @@ typeofLastMessage(String type, String lastMessage, String data) {
     switch (type) {
       case 'text':
         return Icons.textsms;
-        break;
+
       case 'img':
         return Icons.image;
-        break;
+
       case 'video':
         return Icons.slow_motion_video;
-        break;
+
       case 'audio':
         return Icons.mic;
-        break;
       case 'call':
         return Icons.call;
       default:

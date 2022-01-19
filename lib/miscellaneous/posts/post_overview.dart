@@ -114,15 +114,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     currentStep: _stepperPersonalInfo.currentStep,
                     onStepTapped: (int step) =>
                         setState(() => _stepperPersonalInfo.currentStep = step),
-<<<<<<< HEAD
-                    controlsBuilder: (BuildContext context,
-                            ControlsDetails controlsDetails) =>
-                        Container(),
-=======
                     controlsBuilder:
                         (BuildContext context, ControlsDetails details) =>
                             Container(),
->>>>>>> 11e65545464353d5c481ae02c99890ab8ae0536f
                     steps: <Step>[
                       Step(
                         title: Text('Ordered'),

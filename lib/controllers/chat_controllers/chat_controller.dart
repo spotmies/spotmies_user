@@ -269,7 +269,6 @@ class ChatController extends ControllerMVC {
         case "video":
           return ".mp4";
 
-          break;
         default:
           return ".jpg";
       }

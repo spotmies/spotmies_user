@@ -58,8 +58,6 @@ bottomOptionsMenu(context,
                             case 3:
                               if (option4Click != null) option4Click();
                               break;
-
-                              break;
                             default:
                           }
                           // Navigator.pop(context);

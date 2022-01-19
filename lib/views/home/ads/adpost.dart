@@ -63,7 +63,6 @@ class _PostAdState extends StateMVC<PostAd> {
         case 3:
           return onSuccess(height(context), width(context), context);
 
-          break;
         default:
           break;
       }

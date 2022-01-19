@@ -48,7 +48,6 @@ class _CallingUiState extends State<CallingUi> {
         return "Connected";
       case 6:
         return "Terminated....";
-        break;
       default:
         return "connecting...";
     }
