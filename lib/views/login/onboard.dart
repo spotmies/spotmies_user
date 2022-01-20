@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies/models/onboardingModel.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/views/call_ui/audioCallWithImage/size.config.dart';
 import 'package:spotmies/views/login/loginpage.dart';
-import 'package:spotmies/miscellaneous/model/config.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/models/rating_model.dart';
 import 'package:spotmies/views/reusable_widgets/rating/rating_button.dart';

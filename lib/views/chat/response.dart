@@ -1,14 +1,17 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart';
+import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
@@ -22,17 +25,16 @@ class Responsee extends StatefulWidget {
 }
 
 class _ResponseeState extends StateMVC<Responsee> {
-  late ResponsiveController _responsiveController;
-  late ResponsesProvider responseProvider;
-  late UniversalProvider up;
-
-  _ResponseeState() : super(ResponsiveController()) {
-    this._responsiveController = controller as ResponsiveController;
-  }
+  ResponsiveController? _responsiveController = ResponsiveController();
+  ResponsesProvider? responseProvider;
+  UniversalProvider? up;
+  ChatProvider? chatProvider;
+  UserDetailsProvider? profileProvider;
+  GetOrdersProvider? ordersProvider;
 
   void chatWithPatner(responseData) {
-    //need display circular indicator with z index
-    _responsiveController.chatWithpatner(responseData);
+    _responsiveController?.chatWithpatner(
+        responseData, context, responseProvider, chatProvider);
   }
 
   @override
@@ -41,7 +43,38 @@ class _ResponseeState extends StateMVC<Responsee> {
     up = Provider.of<UniversalProvider>(context, listen: false);
 
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
-    up.setCurrentConstants("responses");
+
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+    up?.setCurrentConstants("responses");
+    //address
+
+    responseProvider?.addListener(() {
+      if ((responseProvider?.acceptOrRejectResponsesQueue.length)! > 0) {
+        dynamic queueData = responseProvider?.acceptOrRejectResponsesQueue[0];
+        dynamic targetResponse = responseProvider?.getResponseByordIdAndPid(
+            ordId: queueData['ordId'], pId: queueData['pId']);
+        log("targetresp $targetResponse  $queueData");
+        if (targetResponse == null) {
+          snackbar(context, "something went wrong");
+          log("something went wrong");
+          responseProvider?.resetResponsesQueue();
+          return;
+        }
+        responseProvider?.resetResponsesQueue();
+        _responsiveController?.acceptOrRejectResponse(
+            targetResponse,
+            queueData['responseType'],
+            context,
+            responseProvider,
+            profileProvider,
+            chatProvider,
+            ordersProvider);
+      }
+      ;
+    });
+
     // log(_chatController.data.toString());
   }
 
@@ -53,21 +86,24 @@ class _ResponseeState extends StateMVC<Responsee> {
     //     kToolbarHeight;
     // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
-        key: _responsiveController.scaffoldkey,
+        key: _responsiveController?.scaffoldkey,
         body: Consumer<ResponsesProvider>(builder: (context, data, child) {
           List listResponse = data.getResponsesList;
           // if (data.loader) return Center(child: profileShimmer(context));
           if (listResponse.length < 1)
             return Center(
               child: TextWid(
-                text: up.getText("no_responses"),
+                text: up?.getText("no_responses"),
                 size: width(context) * 0.045,
               ),
             );
           return Stack(children: [
             Container(
               child: RefreshIndicator(
-                onRefresh: _responsiveController.fetchNewResponses,
+                onRefresh: () async {
+                  await _responsiveController?.fetchNewResponses(
+                      context, responseProvider);
+                },
                 color: Colors.white,
                 backgroundColor: Colors.indigo[900],
                 child: ListView.builder(
@@ -90,7 +126,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                   height(context),
                                   width(context),
                                   pDetails,
-                                  _responsiveController,
+                                  _responsiveController!,
                                   responseData,
                                   chatWithPatner, onClick: () {
                                 // Navigator.of(context).psu
@@ -140,7 +176,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             TextWidget(
-                                              text: _responsiveController.jobs
+                                              text: _responsiveController?.jobs
                                                   .elementAt(ord['job']),
                                               color: Colors.indigo[900],
                                               size: width(context) * 0.035,
@@ -257,10 +293,12 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                   child: IconButton(
                                                       onPressed: () {
                                                         _responsiveController
-                                                            .deleteResponse(
+                                                            ?.deleteResponse(
                                                                 responseData[
                                                                         'responseId']
-                                                                    .toString());
+                                                                    .toString(),
+                                                                context,
+                                                                responseProvider);
                                                       },
                                                       icon: Icon(
                                                         Icons.delete_sweep,
@@ -287,8 +325,15 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                   Colors.indigo[50],
                                               onClick: () {
                                                 _responsiveController
-                                                    .acceptOrRejectResponse(
-                                                        responseData, "reject");
+                                                    ?.acceptOrRejectResponse(
+                                                  responseData,
+                                                  "reject",
+                                                  context,
+                                                  responseProvider,
+                                                  profileProvider,
+                                                  chatProvider,
+                                                  ordersProvider,
+                                                );
                                               },
                                             ),
                                             ElevatedButtonWidget(
@@ -303,8 +348,15 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                   Colors.indigo[900],
                                               onClick: () {
                                                 _responsiveController
-                                                    .acceptOrRejectResponse(
-                                                        responseData, "accept");
+                                                    ?.acceptOrRejectResponse(
+                                                  responseData,
+                                                  "accept",
+                                                  context,
+                                                  responseProvider,
+                                                  profileProvider,
+                                                  chatProvider,
+                                                  ordersProvider,
+                                                );
                                               },
                                             )
                                           ],

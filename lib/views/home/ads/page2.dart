@@ -8,7 +8,6 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/media_player.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';
-import 'package:spotmies/views/reusable_widgets/image_viewer.dart';
 import 'package:spotmies/views/reusable_widgets/steps.dart';
 
 Widget page2(double hight, double width, BuildContext context,
@@ -226,7 +225,7 @@ Widget page2(double hight, double width, BuildContext context,
                     ),
                     ElevatedButtonWidget(
                       onClick: () async {
-                        await adController.step1();
+                        await adController.step1(context);
                       },
                       buttonName: 'Next',
                       bgColor: Colors.indigo[900],

@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
 import 'package:path_provider/path_provider.dart';
 // import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/reusable_widgets/flutter_audio_recorder.dart';
 
 Future audioRecoder(
     BuildContext context, double hight, double width, dynamic adController,
@@ -224,7 +224,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     setState(() {});
   }
 
-  void _onPlayButtonPressed(String message) {
+  void _onPlayButtonPressed(String? message) {
     if (!_isPlaying) {
       _isPlaying = true;
 

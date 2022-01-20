@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/chat_provider.dart';
@@ -20,8 +19,8 @@ import 'package:video_player/video_player.dart';
 class ChatController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
-  late ChatProvider chatProvider;
-  late UserDetailsProvider profileProvider;
+  // late ChatProvider chatProvider;
+  // late UserDetailsProvider profileProvider;
   List chatList = [];
   Map targetChat = {};
   Map partner = {};
@@ -36,24 +35,24 @@ class ChatController extends ControllerMVC {
   String? uuId = FirebaseAuth.instance.currentUser?.uid;
   final picker = ImagePicker();
   late VideoPlayerController videoPlayerController;
-  @override
-  void initState() {
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
-    log("<<<<<<<<<<chat controller initiated>>>>>>>>>>>");
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   chatProvider = Provider.of<ChatProvider>(context, listen: false);
+  //   profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+  //   log("<<<<<<<<<<chat controller initiated>>>>>>>>>>>");
+  //   super.initState();
+  // }
 
-  cardOnClick(msgId, msgId2, readReceiptObj) {
+  cardOnClick(msgId, msgId2, readReceiptObj,ChatProvider? chatProvider) {
     log("$msgId $msgId2");
     if (readReceiptObj != "" &&
-        chatProvider.getChatDetailsByMsgId(msgId)['uCount'] > 0) {
+        chatProvider?.getChatDetailsByMsgId(msgId)['uCount'] > 0) {
       log("readdd////////////////////");
-      chatProvider.setReadReceipt(readReceiptObj);
+      chatProvider?.setReadReceipt(readReceiptObj);
     }
-    chatProvider.setMsgCount(20);
-    chatProvider.resetMessageCount(msgId);
-    chatProvider.setMsgId(msgId2);
+    chatProvider?.setMsgCount(20);
+    chatProvider?.resetMessageCount(msgId);
+    chatProvider?.setMsgId(msgId2);
   }
 
   dateCompare(msg1, msg2) {
@@ -86,12 +85,12 @@ class ChatController extends ControllerMVC {
     return currentChatData[0];
   }
 
-  sendMessageHandler(msgId, value,
+  sendMessageHandler(msgId, value,BuildContext context,ChatProvider? chatProvider,UserDetailsProvider? profileProvider,
       {String sender: "user",
       String action: "",
       dynamic chatDetails,
       String type: "text"}) {
-    if (chatProvider.personalChatLoader) {
+    if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
     }
@@ -111,8 +110,8 @@ class ChatController extends ControllerMVC {
       'uId': FirebaseAuth.instance.currentUser?.uid,
       'msgId': msgId,
       'ordId': targetC['ordId'],
-      'incomingName': profileProvider.getUser['name'],
-      'incomingProfile': profileProvider.getUser['pic'],
+      'incomingName': profileProvider?.getUser['name'],
+      'incomingProfile': profileProvider?.getUser['pic'],
       'deviceToken': [targetC['pDetails']['partnerDeviceToken']]
       // 'deviceToken':['dVMBmjRYQTSXm0twrxhQ5p:APA91bH-tfbTwRZGRLRwYxmrYOiJ8tA6WxHhyGkAKv8NxPUCs9Z_uIjmITGjyxwzrQjT60AVdcDCi2f5Juo249VrakEoKTf8242iLmvceCB2ik2gzc4Y9pYJH-drcX2A1vtcPwlMPtwJ']
     };
@@ -128,8 +127,8 @@ class ChatController extends ControllerMVC {
     // scrollToBottom();
   }
 
-  deleteOrBlockThisChat(msgId, {bool isChatDelete = false}) async {
-    if (chatProvider.personalChatLoader) {
+  deleteOrBlockThisChat(msgId,BuildContext context ,ChatProvider?chatProvider,{bool isChatDelete = false}) async {
+    if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
     }
@@ -155,7 +154,7 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  chatStreamSocket(targetChat,
+  chatStreamSocket(targetChat,ChatProvider? chatProvider,
       {typeOfAction: "disable", revealProfile: "true"}) {
     Map<String, Object> sendPayload = {
       "uId": targetChat['uId'],
@@ -169,12 +168,12 @@ class ChatController extends ControllerMVC {
     if (typeOfAction == "revealProfile")
       sendPayload['revealProfile'] = revealProfile;
 
-    chatProvider.setSendMessage(sendPayload);
+    chatProvider?.setSendMessage(sendPayload);
     // chatProvider.disableChatByMsgId(targetChat['msgId']);
   }
 
-  revealProfile(chatDetails, {bool revealProfile = true}) async {
-    if (chatProvider.personalChatLoader) {
+  revealProfile(chatDetails,BuildContext context,ChatProvider? chatProvider, {bool revealProfile = true}) async {
+    if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
     }
@@ -215,8 +214,8 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  Future fetchNewChatList() async {
-    if (chatProvider.personalChatLoader) {
+  Future fetchNewChatList(BuildContext context ,ChatProvider ? chatProvider) async {
+    if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
     }
@@ -233,7 +232,8 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  chooseImage(sendCallBack, String msgId) async {
+  chooseImage(sendCallBack, String msgId,ChatProvider? chatProvider,
+      BuildContext context, UserDetailsProvider? profileProvider) async {
     if (imageLink.length != 0) {
       await imageLink.removeAt(0);
       chatimages.removeAt(0);
@@ -249,16 +249,19 @@ class ChatController extends ControllerMVC {
     });
     if (pickedFile?.path == null) retrieveLostData();
 
-    await uploadFilesLoop(msgId, fileArray: chatimages, type: "img");
+    await uploadFilesLoop(msgId, context, chatProvider, profileProvider, fileArray: chatimages, type: "img");
     chatimages.clear();
   }
 
-  uploadAudioFiles(File audioFile) async {
+  uploadAudioFiles(File audioFile,
+    ChatProvider? chatProvider
+    ,BuildContext context, UserDetailsProvider? profileProvider
+  ) async {
     log("audio is $audioFile");
-    await uploadFilesLoop(currentMsgId, fileArray: [audioFile], type: "audio");
+    await uploadFilesLoop(currentMsgId, context,  chatProvider, profileProvider ,fileArray: [audioFile], type: "audio",);
   }
 
-  Future<void> uploadFilesLoop(String msgId,
+  Future<void> uploadFilesLoop(String msgId,BuildContext context, ChatProvider? chatProvider,UserDetailsProvider? profileProvider,
       {fileArray, String type = "img"}) async {
     String extensionType() {
       switch (type) {
@@ -275,15 +278,17 @@ class ChatController extends ControllerMVC {
     }
 
     fileArray.forEach((imgFile) async {
-      chatProvider.setPersonalChatLoader(true, text: "Sending Files");
+      chatProvider?.setPersonalChatLoader(true, text: "Sending Files");
       String uploadedFile = await uploadFilesToCloud(imgFile,
           fileType: extensionType(), cloudLocation: "chatMedia");
-      chatProvider.setPersonalChatLoader(false);
-      sendMessageHandler(msgId, uploadedFile, type: type);
+      chatProvider?.setPersonalChatLoader(false);
+      sendMessageHandler(msgId, uploadedFile,context,chatProvider,profileProvider, type: type);
     });
   }
 
-  pickVideo(sendCallBack, String msgId) async {
+  pickVideo(sendCallBack, String msgId,
+    ChatProvider? chatProvider
+    ,BuildContext context, UserDetailsProvider? profileProvider) async {
     PickedFile? pickedFile = await picker.getVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     if (pickedFile != null) {
@@ -291,7 +296,7 @@ class ChatController extends ControllerMVC {
     }
     videoPlayerController = VideoPlayerController.file(chatVideo[0]);
     // uploadVideo(sendCallBack, msgId);
-    await uploadFilesLoop(msgId, fileArray: chatVideo, type: "video");
+    await uploadFilesLoop(msgId,context,  chatProvider, profileProvider,  fileArray: chatVideo, type: "video");
     chatVideo.clear();
   }
 

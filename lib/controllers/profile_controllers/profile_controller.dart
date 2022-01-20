@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:share/share.dart';
@@ -60,17 +59,17 @@ class ProfileController extends ControllerMVC {
   List routes = [];
   String? uuId = FirebaseAuth.instance.currentUser?.uid;
 
-  editProfile() {
+  editProfile(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => Setting()));
   }
 
-  help() {
+  help(BuildContext context) {
     return Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => HelpAndSupport()));
   }
 
-  privacy() {
+  privacy(BuildContext context) {
     return Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => PrivacyPolicyWebView()));
   }
@@ -128,7 +127,7 @@ class ProfileController extends ControllerMVC {
     }
   }
 
-  signout() async {
+  signout(BuildContext context) async {
     await FirebaseAuth.instance.signOut().then((action) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPageScreen()));

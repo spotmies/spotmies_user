@@ -1,8 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -267,7 +265,8 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                             onPressed: () {
                               // _loginPageController.dataToOTP();
                               if (data.loader) return;
-                              _loginPageController.dataToOTP();
+                              _loginPageController.dataToOTP(
+                                  context, timerProvider);
                             })
 
                         // child: ElevatedButton(

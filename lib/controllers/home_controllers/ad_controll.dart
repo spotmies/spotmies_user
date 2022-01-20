@@ -1,16 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
@@ -20,6 +16,7 @@ import 'package:spotmies/utilities/addressExtractor.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/uploadFilesToCloud.dart';
+import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -28,20 +25,12 @@ class AdController extends ControllerMVC {
   var formkey = GlobalKey<FormState>();
   TextEditingController problem = TextEditingController();
   final controller = TestController();
-  late GetOrdersProvider ordersProvider;
   String? uuId = FirebaseAuth.instance.currentUser?.uid.toString();
-  // int currentStep = 0;
   GlobalKey<PageSliderState> sliderKey = GlobalKey();
 
-  // String service;
   String title = "";
   late String time;
-  // String upload;
-  // String discription;
-  late String money;
-  // String state;
-  // String adtime;
-  // File _profilepic;
+  late String? money;
   List<File> serviceImages = [];
   List<String> serviceImagesStrings = [];
   bool uploading = false;
@@ -56,7 +45,7 @@ class AdController extends ControllerMVC {
   DateTime now = DateTime.now();
 
   // drop down menu for service type
-  int dropDownValue = 0;
+  int? dropDownValue = 0;
   //dummy data for accept/reject requests condition
   String dummy = 'nothing';
   //user id
@@ -98,42 +87,6 @@ class AdController extends ControllerMVC {
     this.adModel = AdModel();
   }
 
-  Future<void> docid() async {
-    docc = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .collection('adpost')
-        .doc();
-  }
-
-  // Future servicePost() async {
-  //   try {
-  //     var response = await http.post(
-  //         Uri.https('spotmiesserver.herokuapp.com', 'api/order/Create-Ord'),
-  //         body: {
-  //           "problem": this.title,
-  //           "job": this.dropDownValue.toString(),
-  //           "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
-  //           "ordState": 0.toString(),
-  //           "join": DateTime.now().millisecondsSinceEpoch.toString(),
-  //           "schedule": pickedDate.millisecondsSinceEpoch.toString(),
-  //           "uId": FirebaseAuth.instance.currentUser.uid,
-  //           "money": this.money,
-  //           "loc.0": latitude.toString(),
-  //           "loc.1": longitude.toString(),
-  //           "media": imageLink.toString(),
-  //         });
-
-  //     if (response.statusCode == 200) {
-  //       String responseString = response?.body;
-  //       print(responseString);
-  //       return dataModelFromJson(responseString);
-  //     } else
-  //       return null;
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   //function for location
   void getCurrentLocation() async {
@@ -154,15 +107,6 @@ class AdController extends ControllerMVC {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
-
-    getAddressofLocation();
-    pickedDate = DateTime.now();
-    pickedTime = TimeOfDay.now();
-  }
 
   getAddressofLocation({double? lat, double? long}) async {
     log('message');
@@ -170,7 +114,7 @@ class AdController extends ControllerMVC {
         desiredAccuracy: LocationAccuracy.high);
     final coordinates = (lat == null && long == null)
         ? Coordinates(position.latitude, position.longitude)
-        : Coordinates(lat, long);
+        : Coordinates(lat!, long!);
     var addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     log("address ${addresses.first.subLocality}");
@@ -281,33 +225,10 @@ class AdController extends ControllerMVC {
       imageLink.add(downloadLink);
     }
 
-    // int i = 1;
+    }
 
-    // for (var img in serviceImages) {
-    //   setState(() {
-    //     val = i / serviceImages.length;
-    //   });
-    //   var postImageRef = FirebaseStorage.instance.ref().child('adImages');
-    //   UploadTask uploadTask =
-    //       postImageRef.child(DateTime.now().toString() + ".jpg").putFile(img);
-    //   await (await uploadTask)
-    //       .ref
-    //       .getDownloadURL()
-    //       .then((value) => imageLink.add(value.toString()));
-    //   i++;
-    // }
-  }
-
-  // step2() {
-  //   setState(() {
-  //     if (longitude != '' || pickedTime != null) {
-  //       wid = wid + 1;
-  //     }
-  //   });
-  // }
-
-  step1() {
-    if (dropDownValue == null || dropDownValue < 0) {
+  step1(BuildContext context) {
+    if (dropDownValue == null || dropDownValue! < 0) {
       snackbar(context, 'Please select service type');
       return;
     }
@@ -322,10 +243,10 @@ class AdController extends ControllerMVC {
     });
   }
 
-  step3(userDetails) {
+  step3(userDetails,BuildContext context,GetOrdersProvider ordersProvider) {
     isUploading = 1;
     refresh();
-    adbutton(userDetails);
+    adbutton(userDetails,context,ordersProvider);
   }
 
   updateLocations(lat, log, fulladdress) {
@@ -342,7 +263,7 @@ class AdController extends ControllerMVC {
     return pickedDateTime.millisecondsSinceEpoch.toString();
   }
 
-  adbutton(userDetails) async {
+  adbutton(userDetails,BuildContext context,GetOrdersProvider ordersProvider) async {
     await uploadServiceMedia();
     // String images = imageLink.toString();
     CircularProgressIndicator();
@@ -387,59 +308,6 @@ class AdController extends ControllerMVC {
         snackbar(context, 'Bad Request');
       }
     });
-  }
-
-  buttonFromHome() async {
-    docid();
-    await uploadServiceMedia();
-    var orderid = await docc.id;
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .collection('adpost')
-        .doc(orderid)
-        .set({
-      'problem': this.dropDownValue,
-      'job': this.title,
-      'money': this.money,
-      'posttime': this.now,
-      'scheduledate': DateFormat('dd MMM yyyy').format(
-          (DateTime.fromMillisecondsSinceEpoch(
-              (pickedDate.millisecondsSinceEpoch)))),
-      'scheduletime': '${pickedTime.format(context)}',
-      'userid': uid,
-      'request': dummy,
-      'orderid': orderid,
-      'media': FieldValue.arrayUnion(imageLink),
-      'location': {
-        'latitude': latitude,
-        'longitude': longitude,
-        // 'add1': add3,
-      },
-      'orderstate': 0,
-    });
-
-    await FirebaseFirestore.instance.collection('allads').doc(orderid).set({
-      'job': this.dropDownValue,
-      'problem': this.title,
-      'money': this.money,
-      'posttime': this.now,
-      'scheduledate': DateFormat('dd MMM yyyy').format(
-          (DateTime.fromMillisecondsSinceEpoch(
-              (pickedDate.millisecondsSinceEpoch)))),
-      'scheduletime': '${pickedTime.format(context)}',
-      'userid': uid,
-      'request': dummy,
-      'orderid': orderid,
-      'media': FieldValue.arrayUnion(imageLink),
-      'location': {
-        'latitude': latitude,
-        'longitude': longitude,
-        // 'add1': add3,
-      },
-      'orderstate': 0,
-    });
-    Navigator.pop(context);
   }
 
   Future<bool?> dialogTrrigger(BuildContext context) async {

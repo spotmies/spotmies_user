@@ -1,12 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/model.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/chat_provider.dart';
@@ -14,12 +10,13 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/maps/maps.dart';
+import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
 
 class PostOverViewController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   TextEditingController problem = TextEditingController();
-  late ChatProvider chatProvider;
-  late GetOrdersProvider ordersProvider;
+  // late ChatProvider chatProvider;
+  // late GetOrdersProvider ordersProvider;
   String? title;
   int dropDownValue = 0;
   dynamic orderDetails = {};
@@ -27,50 +24,57 @@ class PostOverViewController extends ControllerMVC {
   late DateTime pickedDate;
   late TimeOfDay pickedTime;
 
-  @override
-  void initState() {
-    super.initState();
-    chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   chatProvider = Provider.of<ChatProvider>(context, listen: false);
+  //   ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
 
-    // getAddressofLocation();
-  }
+  //   // getAddressofLocation();
+  // }
 
-  isOrderCompleted(String money, String orderID) async {
+  isOrderCompleted(String money, String orderID,BuildContext context,
+      GetOrdersProvider ordersProvider) async {
     Map<String, String> body = {"orderState": "9", "moneyGivenByUser": money};
     dynamic response = await Server().editMethod(API.editOrder + orderID, body);
     if (response.statusCode == 200 || response.statusCode == 204) {
       snackbar(context, "Your order completed now");
-      await getOrderAndUpdate(orderID);
+      await getOrderAndUpdate(orderID, ordersProvider);
     } else {
       snackbar(context, "Something went wrong try again later");
     }
   }
 
-  Future<void> getOrderAndUpdate(orderID) async {
+  Future<void> getOrderAndUpdate(orderID, GetOrdersProvider? ordersProvider) async {
     dynamic response2 =
         await Server().getMethod(API.confirmOrder + orderID.toString());
     if (response2.statusCode == 200) {
       dynamic updatedOrder = jsonDecode(response2.body);
-      ordersProvider.updateOrderById(
+      ordersProvider?.updateOrderById(
           ordId: updatedOrder['ordId'], orderData: updatedOrder);
     }
   }
 
   Widget editAttributes(String field, String ordId, job, money, schedule,
-      Coordinates coordinates) {
+      Coordinates coordinates,BuildContext context,
+      GetOrdersProvider? ordersProvider) {
     return InkWell(
       onTap: () {
         if (field == 'problem') {
           editDialogue(
             'problem',
             ordId,
+            context,
+            ordersProvider
+
           );
         }
         if (field == 'amount') {
           editDialogue(
             'amount',
             ordId,
+            context,
+            ordersProvider
           );
         }
         if (field == 'Schedule') {
@@ -173,7 +177,8 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
-  Future chatWithpatner(responseData) async {
+  Future chatWithpatner(responseData,BuildContext context,
+      GetOrdersProvider ordersProvider,ChatProvider chatProvider) async {
     if (ordersProvider.orderViewLoader) return;
 
     String ordId = responseData['ordId'].toString();
@@ -223,6 +228,8 @@ class PostOverViewController extends ControllerMVC {
   editDialogue(
     edit,
     String ordId,
+    BuildContext context, GetOrdersProvider? ordersProvider,
+    
   ) {
     final hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
@@ -348,7 +355,7 @@ class PostOverViewController extends ControllerMVC {
   }
 
   static const dummyLocation = {"lat": 0.00, "log": 0.00};
-  rescheduleServiceOrCancel(orderState, orderId,
+  rescheduleServiceOrCancel(orderState, orderId, GetOrdersProvider ordersProvider,
       {isReschedule = true,
       Map<String, double> updatedCoordinate = dummyLocation,
       dynamic updatedAddress,
@@ -384,7 +391,9 @@ class PostOverViewController extends ControllerMVC {
     ordersProvider.setOrderViewLoader(false);
     if (response != null) {
       ordersProvider.setOrderViewLoader(true);
-      await getOrderAndUpdate(orderId);
+      await getOrderAndUpdate(orderId,
+        ordersProvider,
+      );
       ordersProvider.setOrderViewLoader(false);
     }
   }
@@ -394,7 +403,7 @@ class PostOverViewController extends ControllerMVC {
     await updateOrder(body: body, ordId: ordId);
   }
 
-  submitReview(int rating, String comment) async {
+  submitReview(int rating, String comment, GetOrdersProvider? ordersProvider,BuildContext context) async {
     log(rating.toString());
     log(comment);
     String mappedRating = (rating * 20).toString();
@@ -413,7 +422,7 @@ class PostOverViewController extends ControllerMVC {
     //  log("body $body");
     dynamic newbody = orderDetails;
     newbody['orderState'] = 10;
-    ordersProvider.updateOrderById(ordId: newbody['ordId'], orderData: newbody);
+    ordersProvider?.updateOrderById(ordId: newbody['ordId'], orderData: newbody);
     bool resp = await feedbackOrder(body: body);
     if (resp) {
       Map<String, String> body = {"orderState": "10"};
@@ -423,13 +432,13 @@ class PostOverViewController extends ControllerMVC {
         snackbar(context, "Thank you for your feedback");
       } else {
         newbody['orderState'] = 9;
-        ordersProvider.updateOrderById(
+        ordersProvider?.updateOrderById(
             ordId: newbody['ordId'], orderData: newbody);
         snackbar(context, "Something went wrong");
       }
     } else {
       newbody['orderState'] = 9;
-      ordersProvider.updateOrderById(
+      ordersProvider?.updateOrderById(
           ordId: newbody['ordId'], orderData: newbody);
       snackbar(context, "Something went wrong");
     }
@@ -476,7 +485,7 @@ class PostOverViewController extends ControllerMVC {
   //   }
   // }
 
-  List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
+  // List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
   List icons = [
     Icons.pending_actions,
     Icons.run_circle_rounded,

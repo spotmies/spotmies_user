@@ -8,7 +8,6 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/profile/editDetailsBS.dart';
 // import 'package:spotmies/views/profile/editDetailsBS.dart';
-import 'package:spotmies/views/profile/feedBack.dart';
 import 'package:spotmies/views/profile/help&supportBS.dart';
 import 'package:spotmies/views/profile/orderHistoryBS.dart';
 import 'package:spotmies/views/profile/privacyPolicies.dart';

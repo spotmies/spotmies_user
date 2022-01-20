@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -85,7 +82,9 @@ class _PostListState extends StateMVC<PostList> {
                 );
 
               return RefreshIndicator(
-                onRefresh: _postsController.getOrderFromDB,
+                onRefresh: ()async{
+                 await _postsController.getOrderFromDB(context);
+                },
                 child: ListView.builder(
                     itemCount: o.length,
                     itemBuilder: (BuildContext ctxt, int index) {

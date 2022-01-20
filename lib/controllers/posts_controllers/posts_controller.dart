@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/apiCalls/testController.dart';
@@ -45,13 +43,13 @@ class PostsController extends ControllerMVC {
     'Drivers',
     'Events'
   ];
-  List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
-  @override
-  void initState() {
-    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
+  // List state = ['Waiting for confirmation', 'Ongoing', 'Completed'];
+  // @override
+  // void initState() {
+  //   ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
   getAddressofLocation(addresses) async {
     // Position position = await Geolocator.getCurrentPosition(
@@ -61,7 +59,7 @@ class PostsController extends ControllerMVC {
     return Text(addresses.first.locality.toString());
   }
 
-  Future getOrderFromDB() async {
+  Future getOrderFromDB(BuildContext context) async {
     var response = await Server().getMethod(API.getOrders + (uuId ?? ""));
     if (response.statusCode == 200) {
       var ordersList = jsonDecode(response.body);

@@ -102,7 +102,7 @@ class _VideoState extends State<VideoPlayerWid> {
 }
 
 class VideoPlayerWidget extends StatelessWidget {
-  final VideoPlayerController controller;
+  final VideoPlayerController? controller;
 
   const VideoPlayerWidget({
     Key? key,
@@ -111,20 +111,20 @@ class VideoPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      controller != null && controller.value.isInitialized
+      controller != null && controller!.value.isInitialized
           ? Container(alignment: Alignment.topCenter, child: buildVideo())
           : Container(child: circleProgress());
 
   Widget buildVideo() => Stack(
         children: <Widget>[
           buildVideoPlayer(),
-          Positioned.fill(child: BasicOverlayWidget(controller: controller)),
+          Positioned.fill(child: BasicOverlayWidget(controller: controller!)),
         ],
       );
 
   Widget buildVideoPlayer() => AspectRatio(
-        aspectRatio: controller.value.aspectRatio,
-        child: VideoPlayer(controller),
+        aspectRatio: controller!.value.aspectRatio,
+        child: VideoPlayer(controller!),
       );
 }
 

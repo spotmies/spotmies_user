@@ -5,14 +5,16 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 Widget profilePic(BuildContext context, upic, name, {onClick}) {
   // final width(context) = MediaQuery.of(context).size.width;
   // final _hight = MediaQuery.of(context).size.height -
-      // MediaQuery.of(context).padding.top -
-      // kToolbarHeight;
+  // MediaQuery.of(context).padding.top -
+  // kToolbarHeight;
   return CircleAvatar(
     child: Stack(children: [
       ClipOval(
-        child: Uri.parse(upic).isAbsolute
+        child: upic != null
             ? Image.network(upic,
-                height: width(context) * 0.4, width: width(context) * 0.4, fit: BoxFit.fill)
+                height: width(context) * 0.4,
+                width: width(context) * 0.4,
+                fit: BoxFit.fill)
             : Container(
                 height: width(context) * 0.4,
                 width: width(context) * 0.4,

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/stepperPersonalInfo_controller.dart';
@@ -17,20 +16,20 @@ class StepperPersonalInfo extends StatefulWidget {
 }
 
 class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
-  late StepperPersonal _stepperPersonalInfo;
-  late UniversalProvider up;
+  final StepperPersonal _stepperPersonalInfo = StepperPersonal();
+  UniversalProvider? up;
 
-  _StepperPersonalInfoState() : super(StepperPersonal()) {
-    this._stepperPersonalInfo = controller as StepperPersonal;
-  }
-  late TimeProvider timerProvider;
+  // _StepperPersonalInfoState() : super(StepperPersonal()) {
+  //   this._stepperPersonalInfo = controller as StepperPersonal;
+  // }
+  TimeProvider? timerProvider;
   @override
   void initState() {
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("signup");
+    up?.setCurrentConstants("signup");
     _stepperPersonalInfo.termsAndConditions =
-        up.getValue("terms_and_conditions") ??
+        up?.getValue("terms_and_conditions") ??
             _stepperPersonalInfo.offlineTermsAndConditions;
     super.initState();
   }
@@ -94,7 +93,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                   onPressed: () async {
                                     CircularProgressIndicator();
                                     var resp =
-                                        await _stepperPersonalInfo.step3();
+                                        await _stepperPersonalInfo.step3(context,timerProvider);
                                     log("resp $resp");
                                     // await Navigator.pushAndRemoveUntil(
                                     //     context,
@@ -140,11 +139,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   );
                 },
                 onStepContinue: _stepperPersonalInfo.currentStep == 0
-                    ? () => setState(() => _stepperPersonalInfo.step1())
+                    ? () => setState(() => _stepperPersonalInfo.step1(context))
                     : _stepperPersonalInfo.currentStep == 1
-                        ? () => setState(() => _stepperPersonalInfo.step2())
+                        ? () => setState(() => _stepperPersonalInfo.step2(context))
                         : _stepperPersonalInfo.currentStep == 2
-                            ? () => setState(() => _stepperPersonalInfo.step3())
+                            ? () => setState(() => _stepperPersonalInfo.step3(context,timerProvider))
                             : null,
                 onStepCancel: _stepperPersonalInfo.currentStep > 0
                     ? () =>
@@ -472,7 +471,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
             if (_stepperPersonalInfo.profilepic == null)
               TextButton(
                   onPressed: () {
-                    _stepperPersonalInfo.step3();
+                    _stepperPersonalInfo.step3(context, timerProvider);
                   },
                   child: Text('Skip',
                       style: TextStyle(fontSize: 20, color: Colors.black)))

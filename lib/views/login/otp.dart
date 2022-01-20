@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -25,15 +23,15 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends StateMVC<OTPScreen> {
-  late LoginPageController _loginPageController;
-  late UniversalProvider up;
-  _OTPScreenState() : super(LoginPageController()) {
-    this._loginPageController = controller as LoginPageController;
-  }
+  LoginPageController? _loginPageController = LoginPageController();
+  UniversalProvider? up;
+  // _OTPScreenState() : super(LoginPageController()) {
+  //   this._loginPageController = controller as LoginPageController;
+  // }
 
-  late TimeProvider timerProvider;
-  late Timer _timer;
-  late int pinlength;
+  TimeProvider? timerProvider;
+  Timer? _timer;
+  int? pinlength;
 
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
@@ -46,17 +44,17 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   );
   startTimer() {
     _timer = new Timer.periodic(Duration(seconds: 1), (timer) {
-      timerProvider.updateTime();
-      if (timerProvider.countDown < 2) timer.cancel();
+      timerProvider?.updateTime();
+      if ((timerProvider?.countDown)! < 2) timer.cancel();
     });
   }
 
   @override
   void initState() {
-    _timer.cancel();
+    _timer?.cancel();
     timerProvider = Provider.of<TimeProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("otp");
+    up?.setCurrentConstants("otp");
 
     super.initState();
     startTimer();
@@ -64,15 +62,15 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   void resendOtp() {
-    timerProvider.resetTimer();
+    timerProvider?.resetTimer();
     // _verifyPhone();
 
-    _loginPageController.verifyPhone(navigate: false);
+    _loginPageController?.verifyPhone(context, timerProvider!, navigate: false);
     startTimer();
   }
 
@@ -86,7 +84,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      key: _loginPageController.scaffoldkey,
+      key: _loginPageController?.scaffoldkey,
       body: Consumer<TimeProvider>(builder: (context, data, child) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,7 +178,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                 data.setOtp(pin.toString());
                               },
                               onSubmit: (pin) {
-                                _loginPageController.loginUserWithOtp(pin);
+                                _loginPageController?.loginUserWithOtp(
+                                    pin, context, timerProvider);
                                 setState(() {
                                   pinlength = pin.length;
                                 });
@@ -237,7 +236,8 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                             top: data.countDown > 2 ? 0 : _hight * 0.25),
                         child: ElevatedButtonWidget(
                           onClick: () {
-                            _loginPageController.loginUserWithOtp(data.getOtp);
+                            _loginPageController?.loginUserWithOtp(
+                                data.getOtp, context, timerProvider);
                           },
                           height: _hight * 0.07,
                           textStyle: FontWeight.w600,

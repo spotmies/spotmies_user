@@ -11,7 +11,7 @@ import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/maps/maps.dart';
 
 class OnlinePlaceSearch extends StatefulWidget {
-  final Function onSave;
+  final Function? onSave;
   OnlinePlaceSearch({required this.onSave});
   @override
   OnlinePlaceSearchState createState() => OnlinePlaceSearchState();
@@ -20,7 +20,7 @@ class OnlinePlaceSearch extends StatefulWidget {
 class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   // List<Places> geoLocations = [];
   String query = '';
-  late Timer debouncer;
+  late Timer? debouncer;
   late UniversalProvider up;
 
   @override
@@ -34,7 +34,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
 
   @override
   void dispose() {
-    debouncer.cancel();
+    debouncer?.cancel();
     super.dispose();
   }
 
@@ -43,7 +43,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
     Duration duration = const Duration(milliseconds: 1000),
   }) {
     if (debouncer != null) {
-      debouncer.cancel();
+      debouncer?.cancel();
     }
 
     debouncer = Timer(duration, callback);
@@ -105,7 +105,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                                                     if (widget.onSave == null)
                                                       return snackbar(context,
                                                           "something went wrong");
-                                                    widget.onSave(
+                                                    widget.onSave!(
                                                         cords, fullAddress);
                                                     Navigator.pop(context);
                                                   },
@@ -176,7 +176,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                       onSave: (cords, fullAddress) {
                         if (widget.onSave == null)
                           return snackbar(context, "something went wrong");
-                        widget.onSave(cords, fullAddress);
+                        widget.onSave!(cords, fullAddress);
                         Navigator.pop(context);
                       },
                     )));

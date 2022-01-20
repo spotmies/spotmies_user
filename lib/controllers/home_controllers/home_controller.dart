@@ -1,10 +1,11 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
 
 class HomeController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
@@ -41,9 +42,9 @@ class HomeController extends ControllerMVC {
   ];
   var latitude = "";
   var longitude = "";
-  String add1 = "";
-  String add2 = "";
-  String add3 = "";
+  String? add1 = "";
+  String? add2;
+  String? add3 = "";
 
   //function for location
   // void getCurrentLocation() async {

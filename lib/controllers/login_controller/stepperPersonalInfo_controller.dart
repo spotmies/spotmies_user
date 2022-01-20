@@ -4,11 +4,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/models/stepperPersonalModel.dart';
@@ -57,15 +55,15 @@ class StepperPersonal extends ControllerMVC {
     this.stepperPersonalModel = StepperPersonalModel();
   }
 
-  late TimeProvider timerProvider;
-  @override
-  void initState() {
-    timerProvider = Provider.of<TimeProvider>(context, listen: false);
+  // late TimeProvider timerProvider;
+  // @override
+  // void initState() {
+  //   timerProvider = Provider.of<TimeProvider>(context, listen: false);
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
-  step1() {
+  step1(BuildContext context) {
     if (accept == true) {
       currentStep += 1;
     } else {
@@ -84,8 +82,8 @@ class StepperPersonal extends ControllerMVC {
     }
   }
 
-  step2() {
-    if (formkey != null && formkey.currentState!.validate()) {
+  step2(BuildContext context) {
+    if (formkey.currentState!.validate()) {
       formkey.currentState?.save();
       currentStep += 1;
       print(FirebaseAuth.instance.currentUser?.uid);
@@ -101,16 +99,16 @@ class StepperPersonal extends ControllerMVC {
     }
   }
 
-  step3() async {
-    timerProvider.setLoader(true, loadingValue: "Uploading profile pic...");
-    log("${timerProvider.phoneNumber}");
+  step3(BuildContext context,TimeProvider? timerProvider) async {
+    timerProvider?.setLoader(true, loadingValue: "Uploading profile pic...");
+    log("${timerProvider?.phoneNumber}");
     await uploadimage();
     dynamic deviceToken = await FirebaseMessaging.instance.getToken();
-    timerProvider.setLoader(true, loadingValue: "Registration Inprogress...");
-    log(timerProvider.phoneNumber.toString());
+    timerProvider?.setLoader(true, loadingValue: "Registration Inprogress...");
+    // log(timerProvider!.phoneNumber.toString());
     var body = {
       "name": this.name.toString(),
-      "phNum": timerProvider.phNumber.toString(),
+      "phNum": timerProvider?.phNumber.toString(),
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       "uId": FirebaseAuth.instance.currentUser?.uid.toString(),
       "userState": "active",
@@ -120,14 +118,14 @@ class StepperPersonal extends ControllerMVC {
       "pic": imageLink.toString(),
       "userDeviceToken": deviceToken?.toString() ?? "",
       "referalCode":
-          "${name?.substring(0, 4)}${timerProvider.phNumber.substring(6)}"
+          "${name?.substring(0, 4)}${timerProvider?.phNumber.substring(6)}"
     };
     log("body $body");
     var resp =
         await Server().postMethod(API.userRegister, body).catchError((e) {
       print(e);
     });
-    timerProvider.setLoader(false);
+    timerProvider?.setLoader(false);
     log("respss ${resp.statusCode}");
     log("response ${resp.body}");
     if (resp.statusCode == 200) {

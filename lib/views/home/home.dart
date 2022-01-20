@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -80,9 +78,9 @@ class _HomeState extends StateMVC<Home> {
                 await _homeController.getAddressofLocation();
               },
               child: Text(
-                  _homeController.add2 == null
+                  (_homeController.add2 == null)
                       ? 'seethammadhara'
-                      : _homeController.add2,
+                      : _homeController.add2!,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: GoogleFonts.josefinSans(

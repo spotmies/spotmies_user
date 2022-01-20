@@ -74,7 +74,10 @@ class _ChatListState extends StateMVC<ChatList> {
                         ));
                       }
                       return RefreshIndicator(
-                        onRefresh: _chatController.fetchNewChatList,
+                        onRefresh: () async {
+                          await _chatController.fetchNewChatList(
+                              context, chatProvider);
+                        },
                         child: ListView.builder(
                           itemCount: chatList.length,
                           itemBuilder: (BuildContext context, int index) {

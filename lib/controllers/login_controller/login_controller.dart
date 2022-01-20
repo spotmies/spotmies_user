@@ -2,10 +2,8 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/models/loginModel.dart';
@@ -16,7 +14,7 @@ import 'package:spotmies/views/login/otp.dart';
 import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 
 class LoginPageController extends ControllerMVC {
-  late TimeProvider timerProvider;
+  // late TimeProvider timerProvider;
 
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -30,28 +28,28 @@ class LoginPageController extends ControllerMVC {
     this.loginModel = LoginModel();
   }
   String _verificationCode = "";
-  @override
-  void initState() {
-    timerProvider = Provider.of<TimeProvider>(context, listen: false);
+  // @override
+  // void initState() {
+  //   // timerProvider = Provider.of<TimeProvider>(context, listen: false);
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
-  dataToOTP() {
+  dataToOTP(BuildContext context, TimeProvider timerProvider) {
     if (formkey.currentState != null) {
       if (formkey.currentState!.validate()) {
         formkey.currentState?.save();
         timerProvider.setPhNumber(loginnum.text.toString());
 
-        verifyPhone();
+        verifyPhone(context,timerProvider);
       }
     }
   }
 
-  verifyPhone({navigate = true}) async {
+  verifyPhone(BuildContext context, TimeProvider timerProvider, {navigate = true}) async {
     timerProvider.resetTimer();
     timerProvider.setLoader(true, loadingValue: "Sending OTP .....");
-    log("phnum ${timerProvider.phNumber}");
+    // log("phnum ${timerProvider.phNumber}");
     try {
       await FirebaseAuth.instance.verifyPhoneNumber(
           phoneNumber: '+91${timerProvider.phNumber}',
@@ -73,7 +71,7 @@ class LoginPageController extends ControllerMVC {
             });
           },
           verificationFailed: (FirebaseAuthException e) {
-            log(e.message.toString());
+            // log(e.message.toString());
             snackbar(context, e.message.toString());
             timerProvider.setLoader(false);
           },
@@ -84,7 +82,7 @@ class LoginPageController extends ControllerMVC {
 
             _verificationCode = verficationID;
             timerProvider.setVerificationCode(verficationID);
-            log("verfication code $_verificationCode");
+            // log("verfication code $_verificationCode");
 
             if (navigate) {
               Navigator.of(context).push(MaterialPageRoute(
@@ -99,15 +97,15 @@ class LoginPageController extends ControllerMVC {
           },
           timeout: Duration(seconds: 85));
     } catch (e) {
-      log(e.toString());
+      // log(e.toString());
       snackbar(context, e.toString());
       timerProvider.setLoader(false);
     }
   }
 
-  loginUserWithOtp(otpValue) async {
-    log("verfication code ${timerProvider.verificationCode}");
-    log(otpValue.toString());
+  loginUserWithOtp(otpValue,BuildContext context,timerProvider) async {
+    // log("verfication code ${timerProvider.verificationCode}");
+    // log(otpValue.toString());
     timerProvider.setLoader(true);
     try {
       dynamic sekhar = await FirebaseAuth.instance
@@ -115,14 +113,14 @@ class LoginPageController extends ControllerMVC {
               verificationId: timerProvider.verificationCode,
               smsCode: otpValue))
           .then((value) async {
-        log(value.user.toString());
+        // log(value.user.toString());
         if (value.user != null) {
           // log("${value.user}");
-          log("$value");
+          // log("$value");
           timerProvider.setPhoneNumber(timerProvider.phNumber.toString());
           print("user already login");
           String resp = await checkUserRegistered(value.user?.uid);
-          log("respp 122 $resp");
+          // log("respp 122 $resp");
           timerProvider.setLoader(false);
           if (resp == "false") {
             Navigator.pushAndRemoveUntil(
@@ -142,10 +140,10 @@ class LoginPageController extends ControllerMVC {
           snackbar(context, "Something went wrong");
         }
       });
-      log("sekhar $sekhar");
+      // log("sekhar $sekhar");
     } catch (e) {
       FocusScope.of(context).unfocus();
-      log(e.toString());
+      // log(e.toString());
       timerProvider.setLoader(false);
       snackbar(context, "something went wrong");
     }

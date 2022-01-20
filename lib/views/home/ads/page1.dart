@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
@@ -286,7 +285,7 @@ Widget page1(double hight, double width, BuildContext context,
                     children: [
                       ElevatedButtonWidget(
                         onClick: () async {
-                          await adController.step1();
+                          await adController.step1(context);
                         },
                         buttonName: 'Next',
                         bgColor: Colors.indigo[900],

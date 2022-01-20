@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/maps/onLine_placesSearch.dart';
@@ -10,7 +11,7 @@ import 'package:spotmies/views/reusable_widgets/steps.dart';
 import '../../maps/maps.dart';
 
 Widget page3(double hight, double width, user, AdController adController,
-    BuildContext context) {
+    BuildContext context, GetOrdersProvider? ordersProvider) {
   return Scaffold(
     body: SingleChildScrollView(
       child: Container(
@@ -172,7 +173,7 @@ Widget page3(double hight, double width, user, AdController adController,
                     ),
                     ElevatedButtonWidget(
                       onClick: () async {
-                        await adController.step3(user);
+                        await adController.step3(user,context,ordersProvider!);
                       },
                       buttonName: 'Finish',
                       bgColor: Colors.indigo[900],

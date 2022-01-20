@@ -10,6 +10,7 @@ import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -33,14 +34,15 @@ class PersonalChat extends StatefulWidget {
 }
 
 class _PersonalChatState extends StateMVC<PersonalChat> {
-  late ChatController _chatController;
+   ChatController _chatController = ChatController();
 
-  _PersonalChatState() : super(ChatController()) {
-    this._chatController = controller as ChatController;
-  }
-  late ChatProvider chatProvider;
-  late ResponsesProvider responseProvider;
-  late UniversalProvider up;
+  // _PersonalChatState() : super(ChatController()) {
+  //   this._chatController = controller as ChatController;
+  // }
+   ChatProvider? chatProvider;
+   ResponsesProvider? responseProvider;
+   UserDetailsProvider? profileProvider;
+   UniversalProvider? up;
 
   ScrollController _scrollController = ScrollController();
 
@@ -57,20 +59,21 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     super.initState();
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("chatScreen");
+    up?.setCurrentConstants("chatScreen");
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         // log("at top >>>");
-        chatProvider.setMsgCount(chatProvider.getMsgCount() + 20);
+        chatProvider?.setMsgCount(chatProvider?.getMsgCount() + 20);
       }
       if (_scrollController.position.pixels < 40) {
         // log('disable float >>>>>>>>>>>>');
-        if (chatProvider.getFloat()) chatProvider.setFloat(false);
+        if (chatProvider?.getFloat()) chatProvider?.setFloat(false);
       } else if (_scrollController.position.pixels > 40) {
-        if (!chatProvider.getFloat()) {
-          chatProvider.setFloat(true);
+        if (!chatProvider?.getFloat()) {
+          chatProvider?.setFloat(true);
           // log('en float >>>>>>>>>>>>');
         }
       }
@@ -78,7 +81,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   sendMessageHandler(value, {sender: "user", action: ""}) {
-    _chatController.sendMessageHandler(widget.msgId, value,
+    _chatController.sendMessageHandler(widget.msgId, value,context,chatProvider,profileProvider,
         sender: sender, action: action);
   }
 
@@ -86,7 +89,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     print("reveal profile $state");
     sendMessageHandler(state ? "user shared profile" : "user disabled Profile",
         sender: "bot", action: state ? "enableProfile" : "disableProfile");
-    _chatController.revealProfile(_chatController.targetChat,
+    _chatController.revealProfile(_chatController.targetChat,context,chatProvider,
         revealProfile: state);
   }
 
@@ -121,7 +124,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   ];
 
   acceptRejectPartner(responseType) {
-    dynamic checkThisResponse = responseProvider.getResponseByordIdAndPid(
+    dynamic checkThisResponse = responseProvider?.getResponseByordIdAndPid(
         pId: _chatController.targetChat['pId'],
         ordId: _chatController.targetChat['ordId']);
     if (checkThisResponse == null) {
@@ -129,13 +132,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           context, "Your already Accept or Reject this partner for the order");
       return;
     }
-    responseProvider.addNewResponsesQueue({
+    responseProvider?.addNewResponsesQueue({
       "pId": _chatController.targetChat['pId'],
       "ordId": _chatController.targetChat['ordId'],
       "responseType": responseType == "accept" ? "accept" : "reject"
     });
     _chatController.sendMessageHandler(widget.msgId,
-        "${_chatController.userDetails['name']} $responseType the order",
+        "${_chatController.userDetails['name']} $responseType the order",context,chatProvider,profileProvider,
         sender: "bot",
         action: responseType == "accept" ? "acceptOrder" : "rejectOrder");
   }

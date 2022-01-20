@@ -8,10 +8,11 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
+import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/snackbar.dart';
-import 'package:spotmies/views/chat/chat_tab.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -37,16 +38,20 @@ class PartnerDetails extends StatefulWidget {
 }
 
 class _PartnerDetailsState extends StateMVC<PartnerDetails> {
-  late ChatController _chatController;
-  late UniversalProvider up;
-  _PartnerDetailsState() : super(ChatController()) {
-    this._chatController = controller as ChatController;
-  }
+   ChatController? _chatController = ChatController();
+   UniversalProvider? up;
+    ChatProvider? chatProvider;
+   UserDetailsProvider? profileProvider;
+  // _PartnerDetailsState() : super(ChatController()) {
+  //   this._chatController = controller as ChatController;
+  // }
   late bool isSwitch;
   @override
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("chatScreen");
+    up?.setCurrentConstants("chatScreen");
+    chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
     log("details ${widget.profileDetails} ");
     setState(() {
       isSwitch = widget.isMyProfileRevealed;
@@ -57,7 +62,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _chatController.scaffoldkey,
+        key: _chatController?.scaffoldkey,
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
@@ -304,18 +309,23 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                               activeColor: Colors.blue[900],
                               onChanged: (value) {
                                 // widget.revealMyProfile(value);
-                                _chatController.sendMessageHandler(
+                                _chatController?.sendMessageHandler(
                                     widget.msgId,
                                     value
                                         ? "user shared the profile"
                                         : "user disabled their profile",
+                                    context,
+                                    chatProvider,
+                                    profileProvider,
                                     chatDetails: widget.chatDetails,
                                     sender: "bot",
                                     action: value
                                         ? "enableProfile"
                                         : "disableProfile");
-                                _chatController.revealProfile(
+                                _chatController?.revealProfile(
                                     widget.chatDetails,
+                                    context,
+                                    chatProvider,
                                     revealProfile: value);
                                 setState(() {
                                   isSwitch = value;
@@ -339,24 +349,27 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                       Colors.redAccent,
                       Icons.block, onTap: () {
                     log("block");
-                    _chatController.sendMessageHandler(
-                        widget.msgId, "User blocked this chat",
+                    _chatController?.sendMessageHandler(
+                        widget.msgId, "User blocked this chat",context,chatProvider,profileProvider,
                         sender: "bot",
                         chatDetails: widget.chatDetails,
                         action: "blockChat");
 
-                    _chatController.deleteOrBlockThisChat(widget.msgId);
+                    _chatController?.deleteOrBlockThisChat(widget.msgId,context,chatProvider);
                   }),
                   actionButton(width(context), height(context), "Delete Chat",
                       Colors.redAccent, Icons.delete_sweep_rounded, onTap: () {
                     log("delete");
-                    _chatController.sendMessageHandler(
+                    _chatController?.sendMessageHandler(
                         widget.msgId, "User deleted this chat",
+                        context,
+                        chatProvider,
+                        profileProvider,
                         sender: "bot",
                         chatDetails: widget.chatDetails,
                         action: "deleteChat");
 
-                    _chatController.deleteOrBlockThisChat(widget.msgId,
+                    _chatController?.deleteOrBlockThisChat(widget.msgId,context,chatProvider,
                         isChatDelete: true);
                   }),
                   actionButton(

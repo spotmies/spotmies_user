@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+// import 'package:flutter_incall/flutter_incall.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/views/call_ui/audioCallWithImage/components/body.dart';
 import 'package:spotmies/views/internet_calling/signaling.dart';
-import 'package:flutter_incall/flutter_incall.dart';
+import 'package:spotmies/views/reusable_widgets/incall.dart';
 
 class MyCalling extends StatefulWidget {
   final String? msgId;

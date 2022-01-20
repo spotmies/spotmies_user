@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -15,10 +15,10 @@ class ChatScreenController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   TextEditingController controller = TextEditingController();
   ScrollController scrollController = ScrollController();
-  String textInput = "";
+  String? textInput = "";
 
   //images
-  List<File> profilepic = [];
+  List<File>? profilepic = [];
   bool uploading = false;
   double val = 0;
   String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
@@ -50,7 +50,7 @@ class ChatScreenController extends ControllerMVC {
         await ImagePicker().getImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
-        profilepic.add(File(pickedFile.path));
+        profilepic?.add(File(pickedFile.path));
       }
     });
     if (pickedFile?.path == null) retrieveLostData();
@@ -63,7 +63,7 @@ class ChatScreenController extends ControllerMVC {
     }
     if (response.file != null) {
       setState(() {
-        profilepic.add(File(response.file!.path));
+        profilepic?.add(File(response.file!.path));
       });
     } else {
       print(response.file);
@@ -74,9 +74,9 @@ class ChatScreenController extends ControllerMVC {
   Future<void> uploadimage() async {
     int i = 1;
 
-    for (var img in profilepic) {
+    for (var img in profilepic!) {
       setState(() {
-        val = i / profilepic.length;
+        val = i / profilepic!.length;
       });
       var postImageRef = FirebaseStorage.instance.ref().child('adImages');
       UploadTask uploadTask =

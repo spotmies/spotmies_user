@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
@@ -35,16 +36,21 @@ class _PostAdState extends StateMVC<PostAd> {
   String add1 = "";
   String add2 = "";
   String add3 = "";
-  late UniversalProvider up;
+   UniversalProvider? up;
 
-  late UserDetailsProvider uDetailsProvider;
+   UserDetailsProvider? uDetailsProvider;
+   GetOrdersProvider? ordersProvider;
 
   @override
   void initState() {
     _adController.isUploading = 0;
     uDetailsProvider = Provider.of<UserDetailsProvider>(context, listen: false);
+    ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("serviceRequest");
+    up?.setCurrentConstants("serviceRequest");
+   _adController.getAddressofLocation();
+    _adController.pickedDate = DateTime.now();
+    _adController.pickedTime = TimeOfDay.now();
 
     super.initState();
   }
@@ -77,7 +83,7 @@ class _PostAdState extends StateMVC<PostAd> {
                 Container(
                     height: height(context) * 1.08,
                     child: page1(height(context), width(context), context,
-                        _adController, up)),
+                        _adController, up!)),
                 Container(
                     height: height(context) * 1.08,
                     child: page2(height(context), width(context), context,
@@ -85,7 +91,7 @@ class _PostAdState extends StateMVC<PostAd> {
                 Container(
                     height: height(context) * 1.08,
                     child: page3(height(context), width(context), user,
-                        _adController, context)),
+                        _adController, context,ordersProvider)),
               ]),
             ]),
           )));

@@ -1,9 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +9,7 @@ import 'package:spotmies/utilities/addressExtractor.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,13 +37,13 @@ class Maps extends StatefulWidget {
 class _MapsState extends State<Maps> {
   TextEditingController searchController = TextEditingController();
   late UniversalProvider up;
-  late Map coordinates;
+  late Map? coordinates;
   _MapsState(this.coordinates);
   var formkey = GlobalKey<FormState>();
   var scaffoldkey = GlobalKey<ScaffoldState>();
   late GoogleMapController googleMapController;
   Map<String, double> generatedCoordinates = {"lat": 0.00, "log": 0.00};
-  late Position position;
+  late Position? position;
   late double lat;
   late double long;
   String addressline = "";
@@ -57,29 +55,29 @@ class _MapsState extends State<Maps> {
         position: LatLng(lat, long),
         onTap: () async {
           final coordinated = coordinates == null
-              ? Coordinates(position.latitude, position.longitude)
-              : Coordinates(coordinates['latitude'], coordinates['logitude']);
+              ? Coordinates(position!.latitude, position!.longitude)
+              : Coordinates(coordinates?['latitude'], coordinates?['logitude']);
           var address =
               await Geocoder.local.findAddressesFromCoordinates(coordinated);
           var firstAddress = address.first.addressLine;
 
           setState(() {
             lat = coordinates == null
-                ? position.latitude
-                : coordinates['latitude'];
+                ? position?.latitude
+                : coordinates?['latitude'];
             long = coordinates == null
-                ? position.latitude
-                : coordinates['logitude'];
-            addressline = firstAddress;
+                ? position?.latitude
+                : coordinates?['logitude'];
+            addressline = firstAddress!;
           });
           coordinates == null
               ? bottomAddressSheet(
-                  position.latitude,
-                  position.longitude,
+                  position!.latitude,
+                  position!.longitude,
                 )
               : bottomAddressSheet(
-                  coordinates['latitude'],
-                  coordinates['logitude'],
+                  coordinates?['latitude'],
+                  coordinates?['logitude'],
                 );
         },
         draggable: true,
@@ -136,7 +134,7 @@ class _MapsState extends State<Maps> {
               setState(() {
                 lat = tapped.latitude;
                 long = tapped.longitude;
-                addressline = firstAddress;
+                addressline = firstAddress!;
               });
               bottomAddressSheet(
                 lat,
@@ -158,9 +156,9 @@ class _MapsState extends State<Maps> {
             initialCameraPosition: CameraPosition(
                 target: coordinates != null
                     ? navigateMaps(
-                        coordinates['latitude'], coordinates['logitude'])
+                        coordinates?['latitude'], coordinates?['logitude'])
                     //LatLng(coordinates['latitude'], coordinates['logitude'])
-                    : navigateMaps(position.latitude, position.longitude),
+                    : navigateMaps(position?.latitude, position?.longitude),
                 zoom: 17),
             markers: Set<Marker>.of(markers.values),
           ),

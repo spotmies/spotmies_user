@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -741,7 +740,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                             width: width(context) * 1,
                             child: GridView.builder(
                                 itemCount:
-                                    _chatScreenController.profilepic.length + 1,
+                                    (_chatScreenController.profilepic?.length)! + 1,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 5),
@@ -768,7 +767,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                     image: DecorationImage(
                                                         image: FileImage(
                                                             _chatScreenController
-                                                                    .profilepic[
+                                                                    .profilepic![
                                                                 index - 1]),
                                                         fit: BoxFit.cover)),
                                               ),
@@ -784,7 +783,7 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
                                                     onPressed: () async {
                                                       _chatScreenController
                                                           .profilepic
-                                                          .removeAt(0);
+                                                          ?.removeAt(0);
 
                                                       refresh();
                                                     }),

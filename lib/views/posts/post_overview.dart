@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,7 +51,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   // _PostOverViewState(this.value);
   // int _currentStep = 0;
   void chatWithPatner(responseData) {
-    _postOverViewController.chatWithpatner(responseData);
+    _postOverViewController.chatWithpatner(responseData,context,
+      ordersProvider,chatProvider
+    );
   }
 
   @override
@@ -76,7 +77,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   isThisOrderCompleted(state, {String orderID = "123", String money = "0"}) {
     if (state) {
-      _postOverViewController.isOrderCompleted(money, orderID);
+      _postOverViewController.isOrderCompleted(money, orderID,context,
+        ordersProvider,
+      );
     }
     showOrderStatusQuestion = false;
     refresh();
@@ -98,7 +101,6 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       case 10:
         return Colors.green;
 
-        break;
       default:
         return Colors.white;
     }
@@ -211,8 +213,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 onClick: () {
                                   _postOverViewController
                                       .rescheduleServiceOrCancel(
-                                          d['orderState'], d['ordId'],
-                                          action: "CANCEL_ORDER");
+                                          d['orderState'], d['ordId'],ordersProvider,
+                                          action: "CANCEL_ORDER",);
                                 },
                                 height: height(context) * 0.05,
                                 minWidth: width(context) * 0.4,
@@ -240,6 +242,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                     await _postOverViewController
                                         .rescheduleServiceOrCancel(
                                             d['orderState'], d['ordId'],
+                                            ordersProvider,
                                             action: "UPDATE_SCHEDULE");
                                   }
                                 },
@@ -380,6 +383,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                           .rescheduleServiceOrCancel(
                                                               d['orderState'],
                                                               d['ordId'],
+                                                              ordersProvider,
                                                               action:
                                                                   "UPDATE_LOCATION",
                                                               updatedAddress:
@@ -784,28 +788,28 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         context: context,
         barrierDismissible: true, // set to false if you want to force a rating
         builder: (context) {
-          return RatingDialog(
-            icon: Icon(
-              Icons.rate_review,
-              size: 100,
-              color: Colors.blue[800],
-            ),
-            // const FlutterLogo(
+          return RatingDialog(onSubmitted: (RatingDialogResponse ) {  }, submitButtonText: '', title: Text('data'),
+            // icon: Icon(
+            //   Icons.rate_review,
             //   size: 100,
-            // ), // set your own image/icon widget
-            title: "Rate Your Technician!",
-            description: "Express Your Experience By Tapping \nOn Stars",
-            submitButton: "SUBMIT",
-            alternativeButton: "Contact us instead?", // optional
-            positiveComment: "We are so happy to hear :)", // optional
-            negativeComment: "We're sad to hear :(", // optional
-            accentColor: Colors.blue[800], // optional
-            onSubmitPressed: (int rating) {
-              print("onSubmitPressed: rating = $rating");
-            },
-            onAlternativePressed: () {
-              print("onAlternativePressed: do something");
-            },
+            //   color: Colors.blue[800],
+            // ),
+            // // const FlutterLogo(
+            // //   size: 100,
+            // // ), // set your own image/icon widget
+            // title: "Rate Your Technician!",
+            // description: "Express Your Experience By Tapping \nOn Stars",
+            // submitButton: "SUBMIT",
+            // alternativeButton: "Contact us instead?", // optional
+            // positiveComment: "We are so happy to hear :)", // optional
+            // negativeComment: "We're sad to hear :(", // optional
+            // accentColor: Colors.blue[800], // optional
+            // onSubmitPressed: (int rating) {
+            //   print("onSubmitPressed: rating = $rating");
+            // },
+            // onAlternativePressed: () {
+            //   print("onAlternativePressed: do something");
+            // },
           );
         });
   }
@@ -1095,7 +1099,6 @@ class _Timeline2 extends StatelessWidget {
             switch (index) {
               case 0:
                 return solidLineConnector;
-                break;
               case 1:
                 if (orderData['orderState'] > 6) return solidLineConnector;
                 return solidLineConnectorEmpty;
@@ -1201,7 +1204,6 @@ class TimeLineTitle extends StatelessWidget {
         return "Feedback";
       default:
         return "Something Went wrong";
-        break;
     }
   }
 
@@ -1217,7 +1219,6 @@ class TimeLineTitle extends StatelessWidget {
       case 4:
         if (orderState > 9) return true;
         return false;
-        break;
       default:
         return false;
     }
