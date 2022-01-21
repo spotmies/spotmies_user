@@ -109,7 +109,7 @@ class LoginPageController extends ControllerMVC {
     // log(otpValue.toString());
     timerProvider.setLoader(true);
     try {
-      dynamic sekhar = await FirebaseAuth.instance
+       await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(
               verificationId: timerProvider.verificationCode,
               smsCode: otpValue))
