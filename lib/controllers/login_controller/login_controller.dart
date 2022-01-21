@@ -41,12 +41,13 @@ class LoginPageController extends ControllerMVC {
         formkey.currentState?.save();
         timerProvider.setPhNumber(loginnum.text.toString());
 
-        verifyPhone(context,timerProvider);
+        verifyPhone(context, timerProvider);
       }
     }
   }
 
-  verifyPhone(BuildContext context, TimeProvider timerProvider, {navigate = true}) async {
+  verifyPhone(BuildContext context, TimeProvider timerProvider,
+      {navigate = true}) async {
     timerProvider.resetTimer();
     timerProvider.setLoader(true, loadingValue: "Sending OTP .....");
     // log("phnum ${timerProvider.phNumber}");
@@ -103,7 +104,7 @@ class LoginPageController extends ControllerMVC {
     }
   }
 
-  loginUserWithOtp(otpValue,BuildContext context,timerProvider) async {
+  loginUserWithOtp(otpValue, BuildContext context, timerProvider) async {
     // log("verfication code ${timerProvider.verificationCode}");
     // log(otpValue.toString());
     timerProvider.setLoader(true);

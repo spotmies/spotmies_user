@@ -74,7 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           },
                         ),
                         SizedBox(
-                          height: SizeConfig.defaultSize * 4,
+                          height: SizeConfig.defaultSize! * 4,
                         )
                       ],
                     ),
@@ -122,7 +122,7 @@ class SkipButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SizeConfig.defaultSize),
+      padding: EdgeInsets.all(SizeConfig.defaultSize!),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -134,7 +134,7 @@ class SkipButton extends StatelessWidget {
             child: Text(
               'Skip',
               style: TextStyle(
-                  fontSize: SizeConfig.defaultSize * 1.4, //14
+                  fontSize: SizeConfig.defaultSize! * 1.4, //14
                   color: Colors.black,
                   fontWeight: FontWeight.w600),
             ),
@@ -165,13 +165,13 @@ class StepsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: SizeConfig.defaultSize * 4.5,
-      height: SizeConfig.defaultSize * 4.5,
+      width: SizeConfig.defaultSize! * 4.5,
+      height: SizeConfig.defaultSize! * 4.5,
       child: Stack(
         children: [
           Container(
-            width: SizeConfig.defaultSize * 4.5,
-            height: SizeConfig.defaultSize * 4.5,
+            width: SizeConfig.defaultSize! * 4.5,
+            height: SizeConfig.defaultSize! * 4.5,
             child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(Colors.blue[800]),
                 value: (page + 1) / (_list.length + 1)),
@@ -189,8 +189,8 @@ class StepsContainer extends StatelessWidget {
                 }
               },
               child: Container(
-                width: SizeConfig.defaultSize * 3.5,
-                height: SizeConfig.defaultSize * 3.5,
+                width: SizeConfig.defaultSize! * 3.5,
+                height: SizeConfig.defaultSize! * 3.5,
                 decoration: BoxDecoration(
                     color: Colors.blue[800],
                     borderRadius: BorderRadius.all(Radius.circular(100.0))),
@@ -275,7 +275,7 @@ class CommonText extends StatelessWidget {
       style: TextStyle(
           color: textColor ?? Colors.black,
           fontWeight: fontWeight ?? FontWeight.w400,
-          fontSize: SizeConfig.defaultSize * (fontSize ?? 1.8)),
+          fontSize: SizeConfig.defaultSize! * (fontSize ?? 1.8)),
     );
   }
 }
@@ -292,7 +292,7 @@ class MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SizeConfig.defaultSize * 2),
+      padding: EdgeInsets.all(SizeConfig.defaultSize! * 2),
       child: Column(
         children: [
           Expanded(
@@ -301,8 +301,8 @@ class MainContent extends StatelessWidget {
               0.5,
               Image.asset(
                 _list[index].image,
-                height: SizeConfig.defaultSize * 30,
-                width: SizeConfig.defaultSize * 30,
+                height: SizeConfig.defaultSize! * 30,
+                width: SizeConfig.defaultSize! * 30,
               ),
             ),
           ),
@@ -313,7 +313,7 @@ class MainContent extends StatelessWidget {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
-                  fontSize: SizeConfig.defaultSize * 2.6),
+                  fontSize: SizeConfig.defaultSize! * 2.6),
             ),
           ),
           SizedBox(
@@ -327,7 +327,7 @@ class MainContent extends StatelessWidget {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w400,
-                  fontSize: SizeConfig.defaultSize * 1.4),
+                  fontSize: SizeConfig.defaultSize! * 1.4),
             ),
           ),
         ],
