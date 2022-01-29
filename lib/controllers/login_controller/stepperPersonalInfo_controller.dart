@@ -38,14 +38,14 @@ class StepperPersonal extends ControllerMVC {
   String? imageLink;
   List termsAndConditions = [];
   List offlineTermsAndConditions = [
-    " offline Spotmies partner not supposed to Save customer details,as well as not supposed to give contact information to customer",
+    "Offline Spotmies partner not supposed to Save customer details,as well as not supposed to give contact information to customer",
     "Spotmies partners are not supposed to share customer details to others,it will be considered as an illegal activity",
-    "we do not Entertain any illegal activities.if perform severe actions will be taken",
-    "partners are responsible for the damages done during the services and they bare whole forfeit",
-    "we do not provide  any kind of training,equipment/material and  labor to perform any Service",
+    "We do not Entertain any illegal activities. If perform severe actions will be taken",
+    "Partners are responsible for the damages done during the services and they bare whole forfeit",
+    "We do not provide  any kind of training,equipment/material and  labor to perform any Service",
     "We do not provide any shipping charges,travelling fares",
-    "partner should take good care of their appearance ,language ,behaviour while they perform service",
-    "partner should fellow all the covid regulations",
+    "Partner should take good care of their appearance ,language ,behaviour while they perform service",
+    "Partner should follow all the COVID regulations",
   ];
   // DateTime now = DateTime.now();
 
@@ -99,7 +99,7 @@ class StepperPersonal extends ControllerMVC {
     }
   }
 
-  step3(BuildContext context,TimeProvider? timerProvider) async {
+  step3(BuildContext context, TimeProvider? timerProvider) async {
     timerProvider?.setLoader(true, loadingValue: "Uploading profile pic...");
     log("${timerProvider?.phoneNumber}");
     await uploadimage();

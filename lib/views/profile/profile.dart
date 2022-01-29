@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/profile/editDetailsBS.dart';
@@ -86,7 +87,9 @@ class _ProfileState extends StateMVC<Profile> {
     // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _profileController.scaffoldkey,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context) == ThemeData.fallback()
+          ? Colors.green.shade900
+          : SpotmiesTheme.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,

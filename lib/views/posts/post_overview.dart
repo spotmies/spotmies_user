@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
-import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
@@ -51,9 +50,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   // _PostOverViewState(this.value);
   // int _currentStep = 0;
   void chatWithPatner(responseData) {
-    _postOverViewController.chatWithpatner(responseData,context,
-      ordersProvider,chatProvider
-    );
+    _postOverViewController.chatWithpatner(
+        responseData, context, ordersProvider, chatProvider);
   }
 
   @override
@@ -77,7 +75,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
 
   isThisOrderCompleted(state, {String orderID = "123", String money = "0"}) {
     if (state) {
-      _postOverViewController.isOrderCompleted(money, orderID,context,
+      _postOverViewController.isOrderCompleted(
+        money,
+        orderID,
+        context,
         ordersProvider,
       );
     }
@@ -213,8 +214,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 onClick: () {
                                   _postOverViewController
                                       .rescheduleServiceOrCancel(
-                                          d['orderState'], d['ordId'],ordersProvider,
-                                          action: "CANCEL_ORDER",);
+                                    d['orderState'],
+                                    d['ordId'],
+                                    ordersProvider,
+                                    action: "CANCEL_ORDER",
+                                  );
                                 },
                                 height: height(context) * 0.05,
                                 minWidth: width(context) * 0.4,
@@ -241,7 +245,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           .getDateAndTime()) {
                                     await _postOverViewController
                                         .rescheduleServiceOrCancel(
-                                            d['orderState'], d['ordId'],
+                                            d['orderState'],
+                                            d['ordId'],
                                             ordersProvider,
                                             action: "UPDATE_SCHEDULE");
                                   }
@@ -788,29 +793,35 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         context: context,
         barrierDismissible: true, // set to false if you want to force a rating
         builder: (context) {
-          return RatingDialog(onSubmitted: (RatingDialogResponse ) {  }, submitButtonText: '', title: Text('data'),
-            // icon: Icon(
-            //   Icons.rate_review,
-            //   size: 100,
-            //   color: Colors.blue[800],
-            // ),
-            // // const FlutterLogo(
-            // //   size: 100,
-            // // ), // set your own image/icon widget
-            // title: "Rate Your Technician!",
-            // description: "Express Your Experience By Tapping \nOn Stars",
-            // submitButton: "SUBMIT",
-            // alternativeButton: "Contact us instead?", // optional
-            // positiveComment: "We are so happy to hear :)", // optional
-            // negativeComment: "We're sad to hear :(", // optional
-            // accentColor: Colors.blue[800], // optional
-            // onSubmitPressed: (int rating) {
-            //   print("onSubmitPressed: rating = $rating");
-            // },
-            // onAlternativePressed: () {
-            //   print("onAlternativePressed: do something");
-            // },
-          );
+          //TODO implement
+        return RatingCard(onFeedbackSubmitted: (int stars, String feedback) {
+            print("$stars - $feedback");
+          });
+          // return RatingDialog(
+          //   onSubmitted: (RatingDialogResponse) {}, submitButtonText: '',
+          //   title: Text('data'),
+          //   // icon: Icon(
+          //   //   Icons.rate_review,
+          //   //   size: 100,
+          //   //   color: Colors.blue[800],
+          //   // ),
+          //   // // const FlutterLogo(
+          //   // //   size: 100,
+          //   // // ), // set your own image/icon widget
+          //   // title: "Rate Your Technician!",
+          //   // description: "Express Your Experience By Tapping \nOn Stars",
+          //   // submitButton: "SUBMIT",
+          //   // alternativeButton: "Contact us instead?", // optional
+          //   // positiveComment: "We are so happy to hear :)", // optional
+          //   // negativeComment: "We're sad to hear :(", // optional
+          //   // accentColor: Colors.blue[800], // optional
+          //   // onSubmitPressed: (int rating) {
+          //   //   print("onSubmitPressed: rating = $rating");
+          //   // },
+          //   // onAlternativePressed: () {
+          //   //   print("onAlternativePressed: do something");
+          //   // },
+          // );
         });
   }
 
@@ -1239,285 +1250,281 @@ class TimeLineTitle extends StatelessWidget {
   }
 }
 
-
-
-
-
 // CustomScrollView(
-        //   physics: const BouncingScrollPhysics(
-        //       parent: AlwaysScrollableScrollPhysics()),
-        //   slivers: [
-        //     SliverAppBar(
-        //         backgroundColor: Colors.blue[900],
-        //         stretch: true,
-        //         pinned: true,
-        //         snap: false,
-        //         floating: true,
-        //         expandedHeight: height(context) * 0.5,
-        //         flexibleSpace: FlexibleSpaceBar(
-        //             stretchModes: <StretchMode>[
-        //               StretchMode.zoomBackground,
-        //               StretchMode.fadeTitle,
-        //             ],
-        //             title: Text(
-        //               _postOverViewController.jobs.elementAt(d['job']),
-        //             ),
-        //             background: Container(
-        //               width: width(context) * 1,
-        //               color: Colors.black,
-        //               child: GestureDetector(
-        //                   onTap: () {
-        //                     imageslider(images, height(context), width(context));
-        //                   },
-        //                   child: (images.isEmpty)
-        //                       ? Icon(
-        //                           Icons.tungsten_rounded,
-        //                           color: Colors.amber,
-        //                           size: width(context) * 0.5,
-        //                         )
-        //                       : Image.network(
-        //                           images.first,
-        //                           fit: BoxFit.cover,
-        //                         )),
-        //             ))),
-        //     SliverList(
-        //         delegate: SliverChildListDelegate([
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: width(context) * 0.08, top: width(context) * 0.03),
-        //         height: height(context) * 0.07,
-        //         child: Column(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Text('Orderid:',
-        //                 style: TextStyle(
-        //                     color: Colors.grey[700],
-        //                     fontWeight: FontWeight.bold)),
-        //             Text(d['ordId'].toString()),
-        //           ],
-        //         ),
-        //       ),
-        //       Divider(
-        //         thickness: 4,
-        //         color: Colors.grey[200],
-        //       ),
-        //       Container(
-        //         padding: EdgeInsets.only(right: 5, left: 5),
-        //         height: height(context) * 0.032,
-        //         decoration: BoxDecoration(
-        //             color: Colors.white,
-        //             borderRadius: BorderRadius.circular(5)),
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children: [
-        //             Icon(
-        //               _postOverViewController.orderStateIcon(d['ordState']),
-        //               color: Colors.indigo[900],
-        //               size: width(context) * 0.04,
-        //             ),
-        //             SizedBox(
-        //               width: width(context) * 0.01,
-        //             ),
-        //             TextWidget(
-        //                 text: _postOverViewController
-        //                     .orderStateText(d['ordState']),
-        //                 color: Colors.indigo[900],
-        //                 weight: FontWeight.w600,
-        //                 size: width(context) * 0.03)
-        //           ],
-        //         ),
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-        //         height: height(context) * 0.1,
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Container(
-        //               width: width(context) * 0.7,
-        //               child: Column(
-        //                 mainAxisAlignment: MainAxisAlignment.center,
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text('Problem:',
-        //                       style: TextStyle(
-        //                           color: Colors.grey[700],
-        //                           fontWeight: FontWeight.bold)),
-        //                   Flexible(
-        //                     child: Text(
-        //                       d['problem'],
-        //                       overflow: TextOverflow.ellipsis,
-        //                       style: TextStyle(color: Colors.grey[800]),
-        //                     ),
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             _postOverViewController.editAttributes(
-        //                 'problem',
-        //                 ordId.toString(),
-        //                 d['job'],
-        //                 d['money'],
-        //                 d['schedule'],
-        //                 coordinates),
-        //           ],
-        //         ),
-        //       ),
-        //       Divider(
-        //         thickness: 4,
-        //         color: Colors.grey[200],
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-        //         height: height(context) * 0.1,
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Column(
-        //               mainAxisAlignment: MainAxisAlignment.center,
-        //               crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Text('Amount quoted:',
-        //                     style: TextStyle(
-        //                         color: Colors.grey[700],
-        //                         fontWeight: FontWeight.bold)),
-        //                 Text('₹' + d['money'].toString(),
-        //                     style: TextStyle(
-        //                       color: Colors.grey[700],
-        //                     )),
-        //                 // Text(d['ordId']),
-        //               ],
-        //             ),
-        //             _postOverViewController.editAttributes(
-        //                 'amount',
-        //                 ordId.toString(),
-        //                 d['job'],
-        //                 d['money'],
-        //                 d['schedule'],
-        //                 coordinates),
-        //           ],
-        //         ),
-        //       ),
-        //       Divider(
-        //         thickness: 4,
-        //         color: Colors.grey[200],
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-        //         height: height(context) * 0.1,
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Column(
-        //               mainAxisAlignment: MainAxisAlignment.center,
-        //               crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Text('Schedule:',
-        //                     style: TextStyle(
-        //                         color: Colors.grey[700],
-        //                         fontWeight: FontWeight.bold)),
-        //                 Text(
-        //                     DateFormat('dd/MM/yyyy').format(
-        //                         DateTime.fromMillisecondsSinceEpoch(
-        //                             d['schedule'])),
-        //                     style: TextStyle(
-        //                       color: Colors.grey[700],
-        //                     ))
-        //               ],
-        //             ),
-        //             _postOverViewController.editAttributes(
-        //                 'Schedule',
-        //                 ordId.toString(),
-        //                 d['job'],
-        //                 d['money'],
-        //                 d['schedule'],
-        //                 coordinates),
-        //           ],
-        //         ),
-        //       ),
-        //       Divider(
-        //         thickness: 4,
-        //         color: Colors.grey[200],
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-        //         height: height(context) * 0.1,
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Column(
-        //               mainAxisAlignment: MainAxisAlignment.center,
-        //               crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Text('Service location:',
-        //                     style: TextStyle(
-        //                         color: Colors.grey[700],
-        //                         fontWeight: FontWeight.bold)),
-        //                 Text(
-        //                     d['loc'][0].toString() +
-        //                         ',' +
-        //                         d['loc'][1].toString(),
-        //                     style: TextStyle(
-        //                       color: Colors.grey[700],
-        //                     ))
-        //               ],
-        //             ),
-        //             _postOverViewController.editAttributes(
-        //                 'location',
-        //                 ordId.toString(),
-        //                 d['job'],
-        //                 d['money'],
-        //                 d['schedule'],
-        //                 coordinates),
-        //           ],
-        //         ),
-        //       ),
-        //       d['ordstate'] == 'req'
-        //           ? Container(
-        //               color: Colors.blue[900],
-        //               child: IconButton(
-        //                   onPressed: () {
-        //                     rating();
-        //                   },
-        //                   icon: Row(
-        //                     mainAxisAlignment: MainAxisAlignment.center,
-        //                     children: [
-        //                       Text(
-        //                         'Rate',
-        //                         style: TextStyle(
-        //                             color: Colors.white,
-        //                             fontSize: width(context) * 0.05),
-        //                       ),
-        //                       Icon(
-        //                         Icons.star,
-        //                         color: Colors.white,
-        //                       ),
-        //                     ],
-        //                   )),
-        //             )
-        //           : Container(
-        //               color: Colors.blue[900],
-        //               child: IconButton(
-        //                   icon: Row(
-        //                     mainAxisAlignment: MainAxisAlignment.center,
-        //                     children: [
-        //                       Text(
-        //                         'Complete',
-        //                         style: TextStyle(color: Colors.white),
-        //                       ),
-        //                       Icon(
-        //                         Icons.done,
-        //                         color: Colors.white,
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   onPressed: () {}),
-        //             ),
-        //     ])),
-        //   ],
-        // );
+//   physics: const BouncingScrollPhysics(
+//       parent: AlwaysScrollableScrollPhysics()),
+//   slivers: [
+//     SliverAppBar(
+//         backgroundColor: Colors.blue[900],
+//         stretch: true,
+//         pinned: true,
+//         snap: false,
+//         floating: true,
+//         expandedHeight: height(context) * 0.5,
+//         flexibleSpace: FlexibleSpaceBar(
+//             stretchModes: <StretchMode>[
+//               StretchMode.zoomBackground,
+//               StretchMode.fadeTitle,
+//             ],
+//             title: Text(
+//               _postOverViewController.jobs.elementAt(d['job']),
+//             ),
+//             background: Container(
+//               width: width(context) * 1,
+//               color: Colors.black,
+//               child: GestureDetector(
+//                   onTap: () {
+//                     imageslider(images, height(context), width(context));
+//                   },
+//                   child: (images.isEmpty)
+//                       ? Icon(
+//                           Icons.tungsten_rounded,
+//                           color: Colors.amber,
+//                           size: width(context) * 0.5,
+//                         )
+//                       : Image.network(
+//                           images.first,
+//                           fit: BoxFit.cover,
+//                         )),
+//             ))),
+//     SliverList(
+//         delegate: SliverChildListDelegate([
+//       Container(
+//         padding:
+//             EdgeInsets.only(left: width(context) * 0.08, top: width(context) * 0.03),
+//         height: height(context) * 0.07,
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text('Orderid:',
+//                 style: TextStyle(
+//                     color: Colors.grey[700],
+//                     fontWeight: FontWeight.bold)),
+//             Text(d['ordId'].toString()),
+//           ],
+//         ),
+//       ),
+//       Divider(
+//         thickness: 4,
+//         color: Colors.grey[200],
+//       ),
+//       Container(
+//         padding: EdgeInsets.only(right: 5, left: 5),
+//         height: height(context) * 0.032,
+//         decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.circular(5)),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(
+//               _postOverViewController.orderStateIcon(d['ordState']),
+//               color: Colors.indigo[900],
+//               size: width(context) * 0.04,
+//             ),
+//             SizedBox(
+//               width: width(context) * 0.01,
+//             ),
+//             TextWidget(
+//                 text: _postOverViewController
+//                     .orderStateText(d['ordState']),
+//                 color: Colors.indigo[900],
+//                 weight: FontWeight.w600,
+//                 size: width(context) * 0.03)
+//           ],
+//         ),
+//       ),
+//       Container(
+//         padding:
+//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+//         height: height(context) * 0.1,
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Container(
+//               width: width(context) * 0.7,
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text('Problem:',
+//                       style: TextStyle(
+//                           color: Colors.grey[700],
+//                           fontWeight: FontWeight.bold)),
+//                   Flexible(
+//                     child: Text(
+//                       d['problem'],
+//                       overflow: TextOverflow.ellipsis,
+//                       style: TextStyle(color: Colors.grey[800]),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             _postOverViewController.editAttributes(
+//                 'problem',
+//                 ordId.toString(),
+//                 d['job'],
+//                 d['money'],
+//                 d['schedule'],
+//                 coordinates),
+//           ],
+//         ),
+//       ),
+//       Divider(
+//         thickness: 4,
+//         color: Colors.grey[200],
+//       ),
+//       Container(
+//         padding:
+//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+//         height: height(context) * 0.1,
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text('Amount quoted:',
+//                     style: TextStyle(
+//                         color: Colors.grey[700],
+//                         fontWeight: FontWeight.bold)),
+//                 Text('₹' + d['money'].toString(),
+//                     style: TextStyle(
+//                       color: Colors.grey[700],
+//                     )),
+//                 // Text(d['ordId']),
+//               ],
+//             ),
+//             _postOverViewController.editAttributes(
+//                 'amount',
+//                 ordId.toString(),
+//                 d['job'],
+//                 d['money'],
+//                 d['schedule'],
+//                 coordinates),
+//           ],
+//         ),
+//       ),
+//       Divider(
+//         thickness: 4,
+//         color: Colors.grey[200],
+//       ),
+//       Container(
+//         padding:
+//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+//         height: height(context) * 0.1,
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text('Schedule:',
+//                     style: TextStyle(
+//                         color: Colors.grey[700],
+//                         fontWeight: FontWeight.bold)),
+//                 Text(
+//                     DateFormat('dd/MM/yyyy').format(
+//                         DateTime.fromMillisecondsSinceEpoch(
+//                             d['schedule'])),
+//                     style: TextStyle(
+//                       color: Colors.grey[700],
+//                     ))
+//               ],
+//             ),
+//             _postOverViewController.editAttributes(
+//                 'Schedule',
+//                 ordId.toString(),
+//                 d['job'],
+//                 d['money'],
+//                 d['schedule'],
+//                 coordinates),
+//           ],
+//         ),
+//       ),
+//       Divider(
+//         thickness: 4,
+//         color: Colors.grey[200],
+//       ),
+//       Container(
+//         padding:
+//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
+//         height: height(context) * 0.1,
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text('Service location:',
+//                     style: TextStyle(
+//                         color: Colors.grey[700],
+//                         fontWeight: FontWeight.bold)),
+//                 Text(
+//                     d['loc'][0].toString() +
+//                         ',' +
+//                         d['loc'][1].toString(),
+//                     style: TextStyle(
+//                       color: Colors.grey[700],
+//                     ))
+//               ],
+//             ),
+//             _postOverViewController.editAttributes(
+//                 'location',
+//                 ordId.toString(),
+//                 d['job'],
+//                 d['money'],
+//                 d['schedule'],
+//                 coordinates),
+//           ],
+//         ),
+//       ),
+//       d['ordstate'] == 'req'
+//           ? Container(
+//               color: Colors.blue[900],
+//               child: IconButton(
+//                   onPressed: () {
+//                     rating();
+//                   },
+//                   icon: Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       Text(
+//                         'Rate',
+//                         style: TextStyle(
+//                             color: Colors.white,
+//                             fontSize: width(context) * 0.05),
+//                       ),
+//                       Icon(
+//                         Icons.star,
+//                         color: Colors.white,
+//                       ),
+//                     ],
+//                   )),
+//             )
+//           : Container(
+//               color: Colors.blue[900],
+//               child: IconButton(
+//                   icon: Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       Text(
+//                         'Complete',
+//                         style: TextStyle(color: Colors.white),
+//                       ),
+//                       Icon(
+//                         Icons.done,
+//                         color: Colors.white,
+//                       ),
+//                     ],
+//                   ),
+//                   onPressed: () {}),
+//             ),
+//     ])),
+//   ],
+// );

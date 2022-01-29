@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/home_controller.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
@@ -66,10 +67,10 @@ class _HomeState extends StateMVC<Home> {
       length: 8,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.background,
           leading: Icon(
             Icons.location_searching,
-            color: Colors.indigo[900],
+            color: SpotmiesTheme.primary,
           ),
           title: Container(
             width: width(context) * 0.5,
@@ -86,7 +87,7 @@ class _HomeState extends StateMVC<Home> {
                   style: GoogleFonts.josefinSans(
                     fontSize: width(context) * 0.045,
                     fontWeight: FontWeight.bold,
-                    color: Colors.indigo[900],
+                    color: SpotmiesTheme.primary,
                   )),
             ),
           ),
@@ -106,7 +107,7 @@ class _HomeState extends StateMVC<Home> {
                   },
                   icon: Icon(
                     Icons.search,
-                    color: Colors.indigo[900],
+                    color: SpotmiesTheme.primary,
                   ),
                 )),
             Container(
@@ -118,7 +119,7 @@ class _HomeState extends StateMVC<Home> {
                   },
                   icon: Icon(
                     Icons.local_offer_sharp,
-                    color: Colors.indigo[900],
+                    color: SpotmiesTheme.primary,
                   ),
                 )),
           ],
@@ -134,7 +135,7 @@ class _HomeState extends StateMVC<Home> {
                   indicatorWeight: 0,
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Colors.indigo[900]),
+                      color: SpotmiesTheme.primary),
                   labelStyle: fonts(
                       width(context) * 0.04, FontWeight.w600, Colors.white),
                   tabs: [
@@ -331,7 +332,7 @@ class _HomeState extends StateMVC<Home> {
 //           backgroundColor: Colors.white,
 //           leading: Icon(
 //             Icons.location_searching,
-//             color: Colors.indigo[900],
+//             color: SpotmiesTheme.primary,
 //           ),
 //           title: Container(
 //             width: width(context) * 0.5,
@@ -354,7 +355,7 @@ class _HomeState extends StateMVC<Home> {
 //             // Text(
 //             //   'MMTC,Seethammadhara',
 //             //   overflow: TextOverflow.ellipsis,
-//             //   style: fonts(width(context) * 0.045, FontWeight.w600, Colors.indigo[900]),
+//             //   style: fonts(width(context) * 0.045, FontWeight.w600, SpotmiesTheme.primary),
 //             // ),
 //           ),
 //           actions: [
@@ -373,7 +374,7 @@ class _HomeState extends StateMVC<Home> {
 //                   },
 //                   icon: Icon(
 //                     Icons.search,
-//                     color: Colors.indigo[900],
+//                     color: SpotmiesTheme.primary,
 //                   ),
 //                 )),
 //             Container(
@@ -385,7 +386,7 @@ class _HomeState extends StateMVC<Home> {
 //                   },
 //                   icon: Icon(
 //                     Icons.local_offer_sharp,
-//                     color: Colors.indigo[900],
+//                     color: SpotmiesTheme.primary,
 //                   ),
 //                 )),
 //           ],
@@ -401,7 +402,7 @@ class _HomeState extends StateMVC<Home> {
 //                   indicatorWeight: 0,
 //                   indicator: BoxDecoration(
 //                       borderRadius: BorderRadius.circular(5),
-//                       color: Colors.indigo[900]),
+//                       color: SpotmiesTheme.primary),
 //                   labelStyle:
 //                       fonts(width(context) * 0.04, FontWeight.w600, Colors.white),
 //                   tabs: [

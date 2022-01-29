@@ -87,7 +87,6 @@ class AdController extends ControllerMVC {
     this.adModel = AdModel();
   }
 
-
   //function for location
   void getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -106,7 +105,6 @@ class AdController extends ControllerMVC {
       longitude = '${position.longitude}';
     });
   }
-
 
   getAddressofLocation({double? lat, double? long}) async {
     log('message');
@@ -224,8 +222,7 @@ class AdController extends ControllerMVC {
           cloudLocation: "orderMediaFiles", fileType: extensionType(i));
       imageLink.add(downloadLink);
     }
-
-    }
+  }
 
   step1(BuildContext context) {
     if (dropDownValue == null || dropDownValue! < 0) {
@@ -243,10 +240,10 @@ class AdController extends ControllerMVC {
     });
   }
 
-  step3(userDetails,BuildContext context,GetOrdersProvider ordersProvider) {
+  step3(userDetails, BuildContext context, GetOrdersProvider ordersProvider) {
     isUploading = 1;
     refresh();
-    adbutton(userDetails,context,ordersProvider);
+    adbutton(userDetails, context, ordersProvider);
   }
 
   updateLocations(lat, log, fulladdress) {
@@ -263,7 +260,8 @@ class AdController extends ControllerMVC {
     return pickedDateTime.millisecondsSinceEpoch.toString();
   }
 
-  adbutton(userDetails,BuildContext context,GetOrdersProvider ordersProvider) async {
+  adbutton(userDetails, BuildContext context,
+      GetOrdersProvider ordersProvider) async {
     await uploadServiceMedia();
     // String images = imageLink.toString();
     CircularProgressIndicator();

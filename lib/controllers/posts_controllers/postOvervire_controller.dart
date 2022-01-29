@@ -7,6 +7,7 @@ import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/maps/maps.dart';
@@ -33,7 +34,7 @@ class PostOverViewController extends ControllerMVC {
   //   // getAddressofLocation();
   // }
 
-  isOrderCompleted(String money, String orderID,BuildContext context,
+  isOrderCompleted(String money, String orderID, BuildContext context,
       GetOrdersProvider ordersProvider) async {
     Map<String, String> body = {"orderState": "9", "moneyGivenByUser": money};
     dynamic response = await Server().editMethod(API.editOrder + orderID, body);
@@ -45,7 +46,8 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
-  Future<void> getOrderAndUpdate(orderID, GetOrdersProvider? ordersProvider) async {
+  Future<void> getOrderAndUpdate(
+      orderID, GetOrdersProvider? ordersProvider) async {
     dynamic response2 =
         await Server().getMethod(API.confirmOrder + orderID.toString());
     if (response2.statusCode == 200) {
@@ -55,27 +57,22 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
-  Widget editAttributes(String field, String ordId, job, money, schedule,
-      Coordinates coordinates,BuildContext context,
+  Widget editAttributes(
+      String field,
+      String ordId,
+      job,
+      money,
+      schedule,
+      Coordinates coordinates,
+      BuildContext context,
       GetOrdersProvider? ordersProvider) {
     return InkWell(
       onTap: () {
         if (field == 'problem') {
-          editDialogue(
-            'problem',
-            ordId,
-            context,
-            ordersProvider
-
-          );
+          editDialogue('problem', ordId, context, ordersProvider);
         }
         if (field == 'amount') {
-          editDialogue(
-            'amount',
-            ordId,
-            context,
-            ordersProvider
-          );
+          editDialogue('amount', ordId, context, ordersProvider);
         }
         if (field == 'Schedule') {
           print(field);
@@ -88,10 +85,10 @@ class PostOverViewController extends ControllerMVC {
       },
       child: CircleAvatar(
           radius: 20,
-          backgroundColor: Colors.grey[100],
+          backgroundColor: SpotmiesTheme.onSurface,
           child: Icon(
             Icons.edit,
-            color: Colors.blue[900],
+            color: SpotmiesTheme.tertiaryVariant,
           )),
     );
   }
@@ -177,8 +174,8 @@ class PostOverViewController extends ControllerMVC {
     }
   }
 
-  Future chatWithpatner(responseData,BuildContext context,
-      GetOrdersProvider ordersProvider,ChatProvider chatProvider) async {
+  Future chatWithpatner(responseData, BuildContext context,
+      GetOrdersProvider ordersProvider, ChatProvider chatProvider) async {
     if (ordersProvider.orderViewLoader) return;
 
     String ordId = responseData['ordId'].toString();
@@ -228,8 +225,8 @@ class PostOverViewController extends ControllerMVC {
   editDialogue(
     edit,
     String ordId,
-    BuildContext context, GetOrdersProvider? ordersProvider,
-    
+    BuildContext context,
+    GetOrdersProvider? ordersProvider,
   ) {
     final hight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).padding.top -
@@ -252,7 +249,7 @@ class PostOverViewController extends ControllerMVC {
                         right: width * 0.03,
                         top: width * 0.03),
                     decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: SpotmiesTheme.onSurface,
                         borderRadius: BorderRadius.circular(15)),
                     height: hight * 0.10,
                     width: width * 0.7,
@@ -273,16 +270,16 @@ class PostOverViewController extends ControllerMVC {
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide: BorderSide(
-                                width: 1, color: Colors.grey.shade100)),
+                                width: 1, color: SpotmiesTheme.onSurface)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide: BorderSide(
-                                width: 1, color: Colors.grey.shade100)),
+                                width: 1, color: SpotmiesTheme.onSurface)),
                         hintStyle: TextStyle(fontSize: 17),
                         hintText: edit == 'problem' ? 'Problem' : 'Amount',
                         suffixIcon: Icon(
                           Icons.error_outline_rounded,
-                          color: Colors.blue[900],
+                          color: SpotmiesTheme.tertiaryVariant,
                         ),
                         contentPadding: EdgeInsets.only(
                             left: hight * 0.03, top: hight * 0.04),
@@ -305,11 +302,11 @@ class PostOverViewController extends ControllerMVC {
                   },
                   icon: Icon(
                     Icons.done_all,
-                    color: Colors.blue[900],
+                    color: SpotmiesTheme.tertiaryVariant,
                   ),
                   label: Text(
                     'Change',
-                    style: TextStyle(color: Colors.blue[900]),
+                    style: TextStyle(color: SpotmiesTheme.tertiaryVariant),
                   ))
             ],
           );
@@ -355,7 +352,8 @@ class PostOverViewController extends ControllerMVC {
   }
 
   static const dummyLocation = {"lat": 0.00, "log": 0.00};
-  rescheduleServiceOrCancel(orderState, orderId, GetOrdersProvider ordersProvider,
+  rescheduleServiceOrCancel(
+      orderState, orderId, GetOrdersProvider ordersProvider,
       {isReschedule = true,
       Map<String, double> updatedCoordinate = dummyLocation,
       dynamic updatedAddress,
@@ -391,7 +389,8 @@ class PostOverViewController extends ControllerMVC {
     ordersProvider.setOrderViewLoader(false);
     if (response != null) {
       ordersProvider.setOrderViewLoader(true);
-      await getOrderAndUpdate(orderId,
+      await getOrderAndUpdate(
+        orderId,
         ordersProvider,
       );
       ordersProvider.setOrderViewLoader(false);
@@ -403,7 +402,8 @@ class PostOverViewController extends ControllerMVC {
     await updateOrder(body: body, ordId: ordId);
   }
 
-  submitReview(int rating, String comment, GetOrdersProvider? ordersProvider,BuildContext context) async {
+  submitReview(int rating, String comment, GetOrdersProvider? ordersProvider,
+      BuildContext context) async {
     log(rating.toString());
     log(comment);
     String mappedRating = (rating * 20).toString();
@@ -422,7 +422,8 @@ class PostOverViewController extends ControllerMVC {
     //  log("body $body");
     dynamic newbody = orderDetails;
     newbody['orderState'] = 10;
-    ordersProvider?.updateOrderById(ordId: newbody['ordId'], orderData: newbody);
+    ordersProvider?.updateOrderById(
+        ordId: newbody['ordId'], orderData: newbody);
     bool resp = await feedbackOrder(body: body);
     if (resp) {
       Map<String, String> body = {"orderState": "10"};
