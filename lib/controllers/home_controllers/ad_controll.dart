@@ -357,7 +357,8 @@ class AdController extends ControllerMVC {
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
       "uDetails": userDetails["_id"].toString(),
-      "address": fullAddress.isNotEmpty ? jsonEncode(fullAddress) : ""
+      "address":
+          fullAddress.isNotEmpty ? jsonEncode(fullAddress).toString() : ""
     };
     for (var i = 0; i < imageLink.length; i++) {
       body["media.$i"] = imageLink[i];
