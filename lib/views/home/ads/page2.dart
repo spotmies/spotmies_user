@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/media_player.dart';
@@ -13,6 +14,7 @@ import 'package:spotmies/views/reusable_widgets/steps.dart';
 Widget page2(double hight, double width, BuildContext context,
     AdController adController) {
   return Scaffold(
+    backgroundColor: SpotmiesTheme.background,
     body: SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.only(
@@ -50,10 +52,11 @@ Widget page2(double hight, double width, BuildContext context,
                     Center(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey[50],
+                          color: SpotmiesTheme.surfaceVariant2,
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         height: hight * 0.47,
-                        width: width * 0.8,
+                        width: width * 0.9,
                         child: Column(
                           children: [
                             Container(
@@ -61,25 +64,30 @@ Widget page2(double hight, double width, BuildContext context,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 IconButton(
-                                    onPressed: () {
-                                      return !adController.uploading
-                                          ? adController.chooseImage()
-                                          : null;
-                                    },
-                                    icon: Icon(Icons.camera)),
+                                  onPressed: () {
+                                    return !adController.uploading
+                                        ? adController.chooseImage()
+                                        : null;
+                                  },
+                                  icon: Icon(Icons.camera),
+                                  color: SpotmiesTheme.secondaryVariant,
+                                ),
                                 IconButton(
-                                    onPressed: () {
-                                      adController.pickVideo();
-                                    },
-                                    icon: Icon(Icons.video_camera_back)),
+                                  onPressed: () {
+                                    adController.pickVideo();
+                                  },
+                                  icon: Icon(Icons.video_camera_back),
+                                  color: SpotmiesTheme.secondaryVariant,
+                                ),
                                 IconButton(
-                                    onPressed: () {
-                                      log(adController.serviceImages
-                                          .toString());
-                                      audioRecoder(
-                                          context, hight, width, adController);
-                                    },
-                                    icon: Icon(Icons.mic))
+                                  onPressed: () {
+                                    log(adController.serviceImages.toString());
+                                    audioRecoder(
+                                        context, hight, width, adController);
+                                  },
+                                  icon: Icon(Icons.mic),
+                                  color: SpotmiesTheme.secondaryVariant,
+                                )
                               ],
                             )),
                             SizedBox(
@@ -96,6 +104,8 @@ Widget page2(double hight, double width, BuildContext context,
                                             icon: Icon(
                                               Icons.perm_camera_mic,
                                               size: 45,
+                                              color: SpotmiesTheme
+                                                  .secondaryVariant,
                                               // color: Colors.grey,
                                             ),
                                             onPressed: () {}),
@@ -108,6 +118,7 @@ Widget page2(double hight, double width, BuildContext context,
                                           size: width * 0.05,
                                           align: TextAlign.center,
                                           weight: FontWeight.w600,
+                                          color: SpotmiesTheme.secondaryVariant,
                                           // lSpace: 1,
                                         ),
                                       ],
@@ -228,8 +239,8 @@ Widget page2(double hight, double width, BuildContext context,
                         await adController.step1(context);
                       },
                       buttonName: 'Next',
-                      bgColor: Colors.indigo[900],
-                      textColor: Colors.white,
+                      bgColor: SpotmiesTheme.primary,
+                      textColor: SpotmiesTheme.background,
                       height: hight * 0.05,
                       minWidth: width * 0.60,
                       textSize: hight * 0.02,

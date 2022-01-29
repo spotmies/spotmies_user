@@ -66,6 +66,7 @@ class _HomeState extends StateMVC<Home> {
     return DefaultTabController(
       length: 8,
       child: Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         appBar: AppBar(
           backgroundColor: SpotmiesTheme.background,
           leading: Icon(

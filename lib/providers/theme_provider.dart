@@ -28,6 +28,10 @@ class SpotmiesTheme {
   static Color tertiaryVariant = Colors.blue.shade900;
   static Color surfaceVariant = Colors.grey.shade50;
   static Color primaryVariant = Colors.indigo.shade50;
+  static Color surfaceVariant2 = Colors.grey.shade200;
+
+  static Color title = Colors.blueGrey.shade600;
+  static Color titleVariant = Colors.blueGrey.shade900;
 
   Map<colorScheme, Color> lightColorScheme = {
     colorScheme.background: Colors.white,
@@ -41,6 +45,9 @@ class SpotmiesTheme {
     colorScheme.tertiaryVariant: Colors.blue.shade900,
     colorScheme.surfaceVariant: Colors.grey.shade50,
     colorScheme.primaryVariant: Colors.indigo.shade50,
+    colorScheme.surfaceVariant2: Colors.grey.shade200,
+    colorScheme.title: Colors.blueGrey.shade600,
+    colorScheme.titleVariant: Colors.blueGrey.shade900,
   };
   Map<colorScheme, Color> darkColorScheme = {
     colorScheme.background: Colors.grey.shade800,
@@ -53,7 +60,10 @@ class SpotmiesTheme {
     colorScheme.onSurface: Colors.grey.shade100,
     colorScheme.tertiaryVariant: Colors.blue.shade300,
     colorScheme.surfaceVariant: Colors.grey.shade500,
-    colorScheme.primaryVariant: Colors.indigo.shade400
+    colorScheme.primaryVariant: Colors.indigo.shade400,
+    colorScheme.surfaceVariant2: Colors.grey.shade600,
+    colorScheme.title: Colors.blueGrey.shade100,
+    colorScheme.titleVariant: Colors.blueGrey.shade50,
   };
   init(context) {
     Provider.of<ThemeProvider>(context, listen: true).addListener(() {
@@ -93,9 +103,20 @@ class SpotmiesTheme {
       surfaceVariant = (themeMode
           ? darkColorScheme[colorScheme.surfaceVariant]
           : lightColorScheme[colorScheme.surfaceVariant])!;
+
+      surfaceVariant2 = (themeMode
+          ? darkColorScheme[colorScheme.surfaceVariant2]
+          : lightColorScheme[colorScheme.surfaceVariant2])!;
       primaryVariant = (themeMode
           ? darkColorScheme[colorScheme.primaryVariant]
           : lightColorScheme[colorScheme.primaryVariant])!;
+
+      title = (themeMode
+          ? darkColorScheme[colorScheme.title]
+          : lightColorScheme[colorScheme.title])!;
+      titleVariant = (themeMode
+          ? darkColorScheme[colorScheme.titleVariant]
+          : lightColorScheme[colorScheme.titleVariant])!;
     });
   }
 }
@@ -112,4 +133,7 @@ enum colorScheme {
   surface,
   onSurface,
   surfaceVariant,
+  surfaceVariant2,
+  title,
+  titleVariant
 }

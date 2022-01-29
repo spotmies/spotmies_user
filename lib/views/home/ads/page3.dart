@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/maps/onLine_placesSearch.dart';
@@ -13,6 +14,7 @@ import '../../maps/maps.dart';
 Widget page3(double hight, double width, user, AdController adController,
     BuildContext context, GetOrdersProvider? ordersProvider) {
   return Scaffold(
+    backgroundColor: SpotmiesTheme.background,
     body: SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.only(
@@ -46,6 +48,7 @@ Widget page3(double hight, double width, user, AdController adController,
                       size: width * 0.06,
                       align: TextAlign.center,
                       weight: FontWeight.w500,
+                      color: SpotmiesTheme.secondaryVariant,
                     ),
                     SizedBox(
                       height: hight * 0.022,
@@ -57,12 +60,6 @@ Widget page3(double hight, double width, user, AdController adController,
                         isNavigate: false,
                         onSave: () {},
                       ),
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade200,
-                            blurRadius: 5,
-                            spreadRadius: 2)
-                      ]),
                     ),
                     SizedBox(
                       height: hight * 0.022,
@@ -87,6 +84,7 @@ Widget page3(double hight, double width, user, AdController adController,
                                 size: width * 0.04,
                                 flow: TextOverflow.visible,
                                 weight: FontWeight.w500,
+                                color: SpotmiesTheme.secondaryVariant,
                               ),
                               SizedBox(
                                 height: hight * 0.03,
@@ -102,8 +100,9 @@ Widget page3(double hight, double width, user, AdController adController,
                                 ElevatedButtonWidget(
                                   buttonName: 'My Location',
                                   bgColor: Colors.transparent,
-                                  borderSideColor: Colors.indigo[900],
+                                  borderSideColor: SpotmiesTheme.primary,
                                   textSize: width * 0.035,
+                                  textColor: SpotmiesTheme.onBackground,
                                   borderRadius: 15.0,
                                   onClick: () {
                                     adController.getCurrentLocation();
@@ -115,7 +114,8 @@ Widget page3(double hight, double width, user, AdController adController,
                                 ElevatedButtonWidget(
                                   buttonName: 'Change Location',
                                   bgColor: Colors.transparent,
-                                  borderSideColor: Colors.indigo[900],
+                                  textColor: SpotmiesTheme.onBackground,
+                                  borderSideColor: SpotmiesTheme.primary,
                                   borderRadius: 15.0,
                                   textSize: width * 0.035,
                                   height: hight * 0.07,
@@ -173,10 +173,11 @@ Widget page3(double hight, double width, user, AdController adController,
                     ),
                     ElevatedButtonWidget(
                       onClick: () async {
-                        await adController.step3(user,context,ordersProvider!);
+                        await adController.step3(
+                            user, context, ordersProvider!);
                       },
                       buttonName: 'Finish',
-                      bgColor: Colors.indigo[900],
+                      bgColor: SpotmiesTheme.primary,
                       textColor: Colors.white,
                       height: hight * 0.05,
                       minWidth: width * 0.60,

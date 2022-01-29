@@ -1,6 +1,8 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies/providers/theme_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
@@ -9,6 +11,7 @@ Future promotions(BuildContext context, double hight, double width) {
       context: context,
       elevation: 22,
       isScrollControlled: true,
+      backgroundColor: SpotmiesTheme.background,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -40,7 +43,7 @@ Future promotions(BuildContext context, double hight, double width) {
                           child: Stack(children: [
                             DottedBorder(
                               dashPattern: [6, 3, 2, 3],
-                              color: Colors.black,
+                              color: SpotmiesTheme.onBackground,
                               borderType: BorderType.RRect,
                               radius: Radius.circular(30),
                               padding: EdgeInsets.all(0),
@@ -58,8 +61,10 @@ Future promotions(BuildContext context, double hight, double width) {
                                     children: [
                                       Text(
                                         'SUPERSUNDAYS',
-                                        style: fonts(width * 0.06,
-                                            FontWeight.w600, Colors.grey[900]),
+                                        style: fonts(
+                                            width * 0.06,
+                                            FontWeight.w600,
+                                            SpotmiesTheme.secondaryVariant),
                                       ),
                                       Container(
                                         // height: hight * 0.2,
@@ -76,7 +81,8 @@ Future promotions(BuildContext context, double hight, double width) {
                                               style: fonts(
                                                   width * 0.04,
                                                   FontWeight.w500,
-                                                  Colors.grey[900]),
+                                                  SpotmiesTheme
+                                                      .secondaryVariant),
                                             ),
                                           ],
                                         ),
@@ -95,7 +101,7 @@ Future promotions(BuildContext context, double hight, double width) {
                                             style: fonts(
                                                 width * 0.03,
                                                 FontWeight.w500,
-                                                Colors.grey[900]),
+                                                SpotmiesTheme.secondaryVariant),
                                           ),
                                         ],
                                       ),
@@ -122,13 +128,13 @@ Future promotions(BuildContext context, double hight, double width) {
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
                   bgColor: Colors.indigo[50],
-                  minWidth: width,
+                  minWidth: width * 0.9,
                   height: hight * 0.06,
                   textColor: Colors.grey[900],
                   buttonName: 'Close',
                   textSize: width * 0.05,
                   textStyle: FontWeight.w600,
-                  borderRadius: 5.0,
+                  borderRadius: height(context) * 0.015,
                   borderSideColor: Colors.indigo[50],
                   onClick: () {
                     Navigator.pop(context);

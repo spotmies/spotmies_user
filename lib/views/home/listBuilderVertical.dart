@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 Widget serviceIndividualBuilder(
@@ -9,7 +10,7 @@ Widget serviceIndividualBuilder(
   List<Map<String, Object>> buildData,
 ) {
   return Container(
-      height: hight * 0.7,
+      height: hight * 0.8,
       width: width,
       padding: EdgeInsets.all(10),
       child: Column(
@@ -26,7 +27,7 @@ Widget serviceIndividualBuilder(
                   Text(
                     '$buildName',
                     style: fonts(
-                        width * 0.06, FontWeight.w600, Colors.indigo[900]),
+                        width * 0.06, FontWeight.w600, SpotmiesTheme.primary),
                   ),
                   TextButton(
                       onPressed: () {
@@ -55,16 +56,16 @@ Widget serviceIndividualBuilder(
                     margin: EdgeInsets.only(bottom: 10),
                     padding: EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
-                        color: Colors.blueGrey[50],
+                        color: SpotmiesTheme.surfaceVariant2,
                         borderRadius: BorderRadius.circular(15)),
                     child: Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: Colors.grey[50],
+                          backgroundColor: SpotmiesTheme.surfaceVariant,
                           radius: width * 0.06,
                           child: Icon(
                             buildData[index]['icon'] as IconData?,
-                            color: Colors.grey[900],
+                            color: SpotmiesTheme.secondaryVariant,
                             size: width * 0.06,
                           ),
                         ),
@@ -78,7 +79,7 @@ Widget serviceIndividualBuilder(
                               Text(
                                 buildData[index]['job'].toString(),
                                 style: fonts(width * 0.035, FontWeight.w600,
-                                    Colors.grey[900]),
+                                    SpotmiesTheme.secondaryVariant),
                               ),
                               SizedBox(
                                 height: hight * 0.008,
@@ -87,7 +88,7 @@ Widget serviceIndividualBuilder(
                                 buildData[index]['desc'].toString(),
                                 overflow: TextOverflow.ellipsis,
                                 style: fonts(width * 0.03, FontWeight.w500,
-                                    Colors.grey[900]),
+                                    SpotmiesTheme.secondaryVariant),
                               ),
                               SizedBox(
                                 height: hight * 0.01,

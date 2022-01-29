@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -10,7 +11,7 @@ Widget profilePic(BuildContext context, upic, name, {onClick}) {
   return CircleAvatar(
     child: Stack(children: [
       ClipOval(
-        child: upic != null
+        child: (upic == null || upic == "null") == false
             ? Image.network(upic,
                 height: width(context) * 0.4,
                 width: width(context) * 0.4,
@@ -48,5 +49,6 @@ Widget profilePic(BuildContext context, upic, name, {onClick}) {
           ))
     ]),
     radius: width(context) * 0.2,
+    backgroundColor: SpotmiesTheme.primary,
   );
 }

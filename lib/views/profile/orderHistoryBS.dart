@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies/providers/theme_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 Future history(BuildContext context, double hight, double width) {
@@ -21,6 +23,7 @@ Future history(BuildContext context, double hight, double width) {
           top: Radius.circular(20),
         ),
       ),
+      backgroundColor: SpotmiesTheme.background,
       builder: (BuildContext context) {
         return Container(
             height: hight * 0.95,
@@ -36,12 +39,14 @@ Future history(BuildContext context, double hight, double width) {
                 child: Text(
                   'Spotmies Journey',
                   textAlign: TextAlign.center,
-                  style: fonts(width * 0.05, FontWeight.w600, Colors.grey[900]),
+                  style: fonts(width * 0.05, FontWeight.w600,
+                      SpotmiesTheme.secondaryVariant),
                 ),
               ),
               Container(
-                height: hight * 0.63,
+                height: hight * 3 + 220,
                 child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: 20,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
@@ -50,7 +55,7 @@ Future history(BuildContext context, double hight, double width) {
                         margin: EdgeInsets.only(bottom: 10),
                         padding: EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: SpotmiesTheme.surfaceVariant2,
                             borderRadius: BorderRadius.circular(15)),
                         child: Row(
                           children: [
@@ -73,7 +78,7 @@ Future history(BuildContext context, double hight, double width) {
                                   Text(
                                     data[0]['service'].toString(),
                                     style: fonts(width * 0.04, FontWeight.w600,
-                                        Colors.grey[900]),
+                                        SpotmiesTheme.secondaryVariant),
                                   ),
                                   SizedBox(
                                     height: hight * 0.02,
@@ -81,7 +86,7 @@ Future history(BuildContext context, double hight, double width) {
                                   Text(
                                     data[0]['problem'].toString(),
                                     style: fonts(width * 0.04, FontWeight.w500,
-                                        Colors.grey[900]),
+                                        SpotmiesTheme.secondaryVariant),
                                   ),
                                   SizedBox(
                                     height: hight * 0.01,
@@ -90,7 +95,7 @@ Future history(BuildContext context, double hight, double width) {
                                     '${data[0]['date']}  ' +
                                         '${data[0]['time']}',
                                     style: fonts(width * 0.02, FontWeight.w500,
-                                        Colors.grey[900]),
+                                        SpotmiesTheme.secondaryVariant),
                                   ),
                                 ],
                               ),
@@ -101,8 +106,10 @@ Future history(BuildContext context, double hight, double width) {
                                     onPressed: () {},
                                     child: Text(
                                       'More',
-                                      style: fonts(width * 0.04,
-                                          FontWeight.w500, Colors.grey[500]),
+                                      style: fonts(
+                                          width * 0.04,
+                                          FontWeight.w500,
+                                          SpotmiesTheme.secondary),
                                     )))
                           ],
                         ),

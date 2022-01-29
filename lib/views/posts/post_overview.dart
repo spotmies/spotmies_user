@@ -793,7 +793,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         context: context,
         barrierDismissible: true, // set to false if you want to force a rating
         builder: (context) {
-        return RatingCard(onFeedbackSubmitted: (int stars, String feedback) {
+          //TODO implement
+          return RatingCard(onFeedbackSubmitted: (int stars, String feedback) {
             print("$stars - $feedback");
           });
           // return RatingDialog(

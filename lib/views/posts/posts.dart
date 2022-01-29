@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
@@ -48,17 +49,18 @@ class _PostListState extends StateMVC<PostList> {
     //     kToolbarHeight;
     // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         key: _postsController.scaffoldkey,
         // backgroundColor: Colors.blue[900],
         appBar: AppBar(
-          leading: Icon(Icons.work, color: Colors.grey[900]),
+          leading: Icon(Icons.work, color: SpotmiesTheme.secondaryVariant),
           title: TextWidget(
             text: up.getText("navbar_title"),
-            color: Colors.grey[900],
+            color: SpotmiesTheme.secondaryVariant,
             size: width(context) * 0.05,
             weight: FontWeight.w600,
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.surface,
           toolbarHeight: 48,
           elevation: 0,
         ),
@@ -67,7 +69,7 @@ class _PostListState extends StateMVC<PostList> {
           height: height(context) * 1,
           width: width(context) * 1,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: SpotmiesTheme.background,
           ),
           child: Consumer<GetOrdersProvider>(
             builder: (context, data, child) {
@@ -82,8 +84,8 @@ class _PostListState extends StateMVC<PostList> {
                 );
 
               return RefreshIndicator(
-                onRefresh: ()async{
-                 await _postsController.getOrderFromDB(context);
+                onRefresh: () async {
+                  await _postsController.getOrderFromDB(context);
                 },
                 child: ListView.builder(
                     itemCount: o.length,
@@ -157,7 +159,8 @@ class _PostListState extends StateMVC<PostList> {
                                                     height:
                                                         height(context) * 0.032,
                                                     decoration: BoxDecoration(
-                                                        color: Colors.white,
+                                                        color: SpotmiesTheme
+                                                            .background,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(5)),
@@ -224,7 +227,8 @@ class _PostListState extends StateMVC<PostList> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
-                                            color: Colors.grey[50],
+                                            color:
+                                                SpotmiesTheme.surfaceVariant2,
                                             shape: BoxShape.rectangle,
                                           ),
                                           child: (images.length == 0) ||
@@ -233,7 +237,8 @@ class _PostListState extends StateMVC<PostList> {
                                                       "image"
                                               ? Icon(
                                                   Icons.engineering,
-                                                  color: Colors.grey[900],
+                                                  color: SpotmiesTheme
+                                                      .secondaryVariant,
                                                 )
                                               : Image.network(images.first),
                                         ),
@@ -259,8 +264,8 @@ class _PostListState extends StateMVC<PostList> {
                                                         Icon(
                                                           Icons
                                                               .account_balance_wallet,
-                                                          color:
-                                                              Colors.grey[900],
+                                                          color: SpotmiesTheme
+                                                              .secondaryVariant,
                                                           size: width(context) *
                                                               0.04,
                                                         ),
@@ -297,7 +302,8 @@ class _PostListState extends StateMVC<PostList> {
                                                 children: [
                                                   CircleAvatar(
                                                     backgroundColor:
-                                                        Colors.grey[200],
+                                                        SpotmiesTheme
+                                                            .surfaceVariant2,
                                                     child: Icon(
                                                       Icons.notifications,
                                                       color: Colors.grey[500],
@@ -318,7 +324,8 @@ class _PostListState extends StateMVC<PostList> {
                                                                     'responses']
                                                                 .length
                                                                 .toString(),
-                                                            color: Colors.white,
+                                                            color: SpotmiesTheme
+                                                                .background,
                                                             size:
                                                                 width(context) *
                                                                     0.025,
@@ -340,30 +347,36 @@ class _PostListState extends StateMVC<PostList> {
                                         ElevatedButtonWidget(
                                           minWidth: width(context) * 0.498,
                                           height: height(context) * 0.06,
-                                          bgColor: Colors.grey[50],
+                                          bgColor:
+                                              SpotmiesTheme.surfaceVariant2,
                                           buttonName: up.getText("need_help"),
-                                          textColor: Colors.grey[900],
+                                          textColor:
+                                              SpotmiesTheme.secondaryVariant,
                                           borderRadius: 0.0,
                                           textSize: width(context) * 0.04,
                                           leadingIcon: Icon(
                                             Icons.help,
                                             size: width(context) * 0.04,
-                                            color: Colors.grey[900],
+                                            color:
+                                                SpotmiesTheme.secondaryVariant,
                                           ),
                                           borderSideColor: Colors.grey[50],
                                         ),
                                         ElevatedButtonWidget(
                                           minWidth: width(context) * 0.498,
                                           height: height(context) * 0.06,
-                                          bgColor: Colors.grey[50],
+                                          bgColor:
+                                              SpotmiesTheme.surfaceVariant2,
                                           buttonName: up.getText("view_menu"),
-                                          textColor: Colors.grey[900],
+                                          textColor:
+                                              SpotmiesTheme.secondaryVariant,
                                           borderRadius: 0.0,
                                           textSize: width(context) * 0.04,
                                           trailingIcon: Icon(
                                             Icons.menu,
                                             size: width(context) * 0.04,
-                                            color: Colors.grey[900],
+                                            color:
+                                                SpotmiesTheme.secondaryVariant,
                                           ),
                                           borderSideColor: Colors.grey[50],
                                           onClick: () {

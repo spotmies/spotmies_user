@@ -383,6 +383,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
       home: Consumer<UniversalProvider>(
         builder: (context, data, child) {
           return Scaffold(
+            backgroundColor: SpotmiesTheme.background,
             body: Container(
               // color: Colors.amber,
               width: double.infinity,
@@ -419,7 +420,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
                     ],
                   );
                 },
-                backgroundColor: SpotmiesTheme.background,
+                backgroundColor: SpotmiesTheme.surface,
                 activeIndex: data.getCurrentPage,
                 splashColor: Colors.grey[200],
                 splashSpeedInMilliseconds: 300,
