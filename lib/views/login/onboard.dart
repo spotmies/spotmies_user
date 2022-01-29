@@ -101,7 +101,6 @@ class MyAnimatedContainer extends StatelessWidget {
       duration: Duration(seconds: 1),
       curve: Curves.easeOut,
       builder: (context, child, value) {
-        //TODO check color
         return Container(
           width: value,
           height: value,
