@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 
 class HelpAndSupport extends StatelessWidget {
   @override
@@ -10,7 +11,7 @@ class HelpAndSupport extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Help & Support'),
-          backgroundColor: Colors.blue[900],
+          backgroundColor: SpotmiesTheme.tertiaryVariant,
         ),
         body: Container(
             padding: EdgeInsets.all(20),

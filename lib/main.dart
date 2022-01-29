@@ -11,6 +11,7 @@ import 'package:spotmies/providers/getResponseProvider.dart';
 import 'package:spotmies/providers/mapsProvider.dart';
 import 'package:spotmies/providers/orderOverviewProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
@@ -30,21 +31,36 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MultiProvider(providers: [
-      ChangeNotifierProvider<TimeProvider>(create: (context) => TimeProvider()),
+      ChangeNotifierProvider<TimeProvider>(
+        create: (context) => TimeProvider(),
+      ),
       ChangeNotifierProvider<UserDetailsProvider>(
-          create: (context) => UserDetailsProvider()),
-      ChangeNotifierProvider<ChatProvider>(create: (context) => ChatProvider()),
+        create: (context) => UserDetailsProvider(),
+      ),
+      ChangeNotifierProvider<ChatProvider>(
+        create: (context) => ChatProvider(),
+      ),
       ChangeNotifierProvider<UniversalProvider>(
-          create: (context) => UniversalProvider()),
+        create: (context) => UniversalProvider(),
+      ),
       ChangeNotifierProvider<ResponsesProvider>(
-          create: (context) => ResponsesProvider()),
+        create: (context) => ResponsesProvider(),
+      ),
       ChangeNotifierProvider<GetOrdersProvider>(
-          create: (context) => GetOrdersProvider()),
+        create: (context) => GetOrdersProvider(),
+      ),
       ChangeNotifierProvider<OrderOverViewProvider>(
-          create: (context) => OrderOverViewProvider()),
-      ChangeNotifierProvider<MapsProvider>(create: (context) => MapsProvider()),
+        create: (context) => OrderOverViewProvider(),
+      ),
+      ChangeNotifierProvider<MapsProvider>(
+        create: (context) => MapsProvider(),
+      ),
       ChangeNotifierProvider<GetResponseProvider>(
-          create: (context) => GetResponseProvider()),
+        create: (context) => GetResponseProvider(),
+      ),
+      ChangeNotifierProvider<ThemeProvider>(
+        create: (context) => ThemeProvider(),
+      ),
     ], child: MyApp()));
   });
 }
@@ -55,17 +71,45 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   late IO.Socket socket;
   @override
   void initState() {
     // connect();
     super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      Provider.of<ThemeProvider>(context, listen: false).setThemeMode(
+          WidgetsBinding.instance?.window.platformBrightness == Brightness.dark
+              ? ThemeMode.dark
+              : ThemeMode.light);
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    super.didChangePlatformBrightness();
+    print("ThemeModeChanged");
+    Provider.of<ThemeProvider>(context, listen: false).setThemeMode(
+        WidgetsBinding.instance?.window.platformBrightness == Brightness.light
+            ? ThemeMode.light
+            : ThemeMode.dark);
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen());
+    SpotmiesTheme().init(context);
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(),
+    );
   }
 
   // void connect() {

@@ -11,6 +11,7 @@ import 'package:spotmies/controllers/login_controller/splash_screen_controller.d
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/notifications.dart';
@@ -418,7 +419,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
                     ],
                   );
                 },
-                backgroundColor: Colors.white,
+                backgroundColor: SpotmiesTheme.background,
                 activeIndex: data.getCurrentPage,
                 splashColor: Colors.grey[200],
                 splashSpeedInMilliseconds: 300,

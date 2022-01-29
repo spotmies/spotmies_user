@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/snackbar.dart';
@@ -72,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
         kToolbarHeight;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: SpotmiesTheme.background,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -92,13 +93,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   TextWidget(
                       text: 'SPOTMIES',
                       size: _width * 0.08,
-                      color: Colors.indigo.shade900,
+                      color: SpotmiesTheme.primary,
                       lSpace: 6.0,
                       weight: FontWeight.w600),
                   TextWidget(
                       text: 'Experience the Excellence',
                       size: _width * 0.05,
-                      color: Colors.grey.shade700,
+                      color: SpotmiesTheme.secondary,
                       weight: FontWeight.w500),
                   // SizedBox(
                   //   height: _hight * 0.1,

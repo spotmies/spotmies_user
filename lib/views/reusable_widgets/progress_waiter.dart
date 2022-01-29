@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -31,13 +32,13 @@ class ProgressWaiter extends StatelessWidget {
                 CircularProgressIndicator(
                   // strokeWidth: 6.0,
                   // backgroundColor: Colors.white,
-                  color: Colors.indigo[900],
+                  color: SpotmiesTheme.primary,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 20),
                   child: TextWid(
                     text: loadingName,
-                    color: Colors.indigo[900],
+                    color: SpotmiesTheme.primary,
                     weight: FontWeight.bold,
                     size: width(context) * 0.06,
                   ),
