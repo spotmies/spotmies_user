@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotmies/controllers/profile_controllers/profile_controller.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/views/profile/help/faq.dart';
@@ -16,6 +17,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
       context: context,
       elevation: 22,
       isScrollControlled: true,
+      backgroundColor: SpotmiesTheme.background,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -39,6 +41,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                         weight: FontWeight.w600,
                         flow: TextOverflow.visible,
                         align: TextAlign.start,
+                        color: SpotmiesTheme.onBackground,
                       ),
                     ),
                     Container(
@@ -66,7 +69,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                         child: Column(
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.white,
+                              backgroundColor: SpotmiesTheme.surface,
                               child: IconButton(
                                 onPressed: () {
                                   Navigator.push(
@@ -78,7 +81,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                                 icon: Icon(
                                   icons[0],
                                   size: width * 0.06,
-                                  color: Colors.grey[900],
+                                  color: SpotmiesTheme.secondaryVariant,
                                 ),
                               ),
                             ),
@@ -98,7 +101,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                         child: Column(
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.white,
+                              backgroundColor: SpotmiesTheme.surface,
                               child: IconButton(
                                 onPressed: () {
                                   // Navigator.pop(context);
@@ -112,7 +115,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                                 icon: Icon(
                                   icons[1],
                                   size: width * 0.06,
-                                  color: Colors.grey[900],
+                                  color: SpotmiesTheme.secondaryVariant,
                                 ),
                               ),
                             ),
@@ -132,7 +135,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                         child: Column(
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.white,
+                              backgroundColor: SpotmiesTheme.surface,
                               child: IconButton(
                                 onPressed: () {
                                   launch('tel:+918341980196');
@@ -140,7 +143,7 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                                 icon: Icon(
                                   icons[2],
                                   size: width * 0.06,
-                                  color: Colors.grey[900],
+                                  color: SpotmiesTheme.secondaryVariant,
                                 ),
                               ),
                             ),
@@ -172,13 +175,13 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                   padding: EdgeInsets.all(5),
                   child: ElevatedButtonWidget(
                     bgColor: Colors.indigo[50],
-                    minWidth: width,
+                    minWidth: width * 0.9,
                     height: hight * 0.06,
                     textColor: Colors.grey[900],
                     buttonName: 'Close',
                     textSize: width * 0.05,
                     textStyle: FontWeight.w600,
-                    borderRadius: 5.0,
+                    borderRadius: height(context) * 0.015,
                     borderSideColor: Colors.indigo[50],
                     onClick: () {
                       Navigator.pop(context);

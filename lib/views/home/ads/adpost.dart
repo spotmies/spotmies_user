@@ -5,6 +5,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
@@ -36,10 +37,10 @@ class _PostAdState extends StateMVC<PostAd> {
   String add1 = "";
   String add2 = "";
   String add3 = "";
-   UniversalProvider? up;
+  UniversalProvider? up;
 
-   UserDetailsProvider? uDetailsProvider;
-   GetOrdersProvider? ordersProvider;
+  UserDetailsProvider? uDetailsProvider;
+  GetOrdersProvider? ordersProvider;
 
   @override
   void initState() {
@@ -48,7 +49,7 @@ class _PostAdState extends StateMVC<PostAd> {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
     up?.setCurrentConstants("serviceRequest");
-   _adController.getAddressofLocation();
+    _adController.getAddressofLocation();
     _adController.pickedDate = DateTime.now();
     _adController.pickedTime = TimeOfDay.now();
 
@@ -75,7 +76,7 @@ class _PostAdState extends StateMVC<PostAd> {
       return Scaffold(
           resizeToAvoidBottomInset: false,
           key: _adController.scaffoldkey,
-          backgroundColor: Colors.white,
+          backgroundColor: SpotmiesTheme.background,
           body: SafeArea(
               child: SingleChildScrollView(
             child: Column(children: [
@@ -91,7 +92,7 @@ class _PostAdState extends StateMVC<PostAd> {
                 Container(
                     height: height(context) * 1.08,
                     child: page3(height(context), width(context), user,
-                        _adController, context,ordersProvider)),
+                        _adController, context, ordersProvider)),
               ]),
             ]),
           )));

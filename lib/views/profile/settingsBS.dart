@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
@@ -10,6 +11,7 @@ void settings(BuildContext context, double hight, double width) async {
       context: context,
       elevation: 22,
       isScrollControlled: true,
+      backgroundColor: SpotmiesTheme.background,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -39,8 +41,8 @@ void settings(BuildContext context, double hight, double width) async {
                       padding: const EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Select Light Modes',
-                        style: fonts(
-                            width * 0.05, FontWeight.w700, Colors.grey[900]),
+                        style: fonts(width * 0.05, FontWeight.w700,
+                            SpotmiesTheme.secondaryVariant),
                       ),
                     ),
                     Row(
@@ -114,8 +116,8 @@ void settings(BuildContext context, double hight, double width) async {
                       padding: const EdgeInsets.only(left: 25.0),
                       child: Text(
                         'Choose Your Languege',
-                        style: fonts(
-                            width * 0.05, FontWeight.w700, Colors.grey[900]),
+                        style: fonts(width * 0.05, FontWeight.w700,
+                            SpotmiesTheme.secondaryVariant),
                       ),
                     ),
                     Row(
@@ -126,7 +128,8 @@ void settings(BuildContext context, double hight, double width) async {
                           height: hight * 0.045,
                           decoration: BoxDecoration(
                               color: Colors.indigo[50],
-                              borderRadius: BorderRadius.circular(15)),
+                              borderRadius: BorderRadius.circular(
+                                  height(context) * 0.014)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -143,7 +146,8 @@ void settings(BuildContext context, double hight, double width) async {
                           height: hight * 0.045,
                           decoration: BoxDecoration(
                               color: Colors.grey[900],
-                              borderRadius: BorderRadius.circular(15)),
+                              borderRadius: BorderRadius.circular(
+                                  height(context) * 0.014)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -160,7 +164,8 @@ void settings(BuildContext context, double hight, double width) async {
                           height: hight * 0.045,
                           decoration: BoxDecoration(
                               color: Colors.indigo[50],
-                              borderRadius: BorderRadius.circular(15)),
+                              borderRadius: BorderRadius.circular(
+                                  height(context) * 0.014)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -181,13 +186,13 @@ void settings(BuildContext context, double hight, double width) async {
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
                   bgColor: Colors.indigo[50],
-                  minWidth: width,
+                  minWidth: width * 0.9,
                   height: hight * 0.06,
                   textColor: Colors.grey[900],
                   buttonName: 'Close',
                   textSize: width * 0.05,
                   textStyle: FontWeight.w600,
-                  borderRadius: 5.0,
+                  borderRadius: height(context) * 0.015,
                   borderSideColor: Colors.indigo[50],
                   onClick: () {
                     Navigator.pop(context);

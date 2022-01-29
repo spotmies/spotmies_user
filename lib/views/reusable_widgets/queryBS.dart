@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textFormFieldWidget.dart';
@@ -22,6 +23,7 @@ newQueryBS(BuildContext context,
           top: Radius.circular(20),
         ),
       ),
+      backgroundColor: SpotmiesTheme.background,
       builder: (BuildContext context) {
         // if (loader)
         //   return Center(
@@ -49,7 +51,7 @@ newQueryBS(BuildContext context,
                   label: label,
                   hint: hint,
                   enableBorderColor: Colors.grey,
-                  focusBorderColor: Colors.indigo[900],
+                  focusBorderColor: SpotmiesTheme.primary,
                   enableBorderRadius: 15,
                   controller: queryControl,
                   isRequired: true,
@@ -62,15 +64,15 @@ newQueryBS(BuildContext context,
                   validateMsg: 'Please check above text',
                   maxLines: type == "text" ? 9 : 1,
                   postIcon: Icon(Icons.change_circle),
-                  postIconColor: Colors.indigo[900],
+                  postIconColor: SpotmiesTheme.primary,
                 ),
                 Container(
                   padding: EdgeInsets.all(5),
                   child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900],
+                    bgColor: SpotmiesTheme.primary,
                     minWidth: width(context),
                     height: height(context) * 0.06,
-                    textColor: Colors.white,
+                    textColor: SpotmiesTheme.onBackground,
                     buttonName: 'Submit',
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,

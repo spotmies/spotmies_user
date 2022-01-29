@@ -69,7 +69,8 @@ class _ProfileState extends StateMVC<Profile> {
     ordersProvider = Provider.of<GetOrdersProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
     up.setCurrentConstants("profile");
-
+    mode = !(Provider.of<ThemeProvider>(context, listen: false)
+        .isDarkThemeEnabled);
     editpic = profileProvider.getUser['pic'];
     super.initState();
   }
@@ -87,15 +88,14 @@ class _ProfileState extends StateMVC<Profile> {
     // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _profileController.scaffoldkey,
-      backgroundColor: Theme.of(context) == ThemeData.fallback()
-          ? Colors.green.shade900
-          : SpotmiesTheme.background,
+      backgroundColor: SpotmiesTheme.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: SpotmiesTheme.surface,
         elevation: 0,
         title: Text('Profile',
             style: GoogleFonts.josefinSans(
-                color: Colors.grey[900], fontWeight: FontWeight.w700)),
+                color: SpotmiesTheme.secondaryVariant,
+                fontWeight: FontWeight.w700)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -114,7 +114,7 @@ class _ProfileState extends StateMVC<Profile> {
                     icon: Icon(
                       !mode ? Icons.light_mode : Icons.dark_mode,
                       size: width(context) * 0.05,
-                      color: mode ? Colors.grey[800] : Colors.white,
+                      color: mode ? Colors.grey[800] : Colors.indigo.shade600,
                     ))),
           )
         ],
@@ -133,6 +133,9 @@ class _ProfileState extends StateMVC<Profile> {
           //     child: Text("logout"));
           return ListView(
             children: [
+              SizedBox(
+                height: height(context) * 0.04,
+              ),
               profilePic(context, u['pic'], u['name'], onClick: () {
                 editDetails(context, width(context), height(context),
                     profileProvider, editpic, _profileController,
@@ -147,12 +150,12 @@ class _ProfileState extends StateMVC<Profile> {
                     Text(
                       u['name'] ?? 'Spotmies User',
                       style: fonts(width(context) * 0.05, FontWeight.w600,
-                          Colors.grey[900]),
+                          SpotmiesTheme.secondaryVariant),
                     ),
                     Text(
                       u['phNum'].toString(),
                       style: fonts(width(context) * 0.03, FontWeight.w500,
-                          Colors.grey[900]),
+                          SpotmiesTheme.secondaryVariant),
                     )
                   ],
                 ),
@@ -171,13 +174,17 @@ class _ProfileState extends StateMVC<Profile> {
                           children: [
                             Text(
                               '₹ ' + '1234',
-                              style: fonts(width(context) * 0.04,
-                                  FontWeight.w600, Colors.grey[900]),
+                              style: fonts(
+                                  width(context) * 0.04,
+                                  FontWeight.w600,
+                                  SpotmiesTheme.secondaryVariant),
                             ),
                             Text(
                               'Total Savings',
-                              style: fonts(width(context) * 0.02,
-                                  FontWeight.w500, Colors.grey[900]),
+                              style: fonts(
+                                  width(context) * 0.02,
+                                  FontWeight.w500,
+                                  SpotmiesTheme.secondaryVariant),
                             ),
                           ]),
                     ),
@@ -196,12 +203,16 @@ class _ProfileState extends StateMVC<Profile> {
                             children: [
                               Text(
                                 data.getOrdersList.length.toString(),
-                                style: fonts(width(context) * 0.04,
-                                    FontWeight.w600, Colors.grey[900]),
+                                style: fonts(
+                                    width(context) * 0.04,
+                                    FontWeight.w600,
+                                    SpotmiesTheme.secondaryVariant),
                               ),
                               Text('Total orders',
-                                  style: fonts(width(context) * 0.02,
-                                      FontWeight.w500, Colors.grey[900])),
+                                  style: fonts(
+                                      width(context) * 0.02,
+                                      FontWeight.w500,
+                                      SpotmiesTheme.secondaryVariant)),
                             ]);
                       }),
                     )
@@ -209,8 +220,9 @@ class _ProfileState extends StateMVC<Profile> {
                 ),
               ),
               Container(
-                height: height(context) * 0.6,
+                height: height(context) * 0.7,
                 child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: tabnames.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
@@ -223,14 +235,9 @@ class _ProfileState extends StateMVC<Profile> {
                                   : 0),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey.shade200,
-                                      blurRadius: 5,
-                                      spreadRadius: 2)
-                                ]),
+                              color: SpotmiesTheme.surfaceVariant,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                             child: ListTile(
                               onTap: () {
                                 if (index == 0) {

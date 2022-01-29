@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/chat/chatapp/chat_list.dart';
@@ -68,16 +68,17 @@ class _ChatState extends State<Chat> {
         initialIndex: initialTabIndex,
         length: 2,
         child: Scaffold(
+          backgroundColor: SpotmiesTheme.background,
           appBar: AppBar(
             toolbarHeight: height(context) * 0.07,
-            backgroundColor: Colors.white,
+            backgroundColor: SpotmiesTheme.surface,
             bottom: PreferredSize(
                 preferredSize: Size.fromHeight(10),
                 child: Container(
                   child: TabBar(
-                      unselectedLabelColor: Colors.grey[700],
+                      unselectedLabelColor: SpotmiesTheme.secondary,
                       indicatorSize: TabBarIndicatorSize.tab,
-                      indicatorColor: Colors.indigo[900],
+                      indicatorColor: SpotmiesTheme.primary,
                       onTap: (tab) {
                         setState(() {
                           name = (tab == 0) ? 'Responses' : 'Chat';
@@ -96,7 +97,7 @@ class _ChatState extends State<Chat> {
                                   Text(
                                     universalProvider.getText("response_tab"),
                                     style: GoogleFonts.josefinSans(
-                                        color: Colors.indigo[900],
+                                        color: SpotmiesTheme.primary,
                                         fontSize: width(context) * 0.04,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -115,7 +116,7 @@ class _ChatState extends State<Chat> {
                                 Text(
                                   universalProvider.getText("chat_tab"),
                                   style: GoogleFonts.josefinSans(
-                                      color: Colors.indigo[900],
+                                      color: SpotmiesTheme.primary,
                                       fontSize: width(context) * 0.04,
                                       fontWeight: FontWeight.w600),
                                 ),

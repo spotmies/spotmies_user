@@ -7,6 +7,7 @@ import 'package:spotmies/controllers/chat_controllers/responsive_controller.dart
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
@@ -86,6 +87,7 @@ class _ResponseeState extends StateMVC<Responsee> {
     //     kToolbarHeight;
     // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         key: _responsiveController?.scaffoldkey,
         body: Consumer<ResponsesProvider>(builder: (context, data, child) {
           List listResponse = data.getResponsesList;
@@ -104,8 +106,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                   await _responsiveController?.fetchNewResponses(
                       context, responseProvider);
                 },
-                color: Colors.white,
-                backgroundColor: Colors.indigo[900],
+                color: SpotmiesTheme.surface,
+                backgroundColor: SpotmiesTheme.primary,
                 child: ListView.builder(
                     itemCount: listResponse.length,
                     scrollDirection: Axis.vertical,
@@ -142,7 +144,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                               // height: height(context) * 0.27,
                               width: width(context) * 1,
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: SpotmiesTheme.surface,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       topRight: Radius.circular(10),
@@ -178,7 +180,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             TextWidget(
                                               text: _responsiveController?.jobs
                                                   .elementAt(ord['job']),
-                                              color: Colors.indigo[900],
+                                              color: SpotmiesTheme.primary,
                                               size: width(context) * 0.035,
                                               weight: FontWeight.w500,
                                               lSpace: 0.2,
@@ -190,7 +192,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                                 icon: Icon(
                                                   Icons.more_horiz,
                                                   size: width(context) * 0.06,
-                                                  color: Colors.indigo[900],
+                                                  color: SpotmiesTheme.primary,
                                                 ))
                                           ],
                                         ),
@@ -203,7 +205,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                           children: [
                                             Icon(
                                               Icons.schedule,
-                                              color: Colors.indigo[900],
+                                              color: SpotmiesTheme.primary,
                                               size: width(context) * 0.045,
                                             ),
                                             SizedBox(
@@ -213,7 +215,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               text: getDate(ord['schedule']) +
                                                   ' - ' +
                                                   getTime(ord['schedule']),
-                                              color: Colors.indigo[900],
+                                              color: SpotmiesTheme.primary,
                                               weight: FontWeight.w600,
                                               size: width(context) * 0.045,
                                             ),
@@ -318,7 +320,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               height: height(context) * 0.045,
                                               bgColor: Colors.indigo[50],
                                               buttonName: 'Decline',
-                                              textColor: Colors.grey[900],
+                                              textColor: SpotmiesTheme
+                                                  .secondaryVariant,
                                               borderRadius: 15.0,
                                               textSize: width(context) * 0.04,
                                               borderSideColor:
@@ -339,13 +342,13 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             ElevatedButtonWidget(
                                               minWidth: width(context) * 0.5,
                                               height: height(context) * 0.045,
-                                              bgColor: Colors.indigo[900],
+                                              bgColor: SpotmiesTheme.primary,
                                               buttonName: 'Accept',
                                               textColor: Colors.white,
                                               borderRadius: 15.0,
                                               textSize: width(context) * 0.04,
                                               borderSideColor:
-                                                  Colors.indigo[900],
+                                                  SpotmiesTheme.primary,
                                               onClick: () {
                                                 _responsiveController
                                                     ?.acceptOrRejectResponse(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 
 class TextWid extends StatelessWidget {
   final String text;
@@ -35,7 +36,7 @@ class TextWid extends StatelessWidget {
           letterSpacing: lSpace ?? 0,
           decoration: decoration ?? TextDecoration.none,
           fontSize: size ?? 14,
-          color: color ?? Colors.black,
+          color: color ?? SpotmiesTheme.onBackground,
           fontWeight: weight ?? FontWeight.normal,
         ));
   }

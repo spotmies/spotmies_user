@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
@@ -132,14 +133,9 @@ class _ServicesState extends State<Services> {
                       height: height(context) * 0.30,
                       width: width(context) * 0.8,
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                                spreadRadius: 2)
-                          ]),
+                        color: SpotmiesTheme.surfaceVariant,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       // padding: EdgeInsets.only(top: 10, bottom: 5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

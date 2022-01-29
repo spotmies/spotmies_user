@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 Widget servicelistBuilder(
@@ -14,14 +15,9 @@ Widget servicelistBuilder(
   return Container(
     padding: EdgeInsets.all(width * 0.04),
     height: hight * 0.22,
-    margin: EdgeInsets.only(
-      top: 15,
-    ),
+    margin: EdgeInsets.only(top: 15, left: 15, right: 15),
     decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: Colors.grey.shade100, blurRadius: 5, spreadRadius: 2)
-        ],
+        color: SpotmiesTheme.surfaceVariant,
         borderRadius: BorderRadius.circular(15)),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,15 +28,15 @@ Widget servicelistBuilder(
             children: [
               Text(
                 '$buildName',
-                style:
-                    fonts(width * 0.045, FontWeight.w600, Colors.blueGrey[600]),
+                style: fonts(
+                    width * 0.045, FontWeight.w600, SpotmiesTheme.titleVariant),
               ),
               InkWell(
                 onTap: () {},
                 child: Text(
                   'See More',
-                  style: fonts(
-                      width * 0.035, FontWeight.w600, Colors.blueGrey[900]),
+                  style: fonts(width * 0.035, FontWeight.w600,
+                      SpotmiesTheme.titleVariant),
                 ),
               ),
             ],
@@ -64,18 +60,18 @@ Widget servicelistBuilder(
                           );
                         },
                         child: CircleAvatar(
-                            backgroundColor: Colors.blueGrey[50],
+                            backgroundColor: SpotmiesTheme.surfaceVariant2,
                             radius: width * 0.07,
                             child: Icon(
                               buildData[index]['icon'] as IconData?,
-                              color: Colors.grey[900],
+                              color: SpotmiesTheme.secondaryVariant,
                             )),
                       ),
                     ),
                     Text(
                       buildData[index]['job'].toString(),
-                      style: fonts(
-                          width * 0.03, FontWeight.w600, Colors.grey[900]),
+                      style: fonts(width * 0.03, FontWeight.w600,
+                          SpotmiesTheme.secondaryVariant),
                     )
                   ],
                 );
@@ -136,14 +132,8 @@ Widget serviceBlocksMore(
                     Container(
                       padding: EdgeInsets.only(right: width * 0.03),
                       decoration: BoxDecoration(
-                        // color: Colors.grey,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.shade100,
-                              blurRadius: 5,
-                              spreadRadius: 2)
-                        ],
-                      ),
+                          // color: Colors.grey,
+                          ),
                       child: InkWell(
                         onTap: () {
                           DefaultTabController.of(context)
@@ -157,8 +147,8 @@ Widget serviceBlocksMore(
                               // color: Colors.indigo[900],
                               gradient: LinearGradient(
                                   colors: [
-                                    Colors.indigo.shade900,
-                                    Colors.blue.shade900
+                                    SpotmiesTheme.primary,
+                                    SpotmiesTheme.tertiaryVariant
 
                                     // ([Colors.green[100],Colors.pink[100],Colors]..shuffle()).first,
                                     // Colors.green[100]

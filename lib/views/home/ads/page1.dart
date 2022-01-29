@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/reusable_widgets/steps.dart';
@@ -13,6 +15,7 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 Widget page1(double hight, double width, BuildContext context,
     AdController adController, UniversalProvider up) {
   return Scaffold(
+    backgroundColor: SpotmiesTheme.background,
     body: SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.only(
@@ -59,7 +62,7 @@ Widget page1(double hight, double width, BuildContext context,
                           children: [
                             TextWidget(
                               text: 'Category:',
-                              color: Colors.grey[900],
+                              color: SpotmiesTheme.secondaryVariant,
                               size: width * 0.05,
                               weight: FontWeight.w600,
                             ),
@@ -68,13 +71,7 @@ Widget page1(double hight, double width, BuildContext context,
                                 padding: EdgeInsets.only(
                                     left: width * 0.03, right: width * 0.03),
                                 decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.shade300,
-                                          blurRadius: 3,
-                                          spreadRadius: 1)
-                                    ],
-                                    color: Colors.white,
+                                    color: SpotmiesTheme.surfaceVariant2,
                                     borderRadius: BorderRadius.circular(15)),
                                 child: DropdownButton(
                                   underline: SizedBox(),
@@ -82,13 +79,13 @@ Widget page1(double hight, double width, BuildContext context,
                                   icon: Icon(
                                     Icons.arrow_drop_down_circle,
                                     size: width * 0.06,
-                                    color: Colors.indigo[900],
+                                    color: SpotmiesTheme.primary,
                                   ),
                                   items: up.servicesList.map((services) {
                                     return DropdownMenuItem(
                                       child: TextWid(
                                         text: services['nameOfService'],
-                                        color: Colors.grey[900],
+                                        color: SpotmiesTheme.secondaryVariant,
                                         size: width * 0.04,
                                         weight: FontWeight.w500,
                                       ),
@@ -108,17 +105,15 @@ Widget page1(double hight, double width, BuildContext context,
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.shade300,
-                                  blurRadius: 3,
-                                  spreadRadius: 1)
-                            ],
-                            color: Colors.grey[50],
+                            color: SpotmiesTheme.surfaceVariant2,
                             borderRadius: BorderRadius.circular(15)),
                         height: hight * 0.087,
                         width: width * 0.8,
                         child: TextFormField(
+                          style: fonts(
+                              height(context) * 0.025,
+                              FontWeight.normal,
+                              SpotmiesTheme.secondaryVariant),
                           controller: adController.problem,
                           validator: (value) {
                             if (value != null && value.isEmpty) {
@@ -145,7 +140,7 @@ Widget page1(double hight, double width, BuildContext context,
                             hintText: 'Problem',
                             suffixIcon: Icon(
                               Icons.error_outline_rounded,
-                              color: Colors.indigo[900],
+                              color: SpotmiesTheme.primary,
                             ),
                             contentPadding: EdgeInsets.only(
                                 left: hight * 0.03, top: hight * 0.06),
@@ -222,13 +217,7 @@ Widget page1(double hight, double width, BuildContext context,
                                 right: width * 0.03,
                                 top: width * 0.03),
                             decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey.shade300,
-                                      blurRadius: 3,
-                                      spreadRadius: 1)
-                                ],
-                                color: Colors.grey[50],
+                                color: SpotmiesTheme.surfaceVariant2,
                                 borderRadius: BorderRadius.circular(15)),
                             // height: hight * 0.12,
                             width: width * 0.8,
@@ -238,7 +227,7 @@ Widget page1(double hight, double width, BuildContext context,
                                   children: [
                                     TextWidget(
                                       text: 'Schedule:',
-                                      color: Colors.grey[900],
+                                      color: SpotmiesTheme.secondaryVariant,
                                       size: width * 0.05,
                                       weight: FontWeight.w600,
                                     ),
@@ -257,14 +246,14 @@ Widget page1(double hight, double width, BuildContext context,
                                                     .fromMillisecondsSinceEpoch(
                                                         (adController.pickedDate
                                                             .millisecondsSinceEpoch)))),
-                                        color: Colors.grey[900],
+                                        color: SpotmiesTheme.secondaryVariant,
                                         size: width * 0.04,
                                         weight: FontWeight.w500,
                                       ),
                                       TextWidget(
                                         text:
                                             'Time:${adController.pickedTime.format(context)}',
-                                        color: Colors.grey[900],
+                                        color: SpotmiesTheme.secondaryVariant,
                                         size: width * 0.04,
                                         weight: FontWeight.w500,
                                       ),
@@ -288,7 +277,7 @@ Widget page1(double hight, double width, BuildContext context,
                           await adController.step1(context);
                         },
                         buttonName: 'Next',
-                        bgColor: Colors.indigo[900],
+                        bgColor: SpotmiesTheme.primary,
                         textColor: Colors.white,
                         height: hight * 0.05,
                         minWidth: width * 0.60,

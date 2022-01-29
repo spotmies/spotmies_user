@@ -7,6 +7,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
@@ -42,6 +43,7 @@ class _ChatListState extends StateMVC<ChatList> {
   Widget build(BuildContext context) {
     print('======render chatList screen =======');
     return Scaffold(
+      backgroundColor: SpotmiesTheme.background,
       key: _chatController.scaffoldkey,
       body: Container(
         padding: EdgeInsets.only(top: 10),
@@ -52,7 +54,7 @@ class _ChatListState extends StateMVC<ChatList> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
@@ -159,13 +161,17 @@ class _ChatListCardState extends State<ChatListCard> {
             text: widget.name,
             size: _width * 0.045,
             weight: FontWeight.w600,
-            color: widget.count > 0 ? Colors.black : Colors.grey.shade700),
+            color: widget.count > 0
+                ? SpotmiesTheme.onBackground
+                : SpotmiesTheme.secondary),
         subtitle: Row(
           children: [
             Icon(
               typeofLastMessage(widget.type, widget.lastMessage, 'icon'),
               size: 12,
-              color: widget.count > 0 ? Colors.black : Colors.grey[500],
+              color: widget.count > 0
+                  ? SpotmiesTheme.onBackground
+                  : Colors.grey[500],
             ),
             SizedBox(
               width: 3,
@@ -182,7 +188,7 @@ class _ChatListCardState extends State<ChatListCard> {
                   flow: TextOverflow.ellipsis,
                   weight: widget.count > 0 ? FontWeight.w600 : FontWeight.w500,
                   color: widget.count > 0
-                      ? Colors.blueGrey.shade600
+                      ? SpotmiesTheme.title
                       : Colors.grey.shade500),
             ),
           ],
@@ -206,8 +212,9 @@ class _ChatListCardState extends State<ChatListCard> {
                   text: widget.time,
                   size: _width * 0.035,
                   weight: FontWeight.w600,
-                  color:
-                      widget.count > 0 ? Colors.black : Colors.grey.shade700),
+                  color: widget.count > 0
+                      ? SpotmiesTheme.onBackground
+                      : SpotmiesTheme.secondary),
             ),
             widget.count > 0
                 ? Container(
@@ -215,7 +222,7 @@ class _ChatListCardState extends State<ChatListCard> {
                     height: _width * 0.055,
                     margin: EdgeInsets.only(right: _width * 0.035),
                     decoration: BoxDecoration(
-                        color: Colors.indigo[900],
+                        color: SpotmiesTheme.primary,
                         borderRadius: BorderRadius.circular(30.0)),
                     alignment: Alignment.center,
                     child: TextWid(
