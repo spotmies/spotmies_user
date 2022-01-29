@@ -106,6 +106,9 @@ class _ProfileState extends StateMVC<Profile> {
                     onPressed: () {
                       setState(() {
                         mode = !mode;
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .setThemeMode(
+                                mode ? ThemeMode.light : ThemeMode.dark);
                       });
                     },
                     icon: Icon(

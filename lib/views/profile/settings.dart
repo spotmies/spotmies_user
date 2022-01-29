@@ -222,19 +222,21 @@ class _SettingState extends StateMVC<Setting> {
                       ),
                     ),
                     Container(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                            //color: Colors.blue[800],
-                            onPressed: () {
-                              Navigator.of(context).pop();
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        //color: Colors.blue[800],
+                        onPressed: () {
+                          Navigator.of(context).pop();
 
-                              _settingsController.updatePath.update(
-                                  {'email': _settingsController.updatedEmail});
-                            },
-                            child: Text(
-                              'Change',
-                              style: TextStyle(color: Colors.white),
-                            )))
+                          _settingsController.updatePath.update(
+                              {'email': _settingsController.updatedEmail});
+                        },
+                        child: Text(
+                          'Change',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ));

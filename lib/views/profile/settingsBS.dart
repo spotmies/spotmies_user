@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
@@ -44,43 +46,55 @@ void settings(BuildContext context, double hight, double width) async {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          width: width * 0.4,
-                          height: hight * 0.06,
-                          decoration: BoxDecoration(
-                              color: Colors.indigo[50],
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(Icons.light_mode),
-                              Text(
-                                'Light Mode',
-                                style: fonts(width * 0.04, FontWeight.w700,
-                                    Colors.grey[900]),
-                              )
-                            ],
+                        InkWell(
+                          onTap: () {
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .setThemeMode(ThemeMode.light);
+                          },
+                          child: Container(
+                            width: width * 0.4,
+                            height: hight * 0.06,
+                            decoration: BoxDecoration(
+                                color: Colors.indigo[50],
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.light_mode),
+                                Text(
+                                  'Light Mode',
+                                  style: fonts(width * 0.04, FontWeight.w700,
+                                      Colors.grey[900]),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                        Container(
-                          width: width * 0.4,
-                          height: hight * 0.06,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[900],
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                'Dark Mode',
-                                style: fonts(width * 0.04, FontWeight.w700,
-                                    Colors.white),
-                              ),
-                              Icon(
-                                Icons.dark_mode,
-                                color: Colors.white,
-                              ),
-                            ],
+                        InkWell(
+                          onTap: () {
+                            Provider.of<ThemeProvider>(context, listen: false)
+                                .setThemeMode(ThemeMode.dark);
+                          },
+                          child: Container(
+                            width: width * 0.4,
+                            height: hight * 0.06,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[900],
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  'Dark Mode',
+                                  style: fonts(width * 0.04, FontWeight.w700,
+                                      Colors.white),
+                                ),
+                                Icon(
+                                  Icons.dark_mode,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -164,22 +178,22 @@ void settings(BuildContext context, double hight, double width) async {
                 ),
               ),
               Container(
-                      padding: EdgeInsets.all(5),
-                      child: ElevatedButtonWidget(
-                        bgColor: Colors.indigo[50],
-                        minWidth: width,
-                        height: hight * 0.06,
-                        textColor: Colors.grey[900],
-                        buttonName: 'Close',
-                        textSize: width * 0.05,
-                        textStyle: FontWeight.w600,
-                        borderRadius: 5.0,
-                        borderSideColor: Colors.indigo[50],
-                        onClick: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
+                padding: EdgeInsets.all(5),
+                child: ElevatedButtonWidget(
+                  bgColor: Colors.indigo[50],
+                  minWidth: width,
+                  height: hight * 0.06,
+                  textColor: Colors.grey[900],
+                  buttonName: 'Close',
+                  textSize: width * 0.05,
+                  textStyle: FontWeight.w600,
+                  borderRadius: 5.0,
+                  borderSideColor: Colors.indigo[50],
+                  onClick: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
             ],
           ),
         );
