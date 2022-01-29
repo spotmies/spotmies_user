@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:spotmies/providers/theme_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 class TextFieldWidget extends StatefulWidget {
@@ -77,6 +79,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     return TextFormField(
       inputFormatters: widget.formatter,
       controller: widget.controller,
+      style: fonts(height(context) * 0.025, FontWeight.normal,
+          SpotmiesTheme.onBackground),
       decoration: InputDecoration(
         counterText: '',
         border: new OutlineInputBorder(

@@ -7,7 +7,7 @@ class PrivacyPolicyWebView extends StatelessWidget {
     return Scaffold(
       //appBar: AppBar(),
       body: SafeArea(
-              child: WebView(
+        child: WebView(
           initialUrl:
               'https://www.privacypolicies.com/live/931def21-ec24-4e98-84c9-1a7be3af4c8a',
           javascriptMode: JavascriptMode.unrestricted,
