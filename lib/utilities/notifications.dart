@@ -68,6 +68,7 @@ void awesomeInitilize() async {
         NotificationChannel(
             channelKey: 'firebasePushNotifiction',
             channelName: 'firebase Push Notifiction',
+            channelDescription: "test message",
             playSound: true,
             enableLights: true,
             enableVibration: true,
@@ -97,7 +98,6 @@ displayAwesomeNotification(RemoteMessage message, BuildContext context) async {
           displayOnForeground: true,
           icon: 'resource://drawable/logo',
           locked: false,
-          displayedDate: DateTime.now().toString(),
           bigPicture:
               'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 
@@ -160,7 +160,6 @@ displayAwesomeNotificationBackground(
           displayOnForeground: true,
           icon: 'resource://drawable/logo',
           locked: false,
-          displayedDate: DateTime.now().toString(),
           bigPicture:
               'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 

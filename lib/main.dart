@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,19 @@ void main() async {
   });
 }
 
+Future<void> setPrefThemeMode(BuildContext context) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  var system_themeMode =
+      WidgetsBinding.instance?.window.platformBrightness == Brightness.dark;
+  var pref_themeMode =
+      (sharedPreferences.getBool("theme_mode") ?? system_themeMode);
+  var themeMode = system_themeMode ? ThemeMode.dark : ThemeMode.light;
+  if (system_themeMode == false && pref_themeMode == true) {
+    themeMode = ThemeMode.dark;
+  }
+  Provider.of<ThemeProvider>(context, listen: false).setThemeMode(themeMode);
+}
+
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
@@ -79,10 +93,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      Provider.of<ThemeProvider>(context, listen: false).setThemeMode(
-          WidgetsBinding.instance?.window.platformBrightness == Brightness.dark
-              ? ThemeMode.dark
-              : ThemeMode.light);
+      setPrefThemeMode(context);
     });
   }
 
@@ -96,10 +107,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
     print("ThemeModeChanged");
-    Provider.of<ThemeProvider>(context, listen: false).setThemeMode(
-        WidgetsBinding.instance?.window.platformBrightness == Brightness.light
-            ? ThemeMode.light
-            : ThemeMode.dark);
+    setPrefThemeMode(context);
   }
 
   @override

@@ -19,8 +19,8 @@ class LocalNotidication {
         largeIcon: FilePathAndroidBitmap(largeIcon ?? ""));
 
     return NotificationDetails(
-        android: AndroidNotificationDetails(
-            'channel id 1', 'channel name', 'channel Description',
+        android: AndroidNotificationDetails('channel id 1', 'channel name',
+            channelDescription: 'channel Description',
             sound: RawResourceAndroidNotificationSound(sound.split('.').first),
             styleInformation: show ? styleInformation : null,
             importance: Importance.max),
@@ -35,9 +35,8 @@ class LocalNotidication {
 
     return NotificationDetails(
         android: AndroidNotificationDetails(
-            'firebasePushNotifictions',
-            'channel firebasePushNotifictions',
-            'this is firebase push notifications',
+            'firebasePushNotifictions', 'channel firebasePushNotifictions',
+            channelDescription: 'this is firebase push notifications',
             priority: Priority.high,
             sound: RawResourceAndroidNotificationSound(sound.split('.').first),
             styleInformation: show ? styleInformation : null,
@@ -158,7 +157,7 @@ class LocalNotificationService {
           android: AndroidNotificationDetails(
         "firebasePushNotifictions",
         "firebasePushNotifictions channel",
-        "this is our channel",
+        channelDescription: "this is our channel",
         importance: Importance.max,
         priority: Priority.high,
       ));

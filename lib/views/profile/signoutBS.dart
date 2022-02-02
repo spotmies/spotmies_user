@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/login/loginpage.dart';
@@ -13,6 +14,7 @@ Future signOut(BuildContext context, hight, width) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
+      backgroundColor: SpotmiesTheme.background,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -33,8 +35,8 @@ Future signOut(BuildContext context, hight, width) {
                 child: Center(
                   child: Text(
                     'Are Sure, You Want to Leave the App?',
-                    style:
-                        fonts(width * 0.04, FontWeight.w600, Colors.grey[900]),
+                    style: fonts(width * 0.04, FontWeight.w600,
+                        SpotmiesTheme.secondaryVariant),
                   ),
                 ),
               ),

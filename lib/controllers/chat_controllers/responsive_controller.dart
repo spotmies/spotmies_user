@@ -92,9 +92,10 @@ class ResponsiveController extends ControllerMVC {
   //   localNotifications?.initialize(initializesettings);
   // }
 
-   FlutterLocalNotificationsPlugin? localNotifications;
+  FlutterLocalNotificationsPlugin? localNotifications;
 
-  Future fetchNewResponses(BuildContext context,ResponsesProvider? responseProvider) async {
+  Future fetchNewResponses(
+      BuildContext context, ResponsesProvider? responseProvider) async {
     dynamic response = await Server().getMethod(API.reponse + (uuId ?? ""));
     if (response.statusCode == 200) {
       dynamic responseDecode = jsonDecode(response.body);
@@ -104,7 +105,7 @@ class ResponsiveController extends ControllerMVC {
       snackbar(context, "Something went wrong");
   }
 
-  deleteResponse(String responseId,BuildContext context,
+  deleteResponse(String responseId, BuildContext context,
       ResponsesProvider? responseProvider) async {
     dynamic params = {"userType": "user"};
     responseProvider?.setLoader(true);
@@ -118,8 +119,14 @@ class ResponsiveController extends ControllerMVC {
       snackbar(context, "something went wrong");
   }
 
-  acceptOrRejectResponse(responseData, responseType,BuildContext context,
-      ResponsesProvider? responseProvider,UserDetailsProvider? profileProvider,ChatProvider? chatProvider,GetOrdersProvider? ordersProvider) async {
+  acceptOrRejectResponse(
+      responseData,
+      responseType,
+      BuildContext context,
+      ResponsesProvider? responseProvider,
+      UserDetailsProvider? profileProvider,
+      ChatProvider? chatProvider,
+      GetOrdersProvider? ordersProvider) async {
     if (responseProvider!.getLoader) return;
     //enable loader
     responseProvider.setLoader(true);
@@ -183,8 +190,8 @@ class ResponsiveController extends ControllerMVC {
     }
   }
 
-  Future chatWithpatner(responseData,BuildContext context,
-      ResponsesProvider? responseProvider,ChatProvider? chatProvider) async {
+  Future chatWithpatner(responseData, BuildContext context,
+      ResponsesProvider? responseProvider, ChatProvider? chatProvider) async {
     if (responseProvider!.getLoader) return;
 
     String ordId = responseData['ordId'].toString();
@@ -231,9 +238,8 @@ class ResponsiveController extends ControllerMVC {
   }
 
   Future shownotification() async {
-    var androidDetails = AndroidNotificationDetails(
-        'channelId', 'channelName', 'channelDescription',
-        importance: Importance.high);
+    var androidDetails = AndroidNotificationDetails('channelId', 'channelName',
+        channelDescription: 'channelDescription', importance: Importance.high);
     var generalNotificationetails =
         NotificationDetails(android: androidDetails);
     await localNotifications?.show(0, 'orderState', 'something behind the info',
