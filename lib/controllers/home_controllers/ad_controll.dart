@@ -344,7 +344,7 @@ class AdController extends ControllerMVC {
     CircularProgressIndicator();
     // log(userDetails.toString());
     // var ud = userDetails["_id"].toString();
-    var body = {
+    Map<String, dynamic> body = {
       "problem": this.title.toString(),
       "job": (this.dropDownValue).toString(),
       "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
@@ -354,13 +354,13 @@ class AdController extends ControllerMVC {
       "schedule": getDateAndTime(),
       "uId": FirebaseAuth.instance.currentUser.uid.toString(),
       if (this.money != null) "money": this.money.toString(),
-      "loc.0": latitude.toString(),
-      "loc.1": longitude.toString(),
+      "loc.coordinates.0": latitude.toString(),
+      "loc.coordinates.1": longitude.toString(),
       "uDetails": userDetails["_id"].toString(),
       "address":
           fullAddress.isNotEmpty ? jsonEncode(fullAddress).toString() : ""
     };
-    for (var i = 0; i < imageLink.length; i++) {
+    for (int i = 0; i < imageLink.length; i++) {
       body["media.$i"] = imageLink[i];
     }
     log(body.toString());
@@ -372,7 +372,9 @@ class AdController extends ControllerMVC {
         refresh();
         snackbar(context, 'Published');
         ordersProvider.addNewOrder(jsonDecode(response.body));
+        return;
       }
+      log(response?.body.toString());
       if (response.statusCode == 400) {
         isUploading = 2;
         refresh();
