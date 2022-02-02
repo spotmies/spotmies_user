@@ -67,18 +67,18 @@ class HomeController extends ControllerMVC {
   //   });
   //}
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   //notifications();
-  //   //address
-  //   getAddressofLocation();
-  //   //for notifications
-  //   var androidInitialize = AndroidInitializationSettings('asdf');
-  //   var initializesettings = InitializationSettings(android: androidInitialize);
-  //   localNotifications = FlutterLocalNotificationsPlugin();
-  //   localNotifications.initialize(initializesettings);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    //notifications();
+    //address
+    getAddressofLocation();
+    //for notifications
+    var androidInitialize = AndroidInitializationSettings('asdf');
+    var initializesettings = InitializationSettings(android: androidInitialize);
+    localNotifications = FlutterLocalNotificationsPlugin();
+    localNotifications.initialize(initializesettings);
+  }
 
 //get token
   // void getToken() async {

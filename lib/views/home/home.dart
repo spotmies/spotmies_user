@@ -24,8 +24,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends StateMVC<Home> {
-  HomeController? _homeController;
-  UniversalProvider? up;
+  late HomeController _homeController;
+  late UniversalProvider up;
+
+  _HomeState() : super(HomeController()) {
+    this._homeController = controller as HomeController;
+  }
 
   List images = [
     'assets/uploadPic.svg',
@@ -95,9 +99,8 @@ class _HomeState extends StateMVC<Home> {
   @override
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up?.setCurrentConstants("home");
-    _homeController?.getAddressofLocation();
-    //for notifications
+    up.setCurrentConstants("home");
+    _homeController.getAddressofLocation();
 
     super.initState();
   }
@@ -145,12 +148,12 @@ class _HomeState extends StateMVC<Home> {
             width: width(context) * 0.5,
             child: InkWell(
               onTap: () async {
-                await _homeController?.getAddressofLocation();
+                await _homeController.getAddressofLocation();
               },
               child: Text(
-                  (_homeController?.add2 == null)
+                  (_homeController.add2 == null)
                       ? 'seethammadhara'
-                      : _homeController!.add2!,
+                      : _homeController.add2!,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: GoogleFonts.josefinSans(
