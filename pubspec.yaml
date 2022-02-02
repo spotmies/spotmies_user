@@ -40,7 +40,7 @@ dependencies:
   simple_animations: ^3.0.1
   google_fonts: ^2.0.0
   intl: ^0.17.0
-  flutter_local_notifications: ^5.0.0-nullsafety.1
+  flutter_local_notifications: ^9.2.0
   provider: ^5.0.0
   google_maps_flutter: ^2.0.1
   material_floating_search_bar: ^0.3.4
@@ -69,7 +69,7 @@ dependencies:
   firebase_messaging: any
   rxdart: any
   flutter_native_timezone: any
-  awesome_notifications: any
+  awesome_notifications: 0.6.21
   country_code_picker: any
   geocoding: ^2.0.1
   # flutter_incall: any

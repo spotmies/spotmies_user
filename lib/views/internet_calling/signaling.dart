@@ -32,7 +32,8 @@ class Signaling {
 
   Future<String> createRoom(RTCVideoRenderer remoteRenderer) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    DocumentReference roomRef = db.collection('rooms').doc();
+    DocumentReference<Map<String, dynamic>> roomRef =
+        db.collection('rooms').doc();
 
     log('Create PeerConnection with configuration: $configuration');
 
@@ -76,7 +77,9 @@ class Signaling {
     };
 
     // Listening for remote session description below
-    roomRef.snapshots().listen((snapshot) async {
+    roomRef
+        .snapshots()
+        .listen((DocumentSnapshot<Map<String, dynamic>> snapshot) async {
       log('Got updated room: ${snapshot.data()}');
 
       Map<String, dynamic>? data = snapshot.data();
@@ -115,7 +118,8 @@ class Signaling {
 
   Future<void> joinRoom(String roomId, RTCVideoRenderer remoteVideo) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    DocumentReference roomRef = db.collection('rooms').doc('$roomId');
+    DocumentReference<Map<String, dynamic>> roomRef =
+        db.collection('rooms').doc('$roomId');
     var roomSnapshot = await roomRef.get();
     log('Got room ${roomSnapshot.exists}');
 

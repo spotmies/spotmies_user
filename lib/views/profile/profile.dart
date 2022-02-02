@@ -82,6 +82,8 @@ class _ProfileState extends StateMVC<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    mode =
+        !(Provider.of<ThemeProvider>(context, listen: true).isDarkThemeEnabled);
     log("============ Render Profile ==============");
     // final height(context) = MediaQuery.of(context).size.height -
     //     MediaQuery.of(context).padding.top -
@@ -134,7 +136,8 @@ class _ProfileState extends StateMVC<Profile> {
               SizedBox(
                 height: height(context) * 0.04,
               ),
-              profilePic(context, u['pic'], u['name'], width(context) * 0.4, onClick: () {
+              profilePic(context, u['pic'], u['name'], width(context) * 0.4,
+                  onClick: () {
                 editDetails(context, width(context), height(context),
                     profileProvider, editpic, _profileController,
                     details: u);
@@ -276,7 +279,10 @@ class _ProfileState extends StateMVC<Profile> {
                                 }
                                 if (index == 6) {
                                   settings(
-                                      context, height(context), width(context));
+                                    context,
+                                    height(context),
+                                    width(context),
+                                  );
                                 }
                                 if (index == 7) {
                                   signOut(
