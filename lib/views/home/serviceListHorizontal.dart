@@ -110,7 +110,7 @@ Widget serviceBlocksMore(
   List<Map<String, Object>> buildData,
 ) {
   return Container(
-    padding: EdgeInsets.only(left: 15, top: 15),
+    padding: EdgeInsets.only(left: 15,),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

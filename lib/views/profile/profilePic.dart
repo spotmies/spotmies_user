@@ -3,7 +3,8 @@ import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
-Widget profilePic(BuildContext context, upic, name, {onClick}) {
+Widget profilePic(BuildContext context, upic, name, size,
+    {onClick, edit = true}) {
   // final width(context) = MediaQuery.of(context).size.width;
   // final _hight = MediaQuery.of(context).size.height -
   // MediaQuery.of(context).padding.top -
@@ -12,43 +13,41 @@ Widget profilePic(BuildContext context, upic, name, {onClick}) {
     child: Stack(children: [
       ClipOval(
         child: (upic == null || upic == "null") == false
-            ? Image.network(upic,
-                height: width(context) * 0.4,
-                width: width(context) * 0.4,
-                fit: BoxFit.fill)
+            ? Image.network(upic, height: size, width: size, fit: BoxFit.fill)
             : Container(
-                height: width(context) * 0.4,
-                width: width(context) * 0.4,
+                height: size,
+                width: size,
                 alignment: Alignment.center,
                 child: TextWid(
                   text: "${name[0] ?? "J"}",
-                  size: 30,
-                  weight: FontWeight.bold,
-                  color: Colors.white,
+                  size: size * 0.5,
+                  weight: FontWeight.w600,
+                  color: SpotmiesTheme.background,
                 ),
               ),
       ),
-      Positioned(
-          bottom: 0,
-          right: 0,
-          child: Card(
-            elevation: 7,
-            shape: CircleBorder(),
-            child: InkWell(
-              onTap: () {
-                onClick();
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.grey[800],
+      if (edit)
+        Positioned(
+            bottom: 0,
+            right: 0,
+            child: Card(
+              elevation: 7,
+              shape: CircleBorder(),
+              child: InkWell(
+                onTap: () {
+                  onClick();
+                },
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.edit,
+                    color: Colors.grey[800],
+                  ),
                 ),
               ),
-            ),
-          ))
+            ))
     ]),
-    radius: width(context) * 0.2,
+    radius: size / 2.5,
     backgroundColor: SpotmiesTheme.primary,
   );
 }

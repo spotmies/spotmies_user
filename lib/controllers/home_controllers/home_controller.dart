@@ -1,8 +1,10 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
@@ -65,18 +67,18 @@ class HomeController extends ControllerMVC {
   //   });
   //}
 
-  @override
-  void initState() {
-    super.initState();
-    //notifications();
-    //address
-    getAddressofLocation();
-    //for notifications
-    var androidInitialize = AndroidInitializationSettings('asdf');
-    var initializesettings = InitializationSettings(android: androidInitialize);
-    localNotifications = FlutterLocalNotificationsPlugin();
-    localNotifications.initialize(initializesettings);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   //notifications();
+  //   //address
+  //   getAddressofLocation();
+  //   //for notifications
+  //   var androidInitialize = AndroidInitializationSettings('asdf');
+  //   var initializesettings = InitializationSettings(android: androidInitialize);
+  //   localNotifications = FlutterLocalNotificationsPlugin();
+  //   localNotifications.initialize(initializesettings);
+  // }
 
 //get token
   // void getToken() async {
@@ -87,14 +89,15 @@ class HomeController extends ControllerMVC {
   getAddressofLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    final coordinates = Coordinates(position.latitude, position.longitude);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    log(placemarks[0].toString());
 
     setState(() {
-      add1 = addresses.first.featureName;
-      add2 = addresses.first.subLocality;
-      add3 = addresses.first.locality;
+      add1 = placemarks.first.street;
+      add2 = placemarks.first.subLocality;
+      add3 = placemarks.first.subAdministrativeArea;
     });
   }
 

@@ -7,6 +7,7 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
+import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/profile/editDetailsBS.dart';
 // import 'package:spotmies/views/profile/editDetailsBS.dart';
 import 'package:spotmies/views/profile/help&supportBS.dart';
@@ -90,18 +91,20 @@ class _ProfileState extends StateMVC<Profile> {
       key: _profileController.scaffoldkey,
       backgroundColor: SpotmiesTheme.background,
       appBar: AppBar(
-        backgroundColor: SpotmiesTheme.surface,
+        backgroundColor: SpotmiesTheme.background,
         elevation: 0,
-        title: Text('Profile',
-            style: GoogleFonts.josefinSans(
-                color: SpotmiesTheme.secondaryVariant,
-                fontWeight: FontWeight.w700)),
+        title: TextWidget(
+          text: 'Profile',
+          color: SpotmiesTheme.secondaryVariant,
+          size: width(context) * 0.06,
+          weight: FontWeight.w600,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: CircleAvatar(
                 radius: width(context) * 0.046,
-                backgroundColor: Colors.indigo[100],
+                backgroundColor: SpotmiesTheme.secondary,
                 child: IconButton(
                     onPressed: () {
                       setState(() {
@@ -114,7 +117,7 @@ class _ProfileState extends StateMVC<Profile> {
                     icon: Icon(
                       !mode ? Icons.light_mode : Icons.dark_mode,
                       size: width(context) * 0.05,
-                      color: mode ? Colors.grey[800] : Colors.indigo.shade600,
+                      color: SpotmiesTheme.background,
                     ))),
           )
         ],
@@ -126,24 +129,18 @@ class _ProfileState extends StateMVC<Profile> {
           if (data.getLoader || u == null)
             return Center(child: profileShimmer(context));
 
-          // return TextButton(
-          //     onPressed: () {
-          //       signOut(context);
-          //     },
-          //     child: Text("logout"));
           return ListView(
             children: [
               SizedBox(
                 height: height(context) * 0.04,
               ),
-              profilePic(context, u['pic'], u['name'], onClick: () {
+              profilePic(context, u['pic'], u['name'], width(context) * 0.4, onClick: () {
                 editDetails(context, width(context), height(context),
                     profileProvider, editpic, _profileController,
                     details: u);
               }),
               Container(
                 height: height(context) * 0.08,
-                // color: Colors.amber,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -220,7 +217,7 @@ class _ProfileState extends StateMVC<Profile> {
                 ),
               ),
               Container(
-                height: height(context) * 0.7,
+                height: height(context) * 0.8,
                 child: ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: tabnames.length,
@@ -235,9 +232,14 @@ class _ProfileState extends StateMVC<Profile> {
                                   : 0),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: SpotmiesTheme.surfaceVariant,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
+                                color: SpotmiesTheme.background,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: SpotmiesTheme.shadow,
+                                      blurRadius: 3,
+                                      spreadRadius: 1)
+                                ]),
                             child: ListTile(
                               onTap: () {
                                 if (index == 0) {
@@ -284,21 +286,31 @@ class _ProfileState extends StateMVC<Profile> {
                               leading: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(icons[index],
-                                      size: width(context) * 0.04),
+                                  Icon(
+                                    icons[index],
+                                    size: width(context) * 0.04,
+                                    color: SpotmiesTheme.secondaryVariant,
+                                  ),
                                 ],
                               ),
                               title: Text(tabnames[index],
-                                  style: fonts(width(context) * 0.04,
-                                      FontWeight.w500, Colors.blueGrey[900])),
+                                  style: fonts(
+                                    width(context) * 0.04,
+                                    FontWeight.w500,
+                                    SpotmiesTheme.secondaryVariant,
+                                  )),
                               trailing: Icon(
                                 Icons.arrow_forward_ios,
+                                color: SpotmiesTheme.secondaryVariant,
                                 size: width(context) * 0.04,
                               ),
                             ),
                           ));
                     }),
               ),
+              // SizedBox(
+              //   height: height(context) * 0.01,
+              // )
             ],
           );
         }),

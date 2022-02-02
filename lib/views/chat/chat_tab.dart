@@ -71,14 +71,14 @@ class _ChatState extends State<Chat> {
           backgroundColor: SpotmiesTheme.background,
           appBar: AppBar(
             toolbarHeight: height(context) * 0.07,
-            backgroundColor: SpotmiesTheme.surface,
+            backgroundColor: SpotmiesTheme.background,
             bottom: PreferredSize(
                 preferredSize: Size.fromHeight(10),
                 child: Container(
                   child: TabBar(
                       unselectedLabelColor: SpotmiesTheme.secondary,
                       indicatorSize: TabBarIndicatorSize.tab,
-                      indicatorColor: SpotmiesTheme.primary,
+                      indicatorColor: SpotmiesTheme.onBackground,
                       onTap: (tab) {
                         setState(() {
                           name = (tab == 0) ? 'Responses' : 'Chat';
@@ -97,7 +97,7 @@ class _ChatState extends State<Chat> {
                                   Text(
                                     universalProvider.getText("response_tab"),
                                     style: GoogleFonts.josefinSans(
-                                        color: SpotmiesTheme.primary,
+                                        color: SpotmiesTheme.onBackground,
                                         fontSize: width(context) * 0.04,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -116,7 +116,7 @@ class _ChatState extends State<Chat> {
                                 Text(
                                   universalProvider.getText("chat_tab"),
                                   style: GoogleFonts.josefinSans(
-                                      color: SpotmiesTheme.primary,
+                                      color: SpotmiesTheme.onBackground,
                                       fontSize: width(context) * 0.04,
                                       fontWeight: FontWeight.w600),
                                 ),

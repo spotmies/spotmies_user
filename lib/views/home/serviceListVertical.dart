@@ -157,7 +157,7 @@ class _ServicesState extends State<Services> {
                   options: CarouselOptions(
                     autoPlayInterval: Duration(seconds: 5),
                     autoPlayAnimationDuration: Duration(milliseconds: 1000),
-                    autoPlay: true,
+                    autoPlay: false,
                     aspectRatio: 16 / 9,
                     enlargeCenterPage: true,
                   ),

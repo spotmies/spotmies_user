@@ -53,14 +53,18 @@ class _PostListState extends StateMVC<PostList> {
         key: _postsController.scaffoldkey,
         // backgroundColor: Colors.blue[900],
         appBar: AppBar(
-          leading: Icon(Icons.work, color: SpotmiesTheme.secondaryVariant),
+          // leading: Icon(
+          //   Icons.work,
+          //   color: SpotmiesTheme.secondaryVariant,
+          //   size: width(context) * 0.05,
+          // ),
           title: TextWidget(
             text: up.getText("navbar_title"),
             color: SpotmiesTheme.secondaryVariant,
-            size: width(context) * 0.05,
+            size: width(context) * 0.06,
             weight: FontWeight.w600,
           ),
-          backgroundColor: SpotmiesTheme.surface,
+          backgroundColor: SpotmiesTheme.background,
           toolbarHeight: 48,
           elevation: 0,
         ),
@@ -79,7 +83,7 @@ class _PostListState extends StateMVC<PostList> {
                 return Center(
                   child: TextWid(
                     text: up.getText("no_orders"),
-                    size: 30,
+                    size: width(context)*0.05,
                   ),
                 );
 

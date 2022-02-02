@@ -32,6 +32,11 @@ class SpotmiesTheme {
 
   static Color title = Colors.blueGrey.shade600;
   static Color titleVariant = Colors.blueGrey.shade900;
+  static Color shadow = Colors.grey.shade700;
+  static Color light1 = Colors.red.shade300;
+  static Color light2 = Colors.blue.shade300;
+  static Color light3 = Colors.green.shade300;
+  static Color light4 = Colors.orange.shade300;
 
   Map<colorScheme, Color> lightColorScheme = {
     colorScheme.background: Colors.white,
@@ -48,22 +53,32 @@ class SpotmiesTheme {
     colorScheme.surfaceVariant2: Colors.grey.shade200,
     colorScheme.title: Colors.blueGrey.shade600,
     colorScheme.titleVariant: Colors.blueGrey.shade900,
+    colorScheme.shadow: Colors.grey.shade300,
+    colorScheme.light1: Colors.blue.shade50,
+    colorScheme.light2: Colors.red.shade50,
+    colorScheme.light3: Colors.green.shade50,
+    colorScheme.light4: Colors.orange.shade50,
   };
   Map<colorScheme, Color> darkColorScheme = {
     colorScheme.background: Colors.grey.shade800,
     colorScheme.onBackground: Colors.white,
-    colorScheme.primary: Colors.indigo.shade200,
+    colorScheme.primary: Colors.grey.shade100,
     colorScheme.secondary: Colors.grey.shade300,
     colorScheme.tertiary: Colors.blue.shade400,
     colorScheme.secondaryVariant: Colors.grey.shade300,
     colorScheme.surface: Colors.grey.shade600,
     colorScheme.onSurface: Colors.grey.shade100,
     colorScheme.tertiaryVariant: Colors.blue.shade300,
-    colorScheme.surfaceVariant: Colors.grey.shade500,
+    colorScheme.surfaceVariant: Colors.grey.shade700,
     colorScheme.primaryVariant: Colors.indigo.shade400,
     colorScheme.surfaceVariant2: Colors.grey.shade600,
     colorScheme.title: Colors.blueGrey.shade100,
     colorScheme.titleVariant: Colors.blueGrey.shade50,
+    colorScheme.shadow: Colors.grey.shade700,
+    colorScheme.light1: Colors.grey.shade700,
+    colorScheme.light2: Colors.grey.shade700,
+    colorScheme.light3: Colors.grey.shade700,
+    colorScheme.light4: Colors.grey.shade700,
   };
   init(context) {
     Provider.of<ThemeProvider>(context, listen: true).addListener(() {
@@ -117,6 +132,21 @@ class SpotmiesTheme {
       titleVariant = (themeMode
           ? darkColorScheme[colorScheme.titleVariant]
           : lightColorScheme[colorScheme.titleVariant])!;
+      shadow = (themeMode
+          ? darkColorScheme[colorScheme.shadow]
+          : lightColorScheme[colorScheme.shadow])!;
+      light1 = (themeMode
+          ? darkColorScheme[colorScheme.light1]
+          : lightColorScheme[colorScheme.light1])!;
+      light2 = (themeMode
+          ? darkColorScheme[colorScheme.light2]
+          : lightColorScheme[colorScheme.light2])!;
+      light3 = (themeMode
+          ? darkColorScheme[colorScheme.light3]
+          : lightColorScheme[colorScheme.light3])!;
+      light4 = (themeMode
+          ? darkColorScheme[colorScheme.light4]
+          : lightColorScheme[colorScheme.light4])!;
     });
   }
 }
@@ -135,5 +165,10 @@ enum colorScheme {
   surfaceVariant,
   surfaceVariant2,
   title,
-  titleVariant
+  titleVariant,
+  shadow,
+  light1,
+  light2,
+  light3,
+  light4,
 }

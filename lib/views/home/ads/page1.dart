@@ -71,7 +71,7 @@ Widget page1(double hight, double width, BuildContext context,
                                 padding: EdgeInsets.only(
                                     left: width * 0.03, right: width * 0.03),
                                 decoration: BoxDecoration(
-                                    color: SpotmiesTheme.surfaceVariant2,
+                                    color: SpotmiesTheme.surfaceVariant,
                                     borderRadius: BorderRadius.circular(15)),
                                 child: DropdownButton(
                                   underline: SizedBox(),
@@ -79,7 +79,7 @@ Widget page1(double hight, double width, BuildContext context,
                                   icon: Icon(
                                     Icons.arrow_drop_down_circle,
                                     size: width * 0.06,
-                                    color: SpotmiesTheme.primary,
+                                    color: SpotmiesTheme.onBackground,
                                   ),
                                   items: up.servicesList.map((services) {
                                     return DropdownMenuItem(
@@ -105,9 +105,9 @@ Widget page1(double hight, double width, BuildContext context,
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            color: SpotmiesTheme.surfaceVariant2,
+                            color: SpotmiesTheme.surfaceVariant,
                             borderRadius: BorderRadius.circular(15)),
-                        height: hight * 0.087,
+                        height: hight * 0.075,
                         width: width * 0.8,
                         child: TextFormField(
                           style: fonts(
@@ -129,18 +129,20 @@ Widget page1(double hight, double width, BuildContext context,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15)),
                                 borderSide: BorderSide(
-                                    width: 1, color: Colors.indigo.shade50)),
+                                    width: 1,
+                                    color: SpotmiesTheme.surfaceVariant2)),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15)),
                                 borderSide: BorderSide(
-                                    width: 1, color: Colors.grey.shade200)),
+                                    width: 1,
+                                    color: SpotmiesTheme.surfaceVariant)),
                             hintStyle: fonts(width * 0.05, FontWeight.w400,
-                                Colors.grey[500]),
+                                SpotmiesTheme.secondaryVariant),
                             hintText: 'Problem',
                             suffixIcon: Icon(
                               Icons.error_outline_rounded,
-                              color: SpotmiesTheme.primary,
+                              color: SpotmiesTheme.secondaryVariant,
                             ),
                             contentPadding: EdgeInsets.only(
                                 left: hight * 0.03, top: hight * 0.06),
@@ -151,7 +153,7 @@ Widget page1(double hight, double width, BuildContext context,
                         ),
                       ),
                       SizedBox(
-                        height: hight * 0.022,
+                        height: hight * 0.025,
                       ),
                       // Container(
                       //   decoration: BoxDecoration(
@@ -203,9 +205,9 @@ Widget page1(double hight, double width, BuildContext context,
                       //     },
                       //   ),
                       // ),
-                      SizedBox(
-                        height: hight * 0.022,
-                      ),
+                      // SizedBox(
+                      //   height: hight * 0.022,
+                      // ),
                       InkWell(
                         onTap: () async {
                           await adController.pickDate(context);
@@ -217,7 +219,7 @@ Widget page1(double hight, double width, BuildContext context,
                                 right: width * 0.03,
                                 top: width * 0.03),
                             decoration: BoxDecoration(
-                                color: SpotmiesTheme.surfaceVariant2,
+                                color: SpotmiesTheme.surfaceVariant,
                                 borderRadius: BorderRadius.circular(15)),
                             // height: hight * 0.12,
                             width: width * 0.8,
@@ -278,6 +280,7 @@ Widget page1(double hight, double width, BuildContext context,
                         },
                         buttonName: 'Next',
                         bgColor: SpotmiesTheme.primary,
+                        borderSideColor: SpotmiesTheme.primary,
                         textColor: Colors.white,
                         height: hight * 0.05,
                         minWidth: width * 0.60,

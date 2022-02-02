@@ -213,7 +213,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     awesomeInitilize();
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message?.data["route"];
-      log(routefromMessage);
+      log(routefromMessage.toString());
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
     });
@@ -393,7 +393,8 @@ class _GoogleNavBarState extends State<GoogleNavBar>
             bottomNavigationBar: AnimatedBottomNavigationBar.builder(
                 itemCount: icons.length,
                 tabBuilder: (int index, bool isActive) {
-                  final color = isActive ? Colors.grey[800] : Colors.grey;
+                  final color =
+                      isActive ? SpotmiesTheme.titleVariant : Colors.grey;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -420,13 +421,14 @@ class _GoogleNavBarState extends State<GoogleNavBar>
                     ],
                   );
                 },
-                backgroundColor: SpotmiesTheme.surface,
+                backgroundColor: SpotmiesTheme.background,
                 activeIndex: data.getCurrentPage,
-                splashColor: Colors.grey[200],
-                splashSpeedInMilliseconds: 300,
+                splashColor: SpotmiesTheme.surfaceVariant2,
+                splashSpeedInMilliseconds: 100,
                 notchSmoothness: NotchSmoothness.softEdge,
                 gapLocation: GapLocation.center,
                 leftCornerRadius: 32,
+                // elevation: 20,
                 rightCornerRadius: 32,
                 onTap: (index) {
                   if (data.enableRoute)
