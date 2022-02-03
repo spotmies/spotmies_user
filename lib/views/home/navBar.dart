@@ -438,7 +438,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
                 }),
             floatingActionButton: FloatingActionButton(
               elevation: 8,
-              backgroundColor: Colors.indigo[800],
+              backgroundColor: Color(0xff0082ad),
               child: Icon(Icons.engineering, color: Colors.white),
               onPressed: () {
                 Navigator.push(

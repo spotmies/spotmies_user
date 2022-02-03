@@ -7,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
 
 class HomeController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();

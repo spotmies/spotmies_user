@@ -44,7 +44,7 @@ class SpotmiesTheme {
   Map<colorScheme, Color> lightColorScheme = {
     colorScheme.background: Colors.white,
     colorScheme.onBackground: Colors.black,
-    colorScheme.primary: Colors.indigo.shade900,
+    colorScheme.primary: Color(0xff0088ad), //s.cyan.shade700
     colorScheme.secondary: Colors.grey.shade700,
     colorScheme.tertiary: Colors.blue.shade800,
     colorScheme.secondaryVariant: Colors.grey.shade900,
@@ -64,8 +64,8 @@ class SpotmiesTheme {
   };
   Map<colorScheme, Color> darkColorScheme = {
     colorScheme.background: Colors.grey.shade800,
-    colorScheme.onBackground: Colors.white,
-    colorScheme.primary: Colors.grey.shade100,
+    colorScheme.onBackground: Colors.grey.shade50,
+    colorScheme.primary: Color(0xff0088ad), //Colors.grey.shade100,
     colorScheme.secondary: Colors.grey.shade300,
     colorScheme.tertiary: Colors.blue.shade400,
     colorScheme.secondaryVariant: Colors.grey.shade300,
