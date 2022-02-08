@@ -1,15 +1,71 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
+import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotmies/apiCalls/apiExceptions.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
+import 'package:spotmies/models/access_token.dart';
+import 'package:spotmies/utilities/shared_preference.dart';
 
 class Server {
+  /* -------------------------- GET USER ACCESS TOKEN ------------------------- */
+
+  Future<dynamic> getAccessTokenApi() async {
+    log("getting access token");
+    dynamic uri = Uri.https(API.host, API.accessToken);
+    if (FirebaseAuth.instance.currentUser == null) return null;
+    Map<String, String> body = {"uId": FirebaseAuth.instance.currentUser!.uid};
+    try {
+      dynamic response =
+          await http.post(uri, body: body).timeout(Duration(seconds: 30));
+
+      if (response?.statusCode == 200) {
+        AccessToken result = AccessToken.fromJson(jsonDecode(response?.body));
+        log("token ${result.token}");
+        saveToken(result);
+        return result;
+      }
+      return null;
+    } on SocketException {
+      throw FetchDataException(
+          message: 'No Internet Connection', url: uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          message: 'API Not Responding in Time', url: uri.toString());
+    }
+  }
+
+  Future<String> fetchAccessToken() async {
+    dynamic tokenDetails = await getToken();
+    if (tokenDetails == null) {
+      dynamic result = await getAccessTokenApi();
+      if (result == null) return "null";
+      return result.token.toString();
+    } else {
+      tokenDetails = AccessToken.fromJson(tokenDetails);
+      if (tokenDetails.authData.exp <=
+          (new DateTime.now().millisecondsSinceEpoch / 1000)) {
+        dynamic result = await getAccessTokenApi();
+        if (result == null) return "null";
+        return result.token.toString();
+      }
+      return tokenDetails.token.toString();
+    }
+  }
+
+  /* --------------------------- END OF ACCESS TOKEN -------------------------- */
+
   Future<dynamic> getMethod(String api) async {
     var uri = Uri.https(API.host, api);
+    final String accessToken = await fetchAccessToken();
 
     try {
-      var response = await http.get(uri).timeout(Duration(seconds: 30));
+      var response = await http.get(
+        uri,
+        headers: {'Authorization': 'Bearer $accessToken'},
+      ).timeout(Duration(seconds: 30));
       return processResponse(response);
     } on SocketException {
       throw FetchDataException(
@@ -23,9 +79,11 @@ class Server {
   Future<dynamic> postMethod(String api, Map<String, dynamic> body) async {
     var uri = Uri.https(API.host, api);
     // var bodyData = json.encode(body);
+    final String accessToken = await fetchAccessToken();
     try {
-      var response =
-          await http.post(uri, body: body).timeout(Duration(seconds: 30));
+      var response = await http.post(uri, body: body, headers: {
+        'Authorization': 'Bearer $accessToken'
+      }).timeout(Duration(seconds: 30));
 
       // return processResponse(response);
       return response;
@@ -41,9 +99,11 @@ class Server {
   Future<dynamic> editMethod(String api, Map<String, dynamic> body) async {
     var uri = Uri.https(API.host, api);
     // var bodyData = json.encode(body);
+    final String accessToken = await fetchAccessToken();
     try {
-      var response =
-          await http.put(uri, body: body).timeout(Duration(seconds: 30));
+      var response = await http.put(uri, body: body, headers: {
+        'Authorization': 'Bearer $accessToken'
+      }).timeout(Duration(seconds: 30));
       // print("45 $response");
 
       return processResponse(response);
@@ -59,9 +119,12 @@ class Server {
   Future<dynamic> deleteMethod(String api,
       {Map<String, dynamic>? params}) async {
     var uri = Uri.https(API.host, api, params ?? {});
+    final String accessToken = await fetchAccessToken();
 
     try {
-      var response = await http.delete(uri).timeout(Duration(seconds: 30));
+      var response = await http.delete(uri, headers: {
+        'Authorization': 'Bearer $accessToken'
+      }).timeout(Duration(seconds: 30));
       return processResponse(response);
     } on SocketException {
       throw FetchDataException(
