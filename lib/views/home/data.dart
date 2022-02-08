@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spotmies/providers/theme_provider.dart';
 
 List<Map<String, Object>> beauty = [
   {"job": "Beauty", "icon": Icons.face, "desc": 'Facial,waxing,tanning,etc'},

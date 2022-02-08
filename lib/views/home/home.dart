@@ -7,13 +7,11 @@ import 'package:spotmies/controllers/home_controllers/home_controller.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
-import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/views/home/categeries_card.dart';
 import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/home/searchJobs/search.dart';
 import 'package:spotmies/views/home/processSteps_card.dart';
 import 'package:spotmies/views/home/popular_services_card.dart';
-import 'package:spotmies/views/profile/profilePic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class Home extends StatefulWidget {
