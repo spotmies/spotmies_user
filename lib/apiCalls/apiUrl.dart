@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class API {
   static var uid = FirebaseAuth.instance.currentUser?.uid; //user id
-  static var host = 'spotmiesserver.herokuapp.com'; //server path
+  // static var host = 'spotmiesserver.herokuapp.com'; //server path
+  static var host = 'spotmies.herokuapp.com';
   static var createOrder = '/api/order/Create-Ord/'; //post with user id
   static var getOrders = '/api/order/user/'; //get with user id
   static var particularOrder = '/api/order/orders/'; //get with order id
@@ -31,4 +32,5 @@ class API {
   static var serviceFeedBack = "/api/partner-feedback/new-feedback";
   static var newSuggestion = "/api/suggestion/new-suggestion";
   static var faq = "/api/support/faq/all-faqs";
+  static var accessToken = "/api/public/access-token";
 }

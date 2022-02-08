@@ -30,6 +30,11 @@ saveOrders(dynamic data) {
   setStringToSF(id: "orders", value: data);
 }
 
+saveToken(dynamic data) {
+  setStringToSF(id: "token", value: data);
+}
+
+
 /* -------------------------------------------------------------------------- */
 /*                       GET DATA FROM SHARED PREFERENCE                      */
 /* -------------------------------------------------------------------------- */
@@ -62,6 +67,12 @@ getOrders() async {
   dynamic responses = await getStringValuesSF("orders");
   return responses;
 }
+
+getToken() async {
+  dynamic responses = await getStringValuesSF('token');
+  return responses;
+}
+
 
 setStringToSF({required String id, value}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
