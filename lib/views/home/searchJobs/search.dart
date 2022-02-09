@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:spotmies/models/searchJobDataModel.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
+import 'package:spotmies/views/home/ads/adpost.dart';
 
 class FilterLocalListPage extends StatefulWidget {
   @override
@@ -11,14 +15,18 @@ class FilterLocalListPage extends StatefulWidget {
 }
 
 class FilterLocalListPageState extends State<FilterLocalListPage> {
-  late List<Job> jobs;
+  List<dynamic>? jobs;
   String query = '';
+  UniversalProvider? up;
 
   @override
   void initState() {
     super.initState();
 
-    jobs = allJobs;
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up?.setCurrentConstants("serviceRequest");
+    log('${up?.servicesList}');
+    jobs = up?.servicesList;
   }
 
   @override
@@ -29,10 +37,10 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
               buildSearch(),
               Expanded(
                 child: ListView.builder(
-                  itemCount: jobs.length,
+                  itemCount: jobs?.length,
                   itemBuilder: (context, index) {
-                    final book = jobs[index];
-
+                    final book = jobs![index];
+                    log(book.toString());
                     return buildBook(book);
                   },
                 ),
@@ -48,9 +56,13 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
         onChanged: searchBook,
       );
 
-  Widget buildBook(Job job) => ListTile(
+  Widget buildBook(job) => ListTile(
         onTap: () {
-          log(job.job);
+          log(job['serviceId'].toString());
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostAd(sid: job['serviceId'])));
         },
         leading: IconButton(
           onPressed: () {},
@@ -63,25 +75,32 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
         //   height: 50,
         // ),
         title: Text(
-          job.job,
+          job['nameOfService'],
           style: GoogleFonts.josefinSans(
               color: Colors.grey[900], fontWeight: FontWeight.w600),
         ),
-        subtitle: Text(
-          job.canDoWorks,
-          style: GoogleFonts.josefinSans(
-              color: Colors.grey[600], fontWeight: FontWeight.w500),
-        ),
+        // subtitle: RichText(
+        //   text: TextSpan(children: <InlineSpan>[
+        //     for (var string in dum)
+        //       TextSpan(
+        //         text: string,
+        //         style: GoogleFonts.josefinSans(
+        //             color: Colors.grey[600], fontWeight: FontWeight.w500),
+        //       ),
+        //   ]),
+        //   // jsonDecode(job['subServices']),
+        // ),
       );
 
   void searchBook(String query) {
-    final books = allJobs.where((job) {
-      final titleLower = job.job.toLowerCase();
-      final authorLower = job.canDoWorks.toLowerCase();
+    final books = up?.servicesList.where((job) {
+      final titleLower = job['nameOfService'].toLowerCase();
+      // final authorLower = job['subServices'].toLowerCase();
       final searchLower = query.toLowerCase();
 
-      return titleLower.contains(searchLower) ||
-          authorLower.contains(searchLower);
+      return titleLower.contains(searchLower);
+      // ||
+      //     authorLower.contains(searchLower);
     }).toList();
 
     setState(() {
@@ -91,6 +110,22 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
   }
 }
 
+// subserve(subjob) {
+//   for (var string in subjob) return string.toString();
+// }
+
+final dum = [
+  'qwerty',
+  'poiuyt',
+  'qwerty',
+  'poiuyt',
+  'qwerty',
+  'poiuyt',
+  'qwerty',
+  'poiuyt',
+  'qwerty',
+  'poiuyt',
+];
 final allJobs = [
   Job(
     id: 1,

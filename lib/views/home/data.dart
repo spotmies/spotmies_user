@@ -37,6 +37,34 @@ List catImages = [
   'assets/design.svg',
   'assets/education.svg',
   'assets/fliming.svg',
+  'assets/tradesman.svg',
+  'assets/barber.svg',
+  'assets/domestic.svg',
+  'assets/software.svg',
+  'assets/design.svg',
+  'assets/education.svg',
+  'assets/fliming.svg',
+  'assets/tradesman.svg',
+  'assets/barber.svg',
+  'assets/domestic.svg',
+  'assets/software.svg',
+  'assets/design.svg',
+  'assets/education.svg',
+  'assets/fliming.svg',
+  'assets/tradesman.svg',
+  'assets/barber.svg',
+  'assets/domestic.svg',
+  'assets/software.svg',
+  'assets/design.svg',
+  'assets/education.svg',
+  'assets/fliming.svg',
+  'assets/tradesman.svg',
+  'assets/barber.svg',
+  'assets/domestic.svg',
+  'assets/software.svg',
+  'assets/design.svg',
+  'assets/education.svg',
+  'assets/fliming.svg',
 ];
 
 List catNames = [
@@ -66,12 +94,12 @@ List icons = [
   Icons.more_horiz,
 ];
 List serviceNames = [
-  'App\ndeveloper',
-  'Google\ncampaigns',
-  'Logo\ndesigner',
-  'Photo shoot',
-  'Computer\nservices',
-  'More',
+  {'ser': 'App\ndeveloper', 'id': 1},
+  {'ser': 'Google\ncampaigns', 'id': 9},
+  {'ser': 'Logo\ndesigner', 'id': 5},
+  {'ser': 'Photo shoot', 'id': 6},
+  {'ser': 'Computer\nservices', 'id': 0},
+  {'ser': 'More', 'id': 'more'},
 ];
 
 List<Map<String, Object>> tradesman = [
@@ -100,5 +128,3 @@ List<Map<String, Object>> tradesman = [
     "desc": 'Indian,Chineese,contenental,etc.,'
   },
 ];
-
-

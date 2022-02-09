@@ -18,7 +18,7 @@ import 'package:spotmies/utilities/media_player.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
-import 'package:spotmies/views/maps/maps.dart';
+import 'package:spotmies/views/maps/offLine_placesModel.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';

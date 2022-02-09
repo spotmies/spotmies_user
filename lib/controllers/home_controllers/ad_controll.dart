@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -16,7 +17,6 @@ import 'package:spotmies/utilities/addressExtractor.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/uploadFilesToCloud.dart';
-import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
 import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -29,8 +29,8 @@ class AdController extends ControllerMVC {
   GlobalKey<PageSliderState> sliderKey = GlobalKey();
 
   String title = "";
-  late String time;
-  late String? money;
+  String? time;
+  String? money;
   List<File> serviceImages = [];
   List<String> serviceImagesStrings = [];
   bool uploading = false;
@@ -45,7 +45,7 @@ class AdController extends ControllerMVC {
   DateTime now = DateTime.now();
 
   // drop down menu for service type
-  int? dropDownValue = 0;
+  int? dropDownValue;
   //dummy data for accept/reject requests condition
   String dummy = 'nothing';
   //user id
@@ -110,14 +110,17 @@ class AdController extends ControllerMVC {
     log('message');
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    final coordinates = (lat == null && long == null)
-        ? Coordinates(position.latitude, position.longitude)
-        : Coordinates(lat!, long!);
-    var addresses =
-        await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    log("address ${addresses.first.subLocality}");
+    // final coordinates = (lat == null && long == null)
+    //     ? Coordinates(position.latitude, position.longitude)
+    //     : Coordinates(lat!, long!);
+    final lati = (lat == null) ? position.latitude : lat;
+    final longi = (long == null) ? position.longitude : long;
+    // var addresses =
+    //     await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    List<Placemark> placemarks = await placemarkFromCoordinates(lati, longi);
+    // log(placemarks.first.toString());
     setState(() {
-      fullAddress = addressExtractor(addresses.first);
+      fullAddress = addressExtractor(placemarks.first, lati, longi);
     });
   }
 
@@ -130,10 +133,10 @@ class AdController extends ControllerMVC {
             DateTime.now().day - 0),
         lastDate: DateTime(DateTime.now().year + 1));
     if (date != null) {
-      setState(() {
-        pickedDate = date;
-        print(pickedDate.millisecondsSinceEpoch);
-      });
+      // setState(() {
+      pickedDate = date;
+      print(pickedDate.millisecondsSinceEpoch);
+      // });
     }
   }
 
@@ -143,9 +146,9 @@ class AdController extends ControllerMVC {
       initialTime: pickedTime,
     );
     if (t != null) {
-      setState(() {
-        pickedTime = t;
-      });
+      // setState(() {
+      pickedTime = t;
+      // });
     }
   }
 
@@ -225,16 +228,16 @@ class AdController extends ControllerMVC {
   }
 
   step1(BuildContext context) {
-    if (dropDownValue == null || dropDownValue! < 0) {
+    if (dropDownValue == null) {
       snackbar(context, 'Please select service type');
       return;
     }
     setState(() {
       if (formkey.currentState != null) {
         if (formkey.currentState!.validate()) {
-          formkey.currentState?.save();
+          formkey.currentState!.save();
 
-          sliderKey.currentState?.next();
+          sliderKey.currentState!.next();
         }
       }
     });
@@ -276,11 +279,12 @@ class AdController extends ControllerMVC {
       // "schedule": pickedDate.millisecondsSinceEpoch.toString(),
       "schedule": getDateAndTime(),
       "uId": FirebaseAuth.instance.currentUser?.uid.toString(),
-      if (this.money != null) "money": this.money.toString(),
+      if (money != null) "money": money.toString(),
       "loc.0": latitude.toString(),
       "loc.1": longitude.toString(),
       "uDetails": userDetails["_id"].toString(),
-      "address": fullAddress.isNotEmpty ? jsonEncode(fullAddress) : ""
+      "address":
+          fullAddress.isNotEmpty ? jsonEncode(fullAddress).toString() : ""
     };
     for (var i = 0; i < imageLink.length; i++) {
       body["media.$i"] = imageLink[i];

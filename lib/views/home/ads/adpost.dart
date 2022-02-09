@@ -19,18 +19,17 @@ import 'package:spotmies/views/reusable_widgets/pageSlider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 
 class PostAd extends StatefulWidget {
-  final int? jobFromHome;
-  PostAd({this.jobFromHome});
+  final int? sid;
+  PostAd({this.sid});
   @override
-  _PostAdState createState() => _PostAdState(jobFromHome);
+  _PostAdState createState() => _PostAdState();
 }
 
 class _PostAdState extends StateMVC<PostAd> {
   late AdController _adController;
-  _PostAdState(this.jobFromHome) : super(AdController()) {
+  _PostAdState() : super(AdController()) {
     this._adController = controller as AdController;
   }
-  late int? jobFromHome;
 
   var latitude = "";
   var longitude = "";
@@ -40,6 +39,7 @@ class _PostAdState extends StateMVC<PostAd> {
   UniversalProvider? up;
 
   UserDetailsProvider? uDetailsProvider;
+  
   GetOrdersProvider? ordersProvider;
 
   @override
@@ -59,6 +59,9 @@ class _PostAdState extends StateMVC<PostAd> {
   @override
   Widget build(BuildContext context) {
     log("============ Render AdPost ==============");
+    if (widget.sid != null) {
+      _adController.dropDownValue = widget.sid;
+    }
     return Consumer<UserDetailsProvider>(builder: (context, data, child) {
       var user = data.user;
       if (data.getLoader || user == null) return circleProgress();
@@ -83,8 +86,8 @@ class _PostAdState extends StateMVC<PostAd> {
               PageSlider(key: _adController.sliderKey, pages: [
                 Container(
                     height: height(context) * 1.08,
-                    child: page1(height(context), width(context), context,
-                        _adController, up!)),
+                    // child: Page1(),
+                    child: page1(context, _adController, up!, widget.sid)),
                 Container(
                     height: height(context) * 1.08,
                     child: page2(height(context), width(context), context,

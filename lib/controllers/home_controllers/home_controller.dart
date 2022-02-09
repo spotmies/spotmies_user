@@ -86,6 +86,13 @@ class HomeController extends ControllerMVC {
 
 //address
   getAddressofLocation() async {
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (isLocationServiceEnabled) {
+      await Geolocator.checkPermission();
+    } else {
+      await Geolocator.requestPermission();
+    }
+
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 

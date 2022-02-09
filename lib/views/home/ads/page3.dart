@@ -6,10 +6,9 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/maps/offLine_placesModel.dart';
 import 'package:spotmies/views/maps/onLine_placesSearch.dart';
 import 'package:spotmies/views/reusable_widgets/steps.dart';
-
-import '../../maps/maps.dart';
 
 Widget page3(double hight, double width, user, AdController adController,
     BuildContext context, GetOrdersProvider? ordersProvider) {
@@ -58,7 +57,11 @@ Widget page3(double hight, double width, user, AdController adController,
                       child: Maps(
                         isSearch: false,
                         isNavigate: false,
-                        onSave: () {},
+                        onSave: () {
+                          // Navigator.of(context).push(MaterialPageRoute(
+                          //   builder: (context) => Maps(),
+                          // ));
+                        },
                       ),
                     ),
                     SizedBox(
@@ -79,7 +82,8 @@ Widget page3(double hight, double width, user, AdController adController,
                               ),
                               TextWidget(
                                 text: adController.fullAddress.isNotEmpty
-                                    ? adController.fullAddress['addressLine']
+                                    ? '${adController.fullAddress['name']},${adController.fullAddress['street']}, ${adController.fullAddress['subLocality']}, ${adController.fullAddress['locality']}, ${adController.fullAddress['subAdminArea']}, ${adController.fullAddress['adminArea']}, ${adController.fullAddress['postalCode']}, ${adController.fullAddress['isoCountryCode']}'
+                                        .toString()
                                     : "Unable to Get your Location",
                                 size: width * 0.04,
                                 flow: TextOverflow.visible,

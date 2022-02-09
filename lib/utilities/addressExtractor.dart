@@ -1,16 +1,19 @@
-addressExtractor(address) {
+import 'dart:developer';
+
+addressExtractor(address, double lati, double longi) {
   Map<String, String> val = {
     "subLocality": "${address.subLocality}",
     "locality": "${address.locality}",
-    "latitude": "${address.coordinates.latitude}",
-    "logitude": "${address.coordinates.longitude}",
-    "addressLine": "${address.addressLine}",
-    "subAdminArea": "${address.subAdminArea}",
+    "latitude": "${lati}",
+    "logitude": "${longi}",
+    "street": "${address.street}",
+    "subAdminArea": "${address.subAdministrativeArea}",
     "postalCode": "${address.postalCode}",
-    "adminArea": "${address.adminArea}",
-    "subThoroughfare": "${address.subThoroughfare}",
-    "featureName": "${address.featureName}",
-    "thoroughfare": "${address.thoroughfare}",
+    "adminArea": "${address.administrativeArea}",
+    "name": "${address.name}",
+    "isoCountryCode": "${address.isoCountryCode}",
+    // "thoroughfare": "${address.Thoroughfare}",
   };
+  log(val.toString());
   return val;
 }

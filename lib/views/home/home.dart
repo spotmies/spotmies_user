@@ -119,10 +119,14 @@ class _HomeState extends StateMVC<Home> {
         ),
         body: ListView(
           children: [
-            processSteps(context, images, titles, color),
-            popularServices(context, icons, serviceNames),
-            categeries(context, color),
-            banner(context)
+            ProcessCard(images: images, titles: titles, color: color),
+            PopularServices(
+              icons: icons,
+              serviceNames: serviceNames,
+            ),
+            Categories(color: color),
+            // categeries(context, color),
+            // banner(context)
           ],
         ));
   }

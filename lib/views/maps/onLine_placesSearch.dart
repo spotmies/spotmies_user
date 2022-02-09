@@ -8,7 +8,7 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
-import 'package:spotmies/views/maps/maps.dart';
+import 'package:spotmies/views/maps/offLine_placesModel.dart';
 
 class OnlinePlaceSearch extends StatefulWidget {
   final Function? onSave;
@@ -20,14 +20,14 @@ class OnlinePlaceSearch extends StatefulWidget {
 class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   // List<Places> geoLocations = [];
   String query = '';
-  late Timer? debouncer;
-  late UniversalProvider up;
+  Timer? debouncer;
+  UniversalProvider? up;
 
   @override
   void initState() {
     super.initState();
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("maps");
+    up?.setCurrentConstants("maps");
 
     init();
   }
@@ -50,12 +50,12 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
   }
 
   Future init() async {
-    if (up.geoLocations.length > 0) return;
+    if ((up?.geoLocations.length)! > 0) return;
     // var geoLocationss = await PlacesApi.getLoc(query);
-    up.setLocationsLoader(true);
+    up?.setLocationsLoader(true);
     List geoLocationss = await PlacesApi.getAllLocations();
-    up.setLocationsLoader(false);
-    up.setGeoLocations(geoLocationss);
+    up?.setLocationsLoader(false);
+    up?.setGeoLocations(geoLocationss);
     // setState(() => this.geoLocations = geoLocations);
   }
 
@@ -143,10 +143,10 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
       );
   searchLocations(String query) {
     if (query.length > 3) {
-      dynamic searches = getArea(query, up.geoLocations);
-      up.setSearchLocations(searches);
+      dynamic searches = getArea(query, up!.geoLocations);
+      up?.setSearchLocations(searches);
     } else if (query.length == 0) {
-      up.showAllLocation();
+      up?.showAllLocation();
     }
   }
 

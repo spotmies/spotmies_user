@@ -1,231 +1,410 @@
-// import 'dart:async';
-// import 'dart:developer';
+import 'dart:developer';
 
-// import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'dart:convert';
-// // import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/utilities/addressExtractor.dart';
+import 'package:spotmies/utilities/appConfig.dart';
+import 'package:spotmies/utilities/elevatedButtonWidget.dart';
+import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:provider/provider.dart';
 
-// import 'package:spotmies/models/placesModel.dart';
-// import 'package:spotmies/utilities/searchWidget.dart';
-// import 'package:spotmies/utilities/textWidget.dart';
-// import 'package:spotmies/views/maps/maps.dart';
+class Maps extends StatefulWidget {
+  final Map? coordinates;
+  final bool? isNavigate;
+  final bool? isSearch;
+  final Function? onSave;
+  final bool? popBackTwice;
+  final String? actionLabel;
+  // final AdController addresscontroller;
+  const Maps(
+      {Key? key,
+      this.coordinates,
+      this.isNavigate = true,
+      this.isSearch = true,
+      this.onSave,
+      this.popBackTwice = false,
+      this.actionLabel = "save"
+      // this.addresscontroller
+      })
+      : super(key: key);
+  @override
+  // ignore: no_logic_in_create_state
+  _MapsState createState() => _MapsState(coordinates);
+}
 
-// class OfflinePlaceSearch extends StatefulWidget {
-//   @override
-//   OfflinePlaceSearchState createState() => OfflinePlaceSearchState();
-// }
+class _MapsState extends State<Maps> {
+  TextEditingController searchController = TextEditingController();
 
-// class OfflinePlaceSearchState extends State<OfflinePlaceSearch> {
-//   List<Places> geoLocations = [];
-//   String query = '';
-//   Timer debouncer;
+  Map? coordinates;
+  _MapsState(this.coordinates);
+  GlobalKey? formkey = GlobalKey<FormState>();
+  GlobalKey? scaffoldkey = GlobalKey<ScaffoldState>();
+  GoogleMapController? googleMapController;
+  Map<String, double> generatedCoordinates = {"lat": 20.00, "log": 80.00};
+  Position? position;
+  double? lat;
+  double? long;
+  Placemark? addressline;
+  dynamic generatedAddress;
+  Map<MarkerId, Marker>? markers = <MarkerId, Marker>{};
+  void getmarker(double lat, double long) {
+    MarkerId markerId = MarkerId(lat.toString() + long.toString());
+    Marker _marker = Marker(
+        markerId: markerId,
+        position: LatLng(lat, long),
+        onTap: () async {
+          final coordinated = coordinates == null
+              ? LatLng(position!.latitude, position!.longitude)
+              : LatLng(coordinates?['latitude'], coordinates?['logitude']);
+          var address = await placemarkFromCoordinates(
+              coordinated.latitude, coordinated.longitude);
+          log(address.first.toString());
 
-//   @override
-//   void initState() {
-//     super.initState();
+          var firstAddress = address.first;
 
-//     init();
-//   }
+          setState(() {
+            lat = coordinates == null
+                ? position?.latitude
+                : coordinates?['latitude'];
+            long = coordinates == null
+                ? position?.latitude
+                : coordinates?['logitude'];
+            addressline = firstAddress;
+          });
+          coordinates == null
+              ? bottomAddressSheet(
+                  position?.latitude,
+                  position?.longitude,
+                )
+              : bottomAddressSheet(
+                  coordinates?['latitude'],
+                  coordinates?['logitude'],
+                );
+        },
+        draggable: true,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+        infoWindow: InfoWindow(snippet: 'Address'));
+    setState(() {
+      markers![markerId] = _marker;
+    });
+  }
 
-//   @override
-//   void dispose() {
-//     debouncer?.cancel();
-//     super.dispose();
-//   }
+  void getCurrentLocation() async {
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return snackbar(
+          context, 'Location services are disabled. Please turn on Location');
+    }
 
-//   void debounce(
-//     VoidCallback callback, {
-//     Duration duration = const Duration(milliseconds: 1000),
-//   }) {
-//     if (debouncer != null) {
-//       debouncer.cancel();
-//     }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return snackbar(context, 'Location permissions are denied');
+      }
+    }
+    Position currentPosition =
+        await GeolocatorPlatform.instance.getCurrentPosition();
+    setState(() {
+      position = currentPosition;
+    });
+  }
 
-//     debouncer = Timer(duration, callback);
-//   }
+  UniversalProvider? up;
+  @override
+  void initState() {
+    super.initState();
 
-//   Future init() async {
-//     var geoLocations = await PlacesLocal.placeLoc(query);
-//     // .catchError((e) {
-//     //   log(e.toString());
-//     // });
-//     // log('message');
+    up = Provider.of<UniversalProvider>(context, listen: false);
+    up?.setCurrentConstants("maps");
+    getCurrentLocation();
+  }
 
-//     setState(() => this.geoLocations = geoLocations);
-//   }
+  @override
+  Widget build(BuildContext context) {
+    if (position == null) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+          // child: TextWid(
+          //     text: "Please enable location access to spotmies partner App"),
+        ),
+      );
+    }
+    return Scaffold(
+      key: scaffoldkey,
+      resizeToAvoidBottomInset: false,
+      body: SizedBox(
+        child: Stack(alignment: Alignment.topCenter, children: [
+          GoogleMap(
+            onTap: (tapped) async {
+              final coordinated = LatLng(tapped.latitude, tapped.longitude);
+              var address = await placemarkFromCoordinates(
+                  coordinated.latitude, coordinated.longitude);
+              log(address.first.toString());
+              generatedAddress = addressExtractor(
+                  address.first, tapped.latitude, tapped.longitude);
+              String firstAddress = address.first.street.toString();
+              if (markers!.isNotEmpty) markers!.clear();
+              if (markers!.isEmpty) {
+                getmarker(tapped.latitude, tapped.longitude);
+              }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     // log(geoLocations.length.toString());
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Column(
-//           children: <Widget>[
-//             buildSearch(),
-//             geoLocations.length == 0
-//                 ? Container(
-//                     height: 600,
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         CircularProgressIndicator(
-//                           color: Colors.indigo[900],
-//                           backgroundColor: Colors.grey[100],
-//                         ),
-//                         SizedBox(
-//                           height: 25,
-//                         ),
-//                         TextWidget(
-//                           text: 'Please Wait Data is Fetching ....',
-//                         )
-//                       ],
-//                     ),
-//                   )
-//                 : Expanded(
-//                     child: ListView.builder(
-//                       itemCount: geoLocations.length,
-//                       itemBuilder: (context, index) {
-//                         final book = geoLocations[index];
-//                         if (index == 0) {
-//                           return ListTile(
-//                               onTap: () {
-//                                 Navigator.push(
-//                                     context,
-//                                     MaterialPageRoute(
-//                                         builder: (context) => Maps()));
-//                               },
-//                               leading: CircleAvatar(
-//                                   backgroundColor: Colors.grey[200],
-//                                   child: Icon(Icons.gps_fixed)),
-//                               title: TextWidget(
-//                                 text: 'Your Location',
-//                                 size: 15,
-//                                 weight: FontWeight.w700,
-//                               ),
-//                               trailing: IconButton(
-//                                 onPressed: () {},
-//                                 icon: Icon(Icons.directions),
-//                               ));
-//                         } else {
-//                           return buildBook(book);
-//                         }
-//                       },
-//                     ),
-//                   ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+              setState(() {
+                lat = tapped.latitude;
+                long = tapped.longitude;
+                addressline = firstAddress as Placemark?;
+              });
+              bottomAddressSheet(
+                lat!,
+                long!,
+              );
+            },
+            // mapType: MapType.satellite,
 
-//   Widget buildSearch() {
-//     return SearchWidget(
-//       text: query,
-//       hintText: 'Find Place',
-//       icon: Icons.location_searching,
-//       onChanged: searchBook,
-//     );
-//   }
+            buildingsEnabled: true,
+            compassEnabled: false,
+            trafficEnabled: true,
+            myLocationButtonEnabled: true,
 
-//   Future searchBook(String query) async {
-//     debounce(() async {
-//       final geoLoc = await PlacesLocal.placeLoc(query);
-//       // log(geoLoc.toString());
+            onMapCreated: (GoogleMapController controller) {
+              setState(() {
+                googleMapController = controller;
+              });
+            },
+            initialCameraPosition: CameraPosition(
+                target: coordinates != null
+                    ? navigateMaps(
+                        coordinates!['latitude'], coordinates!['logitude'])
+                    //LatLng(coordinates['latitude'], coordinates['logitude'])
+                    : navigateMaps(position!.latitude, position!.longitude),
+                zoom: 17),
+            markers: Set<Marker>.of(markers!.values),
+          ),
+          if (widget.isSearch!)
+            Positioned(
+                top: height(context) * 0.07,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: width(context) * 0.05,
+                        right: width(context) * 0.03),
+                    height: height(context) * 0.07,
+                    width: width(context) * 0.9,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[300]!,
+                              blurRadius: 5,
+                              spreadRadius: 3)
+                        ],
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWid(
+                          text: 'Search',
+                          size: width(context) * 0.05,
+                          color: Colors.grey[500],
+                        ),
+                        Icon(
+                          Icons.search,
+                          color: Colors.grey[500],
+                        ),
+                      ],
+                    ),
+                  ),
+                ))
+        ]),
+      ),
+    );
+  }
 
-//       if (!mounted) return;
+  navigateMaps(lati, logi) {
+    // if (markers.isNotEmpty) markers.clear();
+    if (markers!.isEmpty) getmarker(lati, logi);
+    return LatLng(lati, logi);
+  }
 
-//       setState(() {
-//         this.query = query;
-//         this.geoLocations = geoLoc;
-//       });
-//     });
-//   }
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
-//   Widget buildBook(Places geo) {
-//     // log(geo.subLocality);
-//     return ListTile(
-//         onTap: () {
-//           log(geo.coordinates.toString());
-//           Navigator.push(
-//               context,
-//               MaterialPageRoute(
-//                   builder: (context) => Maps(coordinates: geo.coordinates)));
-//         },
-//         leading: CircleAvatar(
-//           backgroundColor: Colors.grey[200],
-//           child: Icon(
-//             Icons.near_me,
-//             color: Colors.grey[700],
-//           ),
-//         ),
-//         title: TextWidget(
-//           text: geo.subLocality,
-//           size: 15,
-//           weight: FontWeight.w600,
-//         ),
-//         subtitle: TextWidget(
-//           text: geo.addressLine,
-//           size: 12,
-//         ),
-//         trailing: Icon(Icons.directions));
-//   }
-// }
+  bottomAddressSheet(
+    double? lat,
+    double? long,
+  ) {
+    final hight = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    generatedCoordinates['lat'] = lat!;
+    generatedCoordinates['log'] = long!;
+    showModalBottomSheet(
+        context: context,
+        elevation: 22,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: hight * 0.35,
+            child: Column(
+              children: [
+                Container(
+                  height: hight * 0.27,
+                  padding: EdgeInsets.all(width * 0.05),
+                  child: ListView(
+                    children: [
+                      TextWid(
+                        text: 'Your Address:',
+                        size: width * 0.06,
+                        weight: FontWeight.w600,
+                        flow: TextOverflow.visible,
+                      ),
+                      SizedBox(
+                        height: hight * 0.01,
+                      ),
+                      TextWid(
+                        text: addressline.toString(),
+                        size: width * 0.055,
+                        weight: FontWeight.w600,
+                        flow: TextOverflow.visible,
+                        color: Colors.grey[700],
+                      ),
+                      TextWid(
+                        text: lat.toString() + ", " + long.toString(),
+                        size: width * 0.055,
+                        weight: FontWeight.w600,
+                        flow: TextOverflow.visible,
+                        color: Colors.grey[700],
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButtonWidget(
+                      minWidth: width * 0.3,
+                      height: hight * 0.05,
+                      bgColor: Colors.indigo[50],
+                      buttonName: 'Close',
+                      textColor: Colors.grey[900],
+                      // allRadius: true,
+                      borderRadius: 15.0,
+                      textSize: width * 0.04,
+                      leadingIcon: Icon(
+                        Icons.clear,
+                        size: width * 0.04,
+                        color: Colors.grey[900],
+                      ),
+                      borderSideColor: Colors.indigo[50],
+                      onClick: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    widget.isNavigate == true
+                        ? ElevatedButtonWidget(
+                            minWidth: width * 0.5,
+                            height: hight * 0.05,
+                            bgColor: Colors.indigo[900],
+                            onClick: () async {
+                              try {
+                                launch(
+                                    'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                              } catch (e) {
+                                snackbar(context, "something went worng");
+                              }
+                            },
+                            buttonName: 'Navigate',
+                            textColor: Colors.white,
+                            // allRadius: true,
+                            borderRadius: 15.0,
+                            textSize: width * 0.04,
+                            trailingIcon: Icon(
+                              Icons.near_me,
+                              size: width * 0.03,
+                              color: Colors.white,
+                            ),
+                            borderSideColor: Colors.indigo[900],
+                          )
+                        : ElevatedButtonWidget(
+                            minWidth: width * 0.5,
+                            height: hight * 0.05,
+                            bgColor: Colors.indigo[900],
+                            onClick: () async {
+                              final coordinates = {
+                                'latitide': lat,
+                                'longitude': long
+                              };
+                              log(coordinates.toString());
+                              // if (widget.onSave == null)
+                              //   return snackbar(
+                              //       context, "something went wrong");
+                              // widget.onSave!(generatedCoordinates);
 
-// class PlacesLocal {
-//   static Future<List<Places>> placeLoc(String query) async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //
+                              log(lat.toString() + '\n' + long.toString());
 
-//     var location = prefs.getString('places');
-//     final places = jsonDecode(location);
-//     if (location != null) {
-//       return places.map((json) => Places.fromJson(json)).where((geo) {
-//         final subLocality = geo.subLocality.toLowerCase();
-//         final locality = geo.addressLine.toLowerCase();
-//         final coord = geo.coordinates.toString();
-//         final searchLower = query.toLowerCase();
-//         return subLocality.contains(searchLower) ||
-//             locality.contains(searchLower) ||
-//             coord.contains(searchLower);
-//       }).toList();
-//     } else {
-//       throw Exception();
-//     }
-//   }
-// }
+                              // final coordinates = Coordinates(lat, long);
+                              // var addresses = await Geocoder.local
+                              //     .findAddressesFromCoordinates(coordinates);
+                              List<Placemark> placemarks =
+                                  await placemarkFromCoordinates(lat, long);
 
-
-
-
-//  //  var geoLocations =  prefs.getString('places');
-//     // //  List<String> places = (jsonDecode(geoLocations)as List<dynamic>).cast<String>();
-//     //  List<dynamic> newData = List<dynamic>.from(json.decode(geoLocations));
-//     //  log(jsonDecode(geoLocations));
-//           // final List places = jsonDecode(geoLocations);
-
-
-
-// //  Future searchBook(String query) async => debounce(() async {
-// //     SharedPreferences prefs = await SharedPreferences.getInstance();
-// //     var geo =  prefs.getString('places');
-// //      final places = jsonDecode(geo);
-// //      //
-
-// //      final loc = places.where((locations){
-// //         final subLocality = locations.subLocality.toLowerCase();
-// //         final locality = locations.addressLine.toLowerCase();
-// //         final coord = locations.coordinates.toString();
-// //          final searchLower = query.toLowerCase();
-// //           return subLocality.contains(searchLower) ||
-// //           locality.contains(searchLower) ||
-// //           coord.contains(searchLower);
-// //      }).toList();
-// //         // final geoLocations = await PlacesLocal.placeLoc(query);
-
-// //         if (!mounted) return;
-
-// //         setState(() {
-// //           this.query = query;
-// //           this.geoLocations = geoLocations;
-// //         });
-// //       });
+                              Map<String, String> generatedAddress =
+                                  addressExtractor(placemarks.first, lat, long);
+                              log(generatedAddress.toString());
+                              if (widget.onSave == null) {
+                                return snackbar(
+                                    context, "something went wrong");
+                              } else {
+                                widget.onSave!(
+                                    generatedCoordinates, generatedAddress);
+                                Navigator.pop(context);
+                                if (widget.popBackTwice!)
+                                  Navigator.pop(context);
+                              }
+                            },
+                            buttonName: widget.actionLabel,
+                            textColor: Colors.white,
+                            borderRadius: 15.0,
+                            // allRadius: true,
+                            textSize: width * 0.04,
+                            trailingIcon: Icon(
+                              Icons.gps_fixed,
+                              size: width * 0.03,
+                              color: Colors.white,
+                            ),
+                            borderSideColor: Colors.indigo[900],
+                          )
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
+}

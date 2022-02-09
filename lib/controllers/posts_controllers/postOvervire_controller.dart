@@ -10,7 +10,7 @@ import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
-import 'package:spotmies/views/maps/maps.dart';
+import 'package:spotmies/views/maps/offLine_placesModel.dart';
 import 'package:spotmies/views/reusable_widgets/geo_coder.dart';
 
 class PostOverViewController extends ControllerMVC {
