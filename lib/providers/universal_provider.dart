@@ -86,6 +86,24 @@ class UniversalProvider extends ChangeNotifier {
     getServiceListFromServer();
   }
 
+  List<dynamic> getCategoryMainList() {
+    List outputList =
+        servicesList.where((o) => o['isMainService'] == true).toList();
+    return outputList;
+  }
+
+  List<dynamic> getCategorySubList() {
+    List outputList =
+        servicesList.where((o) => o['isMainService'] == false).toList();
+    return outputList;
+  }
+
+  getMainServiceId(id) {
+    int index =
+        getCategoryMainList().indexWhere((element) => element['_id'] == 1);
+    return getCategoryMainList()[index];
+  }
+
   void sortServiceList() {
     servicesList.sort((a, b) {
       return a['sort'].compareTo(b['sort']);

@@ -280,8 +280,8 @@ class AdController extends ControllerMVC {
       "schedule": getDateAndTime(),
       "uId": FirebaseAuth.instance.currentUser?.uid.toString(),
       if (money != null) "money": money.toString(),
-      "loc.0": latitude.toString(),
-      "loc.1": longitude.toString(),
+      "loc.coordinates.0": latitude.toString(),
+      "loc.coordinates.1": longitude.toString(),
       "uDetails": userDetails["_id"].toString(),
       "address":
           fullAddress.isNotEmpty ? jsonEncode(fullAddress).toString() : ""
@@ -301,11 +301,15 @@ class AdController extends ControllerMVC {
       }
       if (response.statusCode == 400) {
         isUploading = 2;
+
+        log(response.body.toString());
         refresh();
         snackbar(context, 'Bad Request');
       }
       if (response.statusCode == 404) {
         isUploading = 2;
+
+        log(response.body.toString());
         refresh();
         snackbar(context, 'Bad Request');
       }

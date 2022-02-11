@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
-import 'package:spotmies/views/home/ads/adpost.dart';
+import 'package:spotmies/views/home/category_view.dart';
 import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -46,9 +46,10 @@ class _CategoriesState extends State<Categories> {
           height: height(context) * 0.25,
           child: ListView.builder(
               padding: EdgeInsets.only(left: width(context) * 0.04),
-              itemCount: up?.servicesList.length,
+              itemCount: up?.getCategoryMainList().length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
+                dynamic serve = up?.getCategoryMainList().toList();
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -64,9 +65,10 @@ class _CategoriesState extends State<Categories> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PostAd(
-                                      sid: up?.servicesList[index]
-                                          ['serviceId'])));
+                                  builder: (context) => CatelogOverView(
+                                      service: serve[index],
+                                      index: index,
+                                      color: widget.color![index + 1])));
                         },
                         child: Container(
                             height: height(context) * 0.2,
@@ -80,8 +82,7 @@ class _CategoriesState extends State<Categories> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextWid(
-                                  text: up?.servicesList[index]
-                                      ['nameOfService'],
+                                  text: serve[index]['nameOfService'],
                                   size: width(context) * 0.04,
                                   weight: FontWeight.w500,
                                   align: TextAlign.justify,
