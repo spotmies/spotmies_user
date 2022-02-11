@@ -9,6 +9,11 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
 void settings(BuildContext context, double hight, double width) async {
+  var activeLanguageButtonColor = Colors.grey[900];
+  var activeLanguageTextColor = Colors.white;
+  var inactiveLanguageButtonColor = Colors.indigo[50];
+  var inactiveLanguageTextColor = Colors.grey[900];
+  var language = -1;
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -19,6 +24,11 @@ void settings(BuildContext context, double hight, double width) async {
         ),
       ),
       builder: (BuildContext context) {
+        language = context.locale == Locale("en", "US")
+            ? 0
+            : context.locale == Locale("te", "IN")
+                ? 1
+                : 2;
         return StatefulBuilder(builder: (context, StateSetter setState) {
           return Container(
             decoration: BoxDecoration(
@@ -146,13 +156,16 @@ void settings(BuildContext context, double hight, double width) async {
                                 Provider.of<LocalizationProvider>(context,
                                         listen: false)
                                     .setLocalizationMode(0);
+                                language = 0;
                               });
                             },
                             child: Container(
                               width: width * 0.3,
                               height: hight * 0.045,
                               decoration: BoxDecoration(
-                                  color: Colors.indigo[50],
+                                  color: language == 0
+                                      ? activeLanguageButtonColor
+                                      : inactiveLanguageButtonColor,
                                   borderRadius: BorderRadius.circular(
                                       height(context) * 0.014)),
                               child: Row(
@@ -161,8 +174,12 @@ void settings(BuildContext context, double hight, double width) async {
                                 children: [
                                   Text(
                                     'English',
-                                    style: fonts(width * 0.04, FontWeight.w700,
-                                        Colors.grey[900]),
+                                    style: fonts(
+                                        width * 0.04,
+                                        FontWeight.w700,
+                                        language == 0
+                                            ? activeLanguageTextColor
+                                            : inactiveLanguageTextColor),
                                   )
                                 ],
                               ),
@@ -175,13 +192,16 @@ void settings(BuildContext context, double hight, double width) async {
                                 Provider.of<LocalizationProvider>(context,
                                         listen: false)
                                     .setLocalizationMode(1);
+                                language = 1;
                               });
                             },
                             child: Container(
                               width: width * 0.3,
                               height: hight * 0.045,
                               decoration: BoxDecoration(
-                                  color: Colors.grey[900],
+                                  color: language == 1
+                                      ? activeLanguageButtonColor
+                                      : inactiveLanguageButtonColor,
                                   borderRadius: BorderRadius.circular(
                                       height(context) * 0.014)),
                               child: Row(
@@ -190,8 +210,12 @@ void settings(BuildContext context, double hight, double width) async {
                                 children: [
                                   Text(
                                     'తెలుగు',
-                                    style: fonts(width * 0.04, FontWeight.w700,
-                                        Colors.white),
+                                    style: fonts(
+                                        width * 0.04,
+                                        FontWeight.w700,
+                                        language == 1
+                                            ? activeLanguageTextColor
+                                            : inactiveLanguageTextColor),
                                   ),
                                 ],
                               ),
@@ -204,13 +228,16 @@ void settings(BuildContext context, double hight, double width) async {
                                 Provider.of<LocalizationProvider>(context,
                                         listen: false)
                                     .setLocalizationMode(2);
+                                language == 2;
                               });
                             },
                             child: Container(
                               width: width * 0.3,
                               height: hight * 0.045,
                               decoration: BoxDecoration(
-                                  color: Colors.indigo[50],
+                                  color: language == 2
+                                      ? activeLanguageButtonColor
+                                      : inactiveLanguageButtonColor,
                                   borderRadius: BorderRadius.circular(
                                       height(context) * 0.014)),
                               child: Row(
@@ -219,8 +246,12 @@ void settings(BuildContext context, double hight, double width) async {
                                 children: [
                                   Text(
                                     'हिंदी',
-                                    style: fonts(width * 0.04, FontWeight.w700,
-                                        Colors.grey[900]),
+                                    style: fonts(
+                                        width * 0.04,
+                                        FontWeight.w700,
+                                        language == 2
+                                            ? activeLanguageTextColor
+                                            : inactiveLanguageTextColor),
                                   )
                                 ],
                               ),
