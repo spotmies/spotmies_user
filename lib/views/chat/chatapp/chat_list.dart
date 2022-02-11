@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -23,17 +24,17 @@ class ChatList extends StatefulWidget {
 }
 
 class _ChatListState extends StateMVC<ChatList> {
-  late ChatController _chatController;
+  ChatController? _chatController;
   _ChatListState() : super(ChatController()) {
     this._chatController = controller as ChatController;
   }
-  late ChatProvider chatProvider;
-  late UniversalProvider up;
+  ChatProvider? chatProvider;
+  UniversalProvider? up;
   @override
   void initState() {
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up.setCurrentConstants("chatScreen");
+    up?.setCurrentConstants("chatScreen");
 
     // chatProvider.setMsgId("");
     super.initState();
@@ -44,7 +45,7 @@ class _ChatListState extends StateMVC<ChatList> {
     print('======render chatList screen =======');
     return Scaffold(
       backgroundColor: SpotmiesTheme.background,
-      key: _chatController.scaffoldkey,
+      key: _chatController?.scaffoldkey,
       body: Container(
         padding: EdgeInsets.only(top: 10),
         child: Column(
@@ -77,7 +78,7 @@ class _ChatListState extends StateMVC<ChatList> {
                       }
                       return RefreshIndicator(
                         onRefresh: () async {
-                          await _chatController.fetchNewChatList(
+                          await _chatController?.fetchNewChatList(
                               context, chatProvider);
                         },
                         child: ListView.builder(
@@ -100,7 +101,8 @@ class _ChatListState extends StateMVC<ChatList> {
                               lastMessage['type'],
                               chatList[index]['uId'],
                               chatList[index]['pId'],
-                              callBack: _chatController.cardOnClick,
+                              callBack: _chatController!.cardOnClick,
+                              chatProvider:chatProvider,
                             );
                           },
                         ),
@@ -128,9 +130,10 @@ class ChatListCard extends StatefulWidget {
   final String type;
   final String uId;
   final String pId;
+  final ChatProvider? chatProvider;
   const ChatListCard(this.profile, this.name, this.lastMessage, this.time,
       this.msgId, this.count, this.type, this.uId, this.pId,
-      {required this.callBack});
+      {required this.callBack, this.chatProvider});
 
   @override
   _ChatListCardState createState() => _ChatListCardState();
@@ -149,13 +152,14 @@ class _ChatListCardState extends State<ChatListCard> {
             "sender": "user",
             "status": 3
           };
-          widget.callBack(widget.msgId, widget.msgId, readReceiptobject);
+          log(readReceiptobject.toString());
+          widget.callBack(widget.msgId, widget.msgId, readReceiptobject, widget.chatProvider);
           //navigate strore msg count value
 
           await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PersonalChat(widget.msgId.toString())));
 
-          widget.callBack(widget.msgId, "", "");
+          widget.callBack(widget.msgId, "", "", widget.chatProvider);
         },
         title: TextWid(
             text: widget.name,

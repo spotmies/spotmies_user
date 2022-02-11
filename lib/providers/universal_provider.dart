@@ -98,10 +98,13 @@ class UniversalProvider extends ChangeNotifier {
     return outputList;
   }
 
-  getMainServiceId(id) {
-    int index =
-        getCategoryMainList().indexWhere((element) => element['_id'] == 1);
-    return getCategoryMainList()[index];
+  getMainServiceId(id) async {
+    List outputList = await getCategoryMainList()
+        .where((o) => o['subServices'].isNotEmpty)
+        .toList();
+    dynamic index = await outputList
+        .indexWhere((element) => element['subServices'].contains(id));
+    return outputList[index];
   }
 
   void sortServiceList() {
