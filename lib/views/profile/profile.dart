@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -85,6 +86,7 @@ class _ProfileState extends StateMVC<Profile> {
     mode =
         !(Provider.of<ThemeProvider>(context, listen: true).isDarkThemeEnabled);
     log("============ Render Profile ==============");
+    log(tr("profile"));
     // final height(context) = MediaQuery.of(context).size.height -
     //     MediaQuery.of(context).padding.top -
     //     kToolbarHeight;
@@ -96,7 +98,7 @@ class _ProfileState extends StateMVC<Profile> {
         backgroundColor: SpotmiesTheme.background,
         elevation: 0,
         title: TextWidget(
-          text: 'Profile',
+          text: tr('profile'),
           color: SpotmiesTheme.secondaryVariant,
           size: width(context) * 0.06,
           weight: FontWeight.w600,

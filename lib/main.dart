@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -9,6 +10,7 @@ import 'package:spotmies/controllers/login_controller/splash_screen_controller.d
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/getResponseProvider.dart';
+import 'package:spotmies/providers/localization_provider.dart';
 import 'package:spotmies/providers/mapsProvider.dart';
 import 'package:spotmies/providers/orderOverviewProvider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
@@ -27,42 +29,59 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   awesomeInitilize();
+  await EasyLocalization.ensureInitialized();
   //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onBackgroundMessage(backGroundHandler);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(MultiProvider(providers: [
-      ChangeNotifierProvider<TimeProvider>(
-        create: (context) => TimeProvider(),
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<TimeProvider>(
+            create: (context) => TimeProvider(),
+          ),
+          ChangeNotifierProvider<UserDetailsProvider>(
+            create: (context) => UserDetailsProvider(),
+          ),
+          ChangeNotifierProvider<ChatProvider>(
+            create: (context) => ChatProvider(),
+          ),
+          ChangeNotifierProvider<UniversalProvider>(
+            create: (context) => UniversalProvider(),
+          ),
+          ChangeNotifierProvider<ResponsesProvider>(
+            create: (context) => ResponsesProvider(),
+          ),
+          ChangeNotifierProvider<GetOrdersProvider>(
+            create: (context) => GetOrdersProvider(),
+          ),
+          ChangeNotifierProvider<OrderOverViewProvider>(
+            create: (context) => OrderOverViewProvider(),
+          ),
+          ChangeNotifierProvider<MapsProvider>(
+            create: (context) => MapsProvider(),
+          ),
+          ChangeNotifierProvider<GetResponseProvider>(
+            create: (context) => GetResponseProvider(),
+          ),
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (context) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider<LocalizationProvider>(
+            create: (context) => LocalizationProvider(),
+          ),
+        ],
+        child: EasyLocalization(
+          child: MyApp(),
+          supportedLocales: [
+            Locale("en", "US"),
+            Locale("hi", "IN"),
+            Locale("te", "IN")
+          ],
+          path: 'assets/translations',
+        ),
       ),
-      ChangeNotifierProvider<UserDetailsProvider>(
-        create: (context) => UserDetailsProvider(),
-      ),
-      ChangeNotifierProvider<ChatProvider>(
-        create: (context) => ChatProvider(),
-      ),
-      ChangeNotifierProvider<UniversalProvider>(
-        create: (context) => UniversalProvider(),
-      ),
-      ChangeNotifierProvider<ResponsesProvider>(
-        create: (context) => ResponsesProvider(),
-      ),
-      ChangeNotifierProvider<GetOrdersProvider>(
-        create: (context) => GetOrdersProvider(),
-      ),
-      ChangeNotifierProvider<OrderOverViewProvider>(
-        create: (context) => OrderOverViewProvider(),
-      ),
-      ChangeNotifierProvider<MapsProvider>(
-        create: (context) => MapsProvider(),
-      ),
-      ChangeNotifierProvider<GetResponseProvider>(
-        create: (context) => GetResponseProvider(),
-      ),
-      ChangeNotifierProvider<ThemeProvider>(
-        create: (context) => ThemeProvider(),
-      ),
-    ], child: MyApp()));
+    );
   });
 }
 
@@ -113,8 +132,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     SpotmiesTheme().init(context);
+    Provider.of<LocalizationProvider>(context, listen: true).addListener(() {
+      var locale =
+          Provider.of<LocalizationProvider>(context, listen: false).language;
+      var localeVar = locale == 0
+          ? Locale("en", "US")
+          : locale == 1
+              ? Locale("te", "IN")
+              : Locale("hi", "IN");
+      setState(() {
+        EasyLocalization.of(context)?.setLocale(localeVar);
+      });
+      print(localeVar);
+    });
+
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       debugShowCheckedModeBanner: false,
+      theme: ThemeData.fallback().copyWith(useMaterial3: true),
       home: SplashScreen(),
     );
   }

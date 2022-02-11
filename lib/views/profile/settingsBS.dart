@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/providers/localization_provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -129,7 +131,7 @@ void settings(BuildContext context, double hight, double width) async {
                       Padding(
                         padding: const EdgeInsets.only(left: 25.0),
                         child: Text(
-                          'Choose Your Languege',
+                          'Choose Your Language',
                           style: fonts(width * 0.05, FontWeight.w700,
                               SpotmiesTheme.secondaryVariant),
                         ),
@@ -137,58 +139,91 @@ void settings(BuildContext context, double hight, double width) async {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
-                            width: width * 0.3,
-                            height: hight * 0.045,
-                            decoration: BoxDecoration(
-                                color: Colors.indigo[50],
-                                borderRadius: BorderRadius.circular(
-                                    height(context) * 0.014)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'English',
-                                  style: fonts(width * 0.04, FontWeight.w700,
-                                      Colors.grey[900]),
-                                )
-                              ],
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                print("Button Pressed: English");
+                                Provider.of<LocalizationProvider>(context,
+                                        listen: false)
+                                    .setLocalizationMode(0);
+                              });
+                            },
+                            child: Container(
+                              width: width * 0.3,
+                              height: hight * 0.045,
+                              decoration: BoxDecoration(
+                                  color: Colors.indigo[50],
+                                  borderRadius: BorderRadius.circular(
+                                      height(context) * 0.014)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'English',
+                                    style: fonts(width * 0.04, FontWeight.w700,
+                                        Colors.grey[900]),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                          Container(
-                            width: width * 0.3,
-                            height: hight * 0.045,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[900],
-                                borderRadius: BorderRadius.circular(
-                                    height(context) * 0.014)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'తెలుగు',
-                                  style: fonts(width * 0.04, FontWeight.w700,
-                                      Colors.white),
-                                ),
-                              ],
+                          InkWell(
+                            onTap: () {
+                              print("Button Pressed: Telugu");
+                              setState(() {
+                                Provider.of<LocalizationProvider>(context,
+                                        listen: false)
+                                    .setLocalizationMode(1);
+                              });
+                            },
+                            child: Container(
+                              width: width * 0.3,
+                              height: hight * 0.045,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[900],
+                                  borderRadius: BorderRadius.circular(
+                                      height(context) * 0.014)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'తెలుగు',
+                                    style: fonts(width * 0.04, FontWeight.w700,
+                                        Colors.white),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Container(
-                            width: width * 0.3,
-                            height: hight * 0.045,
-                            decoration: BoxDecoration(
-                                color: Colors.indigo[50],
-                                borderRadius: BorderRadius.circular(
-                                    height(context) * 0.014)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'हिंदी',
-                                  style: fonts(width * 0.04, FontWeight.w700,
-                                      Colors.grey[900]),
-                                )
-                              ],
+                          InkWell(
+                            onTap: () {
+                              print("Button Pressed: Hindi");
+                              setState(() {
+                                Provider.of<LocalizationProvider>(context,
+                                        listen: false)
+                                    .setLocalizationMode(2);
+                              });
+                            },
+                            child: Container(
+                              width: width * 0.3,
+                              height: hight * 0.045,
+                              decoration: BoxDecoration(
+                                  color: Colors.indigo[50],
+                                  borderRadius: BorderRadius.circular(
+                                      height(context) * 0.014)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    'हिंदी',
+                                    style: fonts(width * 0.04, FontWeight.w700,
+                                        Colors.grey[900]),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ],
