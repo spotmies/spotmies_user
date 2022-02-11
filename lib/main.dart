@@ -79,6 +79,7 @@ void main() async {
             Locale("te", "IN")
           ],
           path: 'assets/translations',
+          fallbackLocale: Locale("en", "US"),
         ),
       ),
     );

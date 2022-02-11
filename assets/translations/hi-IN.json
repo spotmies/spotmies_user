@@ -1,4 +1,14 @@
 {
-    "msg":"Hindi is written in the Devangri language",
-    "profile":"प्रोफ़ाइल"
+  "msg": "Hindi is written in the Devangri language",
+  "profile": "प्रोफ़ाइल",
+  "invite": "आमंत्रण",
+  "privacy_policies": "गोपनीयता पालिसी",
+  "service_history": "इतिहास",
+  "promotions": "प्रोन्नति",
+  "help&support": "मदद",
+  "feedback": "प्रतिपुष्टि",
+  "settings": "समायोजन",
+  "signout": "साइन आउट",
+  "total_savings": "कुल बचत",
+  "total_orders": "कुल अनुरोध"
 }

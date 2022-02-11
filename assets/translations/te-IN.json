@@ -1,4 +1,14 @@
 {
-    "msg":"Telugu is written in the Devangri language",
-    "profile":"ప్రొఫైల్"
- }
+  "msg": "Telugu is written in the Devangri language",
+  "profile": "ప్రొఫైల్",
+  "invite": "ఆహ్వానించండి",
+  "privacy_policies": "గోప్యతా విధానాలు",
+  "service_history": "హిస్టరీ",
+  "promotions": "ప్రమోషన్స్",
+  "help&support": "సహాయం",
+  "feedback": "మీ అభిప్రాయం",
+  "settings": "సెట్టింగ్‌లు",
+  "signout": "సైన్ అవుట్",
+  "total_savings": "మొత్తం పొదుపులు",
+  "total_orders": "మొత్తం ఆర్డర్లు"
+}

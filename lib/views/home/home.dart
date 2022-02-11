@@ -111,10 +111,6 @@ class _HomeState extends StateMVC<Home> {
                 color: SpotmiesTheme.onBackground,
               ),
             )),
-            // Container(
-            //     padding: EdgeInsets.only(right: 10),
-            //     child: profilePic(context, null, 'u', width(context) * 0.1,
-            //         edit: false)),
           ],
         ),
         body: ListView(
@@ -125,11 +121,151 @@ class _HomeState extends StateMVC<Home> {
               serviceNames: serviceNames,
             ),
             Categories(color: color),
-            // categeries(context, color),
-            // banner(context)
+            bottomFooter(context),
           ],
         ));
   }
+}
+
+//never get too tied to search technician on market ,make your work with spotmies now
+bottomFooter(BuildContext context) {
+  return Container(
+      height: height(context) * 0.6,
+      width: width(context),
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(
+          left: width(context) * 0.03, right: width(context) * 0.03),
+      child: RichText(
+        text: TextSpan(
+          text: '\" ',
+          style:
+              fonts(width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
+          children: <TextSpan>[
+            TextSpan(
+              text: 'Don\'t ',
+              style: fonts(
+                  width(context) * 0.13, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'get ',
+              style: fonts(
+                  width(context) * 0.07, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'tired ',
+              style: fonts(
+                  width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'searching ',
+              style: fonts(
+                  width(context) * 0.16, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'for ',
+              style: fonts(
+                  width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'technicians ',
+              style: fonts(
+                  width(context) * 0.19, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: ' in the',
+              style: fonts(
+                  width(context) * 0.05, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: ' market',
+              style: fonts(
+                  width(context) * 0.13, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: ', get your ',
+              style: fonts(
+                  width(context) * 0.08, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'work done',
+              style: fonts(
+                  width(context) * 0.14, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: ' with ',
+              style: fonts(
+                  width(context) * 0.08, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'Spotmies ',
+              style: fonts(
+                  width(context) * 0.15, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'now',
+              style: fonts(
+                  width(context) * 0.07, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: '\" ',
+              style: fonts(
+                  width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
+            )
+          ],
+        ),
+      ));
+}
+
+bottomFooterForPartner(BuildContext context) {
+  return Container(
+      height: height(context) * 0.5,
+      width: width(context),
+      padding: EdgeInsets.only(
+          left: width(context) * 0.03, right: width(context) * 0.03),
+      child: RichText(
+        text: TextSpan(
+          text: '\" ',
+          style:
+              fonts(width(context) * 0.2, FontWeight.bold, SpotmiesTheme.dull),
+          children: <TextSpan>[
+            TextSpan(
+              text: 'A ',
+              style: fonts(
+                  width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'good repution',
+              style: fonts(
+                  width(context) * 0.21, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: ' is more ',
+              style: fonts(
+                  width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'valuable ',
+              style: fonts(
+                  width(context) * 0.18, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'than ',
+              style: fonts(
+                  width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'money',
+              style: fonts(
+                  width(context) * 0.15, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: ' \" ',
+              style: fonts(
+                  width(context) * 0.2, FontWeight.bold, SpotmiesTheme.dull),
+            )
+          ],
+        ),
+      ));
 }
 
 banner(BuildContext context) {
@@ -157,20 +293,16 @@ banner(BuildContext context) {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                              // color: Colors.amber,
-                              width: width(context) * 0.35,
-                              child: SvgPicture.asset(catImages[0])),
-                          Container(
                             width: width(context) * 0.45,
                             height: height(context) * 0.16,
                             // color: Colors.amber,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextWid(
                                   text: 'Easy to use',
-                                  align: TextAlign.end,
+                                  // align: TextAlign.end,
                                   size: width(context) * 0.06,
                                   weight: FontWeight.w600,
                                   color: Colors.grey[50],
@@ -181,7 +313,7 @@ banner(BuildContext context) {
                                 TextWid(
                                   text:
                                       'Easy to use hjfiausd jnfiunsdiuf jnsduifuis IJBFIUhgiu',
-                                  align: TextAlign.end,
+                                  // align: TextAlign.end,
                                   size: width(context) * 0.04,
                                   flow: TextOverflow.visible,
                                   color: Colors.grey[100],
@@ -189,7 +321,11 @@ banner(BuildContext context) {
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          Container(
+                              // color: Colors.amber,
+                              width: width(context) * 0.35,
+                              child: SvgPicture.asset(catImages[0])),
                         ],
                       )),
                   SizedBox(

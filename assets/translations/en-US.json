@@ -1,4 +1,15 @@
 {
     "msg":"English is written in the Drevik language",
-    "profile":"Profile"
+    "profile":"Profile",
+    "invite": "Invite a friend",
+    "privacy_policies": "Privacy Policies",
+    "service_history": "Service History",
+    "promotions": "Promotions",
+    "help&support": "Help & Support",
+    "feedback": "Feedback",
+    "settings":"Settings",
+    "signout":"Sign Out",
+    "total_savings":"Total Savings",
+    "total_orders":"Total Orders"
+
  }
