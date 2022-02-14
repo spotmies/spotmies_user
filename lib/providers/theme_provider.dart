@@ -41,6 +41,8 @@ class SpotmiesTheme {
   static Color light2 = Colors.blue.shade300;
   static Color light3 = Colors.green.shade300;
   static Color light4 = Colors.orange.shade300;
+  static Color equal = Colors.grey.shade500;
+  static Color lite = Colors.white;
 
   Map<colorScheme, Color> lightColorScheme = {
     colorScheme.background: Colors.white,
@@ -62,7 +64,9 @@ class SpotmiesTheme {
     colorScheme.light2: Colors.red.shade50,
     colorScheme.light3: Colors.green.shade50,
     colorScheme.light4: Colors.orange.shade50,
-    colorScheme.dull:Colors.grey.shade100,
+    colorScheme.dull: Colors.grey.shade100,
+    colorScheme.equal: Colors.grey.shade500,
+    colorScheme.lite: Colors.white,
   };
   Map<colorScheme, Color> darkColorScheme = {
     colorScheme.background: Colors.grey.shade800,
@@ -79,12 +83,14 @@ class SpotmiesTheme {
     colorScheme.surfaceVariant2: Colors.grey.shade600,
     colorScheme.title: Colors.blueGrey.shade100,
     colorScheme.titleVariant: Colors.blueGrey.shade50,
-    colorScheme.shadow: Colors.grey.shade700,
+    colorScheme.shadow: Colors.grey.shade800,
     colorScheme.light1: Colors.grey.shade700,
     colorScheme.light2: Colors.grey.shade700,
     colorScheme.light3: Colors.grey.shade700,
     colorScheme.light4: Colors.grey.shade700,
     colorScheme.dull: Colors.grey.shade700,
+    colorScheme.equal: Colors.grey.shade500,
+    colorScheme.lite: Colors.grey.shade700,
   };
   init(context) {
     Provider.of<ThemeProvider>(context, listen: true).addListener(() {
@@ -156,6 +162,12 @@ class SpotmiesTheme {
       dull = (themeMode
           ? darkColorScheme[colorScheme.dull]
           : lightColorScheme[colorScheme.dull])!;
+      equal = (themeMode
+          ? darkColorScheme[colorScheme.equal]
+          : lightColorScheme[colorScheme.equal])!;
+      lite = (themeMode
+          ? darkColorScheme[colorScheme.lite]
+          : lightColorScheme[colorScheme.lite])!;
     });
   }
 }
@@ -180,5 +192,7 @@ enum colorScheme {
   light2,
   light3,
   light4,
-  dull
+  dull,
+  equal,
+  lite
 }

@@ -8,8 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/posts_controllers/postOvervire_controller.dart';
+import 'package:spotmies/controllers/profile_controllers/profile_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/getOrdersProvider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
@@ -19,6 +21,7 @@ import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/maps/offLine_placesModel.dart';
+import 'package:spotmies/views/profile/help&supportBS.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
@@ -42,6 +45,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   _PostOverViewState() : super(PostOverViewController()) {
     this._postOverViewController = controller as PostOverViewController;
   }
+  ProfileController? profileController = ProfileController();
   late ChatProvider chatProvider;
   late UniversalProvider up;
   late int ordId;
@@ -94,16 +98,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       case 6:
       case 7:
       case 8:
-        return Colors.white;
+        return SpotmiesTheme.background;
       case 3:
       case 4:
-        return Colors.red;
+        return SpotmiesTheme.light2;
       case 9:
       case 10:
-        return Colors.green;
+        return SpotmiesTheme.light3;
 
       default:
-        return Colors.white;
+        return SpotmiesTheme.background;
     }
   }
 
@@ -143,7 +147,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
         children: [
           Scaffold(
             resizeToAvoidBottomInset: true,
-            backgroundColor: Colors.white,
+            backgroundColor: SpotmiesTheme.onBackground,
             appBar: AppBar(
               backgroundColor: appBarColor(d['orderState']),
               toolbarHeight: d['orderState'] < 9 && d['orderState'] != 3
@@ -156,7 +160,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 },
                 icon: Icon(
                   Icons.arrow_back,
-                  color: d['orderState'] > 8 ? Colors.white : Colors.grey[900],
+                  color: d['orderState'] > 8
+                      ? SpotmiesTheme.background
+                      : SpotmiesTheme.onBackground,
                 ),
               ),
               title: Column(
@@ -167,8 +173,9 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         ? int.parse(d['job'])
                         : d['job']),
                     size: width(context) * 0.04,
-                    color:
-                        d['orderState'] > 8 ? Colors.white : Colors.grey[500],
+                    color: d['orderState'] > 8
+                        ? SpotmiesTheme.background
+                        : SpotmiesTheme.title,
                     lSpace: 1.5,
                     weight: FontWeight.w600,
                   ),
@@ -180,8 +187,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                       Icon(
                         orderStateIcon(ordState: d['orderState']),
                         color: d['orderState'] > 8
-                            ? Colors.white
-                            : Colors.indigo[900],
+                            ? SpotmiesTheme.equal
+                            : SpotmiesTheme.equal,
                         size: width(context) * 0.035,
                       ),
                       SizedBox(
@@ -191,8 +198,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         child: TextWid(
                             text: orderStateString(ordState: d['orderState']),
                             color: d['orderState'] > 8
-                                ? Colors.white
-                                : Colors.grey.shade700,
+                                ? SpotmiesTheme.equal
+                                : SpotmiesTheme.equal,
                             flow: TextOverflow.visible,
                             weight: FontWeight.w700,
                             size: width(context) * 0.03),
@@ -222,14 +229,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 },
                                 height: height(context) * 0.05,
                                 minWidth: width(context) * 0.4,
-                                bgColor: Colors.white,
-                                borderSideColor: Colors.grey[200],
+                                bgColor: SpotmiesTheme.background,
+                                borderSideColor: SpotmiesTheme.dull,
+                                textColor: SpotmiesTheme.onBackground,
                                 borderRadius: 10.0,
                                 buttonName: 'Cancel',
                                 textSize: width(context) * 0.04,
                                 leadingIcon: Icon(
                                   Icons.cancel,
-                                  color: Colors.grey[900],
+                                  color: SpotmiesTheme.onBackground,
                                   size: width(context) * 0.045,
                                 ),
                               ),
@@ -253,15 +261,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 },
                                 height: height(context) * 0.05,
                                 minWidth: width(context) * 0.55,
-                                bgColor: Colors.indigo[900],
-                                borderSideColor: Colors.grey[200],
+                                bgColor: SpotmiesTheme.primary,
+                                borderSideColor: SpotmiesTheme.background,
                                 borderRadius: 10.0,
                                 buttonName: 'Re-schedule',
-                                textColor: Colors.white,
+                                textColor: SpotmiesTheme.background,
                                 textSize: width(context) * 0.04,
                                 trailingIcon: Icon(
                                   Icons.refresh,
-                                  color: Colors.white,
+                                  color: SpotmiesTheme.background,
                                   size: width(context) * 0.045,
                                 ),
                               )
@@ -272,12 +280,15 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   preferredSize: Size.fromHeight(4.0)),
               actions: [
                 IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.help,
-                      color:
-                          d['orderState'] > 8 ? Colors.white : Colors.grey[900],
-                    )),
+                    onPressed: () {
+                      log(d['uDetails'].toString());
+                      helpAndSupport(context, height(context), width(context),
+                          profileController!, d['uDetails']);
+                    },
+                    icon: Icon(Icons.help,
+                        color: d['orderState'] > 8
+                            ? SpotmiesTheme.background
+                            : SpotmiesTheme.onBackground)),
                 IconButton(
                     onPressed: () {
                       bottomOptionsMenu(context,
@@ -285,36 +296,40 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     },
                     icon: Icon(
                       Icons.more_vert,
-                      color:
-                          d['orderState'] > 8 ? Colors.white : Colors.grey[900],
+                      color: d['orderState'] > 8
+                          ? SpotmiesTheme.background
+                          : SpotmiesTheme.onBackground,
                     )),
               ],
             ),
             body: Container(
               height: height(context),
               width: width(context),
-              color: Colors.grey[100],
+              color: SpotmiesTheme.background,
               child: ListView(
                 children: [
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.dull,
                   ),
                   Wrap(
                     alignment: WrapAlignment.spaceEvenly,
                     children: [
                       TextWidget(
                         text: orderStateString(ordState: d['orderState']),
+                        color: SpotmiesTheme.onBackground,
                       ),
-                      TextWidget(text: "orderId : ${d['ordId']}")
+                      TextWidget(
+                          text: "orderId : ${d['ordId']}",
+                          color: SpotmiesTheme.onBackground)
                     ],
                   ),
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.dull,
                   ),
                   Container(
                     //height: height(context) * 0.45,
                     width: width(context),
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                     child: Column(
                       children: [
                         Container(
@@ -328,12 +343,16 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 text: 'Service Details :',
                                 size: width(context) * 0.055,
                                 weight: FontWeight.w600,
+                                color: SpotmiesTheme.onBackground,
                               ),
                               IconButton(
                                   padding: EdgeInsets.zero,
                                   constraints: BoxConstraints(),
                                   onPressed: () {},
-                                  icon: Icon(Icons.edit))
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: SpotmiesTheme.onBackground,
+                                  ))
                             ],
                           ),
                         ),
@@ -358,7 +377,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 height(context),
                                 'Location',
                                 Icons.location_on,
-                                fullAddress['addressLine'] ??
+                                fullAddress['subLocality'] ??
                                     "Unable to get service address"),
                             Positioned(
                                 right: width(context) * 0.02,
@@ -398,29 +417,32 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                     },
                                                   )));
                                     },
-                                    icon: Icon(Icons.edit_location_outlined)))
+                                    icon: Icon(
+                                      Icons.edit_location_outlined,
+                                      color: SpotmiesTheme.onBackground,
+                                    )))
                           ],
                         )
                       ],
                     ),
                   ),
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.dull,
                   ),
                   mediaView(height(context), width(context), images),
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.dull,
                   ),
                   d['orderState'] > 8
                       ? warrentyCard(height(context), width(context))
                       : Container(),
                   Divider(
-                    color: Colors.white,
+                    color: SpotmiesTheme.dull,
                   ),
                   (d['orderState'] > 6)
                       ? Container(
                           // height: height(context) * 0.3,
-                          color: Colors.white,
+                          color: SpotmiesTheme.background,
                           child: Column(
                             children: [
                               Container(
@@ -435,6 +457,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                       text: 'Technician Details :',
                                       size: width(context) * 0.055,
                                       weight: FontWeight.w600,
+                                      color: SpotmiesTheme.onBackground,
                                     ),
                                   ],
                                 ),
@@ -452,14 +475,18 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                       height: 60,
                                       alignment: Alignment.center,
                                       child: TextWid(
+                                          color: SpotmiesTheme.onBackground,
                                           text:
                                               "Unable to get Technician details")),
                             ],
                           ))
                       : Container(),
+                  SizedBox(
+                    height: height(context) * 0.05,
+                  ),
                   Container(
-                    height: 500,
-                    padding: EdgeInsets.only(left: 30, bottom: 50, top: 30),
+                    // height: 800,
+                    // padding: EdgeInsets.only(left: 30, bottom: 50, top: 30),
                     // width: width(context) * 0.7,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -470,10 +497,14 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
+                                    padding: EdgeInsets.only(
+                                      left: width(context) * 0.04,
+                                    ),
                                     child: TextWid(
                                       text: 'Is this order completed ?',
                                       size: width(context) * 0.055,
                                       weight: FontWeight.w600,
+                                      color: SpotmiesTheme.onBackground,
                                     ),
                                   ),
                                   Container(
@@ -490,22 +521,23 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           onClick: () {
                                             isThisOrderCompleted(false);
                                           },
-                                          bgColor: Colors.white,
-                                          borderSideColor: Colors.grey[200],
+                                          bgColor: SpotmiesTheme.background,
+                                          borderSideColor: SpotmiesTheme.dull,
                                           borderRadius: 10.0,
                                           buttonName: 'Not yet',
+                                          textColor: SpotmiesTheme.onBackground,
                                           textSize: width(context) * 0.04,
                                           leadingIcon: Icon(
                                             Icons.cancel,
-                                            color: Colors.grey[900],
+                                            color: SpotmiesTheme.onBackground,
                                             size: width(context) * 0.045,
                                           ),
                                         ),
                                         ElevatedButtonWidget(
                                           height: height(context) * 0.05,
                                           minWidth: width(context) * 0.45,
-                                          bgColor: Colors.indigo[900],
-                                          borderSideColor: Colors.grey[200],
+                                          bgColor: SpotmiesTheme.primary,
+                                          borderSideColor: SpotmiesTheme.dull,
                                           borderRadius: 10.0,
                                           buttonName: 'Completed',
                                           onClick: () {
@@ -523,11 +555,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                   money: value);
                                             });
                                           },
-                                          textColor: Colors.white,
+                                          textColor: SpotmiesTheme.background,
                                           textSize: width(context) * 0.04,
                                           leadingIcon: Icon(
                                             Icons.check_circle,
-                                            color: Colors.white,
+                                            color: SpotmiesTheme.background,
                                             size: width(context) * 0.045,
                                           ),
                                         )
@@ -537,33 +569,6 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 ],
                               )
                             : Container(),
-                        Visibility(
-                          visible: d['orderState'] < 3,
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 10, right: 10),
-                            child: ElevatedButtonWidget(
-                              height: height(context) * 0.05,
-                              minWidth: width(context) * 0.5,
-                              onClick: () {
-                                Map<String, dynamic> sendPayload = {
-                                  "socketName": "broadCastOrder",
-                                  "ordId": d['ordId']
-                                };
-                                chatProvider.setSendMessage(sendPayload);
-                              },
-                              bgColor: Colors.white,
-                              borderSideColor: Colors.grey[200],
-                              borderRadius: 10.0,
-                              buttonName: 'Send order again',
-                              textSize: width(context) * 0.04,
-                              leadingIcon: Icon(
-                                Icons.refresh_rounded,
-                                color: Colors.grey[900],
-                                size: width(context) * 0.045,
-                              ),
-                            ),
-                          ),
-                        ),
                         Visibility(
                           visible: d['orderState'] == 9 && d['pId'] != null,
                           child: Container(
@@ -575,8 +580,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 reviewBS(context,
                                     _postOverViewController.submitReview);
                               },
-                              bgColor: Colors.white,
-                              borderSideColor: Colors.grey[200],
+                              bgColor: SpotmiesTheme.onBackground,
+                              borderSideColor: SpotmiesTheme.dull,
                               borderRadius: 10.0,
                               buttonName: 'Rate Service',
                               textSize: width(context) * 0.04,
@@ -590,13 +595,53 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: width(context) * 0.04),
                           child: TextWid(
                             text: 'Service Status :',
                             size: width(context) * 0.055,
+                            color: SpotmiesTheme.onBackground,
                             weight: FontWeight.w600,
                           ),
                         ),
-                        Container(child: _Timeline2(context, orderData: d)),
+                        Container(
+                            height: height(context) * 0.6,
+                            padding:
+                                EdgeInsets.only(left: width(context) * 0.04),
+                            child: _Timeline2(context, orderData: d)),
+                        SizedBox(
+                          height: height(context) * 0.05,
+                        ),
+                        Visibility(
+                          visible: d['orderState'] < 3,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.only(
+                                top: width(context) * 0.05,
+                                bottom: width(context) * 0.3),
+                            child: ElevatedButtonWidget(
+                              height: height(context) * 0.05,
+                              minWidth: width(context) * 0.5,
+                              onClick: () {
+                                Map<String, dynamic> sendPayload = {
+                                  "socketName": "broadCastOrder",
+                                  "ordId": d['ordId']
+                                };
+                                chatProvider.setSendMessage(sendPayload);
+                              },
+                              bgColor: SpotmiesTheme.background,
+                              borderSideColor: SpotmiesTheme.dull,
+                              borderRadius: 10.0,
+                              buttonName: 'Send order again',
+                              textColor: SpotmiesTheme.onBackground,
+                              textSize: width(context) * 0.04,
+                              leadingIcon: Icon(
+                                Icons.refresh_rounded,
+                                color: SpotmiesTheme.onBackground,
+                                size: width(context) * 0.045,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -618,16 +663,17 @@ class _PostOverViewState extends StateMVC<PostOverView> {
     subtitle,
   ) {
     return ListTile(
-        tileColor: Colors.redAccent,
+        // tileColor: Colors.redAccent,
         leading: Icon(
           icon,
           size: width * 0.045,
+          color: SpotmiesTheme.onBackground,
         ),
         title: TextWidget(
           text: title,
           size: width * 0.045,
           weight: FontWeight.w600,
-          color: Colors.grey[900],
+          color: SpotmiesTheme.onBackground,
           lSpace: 1.5,
         ),
         subtitle: TextWidget(
@@ -635,7 +681,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           size: width * 0.04,
           flow: TextOverflow.visible,
           weight: FontWeight.w600,
-          color: Colors.grey[600],
+          color: SpotmiesTheme.equal,
           lSpace: 1,
         ),
         trailing: Container(
@@ -646,7 +692,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
   mediaView(hight, width, images) {
     return Container(
       //height: hight * 0.22,
-      color: Colors.white,
+      color: SpotmiesTheme.background,
       padding: EdgeInsets.only(bottom: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -661,6 +707,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   text: 'Media Files :',
                   size: width * 0.055,
                   weight: FontWeight.w600,
+                  color: SpotmiesTheme.onBackground,
                 ),
               ],
             ),
@@ -734,8 +781,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
       width: width,
       margin: EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
-          color: Colors.indigo[900],
-          border: Border.all(color: Colors.indigo.shade900),
+          color: SpotmiesTheme.primary,
+          border: Border.all(color: SpotmiesTheme.primary),
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -749,7 +796,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               children: [
                 TextWidget(
                   text: 'Warranty Card',
-                  color: Colors.white,
+                  color: SpotmiesTheme.onBackground,
                   size: width * 0.05,
                   weight: FontWeight.w600,
                 ),
@@ -758,13 +805,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                   children: [
                     TextWidget(
                       text: 'VALID TILL',
-                      color: Colors.indigo[200],
+                      color: SpotmiesTheme.onBackground,
                       size: width * 0.035,
                       weight: FontWeight.w600,
                     ),
                     TextWidget(
                       text: '09 Oct,2021',
-                      color: Colors.white,
+                      color: SpotmiesTheme.onBackground,
                       size: width * 0.04,
                       weight: FontWeight.w600,
                     ),
@@ -772,7 +819,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                 ),
                 TextWidget(
                   text: 'Claim Warranty >>',
-                  color: Colors.white,
+                  color: SpotmiesTheme.onBackground,
                   size: width * 0.045,
                   weight: FontWeight.w600,
                 )
@@ -898,7 +945,7 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                                     "",
                                 size: width * 0.04,
                                 weight: FontWeight.w600,
-                                color: Colors.grey[900],
+                                color: SpotmiesTheme.onBackground,
                               )
                             ],
                           ),
@@ -911,14 +958,14 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                                       ' | ',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
-                                  color: Colors.grey[700],
+                                  color: SpotmiesTheme.equal,
                                 ),
                                 TextWidget(
                                   // text: pDetails['rate'][0].toString(),
                                   text: '4.5',
                                   size: width * 0.025,
                                   weight: FontWeight.w600,
-                                  color: Colors.grey[700],
+                                  color: SpotmiesTheme.equal,
                                 ),
                                 Icon(
                                   Icons.star,
@@ -938,7 +985,7 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                                         text: lang + "  ",
                                         size: width * 0.026,
                                         weight: FontWeight.w600,
-                                        color: Colors.grey.shade900,
+                                        color: SpotmiesTheme.onBackground,
                                       ),
                                     ))
                                 .toList()),
@@ -950,12 +997,13 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                             Icon(
                               Icons.location_pin,
                               size: width * 0.03,
+                              color: SpotmiesTheme.onBackground,
                             ),
                             TextWid(
                               text: 'vizag',
                               size: width * 0.03,
                               weight: FontWeight.w600,
-                              color: Colors.grey.shade900,
+                              color: SpotmiesTheme.onBackground,
                             ),
                           ],
                         ),
@@ -997,21 +1045,21 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                 children: [
                   CircleAvatar(
                     radius: width * 0.06,
-                    backgroundColor: Colors.white,
+                    backgroundColor: SpotmiesTheme.dull,
                     child: Icon(
                       Icons.call,
-                      color: Colors.grey[900],
+                      color: SpotmiesTheme.onBackground,
                       size: width * 0.05,
                     ),
                   ),
                   SizedBox(
-                    height: hight * 0.01,
+                    width: hight * 0.02,
                   ),
                   TextWidget(
                     text: 'Call',
                     size: width * 0.04,
                     weight: FontWeight.w600,
-                    color: Colors.grey[900],
+                    color: SpotmiesTheme.onBackground,
                   ),
                 ],
               ),
@@ -1024,21 +1072,21 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                 children: [
                   CircleAvatar(
                     radius: width * 0.06,
-                    backgroundColor: Colors.white,
+                    backgroundColor: SpotmiesTheme.dull,
                     child: Icon(
                       Icons.chat_bubble,
-                      color: Colors.grey[900],
+                      color: SpotmiesTheme.onBackground,
                       size: width * 0.05,
                     ),
                   ),
                   SizedBox(
-                    height: hight * 0.01,
+                    width: hight * 0.02,
                   ),
                   TextWidget(
                     text: 'Message',
                     size: width * 0.04,
                     weight: FontWeight.w600,
-                    color: Colors.grey[900],
+                    color: SpotmiesTheme.onBackground,
                   ),
                 ],
               ),
@@ -1077,119 +1125,132 @@ class _Timeline2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = _TimelineStatus.values;
-    return Flexible(
-      child: Timeline.tileBuilder(
-        theme: TimelineThemeData(
-          nodePosition: 0,
-          connectorTheme: ConnectorThemeData(
-            thickness: 3.0,
-            space: 20,
-            color: Color(0xffd3d3d3),
-          ),
-          indicatorTheme: IndicatorThemeData(
-            size: width(context) * 0.06,
+    return Column(
+      children: [
+        Flexible(
+          child: Timeline.tileBuilder(
+            physics: NeverScrollableScrollPhysics(),
+            theme: TimelineThemeData(
+              nodePosition: 0,
+              connectorTheme: ConnectorThemeData(
+                thickness: 3.0,
+                space: 20,
+                color: SpotmiesTheme.dull,
+              ),
+              indicatorTheme: IndicatorThemeData(
+                size: width(context) * 0.06,
+              ),
+            ),
+            //padding: EdgeInsets.symmetric(vertical: 5.0),
+            builder: TimelineTileBuilder.connected(
+              contentsBuilder: (_, index) {
+                return TimeLineTitle(index, contextt, orderData['orderState'],
+                    isServiceStarted());
+              },
+              connectorBuilder: (_, index, connectorType) {
+                var solidLineConnector = SolidLineConnector(
+                  color: SpotmiesTheme.primary,
+                  indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                  endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+                );
+                var solidLineConnectorEmpty = SolidLineConnector(
+                  indent: connectorType == ConnectorType.start ? 0 : 2.0,
+                  endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
+                );
+                switch (index) {
+                  case 0:
+                    return solidLineConnector;
+                  case 1:
+                    if (orderData['orderState'] > 6) return solidLineConnector;
+                    return solidLineConnectorEmpty;
+                  case 2:
+                    if (orderData['orderState'] > 8) return solidLineConnector;
+                    return solidLineConnectorEmpty;
+                  case 3:
+                    if (orderData['orderState'] > 9) return solidLineConnector;
+                    return solidLineConnectorEmpty;
+                  default:
+                    return solidLineConnectorEmpty;
+                }
+              },
+              indicatorBuilder: (_, index) {
+                switch (data[index]) {
+                  case _TimelineStatus.request:
+                    return DotIndicator(
+                      color: SpotmiesTheme.primary,
+                      child: Icon(
+                        Icons.work_rounded,
+                        color: SpotmiesTheme.dull,
+                        size: width(context) * 0.035,
+                      ),
+                    );
+                  case _TimelineStatus.accept:
+                    return DotIndicator(
+                      color: orderData['orderState'] > 6
+                          ? SpotmiesTheme.primary
+                          : SpotmiesTheme.dull,
+                      child: Icon(
+                        Icons.how_to_reg_rounded,
+                        size: width(context) * 0.035,
+                        color: orderData['orderState'] > 6
+                            ? SpotmiesTheme.dull
+                            : SpotmiesTheme.onBackground,
+                      ),
+                    );
+                  case _TimelineStatus.started:
+                    return DotIndicator(
+                      color: isServiceStarted()
+                          ? SpotmiesTheme.primary
+                          : SpotmiesTheme.dull,
+                      child: Icon(
+                        Icons.build,
+                        size: width(context) * 0.035,
+                        color: SpotmiesTheme.onBackground,
+                      ),
+                    );
+                  case _TimelineStatus.completed:
+                    return DotIndicator(
+                      color: orderData['orderState'] > 8
+                          ? SpotmiesTheme.primary
+                          : SpotmiesTheme.dull,
+                      child: Icon(
+                        Icons.verified_rounded,
+                        size: width(context) * 0.035,
+                        color: orderData['orderState'] > 8
+                            ? SpotmiesTheme.dull
+                            : SpotmiesTheme.onBackground,
+                      ),
+                    );
+                  case _TimelineStatus.feedback:
+                    return DotIndicator(
+                      color: orderData['orderState'] > 9
+                          ? SpotmiesTheme.primary
+                          : SpotmiesTheme.dull,
+                      child: Icon(
+                        Icons.reviews,
+                        size: width(context) * 0.035,
+                        color: orderData['orderState'] > 9
+                            ? SpotmiesTheme.dull
+                            : SpotmiesTheme.onBackground,
+                      ),
+                    );
+                  default:
+                    return DotIndicator(
+                      color: SpotmiesTheme.primary,
+                      child: Icon(
+                        Icons.verified_rounded,
+                        size: width(context) * 0.035,
+                        color: SpotmiesTheme.equal,
+                      ),
+                    );
+                }
+              },
+              itemExtentBuilder: (_, __) => kTileHeight,
+              itemCount: data.length,
+            ),
           ),
         ),
-        //padding: EdgeInsets.symmetric(vertical: 5.0),
-        builder: TimelineTileBuilder.connected(
-          contentsBuilder: (_, index) {
-            return TimeLineTitle(
-                index, contextt, orderData['orderState'], isServiceStarted());
-          },
-          connectorBuilder: (_, index, connectorType) {
-            var solidLineConnector = SolidLineConnector(
-              color: Colors.indigo[700],
-              indent: connectorType == ConnectorType.start ? 0 : 2.0,
-              endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
-            );
-            var solidLineConnectorEmpty = SolidLineConnector(
-              indent: connectorType == ConnectorType.start ? 0 : 2.0,
-              endIndent: connectorType == ConnectorType.end ? 0 : 2.0,
-            );
-            switch (index) {
-              case 0:
-                return solidLineConnector;
-              case 1:
-                if (orderData['orderState'] > 6) return solidLineConnector;
-                return solidLineConnectorEmpty;
-              case 2:
-                if (orderData['orderState'] > 8) return solidLineConnector;
-                return solidLineConnectorEmpty;
-              case 3:
-                if (orderData['orderState'] > 9) return solidLineConnector;
-                return solidLineConnectorEmpty;
-              default:
-                return solidLineConnectorEmpty;
-            }
-          },
-          indicatorBuilder: (_, index) {
-            switch (data[index]) {
-              case _TimelineStatus.request:
-                return DotIndicator(
-                  color: Colors.indigo[900],
-                  child: Icon(
-                    Icons.work_rounded,
-                    color: Colors.grey[300],
-                    size: width(context) * 0.035,
-                  ),
-                );
-              case _TimelineStatus.accept:
-                return DotIndicator(
-                  color: orderData['orderState'] > 6
-                      ? Colors.indigo[900]
-                      : Colors.grey,
-                  child: Icon(
-                    Icons.how_to_reg_rounded,
-                    size: width(context) * 0.035,
-                    color: Colors.grey[300],
-                  ),
-                );
-              case _TimelineStatus.started:
-                return DotIndicator(
-                  color: isServiceStarted() ? Colors.indigo[900] : Colors.grey,
-                  child: Icon(
-                    Icons.build,
-                    size: width(context) * 0.035,
-                    color: Colors.grey[300],
-                  ),
-                );
-              case _TimelineStatus.completed:
-                return DotIndicator(
-                  color: orderData['orderState'] > 8
-                      ? Colors.indigo[900]
-                      : Colors.grey,
-                  child: Icon(
-                    Icons.verified_rounded,
-                    size: width(context) * 0.035,
-                    color: Colors.grey[300],
-                  ),
-                );
-              case _TimelineStatus.feedback:
-                return DotIndicator(
-                  color: orderData['orderState'] > 9
-                      ? Colors.indigo[900]
-                      : Colors.grey,
-                  child: Icon(
-                    Icons.reviews,
-                    size: width(context) * 0.035,
-                    color: Colors.grey[300],
-                  ),
-                );
-              default:
-                return DotIndicator(
-                  color: Colors.indigo[900],
-                  child: Icon(
-                    Icons.verified_rounded,
-                    size: width(context) * 0.035,
-                    color: Colors.white,
-                  ),
-                );
-            }
-          },
-          itemExtentBuilder: (_, __) => kTileHeight,
-          itemCount: data.length,
-        ),
-      ),
+      ],
     );
   }
 }
@@ -1242,288 +1303,8 @@ class TimeLineTitle extends StatelessWidget {
           text: getStatus(),
           size: width(context) * 0.04,
           weight: FontWeight.w600,
-          color: isCompleted()
-              ? Colors.grey[850] ?? Colors.grey.shade800
-              : Colors.grey.shade600,
+          color:
+              isCompleted() ? SpotmiesTheme.onBackground : SpotmiesTheme.equal,
         ));
   }
 }
-
-// CustomScrollView(
-//   physics: const BouncingScrollPhysics(
-//       parent: AlwaysScrollableScrollPhysics()),
-//   slivers: [
-//     SliverAppBar(
-//         backgroundColor: Colors.blue[900],
-//         stretch: true,
-//         pinned: true,
-//         snap: false,
-//         floating: true,
-//         expandedHeight: height(context) * 0.5,
-//         flexibleSpace: FlexibleSpaceBar(
-//             stretchModes: <StretchMode>[
-//               StretchMode.zoomBackground,
-//               StretchMode.fadeTitle,
-//             ],
-//             title: Text(
-//               _postOverViewController.jobs.elementAt(d['job']),
-//             ),
-//             background: Container(
-//               width: width(context) * 1,
-//               color: Colors.black,
-//               child: GestureDetector(
-//                   onTap: () {
-//                     imageslider(images, height(context), width(context));
-//                   },
-//                   child: (images.isEmpty)
-//                       ? Icon(
-//                           Icons.tungsten_rounded,
-//                           color: Colors.amber,
-//                           size: width(context) * 0.5,
-//                         )
-//                       : Image.network(
-//                           images.first,
-//                           fit: BoxFit.cover,
-//                         )),
-//             ))),
-//     SliverList(
-//         delegate: SliverChildListDelegate([
-//       Container(
-//         padding:
-//             EdgeInsets.only(left: width(context) * 0.08, top: width(context) * 0.03),
-//         height: height(context) * 0.07,
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text('Orderid:',
-//                 style: TextStyle(
-//                     color: Colors.grey[700],
-//                     fontWeight: FontWeight.bold)),
-//             Text(d['ordId'].toString()),
-//           ],
-//         ),
-//       ),
-//       Divider(
-//         thickness: 4,
-//         color: Colors.grey[200],
-//       ),
-//       Container(
-//         padding: EdgeInsets.only(right: 5, left: 5),
-//         height: height(context) * 0.032,
-//         decoration: BoxDecoration(
-//             color: Colors.white,
-//             borderRadius: BorderRadius.circular(5)),
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Icon(
-//               _postOverViewController.orderStateIcon(d['ordState']),
-//               color: Colors.indigo[900],
-//               size: width(context) * 0.04,
-//             ),
-//             SizedBox(
-//               width: width(context) * 0.01,
-//             ),
-//             TextWidget(
-//                 text: _postOverViewController
-//                     .orderStateText(d['ordState']),
-//                 color: Colors.indigo[900],
-//                 weight: FontWeight.w600,
-//                 size: width(context) * 0.03)
-//           ],
-//         ),
-//       ),
-//       Container(
-//         padding:
-//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-//         height: height(context) * 0.1,
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Container(
-//               width: width(context) * 0.7,
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text('Problem:',
-//                       style: TextStyle(
-//                           color: Colors.grey[700],
-//                           fontWeight: FontWeight.bold)),
-//                   Flexible(
-//                     child: Text(
-//                       d['problem'],
-//                       overflow: TextOverflow.ellipsis,
-//                       style: TextStyle(color: Colors.grey[800]),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             _postOverViewController.editAttributes(
-//                 'problem',
-//                 ordId.toString(),
-//                 d['job'],
-//                 d['money'],
-//                 d['schedule'],
-//                 coordinates),
-//           ],
-//         ),
-//       ),
-//       Divider(
-//         thickness: 4,
-//         color: Colors.grey[200],
-//       ),
-//       Container(
-//         padding:
-//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-//         height: height(context) * 0.1,
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text('Amount quoted:',
-//                     style: TextStyle(
-//                         color: Colors.grey[700],
-//                         fontWeight: FontWeight.bold)),
-//                 Text('₹' + d['money'].toString(),
-//                     style: TextStyle(
-//                       color: Colors.grey[700],
-//                     )),
-//                 // Text(d['ordId']),
-//               ],
-//             ),
-//             _postOverViewController.editAttributes(
-//                 'amount',
-//                 ordId.toString(),
-//                 d['job'],
-//                 d['money'],
-//                 d['schedule'],
-//                 coordinates),
-//           ],
-//         ),
-//       ),
-//       Divider(
-//         thickness: 4,
-//         color: Colors.grey[200],
-//       ),
-//       Container(
-//         padding:
-//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-//         height: height(context) * 0.1,
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text('Schedule:',
-//                     style: TextStyle(
-//                         color: Colors.grey[700],
-//                         fontWeight: FontWeight.bold)),
-//                 Text(
-//                     DateFormat('dd/MM/yyyy').format(
-//                         DateTime.fromMillisecondsSinceEpoch(
-//                             d['schedule'])),
-//                     style: TextStyle(
-//                       color: Colors.grey[700],
-//                     ))
-//               ],
-//             ),
-//             _postOverViewController.editAttributes(
-//                 'Schedule',
-//                 ordId.toString(),
-//                 d['job'],
-//                 d['money'],
-//                 d['schedule'],
-//                 coordinates),
-//           ],
-//         ),
-//       ),
-//       Divider(
-//         thickness: 4,
-//         color: Colors.grey[200],
-//       ),
-//       Container(
-//         padding:
-//             EdgeInsets.only(left: width(context) * 0.09, right: width(context) * 0.02),
-//         height: height(context) * 0.1,
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text('Service location:',
-//                     style: TextStyle(
-//                         color: Colors.grey[700],
-//                         fontWeight: FontWeight.bold)),
-//                 Text(
-//                     d['loc'][0].toString() +
-//                         ',' +
-//                         d['loc'][1].toString(),
-//                     style: TextStyle(
-//                       color: Colors.grey[700],
-//                     ))
-//               ],
-//             ),
-//             _postOverViewController.editAttributes(
-//                 'location',
-//                 ordId.toString(),
-//                 d['job'],
-//                 d['money'],
-//                 d['schedule'],
-//                 coordinates),
-//           ],
-//         ),
-//       ),
-//       d['ordstate'] == 'req'
-//           ? Container(
-//               color: Colors.blue[900],
-//               child: IconButton(
-//                   onPressed: () {
-//                     rating();
-//                   },
-//                   icon: Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Text(
-//                         'Rate',
-//                         style: TextStyle(
-//                             color: Colors.white,
-//                             fontSize: width(context) * 0.05),
-//                       ),
-//                       Icon(
-//                         Icons.star,
-//                         color: Colors.white,
-//                       ),
-//                     ],
-//                   )),
-//             )
-//           : Container(
-//               color: Colors.blue[900],
-//               child: IconButton(
-//                   icon: Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Text(
-//                         'Complete',
-//                         style: TextStyle(color: Colors.white),
-//                       ),
-//                       Icon(
-//                         Icons.done,
-//                         color: Colors.white,
-//                       ),
-//                     ],
-//                   ),
-//                   onPressed: () {}),
-//             ),
-//     ])),
-//   ],
-// );

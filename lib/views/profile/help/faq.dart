@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/profile_controllers/profile_controller.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -31,8 +32,9 @@ class _FAQState extends State<FAQ> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: SpotmiesTheme.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: SpotmiesTheme.background,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
@@ -40,12 +42,13 @@ class _FAQState extends State<FAQ> {
             },
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.onBackground,
             )),
         title: TextWid(
           text: 'Frequently Asked Questions',
           size: width(context) * 0.055,
           weight: FontWeight.w600,
+          color: SpotmiesTheme.onBackground,
         ),
       ),
       body: Consumer<UniversalProvider>(builder: (context, data, child) {
@@ -75,8 +78,8 @@ class _FAQState extends State<FAQ> {
                       child: ExpansionTile(
                         backgroundColor: Colors.white,
                         collapsedBackgroundColor: Colors.white,
-                        textColor: Colors.indigo[900],
-                        iconColor: Colors.indigo[900],
+                        textColor: SpotmiesTheme.primary,
+                        iconColor: SpotmiesTheme.primary,
                         collapsedIconColor: Colors.grey[900],
                         collapsedTextColor: Colors.grey[900],
                         title: TextWid(
@@ -84,13 +87,14 @@ class _FAQState extends State<FAQ> {
                           size: width(context) * 0.05,
                           weight: FontWeight.w500,
                           flow: TextOverflow.visible,
+                          color: SpotmiesTheme.onBackground,
                         ),
                         subtitle: TextWid(
-                          text: faq[index]['description'],
-                          size: width(context) * 0.03,
-                          weight: FontWeight.w500,
-                          flow: TextOverflow.visible,
-                        ),
+                            text: faq[index]['description'],
+                            size: width(context) * 0.03,
+                            weight: FontWeight.w500,
+                            flow: TextOverflow.visible,
+                            color: SpotmiesTheme.onBackground),
                         children: [
                           Theme(
                             data: Theme.of(context)
@@ -115,16 +119,18 @@ class _FAQState extends State<FAQ> {
                                           ],
                                         ),
                                         // expandedAlignment: Alignment.center,
-                                        textColor: Colors.indigo[900],
-                                        iconColor: Colors.indigo[900],
-                                        collapsedIconColor: Colors.indigo[900],
-                                        collapsedTextColor: Colors.indigo[900],
+                                        textColor: SpotmiesTheme.primary,
+                                        iconColor: SpotmiesTheme.primary,
+                                        collapsedIconColor:
+                                            SpotmiesTheme.primary,
+                                        collapsedTextColor:
+                                            SpotmiesTheme.primary,
                                         title: TextWid(
                                           text: body[index]['question'],
                                           size: width(context) * 0.05,
                                           weight: FontWeight.w500,
                                           flow: TextOverflow.visible,
-                                          color: Colors.indigo[900],
+                                          color: SpotmiesTheme.primary,
                                         ),
 
                                         children: [
@@ -157,7 +163,7 @@ class _FAQState extends State<FAQ> {
       floatingActionButton: Container(
         padding: EdgeInsets.all(5),
         child: ElevatedButtonWidget(
-          bgColor: Colors.indigo[900],
+          bgColor: SpotmiesTheme.primary,
           minWidth: width(context) * 0.6,
           height: height(context) * 0.06,
           textColor: Colors.white,
@@ -166,7 +172,7 @@ class _FAQState extends State<FAQ> {
           textStyle: FontWeight.w600,
           borderRadius: 10.0,
           trailingIcon: Icon(Icons.question_answer),
-          borderSideColor: Colors.indigo[900],
+          borderSideColor: SpotmiesTheme.primary,
           onClick: () {
             String pD = up.user["_id"].toString();
             log(pD);

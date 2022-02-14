@@ -60,6 +60,7 @@ class AdController extends ControllerMVC {
   Map fullAddress = {};
   var docc;
   var wid = 1;
+  int datePickColor = 0;
   int isUploading = 0; //0 for nothing 1- pending 2- failure 3-success
   List jobs = [
     'Select',
@@ -280,8 +281,8 @@ class AdController extends ControllerMVC {
       "schedule": getDateAndTime(),
       "uId": FirebaseAuth.instance.currentUser?.uid.toString(),
       if (money != null) "money": money.toString(),
-      "loc.coordinates.0": latitude.toString(),
-      "loc.coordinates.1": longitude.toString(),
+      "loc.coordinates.0": fullAddress['latitude'].toString(),
+      "loc.coordinates.1": fullAddress['logitude'].toString(),
       "uDetails": userDetails["_id"].toString(),
       "address":
           fullAddress.isNotEmpty ? jsonEncode(fullAddress).toString() : ""

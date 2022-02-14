@@ -89,7 +89,8 @@ Widget page1(BuildContext context, AdController adController,
                                     size: width(context) * 0.06,
                                     color: SpotmiesTheme.onBackground,
                                   ),
-                                  items: up.servicesList.map((services) {
+                                  items:
+                                      up.getCategoryMainList().map((services) {
                                     log(adController.dropDownValue.toString());
                                     // if (sid != null) {
                                     //   adController.dropDownValue = sid;
@@ -169,65 +170,210 @@ Widget page1(BuildContext context, AdController adController,
                       SizedBox(
                         height: height(context) * 0.025,
                       ),
-                      InkWell(
-                        onTap: () async {
-                          await adController.pickDate(context);
-                          adController.refresh();
-                          await adController.picktime(context);
-                          adController.refresh();
-                        },
-                        child: Container(
-                            padding: EdgeInsets.only(
-                                left: width(context) * 0.03,
-                                right: width(context) * 0.03,
-                                top: width(context) * 0.03),
-                            decoration: BoxDecoration(
-                                color: SpotmiesTheme.surfaceVariant,
-                                borderRadius: BorderRadius.circular(15)),
-                            // height: hight * 0.12,
-                            width: width(context) * 0.8,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    TextWidget(
-                                      text: 'Schedule:',
-                                      color: SpotmiesTheme.secondaryVariant,
-                                      size: width(context) * 0.05,
-                                      weight: FontWeight.w600,
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  height: height(context) * 0.07,
+                      Container(
+                          padding: EdgeInsets.only(
+                              left: width(context) * 0.03,
+                              right: width(context) * 0.03,
+                              top: width(context) * 0.02),
+                          decoration: BoxDecoration(
+                              color: SpotmiesTheme.surfaceVariant,
+                              borderRadius: BorderRadius.circular(15)),
+                          // height: hight * 0.12,
+                          width: width(context) * 0.8,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  TextWidget(
+                                    text: 'Schedule:',
+                                    color: SpotmiesTheme.secondaryVariant,
+                                    size: width(context) * 0.03,
+                                    weight: FontWeight.w600,
+                                  ),
+                                ],
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  await adController.pickDate(context);
+                                  adController.refresh();
+                                  await adController.picktime(context);
+                                  adController.datePickColor = 0;
+                                  adController.refresh();
+                                },
+                                child: Container(
+                                  height: height(context) * 0.1,
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      TextWidget(
-                                        text: 'Date:  ' +
-                                            DateFormat('dd MMM yyyy').format(
-                                                (DateTime
+                                      Container(
+                                          width: width(context) * 0.45,
+                                          // color: Colors.amber[50],
+                                          child: Row(
+                                            children: [
+                                              TextWid(
+                                                text: DateFormat('dd').format((DateTime
                                                     .fromMillisecondsSinceEpoch(
                                                         (adController.pickedDate
                                                             .millisecondsSinceEpoch)))),
-                                        color: SpotmiesTheme.secondaryVariant,
-                                        size: width(context) * 0.04,
-                                        weight: FontWeight.w500,
+                                                size: width(context) * 0.12,
+                                              ),
+                                              SizedBox(
+                                                width: width(context) * 0.02,
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  TextWid(
+                                                    text: DateFormat('MMM')
+                                                        .format((DateTime
+                                                            .fromMillisecondsSinceEpoch(
+                                                                (adController
+                                                                    .pickedDate
+                                                                    .millisecondsSinceEpoch)))),
+                                                    weight: FontWeight.w600,
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        width(context) * 0.01,
+                                                  ),
+                                                  TextWid(
+                                                    text: DateFormat('EEEE')
+                                                        .format((DateTime
+                                                            .fromMillisecondsSinceEpoch(
+                                                                (adController
+                                                                    .pickedDate
+                                                                    .millisecondsSinceEpoch)))),
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: width(context) * 0.02,
+                                              ),
+                                              Icon(Icons.calendar_today,
+                                                  color: SpotmiesTheme.equal,
+                                                  size: width(context) * 0.06)
+                                            ],
+                                          )),
+                                      SizedBox(
+                                        width: width(context) * 0.02,
                                       ),
-                                      TextWidget(
-                                        text:
-                                            'Time:${adController.pickedTime.format(context)}',
-                                        color: SpotmiesTheme.secondaryVariant,
-                                        size: width(context) * 0.04,
-                                        weight: FontWeight.w500,
+                                      InkWell(
+                                        onTap: () async {
+                                          adController.pickedDate =
+                                              await DateTime.now();
+                                          adController.datePickColor = 1;
+                                          adController.refresh();
+                                        },
+                                        child: Container(
+                                          height: height(context) * 0.06,
+                                          width: width(context) * 0.15,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: adController
+                                                              .datePickColor ==
+                                                          1
+                                                      ? SpotmiesTheme.primary
+                                                      : SpotmiesTheme.equal),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              TextWid(
+                                                text: DateFormat('dd MMM')
+                                                    .format((DateTime
+                                                        .fromMillisecondsSinceEpoch(
+                                                            (DateTime.now()
+                                                                .millisecondsSinceEpoch)))),
+                                                weight: FontWeight.w600,
+                                                size: width(context) * 0.025,
+                                              ),
+                                              TextWid(
+                                                text: 'Today',
+                                                weight: FontWeight.w500,
+                                                size: width(context) * 0.025,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
+                                      SizedBox(
+                                        width: width(context) * 0.02,
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                          adController.pickedDate =
+                                              await DateTime.now()
+                                                  .add(Duration(days: 1));
+                                          adController.datePickColor = 2;
+                                          adController.refresh();
+                                        },
+                                        child: Container(
+                                          height: height(context) * 0.06,
+                                          width: width(context) * 0.15,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: adController
+                                                              .datePickColor ==
+                                                          2
+                                                      ? SpotmiesTheme.primary
+                                                      : SpotmiesTheme.equal),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              TextWid(
+                                                text: DateFormat('dd MMM')
+                                                    .format((DateTime
+                                                        .fromMillisecondsSinceEpoch(
+                                                            (DateTime.now()
+                                                                .add(Duration(
+                                                                    days: 1))
+                                                                .millisecondsSinceEpoch)))),
+                                                weight: FontWeight.w600,
+                                                size: width(context) * 0.025,
+                                              ),
+                                              TextWid(
+                                                text: 'Tomorrow',
+                                                weight: FontWeight.w500,
+                                                size: width(context) * 0.025,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                      // TextWidget(
+                                      //   text: 'Date:  ' +
+                                      //       DateFormat('dd MMM yyyy').format(
+                                      //           (DateTime
+                                      //               .fromMillisecondsSinceEpoch(
+                                      //                   (adController.pickedDate
+                                      //                       .millisecondsSinceEpoch)))),
+                                      //   color: SpotmiesTheme.secondaryVariant,
+                                      //   size: width(context) * 0.04,
+                                      //   weight: FontWeight.w500,
+                                      // ),
+                                      // TextWidget(
+                                      //   text:
+                                      //       'Time:${adController.pickedTime.format(context)}',
+                                      //   color: SpotmiesTheme.secondaryVariant,
+                                      //   size: width(context) * 0.04,
+                                      //   weight: FontWeight.w500,
+                                      // ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
+                              ),
+                            ],
+                          )),
                     ],
                   ),
                 ),

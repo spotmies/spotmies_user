@@ -10,6 +10,7 @@ import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/internet_calling/calling.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
+import 'package:spotmies/views/reusable_widgets/partner_details/partner_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future partnerDetailsSummury(
@@ -250,8 +251,15 @@ Future partnerDetailsSummury(
                     minWidth: width * 0.5,
                     height: hight * 0.05,
                     bgColor: Colors.indigo[900],
-                    onClick: onClick,
-                    buttonName: 'orderDetails',
+                    // onClick: onClick,
+                    onClick: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PartnerStore(
+                          pid: pDetails['pId'],
+                        ),
+                      ));
+                    },
+                    buttonName: 'View Store',
                     textColor: Colors.white,
                     borderRadius: 15.0,
                     textSize: width * 0.04,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotmies/apiCalls/apiCalling.dart';
 import 'package:spotmies/apiCalls/apiUrl.dart';
@@ -17,6 +18,9 @@ class UniversalProvider extends ChangeNotifier {
   String currentScreen = "";
   dynamic currentConstants;
   List faqList = [];
+  dynamic partnerStore;
+  dynamic partnerList = [];
+  dynamic checkNull = {"content": "Loading", "id": "0"};
   dynamic user;
 
   void setUser(data) {
@@ -128,6 +132,41 @@ class UniversalProvider extends ChangeNotifier {
       faqList = responseDecode;
       notifyListeners();
     }
+  }
+
+  fetchPartnerStore(pid) async {
+    dynamic response = await Server().getMethod(API.partnerStore + pid);
+    if (response.statusCode == 200) {
+      dynamic responseDecode = jsonDecode(response.body);
+      partnerStore = responseDecode;
+      notifyListeners();
+    } else {
+      log('Something went wrong');
+    }
+  }
+
+  fetchPartnerList(skip, limit) async {
+    var query = await {"skip": skip.toString(), "limit": limit.toString()};
+    dynamic response = await Server().getMethodParems(API.partnerList, query);
+    if (response.statusCode == 200) {
+      dynamic responseDecode = jsonDecode(response.body);
+      if (responseDecode.isNotEmpty) {
+        partnerList.addAll(responseDecode);
+      } else {
+        checkNull = {"content": "No data found", "id": "1"};
+      }
+      notifyListeners();
+      // return true;
+    } else {
+      log('Something went wrong');
+      // return true;
+    }
+  }
+
+  refresh() async {
+    await Future.delayed(Duration(seconds: 0, milliseconds: 2000));
+    partnerList.clear();
+    fetchPartnerList(0, 3);
   }
 
   void setEnableRoute(bool state) {

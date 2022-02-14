@@ -44,20 +44,10 @@ class _PostListState extends StateMVC<PostList> {
 
   @override
   Widget build(BuildContext context) {
-    // final height(context) = MediaQuery.of(context).size.height -
-    //     MediaQuery.of(context).padding.top -
-    //     kToolbarHeight;
-    // final width(context) = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: SpotmiesTheme.background,
         key: _postsController.scaffoldkey,
-        // backgroundColor: Colors.blue[900],
         appBar: AppBar(
-          // leading: Icon(
-          //   Icons.work,
-          //   color: SpotmiesTheme.secondaryVariant,
-          //   size: width(context) * 0.05,
-          // ),
           title: TextWidget(
             text: up.getText("navbar_title"),
             color: SpotmiesTheme.secondaryVariant,
@@ -72,6 +62,7 @@ class _PostListState extends StateMVC<PostList> {
           // padding: EdgeInsets.all(10),
           height: height(context) * 1,
           width: width(context) * 1,
+          padding: EdgeInsets.all(width(context) * 0.02),
           decoration: BoxDecoration(
             color: SpotmiesTheme.background,
           ),
@@ -83,7 +74,8 @@ class _PostListState extends StateMVC<PostList> {
                 return Center(
                   child: TextWid(
                     text: up.getText("no_orders"),
-                    size: width(context)*0.05,
+                    size: width(context) * 0.05,
+                    color: SpotmiesTheme.secondaryVariant,
                   ),
                 );
 
@@ -95,139 +87,202 @@ class _PostListState extends StateMVC<PostList> {
                     itemCount: o.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       List<String> images = List.from(o[index]['media']);
-                      // final coordinates =
-                      //     Coordinates(o[index]['loc'][0], o[index]['loc'][1]);
-                      // var addresses = Geocoder.local
-                      //     .findAddressesFromCoordinates(coordinates);
 
                       var orderid = o[index]['ordId'];
-                      // log(o[index].toString());
 
-                      // var firstAddress = addresses.first.locality;
                       return Container(
                         child: InkWell(
                           onTap: () {
-                            //  OrderOverViewProvider().orderDetails(orderid);
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
                                   PostOverView(ordId: orderid.toString()),
                             ));
                           },
                           child: Container(
-                              height: height(context) * 0.265,
+                              height: height(context) * 0.22,
                               width: width(context) * 1,
                               decoration: BoxDecoration(
-                                color: Colors.grey[50],
-                                // borderRadius: BorderRadius.circular(15),
+                                color: SpotmiesTheme.lite,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: SpotmiesTheme.shadow,
+                                      blurRadius: 3,
+                                      spreadRadius: 3)
+                                ],
                               ),
                               child: Column(
                                 children: [
                                   Container(
-                                    height: height(context) * 0.09,
+                                    height: height(context) * 0.05,
                                     width: width(context) * 1,
-                                    alignment: Alignment.topCenter,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.only(
+                                        left: width(context) * 0.04,
+                                        right: width(context) * 0.02),
                                     decoration: BoxDecoration(
-                                      color: Colors.blueGrey[50],
-                                      // borderRadius: BorderRadius.only(
-                                      //     topLeft: Radius.circular(15),
-                                      //     topRight: Radius.circular(15)),
+                                      color: SpotmiesTheme.surfaceVariant2,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15)),
                                     ),
-                                    padding: EdgeInsets.only(left: 5, right: 5),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: height(context) * 0.08,
-                                          padding: const EdgeInsets.only(
-                                              left: 8.0, right: 8.0, top: 10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  TextWidget(
-                                                    text: up.getServiceNameById(
-                                                        o[index]['job']),
-                                                    size:
-                                                        width(context) * 0.045,
-                                                    weight: FontWeight.w600,
+                                    child: Row(children: [
+                                      SizedBox(
+                                        width: width(context) * 0.6,
+                                        child: TextWidget(
+                                          text: up.getServiceNameById(
+                                              o[index]['job']),
+                                          size: width(context) * 0.04,
+                                          weight: FontWeight.w600,
+                                          color: SpotmiesTheme.onBackground,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: width(context) * 0.3,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Stack(
+                                              children: [
+                                                CircleAvatar(
+                                                  backgroundColor: SpotmiesTheme
+                                                      .surfaceVariant2,
+                                                  child: Icon(
+                                                    Icons.notifications,
+                                                    color: Colors.grey[500],
                                                   ),
-                                                  Container(
-                                                    padding: EdgeInsets.only(
-                                                        right: 5, left: 5),
-                                                    height:
-                                                        height(context) * 0.032,
-                                                    decoration: BoxDecoration(
-                                                        color: SpotmiesTheme
-                                                            .background,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5)),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Icon(
-                                                          orderStateIcon(
-                                                              ordState: o[index]
-                                                                  [
-                                                                  'orderState']),
-                                                          color: Colors
-                                                              .indigo[900],
+                                                ),
+                                                Positioned(
+                                                    right:
+                                                        width(context) * 0.015,
+                                                    top: width(context) * 0.01,
+                                                    child: CircleAvatar(
+                                                        radius: width(context) *
+                                                            0.015,
+                                                        backgroundColor:
+                                                            SpotmiesTheme
+                                                                .onBackground,
+                                                        child: TextWidget(
+                                                          text: o[index]
+                                                                  ['responses']
+                                                              .length
+                                                              .toString(),
+                                                          color: SpotmiesTheme
+                                                              .background,
                                                           size: width(context) *
-                                                              0.04,
-                                                        ),
-                                                        SizedBox(
-                                                          width:
-                                                              width(context) *
-                                                                  0.01,
-                                                        ),
-                                                        TextWidget(
-                                                            text: orderStateString(
-                                                                ordState: o[
-                                                                        index][
-                                                                    'orderState']),
-                                                            color: Colors
-                                                                .indigo[900],
-                                                            weight:
-                                                                FontWeight.w600,
-                                                            size:
-                                                                width(context) *
-                                                                    0.03)
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              TextWidget(
-                                                text: getDate(
-                                                        o[index]['schedule']) +
-                                                    ' - ' +
-                                                    getTime(
-                                                        o[index]['schedule']),
-                                                color: Colors.grey[600],
-                                                size: width(context) * 0.03,
-                                                weight: FontWeight.w600,
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                                              0.025,
+                                                        )))
+                                              ],
+                                            ),
+                                            IconButton(
+                                                onPressed: () {
+                                                  bottomOptionsMenu(context,
+                                                      menuTitle: up.getText(
+                                                          "more_options"),
+                                                      option1Click: () {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PostOverView(
+                                                              ordId: orderid
+                                                                  .toString()),
+                                                    ));
+                                                  }, option3Click: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            true,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            // insetAnimationCurve:
+                                                            //     Curves.decelerate,
+                                                            title: Text(up.getText(
+                                                                "delete_alert_heading")),
+                                                            content: Text(
+                                                                up.getText(
+                                                                    "delete_order_alert")),
+                                                            actions: [
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  child: Text(
+                                                                    up.getText(
+                                                                        "delete_deny"),
+                                                                    style: TextStyle(
+                                                                        color: Colors.grey[
+                                                                            800],
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  )),
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    ordersProvider
+                                                                        .setLoader(
+                                                                            true);
+                                                                    String
+                                                                        ordid =
+                                                                        API.deleteOrder +
+                                                                            '$orderid';
+                                                                    var response =
+                                                                        await Server()
+                                                                            .deleteMethod(ordid);
+                                                                    ordersProvider
+                                                                        .setLoader(
+                                                                            false);
+                                                                    if (response
+                                                                            .statusCode ==
+                                                                        200) {
+                                                                      response =
+                                                                          jsonDecode(
+                                                                              response.body);
+                                                                      ordersProvider
+                                                                          .removeOrderById(
+                                                                              response['ordId']);
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                    up.getText(
+                                                                        "delete_order"),
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .red,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ))
+                                                            ],
+                                                          );
+                                                        });
+                                                  },
+                                                      options: _postsController
+                                                          .postMenuOptions);
+                                                },
+                                                icon: Icon(
+                                                  Icons.more_vert,
+                                                  color: SpotmiesTheme
+                                                      .onBackground,
+                                                  size: width(context) * 0.05,
+                                                ))
+                                          ],
+                                        ),
+                                      )
+                                    ]),
                                   ),
                                   Container(
                                     padding: EdgeInsets.only(left: 10),
+                                    height: height(context) * 0.13,
                                     child: Row(
                                       children: [
                                         Container(
-                                          width: height(context) * 0.06,
-                                          height: height(context) * 0.06,
+                                          width: height(context) * 0.08,
+                                          height: height(context) * 0.08,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -244,7 +299,13 @@ class _PostListState extends StateMVC<PostList> {
                                                   color: SpotmiesTheme
                                                       .secondaryVariant,
                                                 )
-                                              : Image.network(images.first),
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Image.network(
+                                                    images.first,
+                                                    fit: BoxFit.cover,
+                                                  )),
                                         ),
                                         Container(
                                           height: height(context) * 0.11,
@@ -267,9 +328,9 @@ class _PostListState extends StateMVC<PostList> {
                                                       children: [
                                                         Icon(
                                                           Icons
-                                                              .account_balance_wallet,
+                                                              .home_repair_service,
                                                           color: SpotmiesTheme
-                                                              .secondaryVariant,
+                                                              .onBackground,
                                                           size: width(context) *
                                                               0.04,
                                                         ),
@@ -278,209 +339,117 @@ class _PostListState extends StateMVC<PostList> {
                                                               width(context) *
                                                                   0.01,
                                                         ),
-                                                        TextWidget(
-                                                          text: 'Rs.1500',
-                                                          // +
-                                                          // o[index]['money']
-                                                          //     .toString(),
-                                                          size: width(context) *
-                                                              0.035,
-                                                          weight:
-                                                              FontWeight.w600,
+                                                        SizedBox(
+                                                          width:
+                                                              width(context) *
+                                                                  0.6,
+                                                          child: TextWidget(
+                                                            text: toBeginningOfSentenceCase(o[
+                                                                        index][
+                                                                    'problem']) ??
+                                                                "",
+                                                            // +
+                                                            // text: o[index][
+                                                            //             'money'] ==
+                                                            //         null
+                                                            //     ? 'Not mentioned'
+                                                            //     : o[index]
+                                                            //             ['money']
+                                                            //         .toString(),
+                                                            size:
+                                                                width(context) *
+                                                                    0.04,
+                                                            color: SpotmiesTheme
+                                                                .onBackground,
+                                                            flow: TextOverflow
+                                                                .ellipsis,
+                                                            weight:
+                                                                FontWeight.w600,
+                                                          ),
                                                         )
                                                       ],
                                                     ),
                                                     TextWidget(
-                                                        text: toBeginningOfSentenceCase(o[
-                                                                    index]
-                                                                ['problem']) ??
-                                                            "",
+                                                        text: o[index]
+                                                                    ['money'] ==
+                                                                null
+                                                            ? 'Not mentioned'
+                                                            : o[index]['money']
+                                                                .toString(),
                                                         flow: TextOverflow
                                                             .ellipsis,
+                                                        color: SpotmiesTheme
+                                                            .onBackground,
                                                         size: width(context) *
-                                                            0.045),
+                                                            0.035),
                                                   ],
                                                 ),
                                               ),
-                                              Stack(
-                                                children: [
-                                                  CircleAvatar(
-                                                    backgroundColor:
-                                                        SpotmiesTheme
-                                                            .surfaceVariant2,
-                                                    child: Icon(
-                                                      Icons.notifications,
-                                                      color: Colors.grey[500],
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                      right: 0,
-                                                      top: 0,
-                                                      child: CircleAvatar(
-                                                          radius:
-                                                              width(context) *
-                                                                  0.02,
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .indigo[900],
-                                                          child: TextWidget(
-                                                            text: o[index][
-                                                                    'responses']
-                                                                .length
-                                                                .toString(),
-                                                            color: SpotmiesTheme
-                                                                .background,
-                                                            size:
-                                                                width(context) *
-                                                                    0.025,
-                                                          )))
-                                                ],
-                                              )
                                             ],
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    color: Colors.grey[300],
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ElevatedButtonWidget(
-                                          minWidth: width(context) * 0.498,
-                                          height: height(context) * 0.06,
-                                          bgColor:
-                                              SpotmiesTheme.surfaceVariant2,
-                                          buttonName: up.getText("need_help"),
-                                          textColor:
-                                              SpotmiesTheme.secondaryVariant,
-                                          borderRadius: 0.0,
-                                          textSize: width(context) * 0.04,
-                                          leadingIcon: Icon(
-                                            Icons.help,
-                                            size: width(context) * 0.04,
-                                            color:
-                                                SpotmiesTheme.secondaryVariant,
-                                          ),
-                                          borderSideColor: Colors.grey[50],
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                          right: width(context) * 0.02,
+                                          left: width(context) * 0.02,
                                         ),
-                                        ElevatedButtonWidget(
-                                          minWidth: width(context) * 0.498,
-                                          height: height(context) * 0.06,
-                                          bgColor:
-                                              SpotmiesTheme.surfaceVariant2,
-                                          buttonName: up.getText("view_menu"),
-                                          textColor:
-                                              SpotmiesTheme.secondaryVariant,
-                                          borderRadius: 0.0,
-                                          textSize: width(context) * 0.04,
-                                          trailingIcon: Icon(
-                                            Icons.menu,
-                                            size: width(context) * 0.04,
-                                            color:
-                                                SpotmiesTheme.secondaryVariant,
-                                          ),
-                                          borderSideColor: Colors.grey[50],
-                                          onClick: () {
-                                            bottomOptionsMenu(context,
-                                                menuTitle:
-                                                    up.getText("more_options"),
-                                                option1Click: () {
-                                              Navigator.of(context)
-                                                  .push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PostOverView(
-                                                        ordId:
-                                                            orderid.toString()),
-                                              ));
-                                            }, option3Click: () {
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: true,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      // insetAnimationCurve:
-                                                      //     Curves.decelerate,
-                                                      title: Text(up.getText(
-                                                          "delete_alert_heading")),
-                                                      content: Text(up.getText(
-                                                          "delete_order_alert")),
-                                                      actions: [
-                                                        TextButton(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: Text(
-                                                              up.getText(
-                                                                  "delete_deny"),
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                          .grey[
-                                                                      800],
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )),
-                                                        TextButton(
-                                                            onPressed:
-                                                                () async {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              ordersProvider
-                                                                  .setLoader(
-                                                                      true);
-                                                              String ordid =
-                                                                  API.deleteOrder +
-                                                                      '$orderid';
-                                                              var response =
-                                                                  await Server()
-                                                                      .deleteMethod(
-                                                                          ordid);
-                                                              ordersProvider
-                                                                  .setLoader(
-                                                                      false);
-                                                              if (response
-                                                                      .statusCode ==
-                                                                  200) {
-                                                                response =
-                                                                    jsonDecode(
-                                                                        response
-                                                                            .body);
-                                                                ordersProvider
-                                                                    .removeOrderById(
-                                                                        response[
-                                                                            'ordId']);
-                                                              }
-                                                            },
-                                                            child: Text(
-                                                              up.getText(
-                                                                  "delete_order"),
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ))
-                                                      ],
-                                                    );
-                                                  });
-                                            },
-                                                options: _postsController
-                                                    .postMenuOptions);
-                                          },
+                                        child: TextWidget(
+                                          text: getDate(o[index]['schedule']) +
+                                              ' - ' +
+                                              getTime(o[index]['schedule']),
+                                          color: Colors.grey[600],
+                                          size: width(context) * 0.03,
+                                          weight: FontWeight.w600,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            right: width(context) * 0.02,
+                                            left: width(context) * 0.02),
+                                        height: height(context) * 0.032,
+                                        decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              orderStateIcon(
+                                                  ordState: o[index]
+                                                      ['orderState']),
+                                              color: SpotmiesTheme.primary,
+                                              size: width(context) * 0.04,
+                                            ),
+                                            SizedBox(
+                                              width: width(context) * 0.01,
+                                            ),
+                                            TextWidget(
+                                                text: orderStateString(
+                                                    ordState: o[index]
+                                                        ['orderState']),
+                                                color: SpotmiesTheme.primary,
+                                                weight: FontWeight.w600,
+                                                size: width(context) * 0.03)
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   )
+
+                                  
                                 ],
                               )),
                         ),
-                        padding: EdgeInsets.only(top: 10),
+                        padding: EdgeInsets.only(top: 20),
                       );
                     }),
               );

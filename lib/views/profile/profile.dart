@@ -255,8 +255,7 @@ class _ProfileState extends StateMVC<Profile> {
                                                 PrivacyPolicyWebView()));
                                   }
                                   if (index == 2) {
-                                    history(context, height(context),
-                                        width(context));
+                                    history(context, ordersProvider,up);
                                   }
                                   if (index == 3) {
                                     promotions(context, height(context),

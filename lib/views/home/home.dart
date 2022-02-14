@@ -7,6 +7,7 @@ import 'package:spotmies/controllers/home_controllers/home_controller.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
+import 'package:spotmies/views/home/banner.dart';
 import 'package:spotmies/views/home/categeries_card.dart';
 import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/home/searchJobs/search.dart';
@@ -121,6 +122,7 @@ class _HomeState extends StateMVC<Home> {
               serviceNames: serviceNames,
             ),
             Categories(color: color),
+            banner(context),
             bottomFooter(context),
           ],
         ));
@@ -266,78 +268,4 @@ bottomFooterForPartner(BuildContext context) {
           ],
         ),
       ));
-}
-
-banner(BuildContext context) {
-  return Column(
-    children: [
-      Container(
-        height: height(context) * 0.2,
-        width: width(context),
-        child: ListView.builder(
-            itemCount: 4,
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.only(
-                left: width(context) * 0.03, right: width(context) * 0.03),
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  Container(
-                      height: height(context) * 0.18,
-                      width: width(context) * 0.9,
-                      padding: EdgeInsets.all(width(context) * 0.04),
-                      decoration: BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            width: width(context) * 0.45,
-                            height: height(context) * 0.16,
-                            // color: Colors.amber,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextWid(
-                                  text: 'Easy to use',
-                                  // align: TextAlign.end,
-                                  size: width(context) * 0.06,
-                                  weight: FontWeight.w600,
-                                  color: Colors.grey[50],
-                                ),
-                                SizedBox(
-                                  height: height(context) * 0.01,
-                                ),
-                                TextWid(
-                                  text:
-                                      'Easy to use hjfiausd jnfiunsdiuf jnsduifuis IJBFIUhgiu',
-                                  // align: TextAlign.end,
-                                  size: width(context) * 0.04,
-                                  flow: TextOverflow.visible,
-                                  color: Colors.grey[100],
-                                  weight: FontWeight.w500,
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                              // color: Colors.amber,
-                              width: width(context) * 0.35,
-                              child: SvgPicture.asset(catImages[0])),
-                        ],
-                      )),
-                  SizedBox(
-                    width: width(context) * 0.03,
-                  )
-                ],
-              );
-            }),
-      ),
-      SizedBox(
-        height: height(context) * 0.05,
-      )
-    ],
-  );
 }

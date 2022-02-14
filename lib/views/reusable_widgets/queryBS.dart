@@ -77,7 +77,7 @@ newQueryBS(BuildContext context,
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 10.0,
-                    borderSideColor: Colors.indigo[50],
+                    borderSideColor: SpotmiesTheme.dull,
                     onClick: () async {
                       if (queryForm.currentState != null) {
                         if (queryForm.currentState!.validate()) {

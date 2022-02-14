@@ -12,6 +12,7 @@ import 'package:spotmies/views/reusable_widgets/steps.dart';
 
 Widget page3(double hight, double width, user, AdController adController,
     BuildContext context, GetOrdersProvider? ordersProvider) {
+  // adController.getCurrentLocation();
   return Scaffold(
     backgroundColor: SpotmiesTheme.background,
     body: SingleChildScrollView(
@@ -76,8 +77,13 @@ Widget page3(double hight, double width, user, AdController adController,
                             children: [
                               Row(
                                 children: [
-                                  TextWidget(text: adController.latitude + ","),
-                                  TextWidget(text: adController.longitude),
+                                  TextWidget(
+                                      text: adController.fullAddress['latitude']
+                                              .toString() +
+                                          ","),
+                                  TextWidget(
+                                      text: adController.fullAddress['logitude']
+                                          .toString()),
                                 ],
                               ),
                               TextWidget(

@@ -76,6 +76,25 @@ class Server {
     }
   }
 
+  Future<dynamic> getMethodParems(String api, queryParameters) async {
+    var uri = Uri.https(API.host, api, queryParameters);
+
+    print(uri);
+    final String accessToken = await fetchAccessToken();
+    try {
+      dynamic response = await http.get(uri, headers: {
+        'Authorization': 'Bearer $accessToken'
+      }).timeout(Duration(seconds: 30));
+      return processResponse(response);
+    } on SocketException {
+      throw FetchDataException(
+          message: 'No Internet Connection', url: uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          message: 'API Not Responding in Time', url: uri.toString());
+    }
+  }
+
   Future<dynamic> postMethod(String api, Map<String, dynamic> body) async {
     var uri = Uri.https(API.host, api);
     // var bodyData = json.encode(body);

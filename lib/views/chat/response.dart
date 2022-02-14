@@ -16,6 +16,7 @@ import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
+import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -32,6 +33,18 @@ class _ResponseeState extends StateMVC<Responsee> {
   ChatProvider? chatProvider;
   UserDetailsProvider? profileProvider;
   GetOrdersProvider? ordersProvider;
+
+  List postMenuOptions = [
+    {
+      "name": "View",
+      "icon": Icons.remove_red_eye,
+    },
+    {"name": "Store", "icon": Icons.engineering},
+    {
+      "name": "Close",
+      "icon": Icons.close,
+    },
+  ];
 
   void chatWithPatner(responseData) {
     _responsiveController?.chatWithpatner(
@@ -106,8 +119,8 @@ class _ResponseeState extends StateMVC<Responsee> {
                   await _responsiveController?.fetchNewResponses(
                       context, responseProvider);
                 },
-                color: SpotmiesTheme.surface,
-                backgroundColor: SpotmiesTheme.primary,
+                color: SpotmiesTheme.primary,
+                backgroundColor: SpotmiesTheme.dull,
                 child: ListView.builder(
                     itemCount: listResponse.length,
                     scrollDirection: Axis.vertical,
@@ -123,28 +136,18 @@ class _ResponseeState extends StateMVC<Responsee> {
                         children: [
                           InkWell(
                             onTap: () {
-                              partnerDetailsSummury(
-                                  context,
-                                  height(context),
-                                  width(context),
-                                  pDetails,
-                                  _responsiveController!,
-                                  responseData,
-                                  chatWithPatner, onClick: () {
-                                // Navigator.of(context).psu
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => PostOverView(
-                                          ordId:
-                                              responseData['ordId'].toString(),
-                                        )));
-                              });
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => PostOverView(
+                                        ordId: responseData['ordId'].toString(),
+                                      )));
                             },
                             child: Container(
                               padding: EdgeInsets.only(bottom: 10),
                               // height: height(context) * 0.27,
+
                               width: width(context) * 1,
                               decoration: BoxDecoration(
-                                  color: SpotmiesTheme.surface,
+                                  color: SpotmiesTheme.surfaceVariant,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       topRight: Radius.circular(10),
@@ -152,7 +155,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                       bottomRight: Radius.circular(10)),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.grey.shade200,
+                                        color: SpotmiesTheme.shadow,
                                         blurRadius: 2,
                                         spreadRadius: 2)
                                   ]),
@@ -166,7 +169,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                         left: 10, right: 10, top: 10),
                                     alignment: Alignment.topCenter,
                                     decoration: BoxDecoration(
-                                      color: Colors.indigo[50],
+                                      color: SpotmiesTheme.surfaceVariant2,
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(10),
                                           topRight: Radius.circular(10)),
@@ -180,7 +183,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             TextWidget(
                                               text: _responsiveController?.jobs
                                                   .elementAt(ord['job']),
-                                              color: SpotmiesTheme.primary,
+                                              color: SpotmiesTheme.onBackground,
                                               size: width(context) * 0.035,
                                               weight: FontWeight.w500,
                                               lSpace: 0.2,
@@ -188,11 +191,49 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             IconButton(
                                                 padding: EdgeInsets.zero,
                                                 constraints: BoxConstraints(),
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  bottomOptionsMenu(
+                                                    context,
+                                                    menuTitle: 'More options',
+                                                    option1Click: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      PostOverView(
+                                                                        ordId: responseData['ordId']
+                                                                            .toString(),
+                                                                      )));
+                                                    },
+                                                    option2Click: () {
+                                                      partnerDetailsSummury(
+                                                          context,
+                                                          height(context),
+                                                          width(context),
+                                                          pDetails,
+                                                          _responsiveController!,
+                                                          responseData,
+                                                          chatWithPatner,
+                                                          onClick: () {
+                                                        // Navigator.of(context).psu
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        PostOverView(
+                                                                          ordId:
+                                                                              responseData['ordId'].toString(),
+                                                                        )));
+                                                      });
+                                                    },
+                                                    options: postMenuOptions,
+                                                  );
+                                                },
                                                 icon: Icon(
                                                   Icons.more_horiz,
                                                   size: width(context) * 0.06,
-                                                  color: SpotmiesTheme.primary,
+                                                  color: SpotmiesTheme
+                                                      .onBackground,
                                                 ))
                                           ],
                                         ),
@@ -205,7 +246,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                           children: [
                                             Icon(
                                               Icons.schedule,
-                                              color: SpotmiesTheme.primary,
+                                              color: SpotmiesTheme.onBackground,
                                               size: width(context) * 0.045,
                                             ),
                                             SizedBox(
@@ -215,7 +256,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                               text: getDate(ord['schedule']) +
                                                   ' - ' +
                                                   getTime(ord['schedule']),
-                                              color: SpotmiesTheme.primary,
+                                              color: SpotmiesTheme.onBackground,
                                               weight: FontWeight.w600,
                                               size: width(context) * 0.045,
                                             ),
@@ -241,6 +282,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                         child: TextWidget(
                                           text: ord['problem'],
                                           flow: TextOverflow.visible,
+                                          color: SpotmiesTheme.onBackground,
                                         ),
                                       ),
                                       Visibility(
@@ -253,11 +295,31 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             text:
                                                 "₹ ${responseData['money'] ?? ord['money']}",
                                             flow: TextOverflow.visible,
+                                            color: SpotmiesTheme.onBackground,
                                           ),
                                         ),
                                       ),
                                       IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            partnerDetailsSummury(
+                                                context,
+                                                height(context),
+                                                width(context),
+                                                pDetails,
+                                                _responsiveController!,
+                                                responseData,
+                                                chatWithPatner, onClick: () {
+                                              // Navigator.of(context).psu
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PostOverView(
+                                                            ordId: responseData[
+                                                                    'ordId']
+                                                                .toString(),
+                                                          )));
+                                            });
+                                          },
                                           icon: Icon(
                                             Icons.info,
                                             color: Colors.grey,
@@ -318,7 +380,7 @@ class _ResponseeState extends StateMVC<Responsee> {
                                             ElevatedButtonWidget(
                                               minWidth: width(context) * 0.3,
                                               height: height(context) * 0.045,
-                                              bgColor: Colors.indigo[50],
+                                              bgColor: SpotmiesTheme.dull,
                                               buttonName: 'Decline',
                                               textColor: SpotmiesTheme
                                                   .secondaryVariant,

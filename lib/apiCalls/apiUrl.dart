@@ -33,4 +33,6 @@ class API {
   static var newSuggestion = "/api/suggestion/new-suggestion";
   static var faq = "/api/support/faq/all-faqs";
   static var accessToken = "/api/public/access-token";
+  static var partnerStore = "/api/store/";
+  static var partnerList = "/api/partner/partner-list";
 }

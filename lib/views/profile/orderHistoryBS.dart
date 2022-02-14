@@ -1,18 +1,17 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:spotmies/providers/getOrdersProvider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
-import 'package:spotmies/utilities/fonts.dart';
+import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/utilities/appConfig.dart';
+import 'package:spotmies/views/posts/post_overview.dart';
+import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
+import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
-Future history(BuildContext context, double hight, double width) {
-  List<Map<String, Object>> data = [
-    {
-      "service": "teacher",
-      "problem": "Need Maths Teacher",
-      "pic": Icons.home_repair_service,
-      "date": '24th Aug,2021',
-      "time": '04:30 PM',
-    },
-  ];
+Future history(BuildContext context, GetOrdersProvider? ordersProvider,
+    UniversalProvider? up) {
   return showModalBottomSheet(
       context: context,
       elevation: 22,
@@ -25,96 +24,116 @@ Future history(BuildContext context, double hight, double width) {
       backgroundColor: SpotmiesTheme.background,
       builder: (BuildContext context) {
         return Container(
-            height: hight * 0.95,
+            height: height(context) * 0.95,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: ListView(children: [
               Container(
                   padding: EdgeInsets.only(top: 30),
-                  height: hight * 0.22,
+                  height: height(context) * 0.22,
                   child: SvgPicture.asset('assets/history.svg')),
               Container(
                 padding:
                     EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
-                child: Text(
-                  'Spotmies Journey',
-                  textAlign: TextAlign.center,
-                  style: fonts(width * 0.05, FontWeight.w600,
-                      SpotmiesTheme.secondaryVariant),
+                child: TextWid(
+                  text: 'Spotmies Journey',
+                  weight: FontWeight.w600,
+                  color: SpotmiesTheme.secondaryVariant,
+                  size: width(context) * 0.05,
                 ),
               ),
-              Container(
-                height: hight * 3 + 220,
-                child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: 20,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: hight * 0.15,
-                        width: width,
-                        margin: EdgeInsets.only(bottom: 10),
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        decoration: BoxDecoration(
-                            color: SpotmiesTheme.surfaceVariant2,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: width * 0.08,
-                              child: Icon(
-                                (data[0]['pic'] as IconData?) ?? Icons.photo,
-                                color: Colors.grey[500],
-                                size: width * 0.1,
+              Consumer<GetOrdersProvider>(builder: (context, data, child) {
+                dynamic ol = data.getOrdersList;
+                // log(ol.toString());
+                return Container(
+                  height: height(context) * 3 + 220,
+                  child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: ol.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        List<String> images = List.from(ol[index]['media']);
+                        return Container(
+                          height: height(context) * 0.15,
+                          width: width(context),
+                          margin: EdgeInsets.only(bottom: 10),
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              color: SpotmiesTheme.surfaceVariant2,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                radius: width(context) * 0.08,
+                                child: (images.length == 0)
+                                    ? Icon(
+                                        Icons.engineering,
+                                        color: Colors.grey[900],
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          images.first,
+                                          fit: BoxFit.fill,
+                                        )),
                               ),
-                            ),
-                            Container(
-                              width: width * 0.52,
-                              padding: EdgeInsets.only(left: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data[0]['service'].toString(),
-                                    style: fonts(width * 0.04, FontWeight.w600,
-                                        SpotmiesTheme.secondaryVariant),
-                                  ),
-                                  SizedBox(
-                                    height: hight * 0.02,
-                                  ),
-                                  Text(
-                                    data[0]['problem'].toString(),
-                                    style: fonts(width * 0.04, FontWeight.w500,
-                                        SpotmiesTheme.secondaryVariant),
-                                  ),
-                                  SizedBox(
-                                    height: hight * 0.01,
-                                  ),
-                                  Text(
-                                    '${data[0]['date']}  ' +
-                                        '${data[0]['time']}',
-                                    style: fonts(width * 0.02, FontWeight.w500,
-                                        SpotmiesTheme.secondaryVariant),
-                                  ),
-                                ],
+                              Container(
+                                width: width(context) * 0.52,
+                                padding: EdgeInsets.only(left: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextWid(
+                                      text: up?.getServiceNameById(
+                                          ol[index]['job']),
+                                      size: width(context) * 0.04,
+                                      weight: FontWeight.w600,
+                                    ),
+                                    SizedBox(
+                                      height: height(context) * 0.02,
+                                    ),
+                                    TextWid(
+                                        text: ol[index]['problem'].toString(),
+                                        flow: TextOverflow.ellipsis,
+                                        size: width(context) * 0.04),
+                                    SizedBox(
+                                      height: height(context) * 0.01,
+                                    ),
+                                    TextWid(
+                                      text: getDate(ol[index]['schedule']) +
+                                          ' - ' +
+                                          getTime(ol[index]['schedule']),
+                                      color: Colors.grey[600]!,
+                                      size: width(context) * 0.02,
+                                      weight: FontWeight.w600,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      'More',
-                                      style: fonts(
-                                          width * 0.04,
-                                          FontWeight.w500,
-                                          SpotmiesTheme.secondary),
-                                    )))
-                          ],
-                        ),
-                      );
-                    }),
-              )
+                              Container(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => PostOverView(
+                                            ordId:
+                                                ol[index]['ordId'].toString(),
+                                          ),
+                                        ));
+                                      },
+                                      child: TextWid(
+                                        text: 'More',
+                                        size: width(context) * 0.04,
+                                        weight: FontWeight.w500,
+                                        color: Colors.grey[500],
+                                      )))
+                            ],
+                          ),
+                        );
+                      }),
+                );
+              })
             ]));
       });
 }
