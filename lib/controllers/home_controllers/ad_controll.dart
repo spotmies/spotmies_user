@@ -206,7 +206,7 @@ class AdController extends ControllerMVC {
   }
 
 //image upload function
-  Future<void> uploadServiceMedia() async {
+  Future<void> uploadServiceMedia(ordId) async {
     extensionType(int indexx) {
       switch (checkFileType(serviceImages[indexx].toString())) {
         case "image":
@@ -223,7 +223,7 @@ class AdController extends ControllerMVC {
 
     for (int i = 0; i < serviceImages.length; i++) {
       String downloadLink = await uploadFilesToCloud(serviceImages[i],
-          cloudLocation: "orderMediaFiles", fileType: extensionType(i));
+          cloudLocation: "orders/${ordId}", fileType: extensionType(i));
       imageLink.add(downloadLink);
     }
   }
@@ -266,7 +266,8 @@ class AdController extends ControllerMVC {
 
   adbutton(userDetails, BuildContext context,
       GetOrdersProvider ordersProvider) async {
-    await uploadServiceMedia();
+    dynamic ordId = DateTime.now().millisecondsSinceEpoch;
+    await uploadServiceMedia(ordId);
     // String images = imageLink.toString();
     CircularProgressIndicator();
     // log(userDetails.toString());
@@ -274,7 +275,7 @@ class AdController extends ControllerMVC {
     var body = {
       "problem": this.title.toString(),
       "job": (this.dropDownValue).toString(),
-      "ordId": DateTime.now().millisecondsSinceEpoch.toString(),
+      "ordId": ordId.toString(),
       "ordState": "req",
       "join": DateTime.now().millisecondsSinceEpoch.toString(),
       // "schedule": pickedDate.millisecondsSinceEpoch.toString(),

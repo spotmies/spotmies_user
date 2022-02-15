@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/responses_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
@@ -34,15 +35,15 @@ class PersonalChat extends StatefulWidget {
 }
 
 class _PersonalChatState extends StateMVC<PersonalChat> {
-   ChatController _chatController = ChatController();
+  ChatController? _chatController = ChatController();
 
   // _PersonalChatState() : super(ChatController()) {
-  //   this._chatController = controller as ChatController;
+  //   this._chatController? = controller as ChatController;
   // }
-   ChatProvider? chatProvider;
-   ResponsesProvider? responseProvider;
-   UserDetailsProvider? profileProvider;
-   UniversalProvider? up;
+  ChatProvider? chatProvider;
+  ResponsesProvider? responseProvider;
+  UserDetailsProvider? profileProvider;
+  UniversalProvider? up;
 
   ScrollController _scrollController = ScrollController();
 
@@ -81,7 +82,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   sendMessageHandler(value, {sender: "user", action: ""}) {
-    _chatController.sendMessageHandler(widget.msgId, value,context,chatProvider,profileProvider,
+    _chatController?.sendMessageHandler(
+        widget.msgId, value, context, chatProvider, profileProvider,
         sender: sender, action: action);
   }
 
@@ -89,15 +91,16 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     print("reveal profile $state");
     sendMessageHandler(state ? "user shared profile" : "user disabled Profile",
         sender: "bot", action: state ? "enableProfile" : "disableProfile");
-    _chatController.revealProfile(_chatController.targetChat,context,chatProvider,
+    _chatController?.revealProfile(
+        _chatController?.targetChat, context, chatProvider,
         revealProfile: state);
   }
 
   isMyProfileRevealedFunc() {
-    log("revela true  ${_chatController.orderDetails['revealProfileTo']}");
-    if (_chatController.orderDetails['revealProfileTo']
-        .contains(_chatController.targetChat['pId'])) {
-      log("revela true  ${_chatController.orderDetails['revealProfileTo']}");
+    log("revela true  ${_chatController?.orderDetails['revealProfileTo']}");
+    if (_chatController?.orderDetails['revealProfileTo']
+        .contains(_chatController?.targetChat['pId'])) {
+      log("revela true  ${_chatController?.orderDetails['revealProfileTo']}");
       return true;
     }
     log("revela true");
@@ -125,20 +128,24 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
   acceptRejectPartner(responseType) {
     dynamic checkThisResponse = responseProvider?.getResponseByordIdAndPid(
-        pId: _chatController.targetChat['pId'],
-        ordId: _chatController.targetChat['ordId']);
+        pId: _chatController?.targetChat['pId'],
+        ordId: _chatController?.targetChat['ordId']);
     if (checkThisResponse == null) {
       snackbar(
           context, "Your already Accept or Reject this partner for the order");
       return;
     }
     responseProvider?.addNewResponsesQueue({
-      "pId": _chatController.targetChat['pId'],
-      "ordId": _chatController.targetChat['ordId'],
+      "pId": _chatController?.targetChat['pId'],
+      "ordId": _chatController?.targetChat['ordId'],
       "responseType": responseType == "accept" ? "accept" : "reject"
     });
-    _chatController.sendMessageHandler(widget.msgId,
-        "${_chatController.userDetails['name']} $responseType the order",context,chatProvider,profileProvider,
+    _chatController?.sendMessageHandler(
+        widget.msgId,
+        "${_chatController?.userDetails['name']} $responseType the order",
+        context,
+        chatProvider,
+        profileProvider,
         sender: "bot",
         action: responseType == "accept" ? "acceptOrder" : "rejectOrder");
   }
@@ -260,25 +267,26 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
     return Consumer<ChatProvider>(builder: (context, data, child) {
-      _chatController.currentMsgId = widget.msgId;
-      _chatController.chatList = data.getChatList2();
-      _chatController.targetChat =
-          _chatController.getTargetChat(_chatController.chatList, widget.msgId);
-      _chatController.userDetails = _chatController.targetChat['uDetails'];
-      _chatController.partner = _chatController.targetChat['pDetails'];
-      _chatController.orderDetails = _chatController.targetChat['orderDetails'];
+      _chatController?.currentMsgId = widget.msgId;
+      _chatController?.chatList = data.getChatList2();
+      _chatController?.targetChat = _chatController?.getTargetChat(
+          _chatController?.chatList, widget.msgId);
+      _chatController?.userDetails = _chatController?.targetChat['uDetails'];
+      _chatController?.partner = _chatController?.targetChat['pDetails'];
+      _chatController?.orderDetails =
+          _chatController?.targetChat['orderDetails'];
       // bool showConfirmation =
-      //     _chatController.targetChat['orderDetails']['ordState'] == "req" ? true : false;
+      //     _chatController?.targetChat['orderDetails']['ordState'] == "req" ? true : false;
       bool showConfirmation =
-          _chatController.targetChat['orderDetails']['orderState'] < 7
+          _chatController?.targetChat['orderDetails']['orderState'] < 7
               ? true
               : false;
 
-      List messages = _chatController.targetChat['msgs'];
+      List messages = _chatController?.targetChat['msgs'];
       return Stack(
         children: [
           Scaffold(
-              key: _chatController.scaffoldkey,
+              key: _chatController?.scaffoldkey,
               appBar: _buildAppBar(context, height(context), width(context),
                   showConfirmation: showConfirmation, onClickYes: () {
                 acceptRejectPartner("accept");
@@ -320,7 +328,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                               child: Column(
                                 children: [
                                   Visibility(
-                                    visible: _chatController.dateCompare(
+                                    visible: _chatController?.dateCompare(
                                                 rawMsgData['time'],
                                                 rawMsgDataprev['time']) !=
                                             "false" ||
@@ -345,11 +353,13 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                             alignment: Alignment.center,
                                             child: TextWid(
                                               text: index == messages.length - 1
-                                                  ? _chatController.getDate(
+                                                  ? _chatController?.getDate(
                                                       rawMsgData['time'])
-                                                  : _chatController.dateCompare(
-                                                      rawMsgData['time'],
-                                                      rawMsgDataprev['time']),
+                                                  : _chatController
+                                                      ?.dateCompare(
+                                                          rawMsgData['time'],
+                                                          rawMsgDataprev[
+                                                              'time']),
                                               color: Colors.white,
                                             ),
                                           ),
@@ -382,20 +392,22 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                     color: Colors
                                                         .blueGrey.shade500,
                                                     width: 0.3),
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(15),
-                                                    topRight:
-                                                        Radius.circular(15),
-                                                    bottomRight:
-                                                        Radius.circular(
-                                                            sender != "user"
+                                                borderRadius: sender == "bot"
+                                                    ? BorderRadius.circular(15)
+                                                    : BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(15),
+                                                        topRight:
+                                                            Radius.circular(15),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                sender != "user"
+                                                                    ? 15
+                                                                    : 0),
+                                                        bottomLeft: Radius.circular(
+                                                            sender == "user"
                                                                 ? 15
-                                                                : 0),
-                                                    bottomLeft: Radius.circular(
-                                                        sender == "user"
-                                                            ? 15
-                                                            : 0))),
+                                                                : 0))),
                                             child: Column(
                                               children: [
                                                 Container(
@@ -411,7 +423,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                       sender,
                                                       height(context),
                                                       width(context),
-                                                      _chatController,
+                                                      _chatController!,
                                                       context),
                                                 ),
                                                 Container(
@@ -439,7 +451,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                 index == 0 && sender == "user",
                                             child: readReciept(
                                                 width(context),
-                                                _chatController
+                                                _chatController!
                                                     .targetChat['uState']),
                                           )
                                         ],
@@ -452,9 +464,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                           }),
                     ),
                   ),
-                  _chatController.targetChat['cBuild'] == 1
+                  _chatController?.targetChat['cBuild'] == 1
                       ? chatInputField(sendMessageHandler, context,
-                          controller: _chatController)
+                          controller: _chatController,
+                          chatProvider: chatProvider,
+                          profileProvider: profileProvider)
                       : Container(
                           child: TextWid(text: "You can't Message any More"),
                         )
@@ -534,7 +548,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     return AppBar(
       toolbarHeight: showConfirmation ? hight * 0.13 : hight * 0.08,
       elevation: 2,
-      backgroundColor: Colors.grey[50],
+      backgroundColor: SpotmiesTheme.background,
       leading: IconButton(
           onPressed: () {
             Navigator.pop(context, false);
@@ -546,7 +560,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       bottom: PreferredSize(
           child: showConfirmation
               ? Container(
-                  color: Colors.grey[200],
+                  color: SpotmiesTheme.background,
                   padding:
                       EdgeInsets.only(bottom: width * 0.01, top: width * 0.01),
                   // height: hight * 0.04,
@@ -554,11 +568,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
-                        width: width * 0.45,
+                        width: width * 0.42,
                         child: TextWid(
                           text: "Would you like to give order to this partner",
                           maxlines: 3,
-                          size: width * 0.035,
+                          size: width * 0.03,
                         ),
                       ),
                       ElevatedButtonWidget(
@@ -569,9 +583,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                         borderRadius: 10.0,
                         buttonName: 'No',
                         onClick: onClickNo,
-                        textSize: width * 0.04,
+                        textSize: width * 0.035,
                         leadingIcon: Icon(
-                          Icons.cancel_outlined,
+                          Icons.clear,
                           color: Colors.grey[900],
                           size: width * 0.045,
                         ),
@@ -584,7 +598,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                         borderRadius: 10.0,
                         buttonName: 'Yes',
                         onClick: onClickYes,
-                        textSize: width * 0.04,
+                        textSize: width * 0.035,
                         leadingIcon: Icon(
                           Icons.check_circle_outline,
                           color: Colors.grey[900],
@@ -627,9 +641,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PartnerDetails(
-                  profileDetails: _chatController.partner,
-                  chatDetails: _chatController.targetChat,
-                  msgId: _chatController.targetChat['msgId'].toString(),
+                  profileDetails: _chatController!.partner,
+                  chatDetails: _chatController!.targetChat,
+                  msgId: _chatController?.targetChat['msgId'].toString(),
                   isMyProfileRevealed: isMyProfileRevealedFunc(),
                   revealMyProfile: (state) {
                     revealMyProfile(state);
@@ -641,8 +655,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         child: Row(
           children: [
             ProfilePic(
-              name: _chatController.partner['name'],
-              profile: _chatController.partner['partnerPic'],
+              name: _chatController?.partner['name'],
+              profile: _chatController?.partner['partnerPic'],
               status: false,
               bgColor: Colors.blueGrey[600],
               size: width * 0.045,
@@ -652,7 +666,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             ),
             Expanded(
                 child: TextWid(
-              text: _chatController.partner['name'] ?? "Spotmies User",
+              text: _chatController?.partner['name'] ?? "Spotmies User",
               size: width * 0.058,
               weight: FontWeight.w600,
             )),
@@ -665,19 +679,19 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   void calling(BuildContext context) {
     bottomOptionsMenu(context, options: Constants.bottomSheetOptionsForCalling,
         option1Click: () {
-      launch("tel://${_chatController.partner['phNum']}");
+      launch("tel://${_chatController?.partner['phNum']}");
     }, option2Click: () {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyCalling(
                 msgId: widget.msgId,
-                ordId: _chatController.targetChat['ordId'],
+                ordId: _chatController?.targetChat['ordId'],
                 uId: FirebaseAuth.instance.currentUser?.uid,
-                pId: _chatController.targetChat['pId'],
+                pId: _chatController?.targetChat['pId'],
                 isIncoming: false,
-                name: _chatController.partner['name'],
-                profile: _chatController.partner['partnerPic'],
+                name: _chatController?.partner['name'],
+                profile: _chatController?.partner['partnerPic'],
                 partnerDeviceToken:
-                    _chatController.partner['partnerDeviceToken'].toString(),
+                    _chatController?.partner['partnerDeviceToken'].toString(),
               )));
     });
   }

@@ -35,7 +35,7 @@ Future editDetails(
     profileProvider.setLoader(true);
     Navigator.pop(context);
     String profilePicLink =
-        await uploadFilesToCloud(editpic, cloudLocation: "userDocs");
+        await uploadFilesToCloud(editpic, cloudLocation: "userPics");
     profileProvider.setLoader(false);
 
     var body = {

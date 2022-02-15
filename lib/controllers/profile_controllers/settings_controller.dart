@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,20 +34,20 @@ class SettingsController extends ControllerMVC {
   }
 
 //image upload function
-  Future<void> uploadprofile() async {
-    if (profilepic != null) {
-      var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
-      UploadTask uploadTask = postImageRef
-          .child(DateTime.now().toString() + ".jpg")
-          .putFile(profilepic!);
-      print(uploadTask);
-      var imageUrl = await (await uploadTask).ref.getDownloadURL();
-      imageLink1 = imageUrl.toString();
-      print(imageUrl);
-      FirebaseFirestore.instance
-          .collection('partner')
-          .doc(FirebaseAuth.instance.currentUser?.uid)
-          .update({'profilepic': imageLink1});
-    }
-  }
+  // Future<void> uploadprofile() async {
+  //   if (profilepic != null) {
+  //     var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
+  //     UploadTask uploadTask = postImageRef
+  //         .child(DateTime.now().toString() + ".jpg")
+  //         .putFile(profilepic!);
+  //     print(uploadTask);
+  //     var imageUrl = await (await uploadTask).ref.getDownloadURL();
+  //     imageLink1 = imageUrl.toString();
+  //     print(imageUrl);
+  //     FirebaseFirestore.instance
+  //         .collection('partner')
+  //         .doc(FirebaseAuth.instance.currentUser?.uid)
+  //         .update({'profilepic': imageLink1});
+  //   }
+  // }
 }

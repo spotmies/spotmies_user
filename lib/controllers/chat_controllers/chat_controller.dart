@@ -43,7 +43,7 @@ class ChatController extends ControllerMVC {
   //   super.initState();
   // }
 
-  cardOnClick(msgId, msgId2, readReceiptObj,ChatProvider? chatProvider) {
+  cardOnClick(msgId, msgId2, readReceiptObj, ChatProvider? chatProvider) {
     log("$msgId $msgId2");
     if (readReceiptObj != "" &&
         chatProvider?.getChatDetailsByMsgId(msgId)['uCount'] > 0) {
@@ -85,7 +85,8 @@ class ChatController extends ControllerMVC {
     return currentChatData[0];
   }
 
-  sendMessageHandler(msgId, value,BuildContext context,ChatProvider? chatProvider,UserDetailsProvider? profileProvider,
+  sendMessageHandler(msgId, value, BuildContext context,
+      ChatProvider? chatProvider, UserDetailsProvider? profileProvider,
       {String sender: "user",
       String action: "",
       dynamic chatDetails,
@@ -127,7 +128,8 @@ class ChatController extends ControllerMVC {
     // scrollToBottom();
   }
 
-  deleteOrBlockThisChat(msgId,BuildContext context ,ChatProvider?chatProvider,{bool isChatDelete = false}) async {
+  deleteOrBlockThisChat(msgId, BuildContext context, ChatProvider? chatProvider,
+      {bool isChatDelete = false}) async {
     if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
@@ -154,7 +156,7 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  chatStreamSocket(targetChat,ChatProvider? chatProvider,
+  chatStreamSocket(targetChat, ChatProvider? chatProvider,
       {typeOfAction: "disable", revealProfile: "true"}) {
     Map<String, Object> sendPayload = {
       "uId": targetChat['uId'],
@@ -172,7 +174,8 @@ class ChatController extends ControllerMVC {
     // chatProvider.disableChatByMsgId(targetChat['msgId']);
   }
 
-  revealProfile(chatDetails,BuildContext context,ChatProvider? chatProvider, {bool revealProfile = true}) async {
+  revealProfile(chatDetails, BuildContext context, ChatProvider? chatProvider,
+      {bool revealProfile = true}) async {
     if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
@@ -214,7 +217,8 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  Future fetchNewChatList(BuildContext context ,ChatProvider ? chatProvider) async {
+  Future fetchNewChatList(
+      BuildContext context, ChatProvider? chatProvider) async {
     if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
@@ -232,7 +236,7 @@ class ChatController extends ControllerMVC {
     }
   }
 
-  chooseImage(sendCallBack, String msgId,ChatProvider? chatProvider,
+  chooseImage(sendCallBack, String msgId, ChatProvider? chatProvider,
       BuildContext context, UserDetailsProvider? profileProvider) async {
     if (imageLink.length != 0) {
       await imageLink.removeAt(0);
@@ -242,26 +246,33 @@ class ChatController extends ControllerMVC {
       source: ImageSource.camera,
       imageQuality: 10,
     );
-    setState(() {
-      if (pickedFile != null) {
-        chatimages.add(File(pickedFile.path));
-      }
-    });
+    // setState(() {
+    if (pickedFile != null) {
+      chatimages.add(File(pickedFile.path));
+    }
+    // });
     if (pickedFile?.path == null) retrieveLostData();
 
-    await uploadFilesLoop(msgId, context, chatProvider, profileProvider, fileArray: chatimages, type: "img");
+    await uploadFilesLoop(msgId, context, chatProvider, profileProvider,
+        fileArray: chatimages, type: "img");
     chatimages.clear();
   }
 
-  uploadAudioFiles(File audioFile,
-    ChatProvider? chatProvider
-    ,BuildContext context, UserDetailsProvider? profileProvider
-  ) async {
+  uploadAudioFiles(File audioFile, ChatProvider? chatProvider,
+      BuildContext context, UserDetailsProvider? profileProvider) async {
     log("audio is $audioFile");
-    await uploadFilesLoop(currentMsgId, context,  chatProvider, profileProvider ,fileArray: [audioFile], type: "audio",);
+    await uploadFilesLoop(
+      currentMsgId,
+      context,
+      chatProvider,
+      profileProvider,
+      fileArray: [audioFile],
+      type: "audio",
+    );
   }
 
-  Future<void> uploadFilesLoop(String msgId,BuildContext context, ChatProvider? chatProvider,UserDetailsProvider? profileProvider,
+  Future<void> uploadFilesLoop(String msgId, BuildContext context,
+      ChatProvider? chatProvider, UserDetailsProvider? profileProvider,
       {fileArray, String type = "img"}) async {
     String extensionType() {
       switch (type) {
@@ -278,17 +289,18 @@ class ChatController extends ControllerMVC {
     }
 
     fileArray.forEach((imgFile) async {
-      chatProvider?.setPersonalChatLoader(true, text: "Sending Files");
+      // chatProvider!.setPersonalChatLoader(true, text: "Sending Files");
       String uploadedFile = await uploadFilesToCloud(imgFile,
-          fileType: extensionType(), cloudLocation: "chatMedia");
-      chatProvider?.setPersonalChatLoader(false);
-      sendMessageHandler(msgId, uploadedFile,context,chatProvider,profileProvider, type: type);
+          fileType: extensionType(), cloudLocation: "chat/$msgId");
+      // chatProvider.setPersonalChatLoader(false);
+      sendMessageHandler(
+          msgId, uploadedFile, context, chatProvider, profileProvider,
+          type: type);
     });
   }
 
-  pickVideo(sendCallBack, String msgId,
-    ChatProvider? chatProvider
-    ,BuildContext context, UserDetailsProvider? profileProvider) async {
+  pickVideo(sendCallBack, String msgId, ChatProvider? chatProvider,
+      BuildContext context, UserDetailsProvider? profileProvider) async {
     PickedFile? pickedFile = await picker.getVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     if (pickedFile != null) {
@@ -296,7 +308,8 @@ class ChatController extends ControllerMVC {
     }
     videoPlayerController = VideoPlayerController.file(chatVideo[0]);
     // uploadVideo(sendCallBack, msgId);
-    await uploadFilesLoop(msgId,context,  chatProvider, profileProvider,  fileArray: chatVideo, type: "video");
+    await uploadFilesLoop(msgId, context, chatProvider, profileProvider,
+        fileArray: chatVideo, type: "video");
     chatVideo.clear();
   }
 

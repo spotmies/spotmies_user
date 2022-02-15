@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 // import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/snackbar.dart';
@@ -6,8 +8,16 @@ import 'package:spotmies/views/reusable_widgets/audio.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
+import '../../controllers/chat_controllers/chat_controller.dart';
+
 TextEditingController inputController = TextEditingController();
-Container chatInputField(sendCallBack, BuildContext context, {controller}) {
+Container chatInputField(
+  sendCallBack,
+  BuildContext context, {
+  ChatController? controller,
+  ChatProvider? chatProvider,
+  UserDetailsProvider? profileProvider,
+}) {
   // bool isInput = false;
   List mediaOptions = [
     {
@@ -74,11 +84,19 @@ Container chatInputField(sendCallBack, BuildContext context, {controller}) {
                               onPressed: () async {
                                 bottomOptionsMenu(context,
                                     options: mediaOptions, option1Click: () {
-                                  controller.chooseImage(
-                                      sendCallBack, controller.currentMsgId);
+                                  controller?.chooseImage(
+                                      sendCallBack,
+                                      controller.currentMsgId,
+                                      chatProvider,
+                                      context,
+                                      profileProvider);
                                 }, option3Click: () {
-                                  controller.pickVideo(
-                                      sendCallBack, controller.currentMsgId);
+                                  controller?.pickVideo(
+                                      sendCallBack,
+                                      controller.currentMsgId,
+                                      chatProvider,
+                                      context,
+                                      profileProvider);
                                 }, option4Click: () {
                                   audioRecoder(context, height(context),
                                       width(context), controller,

@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -71,23 +70,23 @@ class ChatScreenController extends ControllerMVC {
   }
 
   //image upload function
-  Future<void> uploadimage() async {
-    int i = 1;
+  // Future<void> uploadimage(msgId) async {
+  //   int i = 1;
 
-    for (var img in profilepic!) {
-      setState(() {
-        val = i / profilepic!.length;
-      });
-      var postImageRef = FirebaseStorage.instance.ref().child('adImages');
-      UploadTask uploadTask =
-          postImageRef.child(DateTime.now().toString() + ".jpg").putFile(img);
-      await (await uploadTask)
-          .ref
-          .getDownloadURL()
-          .then((value) => imageLink.add(value + 'ui'.toString()));
-      i++;
-    }
-  }
+  //   for (var img in profilepic!) {
+  //     setState(() {
+  //       val = i / profilepic!.length;
+  //     });
+  //     var postImageRef = FirebaseStorage.instance.ref().child('adImages');
+  //     UploadTask uploadTask =
+  //         postImageRef.child(DateTime.now().toString() + ".jpg").putFile(img);
+  //     await (await uploadTask)
+  //         .ref
+  //         .getDownloadURL()
+  //         .then((value) => imageLink.add(value + 'ui'.toString()));
+  //     i++;
+  //   }
+  // }
 
   date(msg1, msg2) {
     var temp1 = jsonDecode(msg1);

@@ -9,10 +9,7 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
-import 'package:spotmies/views/reusable_widgets/partner_details/partner.dart';
-import 'package:spotmies/views/reusable_widgets/partner_details/partner_list.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/rating_starfield.dart';
-import 'package:spotmies/views/home/banner.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class PartnerStore extends StatefulWidget {
@@ -354,8 +351,8 @@ class _PartnerStoreState extends State<PartnerStore>
                                       children: [
                                         TextWid(
                                             text: toBeginningOfSentenceCase(
-                                                    ps['rate'][index]['uDetails']
-                                                        ['name'])
+                                                    ps['rate'][index]
+                                                        ['uDetails']['name'])
                                                 .toString(),
                                             weight: FontWeight.w600,
                                             size: width(context) * 0.04),

@@ -137,7 +137,7 @@ messageColorTheme(String sender) {
       return [Colors.white, Colors.grey[800]];
 
     case "bot":
-      return [Colors.grey[900], Colors.grey[50]];
+      return [Colors.grey[50], Colors.grey[900]];
     default:
       return [Colors.grey[900], Colors.grey[50]];
   }

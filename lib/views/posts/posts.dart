@@ -10,7 +10,6 @@ import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
-import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';

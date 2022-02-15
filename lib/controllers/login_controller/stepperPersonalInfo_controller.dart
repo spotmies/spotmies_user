@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -12,6 +11,7 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/models/stepperPersonalModel.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/utilities/snackbar.dart';
+import 'package:spotmies/utilities/uploadFilesToCloud.dart';
 import 'package:spotmies/views/home/navBar.dart';
 
 class StepperPersonal extends ControllerMVC {
@@ -102,7 +102,8 @@ class StepperPersonal extends ControllerMVC {
   step3(BuildContext context, TimeProvider? timerProvider) async {
     timerProvider?.setLoader(true, loadingValue: "Uploading profile pic...");
     log("${timerProvider?.phoneNumber}");
-    await uploadimage();
+    dynamic picLink =
+        await uploadFilesToCloud(profilepic, cloudLocation: 'userPics');
     dynamic deviceToken = await FirebaseMessaging.instance.getToken();
     timerProvider?.setLoader(true, loadingValue: "Registration Inprogress...");
     // log(timerProvider!.phoneNumber.toString());
@@ -115,7 +116,7 @@ class StepperPersonal extends ControllerMVC {
       "altNum": this.altnumber?.toString() ?? "",
       if (this.email != null) "eMail": this.email.toString(),
       "t&a": accept.toString(),
-      "pic": imageLink.toString(),
+      "pic": picLink.toString(),
       "userDeviceToken": deviceToken?.toString() ?? "",
       "referalCode":
           "${name?.substring(0, 4)}${timerProvider?.phNumber.substring(6)}"
@@ -135,14 +136,7 @@ class StepperPersonal extends ControllerMVC {
     } else {
       snackbar(context, "something went wrong");
     }
-    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //   content: Text('Fill all the fields'),
-    //   action: SnackBarAction(
-    //     label: 'Close',
-    //     onPressed: () {},
-    //   ),
-    // ));
-    //currentStep += 1;
+
     return resp;
   }
 
@@ -161,14 +155,14 @@ class StepperPersonal extends ControllerMVC {
   }
 
 //image upload function
-  Future<void> uploadimage() async {
-    if (profilepic == null) return;
-    var postImageRef = FirebaseStorage.instance.ref().child('legalDoc');
-    UploadTask uploadTask = postImageRef
-        .child(DateTime.now().toString() + ".jpg")
-        .putFile(profilepic!);
-    print(uploadTask);
-    var imageUrl = await (await uploadTask).ref.getDownloadURL();
-    imageLink = imageUrl.toString();
-  }
+  // Future<void> uploadimage() async {
+  //   if (profilepic == null) return;
+  //   var postImageRef = FirebaseStorage.instance.ref().child('usersPics');
+  //   UploadTask uploadTask = postImageRef
+  //       .child(DateTime.now().toString() + ".jpg")
+  //       .putFile(profilepic!);
+  //   print(uploadTask);
+  //   var imageUrl = await (await uploadTask).ref.getDownloadURL();
+  //   imageLink = imageUrl.toString();
+  // }
 }
