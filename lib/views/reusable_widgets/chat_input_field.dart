@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 // import 'package:spotmies/utilities/fonts.dart';
@@ -48,10 +49,10 @@ Container chatInputField(
             // padding: EdgeInsets.symmetric(horizontal: 14),
             height: height(context) * 0.08,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: SpotmiesTheme.background,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey.shade200, blurRadius: 2, spreadRadius: 2)
+                    color: SpotmiesTheme.shadow, blurRadius: 2, spreadRadius: 2)
               ],
               borderRadius: BorderRadius.circular(25),
             ),

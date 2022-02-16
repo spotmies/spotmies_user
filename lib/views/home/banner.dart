@@ -19,7 +19,8 @@ banner(BuildContext context) {
                 left: width(context) * 0.025, right: width(context) * 0.025),
             margin: EdgeInsets.all(width(context) * 0.025),
             decoration: BoxDecoration(
-                color: Colors.cyan, borderRadius: BorderRadius.circular(20)),
+                color: SpotmiesTheme.cyan,
+                borderRadius: BorderRadius.circular(20)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -38,7 +39,7 @@ banner(BuildContext context) {
                             // align: TextAlign.end,
                             size: width(context) * 0.06,
                             weight: FontWeight.w600,
-                            color: SpotmiesTheme.background,
+                            color: SpotmiesTheme.onBackground,
                           ),
                           SizedBox(
                             width: width(context) * 0.02,
@@ -52,7 +53,7 @@ banner(BuildContext context) {
                               },
                               icon: Icon(
                                 Icons.arrow_forward,
-                                color: SpotmiesTheme.background,
+                                color: SpotmiesTheme.onBackground,
                               ))
                         ],
                       ),
@@ -64,7 +65,7 @@ banner(BuildContext context) {
                         // align: TextAlign.end,
                         size: width(context) * 0.04,
                         flow: TextOverflow.visible,
-                        color: SpotmiesTheme.background,
+                        color: SpotmiesTheme.onBackground,
                         weight: FontWeight.w500,
                       ),
                     ],

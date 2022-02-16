@@ -9,6 +9,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
@@ -42,6 +43,9 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
   UniversalProvider? up;
   ChatProvider? chatProvider;
   UserDetailsProvider? profileProvider;
+  // _PartnerDetailsState() : super(ChatController()) {
+  //   this._chatController = controller as ChatController;
+  // }
   late bool isSwitch;
   @override
   void initState() {
@@ -59,6 +63,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         key: _chatController?.scaffoldkey,
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(
@@ -74,7 +79,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                   },
                   icon: Icon(
                     Icons.arrow_back,
-                    color: Colors.grey[900],
+                    color: SpotmiesTheme.onBackground,
                   )),
               onStretchTrigger: () {
                 return Future<void>.value();
@@ -93,14 +98,14 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                   text: toBeginningOfSentenceCase(
                           widget.profileDetails['name']) ??
                       "",
-                  size: width(context) * 0.06,
-                  color: Colors.grey[900],
+                  size: width(context) * 0.045,
+                  color: SpotmiesTheme.onBackground,
                   weight: FontWeight.w600,
                 ),
                 centerTitle: false,
                 background: Container(
                   width: width(context) * 1,
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   child: !Uri.parse(
                               widget.profileDetails['partnerPic'].runtimeType ==
                                       String
@@ -131,10 +136,11 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                 [
                   Divider(
                     thickness: 5,
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                   ),
                   Container(
                     // height: height(context) * 0.27,
+                    color: SpotmiesTheme.background,
                     child: Column(
                       children: [
                         Container(
@@ -147,6 +153,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                               text: 'About and phone number',
                               size: width(context) * 0.055,
                               weight: FontWeight.w600,
+                              color: SpotmiesTheme.onBackground,
                             )),
                         Container(
                             alignment: Alignment.bottomLeft,
@@ -157,7 +164,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                             child: TextWid(
                               text: 'Spotmies Using From',
                               size: width(context) * 0.05,
-                              color: Colors.grey[700],
+                              color: SpotmiesTheme.equal,
                               weight: FontWeight.w600,
                             )),
                         Container(
@@ -170,7 +177,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                               text: getDate(
                                   widget.profileDetails['join'].toString()),
                               size: width(context) * 0.035,
-                              color: Colors.grey[700],
+                              color: SpotmiesTheme.equal,
                               weight: FontWeight.w600,
                             )),
                         SizedBox(
@@ -180,7 +187,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                           indent: width(context) * 0.04,
                           endIndent: width(context) * 0.04,
                           thickness: 1,
-                          color: Colors.grey[300],
+                          color: SpotmiesTheme.equal,
                         ),
                         Container(
                           // height: height(context) * 0.10,
@@ -191,7 +198,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                               TextWid(
                                 text: 'Contact',
                                 size: width(context) * 0.05,
-                                color: Colors.grey[700],
+                                color: SpotmiesTheme.onBackground,
                                 weight: FontWeight.w600,
                                 align: TextAlign.start,
                               ),
@@ -223,7 +230,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                                             .substring(0, 5) +
                                                         "*****",
                                                 size: width(context) * 0.04,
-                                                color: Colors.grey[800],
+                                                color:
+                                                    SpotmiesTheme.onBackground,
                                                 weight: FontWeight.w600,
                                               )),
                                         ],
@@ -238,7 +246,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                           IconButton(
                                               icon: Icon(
                                                 Icons.message,
-                                                color: Colors.indigo[900],
+                                                color: SpotmiesTheme.primary,
                                               ),
                                               onPressed: () {
                                                 Navigator.pop(context);
@@ -246,7 +254,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                           IconButton(
                                               icon: Icon(
                                                 Icons.call,
-                                                color: Colors.indigo[900],
+                                                color: SpotmiesTheme.primary,
                                               ),
                                               onPressed: () {
                                                 // launch("tel://$num");
@@ -271,7 +279,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                   ),
                   Divider(
                     thickness: 10,
-                    color: Colors.grey[200],
+                    color: SpotmiesTheme.dull,
                   ),
                   Container(
                     padding: EdgeInsets.only(
@@ -285,7 +293,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                           children: [
                             Icon(
                               Icons.visibility,
-                              color: Colors.grey[900],
+                              color: SpotmiesTheme.onBackground,
                             ),
                             SizedBox(
                               width: width(context) * 0.07,
@@ -293,7 +301,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                             TextWid(
                               text: 'Reveal My Profile',
                               size: width(context) * 0.05,
-                              color: Colors.grey[800],
+                              color: SpotmiesTheme.onBackground,
                               weight: FontWeight.w600,
                             )
                           ],
@@ -301,9 +309,9 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                         Transform.scale(
                           scale: 0.8,
                           child: CupertinoSwitch(
-                              trackColor: Colors.grey[300],
+                              trackColor: SpotmiesTheme.dull,
                               value: isSwitch,
-                              activeColor: Colors.blue[900],
+                              activeColor: SpotmiesTheme.primary,
                               onChanged: (value) {
                                 // widget.revealMyProfile(value);
                                 _chatController?.sendMessageHandler(
@@ -334,7 +342,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                     width(context),
                     height(context),
                     "Available to Recieve Calls",
-                    Colors.grey.shade900,
+                    SpotmiesTheme.onBackground,
                     Icons.call,
                   ),
                   actionButton(
@@ -387,7 +395,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                   }),
                   Divider(
                     thickness: 10,
-                    color: Colors.grey[200],
+                    color: SpotmiesTheme.dull,
                   ),
                   Container(
                     height: 250.0,
@@ -408,7 +416,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
       {Callback? onTap}) {
     Divider divider = Divider(
       thickness: 10,
-      color: Colors.grey[200],
+      color: SpotmiesTheme.dull,
     );
     return Column(
       children: [

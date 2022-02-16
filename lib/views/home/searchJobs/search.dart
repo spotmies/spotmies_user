@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
 import 'package:spotmies/views/home/ads/adpost.dart';
@@ -29,6 +30,7 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: SpotmiesTheme.background,
         body: SafeArea(
           child: Column(
             children: <Widget>[
@@ -72,7 +74,10 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
         },
         leading: IconButton(
           onPressed: () {},
-          icon: Icon(Icons.home_repair_service),
+          icon: Icon(
+            Icons.home_repair_service,
+            color: SpotmiesTheme.onBackground,
+          ),
         ),
         //  Image.network(
         //   job.urlImage,
@@ -83,7 +88,7 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
         title: Text(
           job['nameOfService'],
           style: GoogleFonts.josefinSans(
-              color: Colors.grey[900], fontWeight: FontWeight.w600),
+              color: SpotmiesTheme.onBackground, fontWeight: FontWeight.w600),
         ),
         // subtitle: RichText(
         //   text: TextSpan(children: <InlineSpan>[

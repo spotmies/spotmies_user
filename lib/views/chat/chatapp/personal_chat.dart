@@ -300,9 +300,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                 acceptRejectPartner("reject");
               }),
               body: Container(
+                color: SpotmiesTheme.background,
                 child: Column(children: [
                   Expanded(
                     child: Container(
+                      color: SpotmiesTheme.background,
                       child: ListView.builder(
                           reverse: true,
                           controller: _scrollController,
@@ -327,6 +329,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                             String type = rawMsgData['type'];
 
                             return Container(
+                              color: SpotmiesTheme.background,
                               padding: EdgeInsets.only(
                                   left: sender != "user" ? 10 : 0,
                                   bottom: 5,
@@ -348,7 +351,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                                color: Colors.grey[900],
+                                                color: SpotmiesTheme.onBackground,
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             padding: EdgeInsets.only(
@@ -366,7 +369,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                           rawMsgData['time'],
                                                           rawMsgDataprev[
                                                               'time']),
-                                              color: Colors.white,
+                                              color: SpotmiesTheme.background,
                                             ),
                                           ),
                                         ],
@@ -561,7 +564,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: SpotmiesTheme.onBackground,
           )),
       bottom: PreferredSize(
           child: showConfirmation
@@ -623,14 +626,14 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           },
           icon: Icon(
             Icons.phone,
-            color: Colors.grey[900],
+            color: SpotmiesTheme.onBackground,
           ),
         ),
         IconButton(
             padding: EdgeInsets.only(bottom: 0),
             icon: Icon(
               Icons.more_vert,
-              color: Colors.grey[900],
+              color: SpotmiesTheme.onBackground,
             ),
             onPressed: () {
               bottomOptionsMenu(
@@ -664,7 +667,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               name: _chatController?.partner['name'],
               profile: _chatController?.partner['partnerPic'],
               status: false,
-              bgColor: Colors.blueGrey[600],
+              bgColor: SpotmiesTheme.onBackground,
               size: width * 0.045,
             ),
             SizedBox(
@@ -675,6 +678,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
               text: _chatController?.partner['name'] ?? "Spotmies User",
               size: width * 0.058,
               weight: FontWeight.w600,
+              color: SpotmiesTheme.onBackground,
             )),
           ],
         ),
