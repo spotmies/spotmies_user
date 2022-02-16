@@ -88,6 +88,10 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   revealMyProfile(bool state) {
+    if (_chatController?.targetChat['isNormalChat']) {
+      /* ---------------- Implement reveal profile for normal chat here ---------------- */
+      return;
+    }
     print("reveal profile $state");
     sendMessageHandler(state ? "user shared profile" : "user disabled Profile",
         sender: "bot", action: state ? "enableProfile" : "disableProfile");
@@ -97,6 +101,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   }
 
   isMyProfileRevealedFunc() {
+    if (_chatController?.targetChat['isNormalChat']) return false;
     log("revela true  ${_chatController?.orderDetails['revealProfileTo']}");
     if (_chatController?.orderDetails['revealProfileTo']
         .contains(_chatController?.targetChat['pId'])) {
@@ -273,14 +278,15 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
           _chatController?.chatList, widget.msgId);
       _chatController?.userDetails = _chatController?.targetChat['uDetails'];
       _chatController?.partner = _chatController?.targetChat['pDetails'];
-      _chatController?.orderDetails =
-          _chatController?.targetChat['orderDetails'];
-      // bool showConfirmation =
-      //     _chatController?.targetChat['orderDetails']['ordState'] == "req" ? true : false;
-      bool showConfirmation =
-          _chatController?.targetChat['orderDetails']['orderState'] < 7
-              ? true
-              : false;
+      bool showConfirmation = false;
+      if (!_chatController?.targetChat['isNormalChat']) {
+        _chatController?.orderDetails =
+            _chatController?.targetChat['orderDetails'];
+        showConfirmation =
+            _chatController?.targetChat['orderDetails']['orderState'] < 7
+                ? true
+                : false;
+      }
 
       List messages = _chatController?.targetChat['msgs'];
       return Stack(
