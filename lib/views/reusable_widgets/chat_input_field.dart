@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
@@ -29,10 +32,10 @@ Container chatInputField(
       "name": "Video",
       "icon": Icons.video_camera_back,
     },
-    {
-      "name": "Audio",
-      "icon": Icons.mic,
-    },
+    // {
+    //   "name": "Audio",
+    //   "icon": Icons.mic,
+    // },
   ];
   return Container(
     padding: EdgeInsets.all(10),
@@ -63,9 +66,16 @@ Container chatInputField(
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            controller?.chooseImage(
+                                sendCallBack,
+                                controller.currentMsgId,
+                                chatProvider,
+                                context,
+                                profileProvider);
+                          },
                           icon: Icon(
-                            Icons.mic,
+                            Icons.camera_alt_outlined,
                             color: Colors.grey[500],
                             size: width(context) * 0.07,
                           ),
@@ -90,6 +100,15 @@ Container chatInputField(
                                       chatProvider,
                                       context,
                                       profileProvider);
+                                }, option2Click: () {
+                                  log("option2");
+                                  controller?.chooseImage(
+                                      sendCallBack,
+                                      controller.currentMsgId,
+                                      chatProvider,
+                                      context,
+                                      profileProvider,
+                                      source: ImageSource.gallery);
                                 }, option3Click: () {
                                   controller?.pickVideo(
                                       sendCallBack,

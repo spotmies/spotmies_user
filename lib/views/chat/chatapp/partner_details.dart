@@ -38,13 +38,10 @@ class PartnerDetails extends StatefulWidget {
 }
 
 class _PartnerDetailsState extends StateMVC<PartnerDetails> {
-   ChatController? _chatController = ChatController();
-   UniversalProvider? up;
-    ChatProvider? chatProvider;
-   UserDetailsProvider? profileProvider;
-  // _PartnerDetailsState() : super(ChatController()) {
-  //   this._chatController = controller as ChatController;
-  // }
+  ChatController? _chatController = ChatController();
+  UniversalProvider? up;
+  ChatProvider? chatProvider;
+  UserDetailsProvider? profileProvider;
   late bool isSwitch;
   @override
   void initState() {
@@ -323,9 +320,7 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                                         ? "enableProfile"
                                         : "disableProfile");
                                 _chatController?.revealProfile(
-                                    widget.chatDetails,
-                                    context,
-                                    chatProvider,
+                                    widget.chatDetails, context, chatProvider,
                                     revealProfile: value);
                                 setState(() {
                                   isSwitch = value;
@@ -350,18 +345,24 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                       Icons.block, onTap: () {
                     log("block");
                     _chatController?.sendMessageHandler(
-                        widget.msgId, "User blocked this chat",context,chatProvider,profileProvider,
+                        widget.msgId,
+                        "User blocked this chat",
+                        context,
+                        chatProvider,
+                        profileProvider,
                         sender: "bot",
                         chatDetails: widget.chatDetails,
                         action: "blockChat");
 
-                    _chatController?.deleteOrBlockThisChat(widget.msgId,context,chatProvider);
+                    _chatController?.deleteOrBlockThisChat(
+                        widget.msgId, context, chatProvider);
                   }),
                   actionButton(width(context), height(context), "Delete Chat",
                       Colors.redAccent, Icons.delete_sweep_rounded, onTap: () {
                     log("delete");
                     _chatController?.sendMessageHandler(
-                        widget.msgId, "User deleted this chat",
+                        widget.msgId,
+                        "User deleted this chat",
                         context,
                         chatProvider,
                         profileProvider,
@@ -369,7 +370,8 @@ class _PartnerDetailsState extends StateMVC<PartnerDetails> {
                         chatDetails: widget.chatDetails,
                         action: "deleteChat");
 
-                    _chatController?.deleteOrBlockThisChat(widget.msgId,context,chatProvider,
+                    _chatController?.deleteOrBlockThisChat(
+                        widget.msgId, context, chatProvider,
                         isChatDelete: true);
                   }),
                   actionButton(

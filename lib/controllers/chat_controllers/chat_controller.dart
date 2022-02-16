@@ -176,6 +176,10 @@ class ChatController extends ControllerMVC {
 
   revealProfile(chatDetails, BuildContext context, ChatProvider? chatProvider,
       {bool revealProfile = true}) async {
+    if (targetChat['isNormalChat']) {
+      /* ---------------- Implement reveal profile for normal chat here ---------------- */
+      return;
+    }
     if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
@@ -237,13 +241,14 @@ class ChatController extends ControllerMVC {
   }
 
   chooseImage(sendCallBack, String msgId, ChatProvider? chatProvider,
-      BuildContext context, UserDetailsProvider? profileProvider) async {
+      BuildContext context, UserDetailsProvider? profileProvider,
+      {source = ImageSource.camera}) async {
     if (imageLink.length != 0) {
       await imageLink.removeAt(0);
       chatimages.removeAt(0);
     }
     final pickedFile = await ImagePicker().getImage(
-      source: ImageSource.camera,
+      source: source,
       imageQuality: 10,
     );
     // setState(() {
