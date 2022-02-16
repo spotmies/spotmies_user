@@ -43,6 +43,7 @@ class SpotmiesTheme {
   static Color light4 = Colors.orange.shade300;
   static Color equal = Colors.grey.shade500;
   static Color lite = Colors.white;
+  static Color cyan = Colors.cyan;
 
   Map<colorScheme, Color> lightColorScheme = {
     colorScheme.background: Colors.white,
@@ -67,6 +68,7 @@ class SpotmiesTheme {
     colorScheme.dull: Colors.grey.shade100,
     colorScheme.equal: Colors.grey.shade500,
     colorScheme.lite: Colors.white,
+    colorScheme.cyan: Colors.cyan,
   };
   Map<colorScheme, Color> darkColorScheme = {
     colorScheme.background: Colors.grey.shade800,
@@ -91,6 +93,7 @@ class SpotmiesTheme {
     colorScheme.dull: Colors.grey.shade700,
     colorScheme.equal: Colors.grey.shade500,
     colorScheme.lite: Colors.grey.shade700,
+    colorScheme.cyan: Colors.grey.shade700,
   };
   init(context) {
     Provider.of<ThemeProvider>(context, listen: true).addListener(() {
@@ -168,6 +171,9 @@ class SpotmiesTheme {
       lite = (themeMode
           ? darkColorScheme[colorScheme.lite]
           : lightColorScheme[colorScheme.lite])!;
+      cyan = (themeMode
+          ? darkColorScheme[colorScheme.cyan]
+          : lightColorScheme[colorScheme.cyan])!;
     });
   }
 }
@@ -194,5 +200,6 @@ enum colorScheme {
   light4,
   dull,
   equal,
-  lite
+  lite,
+  cyan
 }

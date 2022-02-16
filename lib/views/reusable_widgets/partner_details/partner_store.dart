@@ -48,7 +48,7 @@ class _PartnerStoreState extends State<PartnerStore>
     return Consumer<UniversalProvider>(builder: (context, data, child) {
       dynamic ps = data.partnerStore;
 
-      log(ps.toString());
+      log("452" + ps['catelogs'].toString());
       if (ps == null) {
         return circleProgress();
       }
@@ -93,7 +93,7 @@ class _PartnerStoreState extends State<PartnerStore>
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Image.network(
-                              ps['partnerPic'],
+                              ps['partnerPic'].toString(),
                               fit: BoxFit.cover,
                               height: height(context) * 0.13,
                               width: height(context) * 0.13,
@@ -209,7 +209,9 @@ class _PartnerStoreState extends State<PartnerStore>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   TextWid(
-                                    text: avg(ps['rate']).toString(),
+                                    text: ps['rate'].isEmpty
+                                        ? '5.0'
+                                        : avg(ps['rate']).toString(),
                                     size: width(context) * 0.05,
                                     weight: FontWeight.w600,
                                   ),
@@ -285,13 +287,13 @@ class _PartnerStoreState extends State<PartnerStore>
                             height: height(context) * 0.6,
                             child: ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: ps['rate'].length,
+                                itemCount: ps['catelogs'].length,
                                 itemBuilder: (context, index) {
                                   return ListTile(
                                     leading: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: Image.network(
-                                        ps['rate'][index]['uDetails']['pic']
+                                        ps['catelogs'][index]['media'][0]['url']
                                             .toString(),
                                         width: width(context) * 0.1,
                                         height: width(context) * 0.1,
@@ -305,21 +307,26 @@ class _PartnerStoreState extends State<PartnerStore>
                                       children: [
                                         TextWid(
                                             text: toBeginningOfSentenceCase(
-                                                    ps['rate'][index]
-                                                        ['uDetails']['name'])
+                                                    ps['catelogs'][index]
+                                                        ['name'])
                                                 .toString(),
                                             weight: FontWeight.w600,
                                             size: width(context) * 0.04),
-                                        RatingStarField(
-                                          filledState:
-                                              (ps['rate'][index]['rating'] / 20)
-                                                  .round(),
-                                        )
+                                        TextWid(
+                                            text: toBeginningOfSentenceCase(
+                                                    "Rs." +
+                                                        ps['catelogs'][index]
+                                                                ['price']
+                                                            .toString())
+                                                .toString(),
+                                            weight: FontWeight.w600,
+                                            size: width(context) * 0.04),
                                       ],
                                     ),
                                     subtitle: TextWid(
                                       text: toBeginningOfSentenceCase(
-                                              ps['rate'][index]['description'])
+                                              ps['catelogs'][index]
+                                                  ['description'])
                                           .toString(),
                                       size: width(context) * 0.035,
                                     ),
@@ -402,6 +409,7 @@ avg(
     }
   }
   int rate = (sum / avg.length).round();
+  log('405  ${rate}');
 
   return rate / 20;
 }

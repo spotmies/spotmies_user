@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 
 class Constants {
   static var jobCategories = [
@@ -129,7 +130,7 @@ messageColorTheme(String sender) {
   switch (sender) {
     case "user":
       return [
-        Colors.blueGrey[500],
+        SpotmiesTheme.light1,
         Colors.grey[50]
       ]; //background is index - 0 && text color is index - 1
 

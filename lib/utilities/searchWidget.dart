@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 
 class SearchWidget extends StatefulWidget {
   final String text;
@@ -25,11 +26,11 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final styleActive = GoogleFonts.josefinSans(
-        color: Colors.grey[700],
+        color: SpotmiesTheme.equal,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.0);
     final styleHint = GoogleFonts.josefinSans(
-        color: Colors.grey[700],
+        color: SpotmiesTheme.onBackground,
         fontWeight: FontWeight.w600,
         fontSize: 17,
         letterSpacing: 1.0);
@@ -40,10 +41,10 @@ class _SearchWidgetState extends State<SearchWidget> {
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: SpotmiesTheme.background,
           boxShadow: [
             BoxShadow(
-                color: Colors.grey.shade200, blurRadius: 5, spreadRadius: 3)
+                color: SpotmiesTheme.shadow, blurRadius: 5, spreadRadius: 3)
           ]
           // border: Border.all(color: Colors.grey[700]),
           ),
@@ -55,11 +56,11 @@ class _SearchWidgetState extends State<SearchWidget> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.arrow_back, color: style.color),
+              icon: Icon(Icons.arrow_back, color: SpotmiesTheme.onBackground),
             ),
             suffixIcon: widget.text.isNotEmpty
                 ? GestureDetector(
-                    child: Icon(Icons.clear, color: style.color),
+                    child: Icon(Icons.clear, color: SpotmiesTheme.onBackground),
                     onTap: () {
                       controller.clear();
                       widget.onChanged('');
@@ -67,7 +68,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     },
                   )
                 : Icon(widget.icon ?? Icons.home_repair_service,
-                    color: style.color),
+                    color: SpotmiesTheme.onBackground),
             hintText: widget.hintText,
             hintStyle: style,
             border: InputBorder.none,

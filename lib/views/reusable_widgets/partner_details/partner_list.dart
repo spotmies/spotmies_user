@@ -9,7 +9,10 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/posts/post_overview.dart';
+import 'package:spotmies/views/reusable_widgets/load_more.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/partner_store.dart';
+import 'package:spotmies/views/reusable_widgets/partner_details/rating_starfield.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -27,7 +30,7 @@ class _PartnerListState extends State<PartnerList> {
   @override
   void initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
-    up?.fetchPartnerList(0, 5);
+    up?.fetchPartnerList(0, 8);
     scrollController?.addListener(() {
       if (scrollController?.position.pixels ==
           scrollController?.position.maxScrollExtent) {
@@ -71,6 +74,7 @@ class _PartnerListState extends State<PartnerList> {
           circleProgress();
         }
         return Container(
+          color: SpotmiesTheme.background,
           child: ListView.builder(
             controller: scrollController,
             // itemExtent: 200,
@@ -97,32 +101,35 @@ class _PartnerListState extends State<PartnerList> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => PartnerStore(
-                            pid: pl['pId'],
+                            pid: pl[index]['pId'],
                           )));
                 },
                 child: Container(
                   // height: hight * 0.24,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(8),
                   margin: EdgeInsets.only(bottom: 5),
                   child: Column(
                     children: [
                       Container(
-                          padding:
-                              EdgeInsets.only(left: 30, right: 30, top: 30),
+                          padding: EdgeInsets.only(
+                              left: width(context) * 0.05,
+                              right: width(context) * 0.05,
+                              top: width(context) * 0.05),
                           child: Row(
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ProfilePic(
                                 profile: pl[index]['partnerPic'].toString(),
                                 name: pl[index]['name'].toString(),
-                                size: height(context) * 0.05,
+                                size: height(context) * 0.04,
                               ),
                               SizedBox(
                                 width: width(context) * 0.07,
                               ),
                               Container(
-                                height: height(context) * 0.11,
-                                width: width(context) * 0.5,
+                                height: height(context) * 0.10,
+                                width: width(context) * 0.6,
+                                // color: Colors.amber,
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -130,6 +137,19 @@ class _PartnerListState extends State<PartnerList> {
                                   children: [
                                     Column(
                                       children: [
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.start,
+                                        //   children: [
+                                        //     RatingStarField(
+                                        //       filledState: (pl[index]['rate']
+                                        //                   .isEmpty
+                                        //               ? 5.0
+                                        //               : avg(pl[index]['rate']))
+                                        //           .round(),
+                                        //     ),
+                                        //   ],
+                                        // ),
                                         Row(
                                           children: [
                                             TextWidget(
@@ -142,6 +162,9 @@ class _PartnerListState extends State<PartnerList> {
                                               color: SpotmiesTheme.onBackground,
                                             )
                                           ],
+                                        ),
+                                        SizedBox(
+                                          height: height(context) * 0.005,
                                         ),
                                         Container(
                                           child: Row(
@@ -156,10 +179,11 @@ class _PartnerListState extends State<PartnerList> {
                                                 color: SpotmiesTheme.equal,
                                               ),
                                               TextWidget(
-                                                // text:
-                                                //     avg(pl['rate'])
-                                                //         .toString(),
-                                                text: '4.5',
+                                                text: pl[index]['rate'].isEmpty
+                                                    ? "5.0"
+                                                    : avg(pl[index]['rate'])
+                                                        .toString(),
+                                                // text: '4.5',
                                                 size: width(context) * 0.025,
                                                 weight: FontWeight.w600,
                                                 color: SpotmiesTheme.equal,
@@ -174,36 +198,43 @@ class _PartnerListState extends State<PartnerList> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(
+                                      height: height(context) * 0.005,
+                                    ),
                                     Container(
-                                      child: Row(
-                                          children: [
-                                        'telugu',
-                                        'Hindi',
-                                        'English'
-                                      ]
-                                              .map((lang) => Container(
-                                                    child: TextWid(
-                                                      text: lang + "  ",
-                                                      size: width(context) *
-                                                          0.026,
-                                                      weight: FontWeight.w600,
-                                                      color: SpotmiesTheme
-                                                          .onBackground,
-                                                    ),
-                                                  ))
-                                              .toList()),
+                                      // color: Colors.amber,
+                                      height: height(context) * 0.02,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: pl[index]['lang'].length,
+                                          itemBuilder: (context, i) {
+                                            return TextWid(
+                                              text: pl[index]['lang'][i] + "  ",
+                                              size: width(context) * 0.026,
+                                              weight: FontWeight.w600,
+                                              color: SpotmiesTheme.onBackground,
+                                            );
+                                          }),
                                     ),
                                     Container(
                                       width: width(context) * 0.45,
+                                      height: height(context) * 0.025,
+                                      // color: Colors.amber,
                                       child: Row(
                                         children: [
                                           Icon(
-                                            Icons.location_pin,
+                                            Icons.business,
                                             size: width(context) * 0.03,
                                             color: SpotmiesTheme.onBackground,
                                           ),
+                                          SizedBox(
+                                            width: width(context) * 0.02,
+                                          ),
                                           TextWid(
-                                            text: 'vizag',
+                                            text:
+                                                pl[index]['businessName'] == ""
+                                                    ? "Visakhaptnam"
+                                                    : pl[index]['businessName'],
                                             size: width(context) * 0.03,
                                             weight: FontWeight.w600,
                                             color: SpotmiesTheme.onBackground,
