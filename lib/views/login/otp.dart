@@ -37,7 +37,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
   final BoxDecoration pinPutDecoration = BoxDecoration(
-    color: SpotmiesTheme.primaryVariant,
+    color: SpotmiesTheme.onBackground,
     borderRadius: BorderRadius.circular(10.0),
     border: Border.all(
       color: SpotmiesTheme.background,
@@ -249,11 +249,11 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                           textSize: _width * 0.045,
                           borderRadius: 10,
                           elevation: 1,
-                          textColor: Colors.blue[900],
+                          textColor: SpotmiesTheme.onBackground,
                           trailingIcon: Icon(
                             Icons.arrow_forward,
                             size: 20,
-                            color: Colors.blue[900],
+                            color: SpotmiesTheme.onBackground,
                           ),
                         ),
                       )

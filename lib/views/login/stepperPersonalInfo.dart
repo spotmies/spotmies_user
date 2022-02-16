@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotmies/controllers/login_controller/stepperPersonalInfo_controller.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
@@ -39,18 +40,18 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     return Scaffold(
       key: _stepperPersonalInfo.scaffoldkey,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: SpotmiesTheme.onBackground),
         title: Text(
           'Create account',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: SpotmiesTheme.onBackground),
         ),
-        backgroundColor: Colors.grey[50],
+        backgroundColor: SpotmiesTheme.background,
         elevation: 0,
       ),
-      backgroundColor: Colors.grey[50],
+      backgroundColor: SpotmiesTheme.background,
       body: Consumer<TimeProvider>(builder: (context, data, child) {
         return Theme(
-          data: ThemeData(primaryColor: Colors.blue[900]),
+          data: ThemeData(primaryColor: SpotmiesTheme.primary),
           child: Stack(children: [
             Stepper(
                 type: StepperType.horizontal,
@@ -71,17 +72,25 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Icon(Icons.navigate_before),
-                                Text('Back'),
+                                Icon(
+                                  Icons.navigate_before,
+                                  color: SpotmiesTheme.onBackground,
+                                ),
+                                Text(
+                                  'Back',
+                                  style: TextStyle(
+                                      color: SpotmiesTheme.onBackground),
+                                ),
                               ],
                             ),
                             onPressed: controlsDetails.onStepCancel,
                             style: ButtonStyle(
-                              backgroundColor: _stepperPersonalInfo
-                                          .currentStep >
-                                      0
-                                  ? MaterialStateProperty.all(Colors.blue[900])
-                                  : MaterialStateProperty.all(Colors.white),
+                              backgroundColor:
+                                  _stepperPersonalInfo.currentStep > 0
+                                      ? MaterialStateProperty.all(
+                                          SpotmiesTheme.dull)
+                                      : MaterialStateProperty.all(
+                                          SpotmiesTheme.background),
                             ),
                           ),
                         ),
@@ -92,8 +101,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     CircularProgressIndicator();
-                                    var resp =
-                                        await _stepperPersonalInfo.step3(context,timerProvider);
+                                    var resp = await _stepperPersonalInfo.step3(
+                                        context, timerProvider);
                                     log("resp $resp");
                                     // await Navigator.pushAndRemoveUntil(
                                     //     context,
@@ -105,13 +114,17 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Text('Finish'),
+                                      Text(
+                                        'Finish',
+                                        style: TextStyle(
+                                            color: SpotmiesTheme.background),
+                                      ),
                                       Icon(Icons.navigate_next),
                                     ],
                                   ),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
-                                        Colors.blue[900]),
+                                        SpotmiesTheme.onBackground),
                                   ),
                                   //color: Colors.green,
                                 ),
@@ -130,7 +143,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                   ),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
-                                        Colors.blue[900]),
+                                        SpotmiesTheme.background),
                                   ),
                                 ),
                               ),
@@ -141,9 +154,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 onStepContinue: _stepperPersonalInfo.currentStep == 0
                     ? () => setState(() => _stepperPersonalInfo.step1(context))
                     : _stepperPersonalInfo.currentStep == 1
-                        ? () => setState(() => _stepperPersonalInfo.step2(context))
+                        ? () =>
+                            setState(() => _stepperPersonalInfo.step2(context))
                         : _stepperPersonalInfo.currentStep == 2
-                            ? () => setState(() => _stepperPersonalInfo.step3(context,timerProvider))
+                            ? () => setState(() => _stepperPersonalInfo.step3(
+                                context, timerProvider))
                             : null,
                 onStepCancel: _stepperPersonalInfo.currentStep > 0
                     ? () =>
@@ -194,7 +209,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
         Container(
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              color: SpotmiesTheme.background,
+              borderRadius: BorderRadius.circular(10)),
           height: height(context) * 0.75,
           child: termsAndConditions.length != 0
               ? Container(
@@ -210,10 +226,11 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                   termsAndConditions[index].toString(),
                               size: width(context) * 0.06,
                               flow: TextOverflow.visible,
+                              color: SpotmiesTheme.onBackground,
                             ),
                             if (index != 7)
                               Divider(
-                                color: Colors.grey[400],
+                                color: SpotmiesTheme.equal,
                                 indent: width(context) * 0.1,
                                 endIndent: width(context) * 0.1,
                               ),
@@ -237,7 +254,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                   Text(
                                     'I agree to accept the terms and Conditions',
                                     style: TextStyle(
-                                        fontSize: width(context) * 0.03),
+                                        fontSize: width(context) * 0.03,
+                                        color: SpotmiesTheme.onBackground),
                                   ),
                                 ],
                               ),
@@ -263,9 +281,10 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 height: height(context) * 0.1,
                 width: width(context) * 1,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextFormField(
+                  style: TextStyle(color: SpotmiesTheme.onBackground),
                   onSaved: (item) =>
                       _stepperPersonalInfo.stepperPersonalModel.name,
                   keyboardType: TextInputType.name,
@@ -273,12 +292,16 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                        borderSide: BorderSide(
+                            width: 1, color: SpotmiesTheme.background)),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
-                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                        borderSide: BorderSide(
+                            width: 1, color: SpotmiesTheme.background)),
+                    hintStyle: TextStyle(
+                        fontSize: 17, color: SpotmiesTheme.onBackground),
                     hintText: 'Name',
+
                     suffixIcon: Icon(Icons.person),
                     //border: InputBorder.none,
                     contentPadding: EdgeInsets.all(20),
@@ -304,20 +327,24 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 height: height(context) * 0.1,
                 width: width(context) * 1,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextFormField(
+                  style: TextStyle(color: SpotmiesTheme.onBackground),
                   onSaved: (item) =>
                       _stepperPersonalInfo.stepperPersonalModel.email,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                        borderSide: BorderSide(
+                            width: 1, color: SpotmiesTheme.background)),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
-                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                        borderSide: BorderSide(
+                            width: 1, color: SpotmiesTheme.background)),
+                    hintStyle:
+                        TextStyle(fontSize: 17, color: SpotmiesTheme.equal),
                     hintText: 'Email(Optional)',
                     suffixIcon: Icon(Icons.email),
                     //border: InputBorder.none,
@@ -345,9 +372,10 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 height: height(context) * 0.1,
                 width: width(context) * 1,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: SpotmiesTheme.background,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextFormField(
+                  style: TextStyle(color: SpotmiesTheme.onBackground),
                   maxLength: 10,
                   onSaved: (item) =>
                       _stepperPersonalInfo.stepperPersonalModel.altnumber,
@@ -356,11 +384,14 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     // labelText: "optional",
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                        borderSide: BorderSide(
+                            width: 1, color: SpotmiesTheme.background)),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
-                    hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                        borderSide: BorderSide(
+                            width: 1, color: SpotmiesTheme.background)),
+                    hintStyle:
+                        TextStyle(fontSize: 17, color: SpotmiesTheme.equal),
                     hintText: 'Alternative Mobile (optional)',
                     suffixIcon: Icon(Icons.dialpad),
                     //border: InputBorder.none,
@@ -400,7 +431,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(
               'Profile Picture',
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: 25, color: SpotmiesTheme.onBackground),
             ),
             SizedBox(
               height: 10,
@@ -411,7 +442,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                 height: 220,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: SpotmiesTheme.background,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30)),
@@ -422,8 +453,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     child: _stepperPersonalInfo.profilepic == null
                         ? Icon(
                             Icons.person,
-                            color: Colors.blueGrey,
-                            size: 200,
+                            color: SpotmiesTheme.onBackground,
+                            size: width(context) * 0.3,
                           )
                         : Container(
                             height: height(context) * 0.27,
@@ -432,15 +463,16 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                             ),
                             child: _stepperPersonalInfo.profilepic != null
                                 ? CircleAvatar(
+                                    backgroundColor: SpotmiesTheme.onBackground,
                                     backgroundImage: FileImage(
                                         _stepperPersonalInfo.profilepic!),
-                                    radius: 100,
+                                    radius: width(context) * 0.2,
                                   )
                                 : SizedBox(),
                           ),
                   ),
                   radius: 30,
-                  backgroundColor: Colors.grey[100],
+                  backgroundColor: SpotmiesTheme.dull,
                 ),
               ),
             ),
@@ -448,7 +480,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
               height: 40,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: SpotmiesTheme.background,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30)),
@@ -461,7 +493,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   // icon: Icon(Icons.select_all),
                   child: Text(
                     'Choose Image',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    style: TextStyle(
+                        fontSize: 18, color: SpotmiesTheme.onBackground),
                   )),
               // child: FlatButton(color:Colors.blue[700], onPressed: (){}, child: Text('Choose image')),
             ),
@@ -474,7 +507,8 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     _stepperPersonalInfo.step3(context, timerProvider);
                   },
                   child: Text('Skip',
-                      style: TextStyle(fontSize: 20, color: Colors.black)))
+                      style:
+                          TextStyle(fontSize: 20, color: SpotmiesTheme.equal)))
           ]),
         )
       ],
