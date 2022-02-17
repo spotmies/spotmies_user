@@ -147,11 +147,11 @@ class StepperPersonal extends ControllerMVC {
       imageQuality: 20,
       preferredCameraDevice: CameraDevice.rear,
     );
-    setState(() {
-      if (front != null) {
-        profilepic = File(front.path);
-      }
-    });
+    // setState(() {
+    if (front != null) {
+      profilepic = File(front.path);
+    }
+    // });
   }
 
 //image upload function

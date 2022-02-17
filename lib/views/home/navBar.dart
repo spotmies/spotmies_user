@@ -14,6 +14,7 @@ import 'package:spotmies/providers/responses_provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
+import 'package:spotmies/utilities/notification_message_view.dart';
 import 'package:spotmies/utilities/notifications.dart';
 import 'package:spotmies/utilities/shared_preference.dart';
 import 'package:spotmies/utilities/snackbar.dart';
@@ -214,24 +215,33 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message?.data["route"];
       log(routefromMessage);
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
+      // Navigator.pushAndRemoveUntil(context,
+      //     MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
     });
     //forground
     FirebaseMessaging.onMessage.listen((message) async {
-      if (message.notification != null) {
-        print(message.notification?.title);
-        print(message.notification?.body);
-        displayAwesomeNotification(message, context);
-      }
+     await displayAwesomeNotification(message, context);
+      // if (message.notification != null) {
+      //   print(message.notification?.title);
+      //   print(message.notification?.body);
+      //   displayAwesomeNotification(message, context);
+      // }
     });
     // when app background but in recent
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       final routefromMessage = message.data["route"];
       log(routefromMessage);
-      displayAwesomeNotification(message, context);
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
+      if (message.notification != null) {
+        await displayAwesomeNotification(message, context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationMessage(
+              message: message.notification,
+            ),
+          ),
+        );
+      }
     });
 
     chatProvider = Provider.of<ChatProvider>(context, listen: false);

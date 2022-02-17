@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +52,7 @@ class _CategoriesState extends State<Categories> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 dynamic serve = up?.getCategoryMainList().toList();
+                log(serve[index].toString());
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -94,7 +97,9 @@ class _CategoriesState extends State<Categories> {
                                     padding: EdgeInsets.all(10),
                                     height: height(context) * 0.12,
                                     // width: width * 0.23,
-                                    child: SvgPicture.asset(catImages[index])),
+                                    child: SvgPicture.asset(serve[index]
+                                            ['userAppIcon']
+                                        .toString())),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Row(

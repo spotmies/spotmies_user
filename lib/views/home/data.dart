@@ -30,9 +30,17 @@ List<Map<String, Object>> software = [
 ];
 
 List catImages = [
-  'assets/tradesman.svg',
-  'assets/barber.svg',
-  'assets/domestic.svg',
+  'assets/catImages/interiors.svg',
+  'assets/catImages/software.svg',
+  'assets/catImages/digital_marketing.svg',
+  'assets/catImages/laptop.svg',
+  'assets/catImages/events.svg',
+  'assets/catImages/cctv.svg',
+  'assets/catImages/designer.svg',
+  'assets/catImages/photoGrapher.svg',
+  'assets/catImages/smart_home.svg',
+  'assets/catImages/book.svg',
+  'assets/catImages/more.svg',
   'assets/software.svg',
   'assets/design.svg',
   'assets/education.svg',

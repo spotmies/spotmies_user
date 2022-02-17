@@ -62,7 +62,7 @@ void awesomeInitilize() async {
             enableVibration: true,
             defaultColor: Colors.teal,
             importance: NotificationImportance.High,
-            defaultRingtoneType: DefaultRingtoneType.Ringtone,
+            defaultRingtoneType: DefaultRingtoneType.Notification,
             channelShowBadge: true,
             ledColor: Colors.white),
         NotificationChannel(
@@ -75,7 +75,7 @@ void awesomeInitilize() async {
             defaultColor: Colors.teal,
             importance: NotificationImportance.High,
             channelShowBadge: true,
-            defaultRingtoneType: DefaultRingtoneType.Ringtone,
+            defaultRingtoneType: DefaultRingtoneType.Notification,
             ledColor: Colors.white),
       ],
       debug: true);
@@ -88,57 +88,58 @@ displayAwesomeNotification(RemoteMessage message, BuildContext context) async {
   // final String timeZone =
   //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: id,
-          channelKey: 'firebasePushNotifiction',
-          title: message.notification?.title,
-          body: message.notification?.body,
-          notificationLayout: NotificationLayout.BigPicture,
-          displayOnBackground: true,
-          displayOnForeground: true,
-          icon: 'resource://drawable/logo',
-          locked: false,
-          bigPicture:
-              'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
+    content: NotificationContent(
+        id: id,
+        channelKey: 'firebasePushNotifiction',
+        title: message.notification?.title,
+        body: message.notification?.body,
+        notificationLayout: NotificationLayout.BigPicture,
+        displayOnBackground: true,
+        displayOnForeground: true,
+        icon: 'resource://drawable/logo',
+        locked: false,
+        bigPicture:
+            'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 
-      // schedule: NotificationInterval(
-      //     interval: 2, timeZone: timeZone, repeats: false),
-      actionButtons: [
-        NotificationActionButton(
-          key: 'accept',
-          label: 'Accept',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-        NotificationActionButton(
-          key: 'cancel',
-          label: 'Cancel',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-      ]);
+    // schedule: NotificationInterval(
+    //     interval: 2, timeZone: timeZone, repeats: false),
+    // actionButtons: [
+    //   NotificationActionButton(
+    //     key: 'accept',
+    //     label: 'Accept',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    //   NotificationActionButton(
+    //     key: 'cancel',
+    //     label: 'Cancel',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    // ]
+  );
 
-  AwesomeNotifications().actionStream.listen((receivedNotifiction) {
-    log('step one');
-    if (receivedNotifiction.buttonKeyPressed == 'cancel') {
-      log('cancel');
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (_) => GoogleNavBar(),
-          ),
-          (route) => route.isFirst);
-    }
-    if (receivedNotifiction.buttonKeyPressed == 'accept') {
-      log('Accept');
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (_) => GoogleNavBar(),
-          ),
-          (route) => route.isFirst);
-    }
-  });
+  // AwesomeNotifications().actionStream.listen((receivedNotifiction) {
+  //   log('step one');
+  //   if (receivedNotifiction.buttonKeyPressed == 'cancel') {
+  //     log('cancel');
+  //     Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (_) => GoogleNavBar(),
+  //         ),
+  //         (route) => route.isFirst);
+  //   }
+  //   if (receivedNotifiction.buttonKeyPressed == 'accept') {
+  //     log('Accept');
+  //     Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (_) => GoogleNavBar(),
+  //         ),
+  //         (route) => route.isFirst);
+  //   }
+  // });
 }
 
 //background
@@ -150,43 +151,44 @@ displayAwesomeNotificationBackground(
   // final String timeZone =
   //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
   await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: id,
-          channelKey: 'firebasePushNotifictions',
-          title: message.notification?.title,
-          body: message.notification?.body,
-          notificationLayout: NotificationLayout.BigPicture,
-          displayOnBackground: true,
-          displayOnForeground: true,
-          icon: 'resource://drawable/logo',
-          locked: false,
-          bigPicture:
-              'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
+    content: NotificationContent(
+        id: id,
+        channelKey: 'firebasePushNotifictions',
+        title: message.notification?.title,
+        body: message.notification?.body,
+        notificationLayout: NotificationLayout.BigPicture,
+        displayOnBackground: true,
+        displayOnForeground: true,
+        icon: 'resource://drawable/logo',
+        locked: false,
+        bigPicture:
+            'https://assets-global.website-files.com/5b6df8bb681f89c158b48f6b/5d7b6a6e00f64f8f69b8bf36_it-services-technician.jpg'),
 
-      // schedule: NotificationInterval(
-      //     interval: 2, timeZone: timeZone, repeats: false),
-      actionButtons: [
-        NotificationActionButton(
-          key: 'accept',
-          label: 'Accept',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-        NotificationActionButton(
-          key: 'cancel',
-          label: 'Cancel',
-          enabled: true,
-          buttonType: ActionButtonType.Default,
-        ),
-      ]);
+    // schedule: NotificationInterval(
+    //     interval: 2, timeZone: timeZone, repeats: false),
+    // actionButtons: [
+    //   NotificationActionButton(
+    //     key: 'accept',
+    //     label: 'Accept',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    //   NotificationActionButton(
+    //     key: 'cancel',
+    //     label: 'Cancel',
+    //     enabled: true,
+    //     buttonType: ActionButtonType.Default,
+    //   ),
+    // ]
+  );
 
-  AwesomeNotifications().actionStream.listen((receivedNotifiction) {
-    log('step one');
-    if (receivedNotifiction.buttonKeyPressed == 'cancel') {
-      log('cancel');
-    }
-    if (receivedNotifiction.buttonKeyPressed == 'accept') {
-      log('Accept');
-    }
-  });
+  // AwesomeNotifications().actionStream.listen((receivedNotifiction) {
+  //   log('step one');
+  //   if (receivedNotifiction.buttonKeyPressed == 'cancel') {
+  //     log('cancel');
+  //   }
+  //   if (receivedNotifiction.buttonKeyPressed == 'accept') {
+  //     log('Accept');
+  //   }
+  // });
 }

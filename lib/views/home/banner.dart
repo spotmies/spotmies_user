@@ -74,7 +74,7 @@ banner(BuildContext context) {
                 Container(
                     // color: Colors.amber,
                     width: width(context) * 0.35,
-                    child: SvgPicture.asset(catImages[0])),
+                    child: SvgPicture.asset('assets/tradesman.svg')),
               ],
             )),
       ),

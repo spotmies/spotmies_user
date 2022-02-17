@@ -35,7 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       });
     });
     return Scaffold(
-        backgroundColor: SpotmiesTheme.background,
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             showAnimatedContainer
@@ -135,7 +135,7 @@ class SkipButton extends StatelessWidget {
               'Skip',
               style: TextStyle(
                   fontSize: SizeConfig.defaultSize! * 1.4, //14
-                  color: SpotmiesTheme.onBackground,
+                  color: Colors.grey[500],
                   fontWeight: FontWeight.w600),
             ),
           )
@@ -311,7 +311,7 @@ class MainContent extends StatelessWidget {
             Text(
               _list[index].title,
               style: TextStyle(
-                  color: SpotmiesTheme.onBackground,
+                  color: Colors.grey[900],
                   fontWeight: FontWeight.w500,
                   fontSize: SizeConfig.defaultSize! * 2.6),
             ),
@@ -325,7 +325,7 @@ class MainContent extends StatelessWidget {
               _list[index].text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: SpotmiesTheme.onBackground,
+                  color: Colors.grey[800],
                   fontWeight: FontWeight.w400,
                   fontSize: SizeConfig.defaultSize! * 1.4),
             ),

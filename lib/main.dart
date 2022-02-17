@@ -67,7 +67,7 @@ void main() async {
           ChangeNotifierProvider<ThemeProvider>(
             create: (context) => ThemeProvider(),
           ),
-          ChangeNotifierProvider<LocalizationProvider>( 
+          ChangeNotifierProvider<LocalizationProvider>(
             create: (context) => LocalizationProvider(),
           ),
         ],

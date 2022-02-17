@@ -9,6 +9,9 @@ import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/login/step1.dart';
+import 'package:spotmies/views/login/step2.dart';
+import 'package:spotmies/views/login/step3.dart';
 import 'package:spotmies/views/reusable_widgets/progress_waiter.dart';
 
 class StepperPersonalInfo extends StatefulWidget {
@@ -17,7 +20,10 @@ class StepperPersonalInfo extends StatefulWidget {
 }
 
 class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
-  final StepperPersonal _stepperPersonalInfo = StepperPersonal();
+  late StepperPersonal _stepperPersonalInfo;
+  _StepperPersonalInfoState() : super(StepperPersonal()) {
+    this._stepperPersonalInfo = controller as StepperPersonal;
+  }
   UniversalProvider? up;
 
   // _StepperPersonalInfoState() : super(StepperPersonal()) {
@@ -51,7 +57,10 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
       backgroundColor: SpotmiesTheme.background,
       body: Consumer<TimeProvider>(builder: (context, data, child) {
         return Theme(
-          data: ThemeData(primaryColor: SpotmiesTheme.primary),
+          data: ThemeData(
+              colorScheme: ColorScheme.dark(
+                  primary: SpotmiesTheme.primary,
+                  onSurface: SpotmiesTheme.dull)),
           child: Stack(children: [
             Stepper(
                 type: StepperType.horizontal,
@@ -137,8 +146,15 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Text('Next'),
-                                      Icon(Icons.navigate_next),
+                                      Text(
+                                        'Next',
+                                        style: TextStyle(
+                                            color: SpotmiesTheme.onBackground),
+                                      ),
+                                      Icon(
+                                        Icons.navigate_next,
+                                        color: SpotmiesTheme.onBackground,
+                                      ),
                                     ],
                                   ),
                                   style: ButtonStyle(
@@ -168,7 +184,14 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   Step(
                     title: Text('Step1'),
                     subtitle: Text('Terms'),
-                    content: step1(_stepperPersonalInfo.termsAndConditions),
+                    // content: step1(_stepperPersonalInfo.termsAndConditions,
+                    //     _stepperPersonalInfo),
+                    content: Step1(
+                        termsAndConditions:
+                            _stepperPersonalInfo.termsAndConditions,
+                        stepperController: _stepperPersonalInfo,
+                        scrollController:
+                            _stepperPersonalInfo.scrollController),
                     isActive: _stepperPersonalInfo.currentStep >= 0,
                     state: _stepperPersonalInfo.currentStep >= 0
                         ? StepState.complete
@@ -179,7 +202,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     subtitle: Text('Profile'),
                     content: Form(
                       key: _stepperPersonalInfo.formkey,
-                      child: step2(),
+                      child: Step2(stepperController:_stepperPersonalInfo),
                     ),
                     isActive: _stepperPersonalInfo.currentStep >= 1,
                     state: _stepperPersonalInfo.currentStep >= 1
@@ -189,7 +212,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   Step(
                     title: Text('Step 3'),
                     subtitle: Text('Photo'),
-                    content: step3(),
+                    content: Step3(stepperController:_stepperPersonalInfo,timerProvider:timerProvider),
                     isActive: _stepperPersonalInfo.currentStep >= 2,
                     state: _stepperPersonalInfo.currentStep >= 2
                         ? StepState.complete
@@ -203,225 +226,225 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
     );
   }
 
-  Widget step1(List termsAndConditions) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: SpotmiesTheme.background,
-              borderRadius: BorderRadius.circular(10)),
-          height: height(context) * 0.75,
-          child: termsAndConditions.length != 0
-              ? Container(
-                  height: height(context) * 0.7,
-                  child: ListView.builder(
-                      controller: _stepperPersonalInfo.scrollController,
-                      itemCount: termsAndConditions.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: [
-                            TextWidget(
-                              text: "${index + 1}.  " +
-                                  termsAndConditions[index].toString(),
-                              size: width(context) * 0.06,
-                              flow: TextOverflow.visible,
-                              color: SpotmiesTheme.onBackground,
-                            ),
-                            if (index != 7)
-                              Divider(
-                                color: SpotmiesTheme.equal,
-                                indent: width(context) * 0.1,
-                                endIndent: width(context) * 0.1,
-                              ),
-                            if (index == termsAndConditions.length - 1)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Checkbox(
-                                      activeColor: Colors.teal,
-                                      checkColor: Colors.white,
-                                      value: _stepperPersonalInfo.accept,
-                                      shape: CircleBorder(),
-                                      onChanged: (bool? value) {
-                                        _stepperPersonalInfo.accept = value;
-                                        if (_stepperPersonalInfo.accept ==
-                                            true) {
-                                          _stepperPersonalInfo.tca = 'accepted';
-                                        }
-                                        _stepperPersonalInfo.refresh();
-                                      }),
-                                  Text(
-                                    'I agree to accept the terms and Conditions',
-                                    style: TextStyle(
-                                        fontSize: width(context) * 0.03,
-                                        color: SpotmiesTheme.onBackground),
-                                  ),
-                                ],
-                              ),
-                          ],
-                        );
-                      }),
-                )
-              : CircularProgressIndicator(),
-        ),
-      ],
-    );
-  }
+  // Widget step1(List termsAndConditions, StepperPersonal stepperPersonalInfo) {
+  //   return Column(
+  //     children: [
+  //       Container(
+  //         padding: EdgeInsets.all(10),
+  //         decoration: BoxDecoration(
+  //             color: SpotmiesTheme.background,
+  //             borderRadius: BorderRadius.circular(10)),
+  //         height: height(context) * 0.75,
+  //         child: termsAndConditions.length != 0
+  //             ? Container(
+  //                 height: height(context) * 0.7,
+  //                 child: ListView.builder(
+  //                     controller: _stepperPersonalInfo.scrollController,
+  //                     itemCount: termsAndConditions.length,
+  //                     itemBuilder: (BuildContext context, int index) {
+  //                       return Column(
+  //                         children: [
+  //                           TextWidget(
+  //                             text: "${index + 1}.  " +
+  //                                 termsAndConditions[index].toString(),
+  //                             size: width(context) * 0.06,
+  //                             flow: TextOverflow.visible,
+  //                             color: SpotmiesTheme.onBackground,
+  //                           ),
+  //                           if (index != 7)
+  //                             Divider(
+  //                               color: SpotmiesTheme.equal,
+  //                               indent: width(context) * 0.1,
+  //                               endIndent: width(context) * 0.1,
+  //                             ),
+  //                           if (index == termsAndConditions.length - 1)
+  //                             Row(
+  //                               mainAxisAlignment: MainAxisAlignment.center,
+  //                               children: [
+  //                                 Checkbox(
+  //                                     activeColor: Colors.teal,
+  //                                     checkColor: Colors.white,
+  //                                     value: _stepperPersonalInfo.accept,
+  //                                     shape: CircleBorder(),
+  //                                     onChanged: (bool? value) {
+  //                                       _stepperPersonalInfo.accept = value;
+  //                                       if (_stepperPersonalInfo.accept ==
+  //                                           true) {
+  //                                         _stepperPersonalInfo.tca = 'accepted';
+  //                                       }
+  //                                       stepperPersonalInfo.refresh();
+  //                                     }),
+  //                                 Text(
+  //                                   'I agree to accept the terms and Conditions',
+  //                                   style: TextStyle(
+  //                                       fontSize: width(context) * 0.03,
+  //                                       color: SpotmiesTheme.onBackground),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                         ],
+  //                       );
+  //                     }),
+  //               )
+  //             : CircularProgressIndicator(),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget step2() {
-    return Column(
-      children: [
-        Container(
-          height: height(context) * 0.75,
-          child: ListView(
-            children: [
-              Container(
-                // padding: EdgeInsets.all(10),
-                height: height(context) * 0.1,
-                width: width(context) * 1,
-                decoration: BoxDecoration(
-                    color: SpotmiesTheme.background,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextFormField(
-                  style: TextStyle(color: SpotmiesTheme.onBackground),
-                  onSaved: (item) =>
-                      _stepperPersonalInfo.stepperPersonalModel.name,
-                  keyboardType: TextInputType.name,
-                  controller: _stepperPersonalInfo.nameTf,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                            width: 1, color: SpotmiesTheme.background)),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                            width: 1, color: SpotmiesTheme.background)),
-                    hintStyle: TextStyle(
-                        fontSize: 17, color: SpotmiesTheme.onBackground),
-                    hintText: 'Name',
+  // Widget step2() {
+  //   return Column(
+  //     children: [
+  //       Container(
+  //         height: height(context) * 0.75,
+  //         child: ListView(
+  //           children: [
+  //             Container(
+  //               // padding: EdgeInsets.all(10),
+  //               height: height(context) * 0.1,
+  //               width: width(context) * 1,
+  //               decoration: BoxDecoration(
+  //                   color: SpotmiesTheme.background,
+  //                   borderRadius: BorderRadius.circular(15)),
+  //               child: TextFormField(
+  //                 style: TextStyle(color: SpotmiesTheme.onBackground),
+  //                 onSaved: (item) =>
+  //                     _stepperPersonalInfo.stepperPersonalModel.name,
+  //                 keyboardType: TextInputType.name,
+  //                 controller: _stepperPersonalInfo.nameTf,
+  //                 decoration: InputDecoration(
+  //                   focusedBorder: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.all(Radius.circular(15)),
+  //                       borderSide: BorderSide(
+  //                           width: 1, color: SpotmiesTheme.background)),
+  //                   enabledBorder: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.all(Radius.circular(15)),
+  //                       borderSide: BorderSide(
+  //                           width: 1, color: SpotmiesTheme.background)),
+  //                   hintStyle: TextStyle(
+  //                       fontSize: 17, color: SpotmiesTheme.onBackground),
+  //                   hintText: 'Name',
 
-                    suffixIcon: Icon(Icons.person),
-                    //border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(20),
-                  ),
-                  validator: (value) {
-                    if (value != null && value.isEmpty) {
-                      return 'Please Enter Your Name';
-                    }
-                    if (value != null && value.length < 5)
-                      return 'name should be greater than 4 letters';
-                    return null;
-                  },
-                  onChanged: (value) {
-                    this._stepperPersonalInfo.name = value;
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 7,
-              ),
-              Container(
-                //padding: EdgeInsets.all(10),
-                height: height(context) * 0.1,
-                width: width(context) * 1,
-                decoration: BoxDecoration(
-                    color: SpotmiesTheme.background,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextFormField(
-                  style: TextStyle(color: SpotmiesTheme.onBackground),
-                  onSaved: (item) =>
-                      _stepperPersonalInfo.stepperPersonalModel.email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                            width: 1, color: SpotmiesTheme.background)),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                            width: 1, color: SpotmiesTheme.background)),
-                    hintStyle:
-                        TextStyle(fontSize: 17, color: SpotmiesTheme.equal),
-                    hintText: 'Email(Optional)',
-                    suffixIcon: Icon(Icons.email),
-                    //border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(20),
-                  ),
-                  validator: (value) {
-                    if (value != null &&
-                        value.length > 1 &&
-                        !value.contains('@')) {
-                      return 'Please Enter Valid Email';
-                    }
-                    return null;
-                  },
-                  controller: _stepperPersonalInfo.emailTf,
-                  onChanged: (String? value) {
-                    this._stepperPersonalInfo.email = value ?? "";
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 7,
-              ),
-              Container(
-                //padding: EdgeInsets.all(10),
-                height: height(context) * 0.1,
-                width: width(context) * 1,
-                decoration: BoxDecoration(
-                    color: SpotmiesTheme.background,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextFormField(
-                  style: TextStyle(color: SpotmiesTheme.onBackground),
-                  maxLength: 10,
-                  onSaved: (item) =>
-                      _stepperPersonalInfo.stepperPersonalModel.altnumber,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    // labelText: "optional",
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                            width: 1, color: SpotmiesTheme.background)),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                            width: 1, color: SpotmiesTheme.background)),
-                    hintStyle:
-                        TextStyle(fontSize: 17, color: SpotmiesTheme.equal),
-                    hintText: 'Alternative Mobile (optional)',
-                    suffixIcon: Icon(Icons.dialpad),
-                    //border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(20),
-                    counterText: "",
-                  ),
-                  validator: (value) {
-                    if (value != null &&
-                        value.length == 10 &&
-                        int.parse(value) < 5000000000) {
-                      return 'Please Enter Valid Mobile Number';
-                    } else if (value != null &&
-                        value.length > 0 &&
-                        value.length < 10) {
-                      return 'Please Enter Valid Mobile Number';
-                    }
-                    return null;
-                  },
-                  controller: _stepperPersonalInfo.altnumberTf,
-                  onChanged: (String? value) {
-                    this._stepperPersonalInfo.altnumber = value ?? "";
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  //                   suffixIcon: Icon(Icons.person),
+  //                   //border: InputBorder.none,
+  //                   contentPadding: EdgeInsets.all(20),
+  //                 ),
+  //                 validator: (value) {
+  //                   if (value != null && value.isEmpty) {
+  //                     return 'Please Enter Your Name';
+  //                   }
+  //                   if (value != null && value.length < 5)
+  //                     return 'name should be greater than 4 letters';
+  //                   return null;
+  //                 },
+  //                 onChanged: (value) {
+  //                   this._stepperPersonalInfo.name = value;
+  //                 },
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 7,
+  //             ),
+  //             Container(
+  //               //padding: EdgeInsets.all(10),
+  //               height: height(context) * 0.1,
+  //               width: width(context) * 1,
+  //               decoration: BoxDecoration(
+  //                   color: SpotmiesTheme.background,
+  //                   borderRadius: BorderRadius.circular(15)),
+  //               child: TextFormField(
+  //                 style: TextStyle(color: SpotmiesTheme.onBackground),
+  //                 onSaved: (item) =>
+  //                     _stepperPersonalInfo.stepperPersonalModel.email,
+  //                 keyboardType: TextInputType.emailAddress,
+  //                 decoration: InputDecoration(
+  //                   focusedBorder: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.all(Radius.circular(15)),
+  //                       borderSide: BorderSide(
+  //                           width: 1, color: SpotmiesTheme.background)),
+  //                   enabledBorder: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.all(Radius.circular(15)),
+  //                       borderSide: BorderSide(
+  //                           width: 1, color: SpotmiesTheme.background)),
+  //                   hintStyle:
+  //                       TextStyle(fontSize: 17, color: SpotmiesTheme.equal),
+  //                   hintText: 'Email(Optional)',
+  //                   suffixIcon: Icon(Icons.email),
+  //                   //border: InputBorder.none,
+  //                   contentPadding: EdgeInsets.all(20),
+  //                 ),
+  //                 validator: (value) {
+  //                   if (value != null &&
+  //                       value.length > 1 &&
+  //                       !value.contains('@')) {
+  //                     return 'Please Enter Valid Email';
+  //                   }
+  //                   return null;
+  //                 },
+  //                 controller: _stepperPersonalInfo.emailTf,
+  //                 onChanged: (String? value) {
+  //                   this._stepperPersonalInfo.email = value ?? "";
+  //                 },
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 7,
+  //             ),
+  //             Container(
+  //               //padding: EdgeInsets.all(10),
+  //               height: height(context) * 0.1,
+  //               width: width(context) * 1,
+  //               decoration: BoxDecoration(
+  //                   color: SpotmiesTheme.background,
+  //                   borderRadius: BorderRadius.circular(15)),
+  //               child: TextFormField(
+  //                 style: TextStyle(color: SpotmiesTheme.onBackground),
+  //                 maxLength: 10,
+  //                 onSaved: (item) =>
+  //                     _stepperPersonalInfo.stepperPersonalModel.altnumber,
+  //                 keyboardType: TextInputType.phone,
+  //                 decoration: InputDecoration(
+  //                   // labelText: "optional",
+  //                   focusedBorder: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.all(Radius.circular(15)),
+  //                       borderSide: BorderSide(
+  //                           width: 1, color: SpotmiesTheme.background)),
+  //                   enabledBorder: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.all(Radius.circular(15)),
+  //                       borderSide: BorderSide(
+  //                           width: 1, color: SpotmiesTheme.background)),
+  //                   hintStyle:
+  //                       TextStyle(fontSize: 17, color: SpotmiesTheme.equal),
+  //                   hintText: 'Alternative Mobile (optional)',
+  //                   suffixIcon: Icon(Icons.dialpad),
+  //                   //border: InputBorder.none,
+  //                   contentPadding: EdgeInsets.all(20),
+  //                   counterText: "",
+  //                 ),
+  //                 validator: (value) {
+  //                   if (value != null &&
+  //                       value.length == 10 &&
+  //                       int.parse(value) < 5000000000) {
+  //                     return 'Please Enter Valid Mobile Number';
+  //                   } else if (value != null &&
+  //                       value.length > 0 &&
+  //                       value.length < 10) {
+  //                     return 'Please Enter Valid Mobile Number';
+  //                   }
+  //                   return null;
+  //                 },
+  //                 controller: _stepperPersonalInfo.altnumberTf,
+  //                 onChanged: (String? value) {
+  //                   this._stepperPersonalInfo.altnumber = value ?? "";
+  //                 },
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget step3() {
     return Column(
