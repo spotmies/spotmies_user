@@ -58,9 +58,13 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
       body: Consumer<TimeProvider>(builder: (context, data, child) {
         return Theme(
           data: ThemeData(
-              colorScheme: ColorScheme.dark(
-                  primary: SpotmiesTheme.primary,
-                  onSurface: SpotmiesTheme.dull)),
+              colorScheme: SpotmiesTheme.background == Colors.white
+                  ? ColorScheme.light(
+                      primary: SpotmiesTheme.primary,
+                      onSurface: SpotmiesTheme.equal)
+                  : ColorScheme.dark(
+                      primary: SpotmiesTheme.primary,
+                      onSurface: SpotmiesTheme.equal)),
           child: Stack(children: [
             Stepper(
                 type: StepperType.horizontal,
@@ -202,7 +206,7 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                     subtitle: Text('Profile'),
                     content: Form(
                       key: _stepperPersonalInfo.formkey,
-                      child: Step2(stepperController:_stepperPersonalInfo),
+                      child: Step2(stepperController: _stepperPersonalInfo),
                     ),
                     isActive: _stepperPersonalInfo.currentStep >= 1,
                     state: _stepperPersonalInfo.currentStep >= 1
@@ -212,7 +216,9 @@ class _StepperPersonalInfoState extends StateMVC<StepperPersonalInfo> {
                   Step(
                     title: Text('Step 3'),
                     subtitle: Text('Photo'),
-                    content: Step3(stepperController:_stepperPersonalInfo,timerProvider:timerProvider),
+                    content: Step3(
+                        stepperController: _stepperPersonalInfo,
+                        timerProvider: timerProvider),
                     isActive: _stepperPersonalInfo.currentStep >= 2,
                     state: _stepperPersonalInfo.currentStep >= 2
                         ? StepState.complete

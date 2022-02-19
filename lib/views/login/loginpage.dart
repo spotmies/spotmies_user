@@ -76,14 +76,16 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       TextWidget(
-                                        text: up.getText("spotmies_title"),
+                                        text: 'SPOTMIES',
+                                        // text: up.getText("spotmies_title"),
                                         weight: FontWeight.w600,
                                         size: width(context) * 0.06,
                                         color: SpotmiesTheme.primary,
                                         lSpace: 2.0,
                                       ),
                                       TextWidget(
-                                          text: up.getText("spotmies_tagline"),
+                                          text: ' EXPERIENCE THE EXELLENCE',
+                                          // text: up.getText("spotmies_tagline"),
                                           weight: FontWeight.w600,
                                           size: width(context) * 0.019,
                                           color: SpotmiesTheme.secondaryVariant,

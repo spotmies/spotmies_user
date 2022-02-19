@@ -19,6 +19,7 @@ import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/notifications.dart';
+import 'package:spotmies/views/login/stepperPersonalInfo.dart';
 
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
@@ -153,7 +154,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       theme: ThemeData.fallback().copyWith(useMaterial3: true),
-      home: SplashScreen(),
+      home: StepperPersonalInfo(),
     );
   }
 

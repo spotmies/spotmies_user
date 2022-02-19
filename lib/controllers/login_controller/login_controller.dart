@@ -159,9 +159,9 @@ checkUserRegistered(uid) async {
     "uId": uid.toString(),
     "isActive": "true"
   };
-  // print("checkUserreg");
+  log("checkUserreg");
   dynamic response = await Server().postMethod(API.userDetails, obj);
-  print("36 ${response.statusCode}");
+  log("36 ${response.statusCode}");
   if (response.statusCode == 200 || response.statusCode == 204)
     return 'true';
   else if (response.statusCode == 404) return 'false';

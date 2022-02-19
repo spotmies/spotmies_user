@@ -38,6 +38,8 @@ class Server {
   }
 
   Future<String> fetchAccessToken() async {
+    if (FirebaseAuth.instance.currentUser == null) return "null";
+
     dynamic tokenDetails = await getToken();
     if (tokenDetails == null) {
       dynamic result = await getAccessTokenApi();
