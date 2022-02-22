@@ -39,7 +39,7 @@ banner(BuildContext context) {
                             // align: TextAlign.end,
                             size: width(context) * 0.06,
                             weight: FontWeight.w600,
-                            color: SpotmiesTheme.onBackground,
+                            color: Colors.white,
                           ),
                           SizedBox(
                             width: width(context) * 0.02,
@@ -53,7 +53,7 @@ banner(BuildContext context) {
                               },
                               icon: Icon(
                                 Icons.arrow_forward,
-                                color: SpotmiesTheme.onBackground,
+                                color: Colors.white,
                               ))
                         ],
                       ),
@@ -65,7 +65,7 @@ banner(BuildContext context) {
                         // align: TextAlign.end,
                         size: width(context) * 0.04,
                         flow: TextOverflow.visible,
-                        color: SpotmiesTheme.onBackground,
+                        color: Colors.white,
                         weight: FontWeight.w500,
                       ),
                     ],

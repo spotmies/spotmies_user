@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +96,8 @@ class _ChatState extends State<Chat> {
                                     width: width(context) * 0.02,
                                   ),
                                   Text(
-                                    universalProvider.getText("response_tab"),
+                                    // universalProvider.getText("response_tab"),
+                                    tr('response'),
                                     style: GoogleFonts.josefinSans(
                                         color: SpotmiesTheme.onBackground,
                                         fontSize: width(context) * 0.04,
@@ -114,7 +116,8 @@ class _ChatState extends State<Chat> {
                                   width: width(context) * 0.02,
                                 ),
                                 Text(
-                                  universalProvider.getText("chat_tab"),
+                                  // universalProvider.getText("chat_tab"),
+                                  tr('chat'),
                                   style: GoogleFonts.josefinSans(
                                       color: SpotmiesTheme.onBackground,
                                       fontSize: width(context) * 0.04,

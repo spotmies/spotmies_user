@@ -105,46 +105,50 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/1.png
-    - assets/2.png
-    - assets/3.png
-    - assets/4.png
-    - assets/5.png
-    - assets/6.svg
-    - assets/images/
-    - assets/icons/
-    - assets/intro.svg
-    - assets/introBook.svg
-    - assets/share.svg
-    - assets/promo.svg
-    - assets/exit.svg
-    - assets/settings.svg
-    - assets/edit.svg
-    - assets/like.svg
-    - assets/help.svg
-    - assets/history.svg
-    - assets/getQuotes.svg
-    - assets/getService.svg
-    - assets/setLocation.svg
-    - assets/uploadPic.svg
-    - assets/fliming.svg
-    - assets/barber.svg
-    - assets/design.svg
-    - assets/domestic.svg
-    - assets/education.svg
-    - assets/software.svg
-    - assets/tradesman.svg
-    - assets/success.svg
-    - assets/spotmies_logo.json
-    - assets/onPending.json
-    - assets/sending.json
-    - assets/succuss.json
-    - assets/fail.json
-    - assets/login.svg
-    - assets/logo.png
-    - assets/waiting.json
+    # - assets/1.png
+    # - assets/2.png
+    # - assets/3.png
+    # - assets/4.png
+    # - assets/5.png
+    # - assets/6.svg
+    # - assets/images/
+    # - assets/icons/
+    # - assets/intro.svg
+    # - assets/introBook.svg
+    # - assets/share.svg
+    # - assets/promo.svg
+    # - assets/exit.svg
+    # - assets/settings.svg
+    # - assets/edit.svg
+    # - assets/like.svg
+    # - assets/help.svg
+    # - assets/history.svg
+    # - assets/getQuotes.svg
+    # - assets/getService.svg
+    # - assets/setLocation.svg
+    # - assets/uploadPic.svg
+    # - assets/fliming.svg
+    # - assets/barber.svg
+    # - assets/design.svg
+    # - assets/domestic.svg
+    # - assets/education.svg
+    # - assets/software.svg
+    # - assets/tradesman.svg
+    # - assets/success.svg
+    # - assets/spotmies_logo.json
+    # - assets/onPending.json
+    # - assets/sending.json
+    # - assets/succuss.json
+    # - assets/fail.json
+    # - assets/login.svg
+    # - assets/logo.png
+    # - assets/waiting.json
     - assets/translations/
     - assets/catImages/
+    - assets/
+    - assets/fonts/
+    - assets/images/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

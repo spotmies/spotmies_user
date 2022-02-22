@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -48,7 +49,8 @@ class _PostListState extends StateMVC<PostList> {
         key: _postsController.scaffoldkey,
         appBar: AppBar(
           title: TextWidget(
-            text: up.getText("navbar_title"),
+            // text: up.getText("navbar_title"),
+            text: tr('my_services'),
             color: SpotmiesTheme.secondaryVariant,
             size: width(context) * 0.06,
             weight: FontWeight.w600,
@@ -443,8 +445,6 @@ class _PostListState extends StateMVC<PostList> {
                                       ),
                                     ],
                                   )
-
-                                  
                                 ],
                               )),
                         ),

@@ -7,24 +7,20 @@ class OnboardingModel {
       {required this.image, required this.text, required this.title});
   static List<OnboardingModel> list = [
     OnboardingModel(
-        image: "assets/1.png",
+        image: "assets/step1.svg",
         title: "take picture",
-        text:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
+        text: "Capture the issue your facing and let the solution come to you"),
     OnboardingModel(
-        image: "assets/2.png",
+        image: "assets/step2.svg",
         title: "add location",
-        text:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
+        text: "Share your location and we share our \nservice"),
     OnboardingModel(
-        image: "assets/3.png",
-        title: "get quotes from technicians",
-        text:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities"),
+        image: "assets/step3.svg",
+        title: "get quotes",
+        text: "Choice of cost is yours and \nservice is ours"),
     OnboardingModel(
-        image: "assets/4.png",
-        title: "get service instantly",
-        text:
-            "You can do this. Step up to the cutting board, the oven, or the stovetop with full confidence in your abilities")
+        image: "assets/step4.svg",
+        title: "get service",
+        text: "We deliver the right service at the \nright time")
   ];
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies/models/onboardingModel.dart';
@@ -104,9 +105,14 @@ class MyAnimatedContainer extends StatelessWidget {
         return Container(
           width: value,
           height: value,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("images/welcome_image.png"))),
+          child: Center(
+              child: CircularProgressIndicator(
+            color: SpotmiesTheme.primary,
+            backgroundColor: SpotmiesTheme.dull,
+          )),
+          // decoration: BoxDecoration(
+          //     image: DecorationImage(
+          //         image: AssetImage("images/welcome_image.png"))),
         );
       },
     );
@@ -173,7 +179,7 @@ class StepsContainer extends StatelessWidget {
             width: SizeConfig.defaultSize! * 4.5,
             height: SizeConfig.defaultSize! * 4.5,
             child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(SpotmiesTheme.tertiary),
+                valueColor: AlwaysStoppedAnimation(SpotmiesTheme.primary),
                 value: (page + 1) / (_list.length + 1)),
           ),
           Center(
@@ -192,7 +198,7 @@ class StepsContainer extends StatelessWidget {
                 width: SizeConfig.defaultSize! * 3.5,
                 height: SizeConfig.defaultSize! * 3.5,
                 decoration: BoxDecoration(
-                    color: SpotmiesTheme.tertiary,
+                    color: SpotmiesTheme.primary,
                     borderRadius: BorderRadius.all(Radius.circular(100.0))),
                 child: Icon(
                   Icons.arrow_forward_ios,
@@ -299,10 +305,10 @@ class MainContent extends StatelessWidget {
             flex: 3,
             child: FadeAnimation(
               0.5,
-              Image.asset(
+              SvgPicture.asset(
                 _list[index].image,
-                height: SizeConfig.defaultSize! * 30,
-                width: SizeConfig.defaultSize! * 30,
+                height: SizeConfig.defaultSize! * 25,
+                width: SizeConfig.defaultSize! * 25,
               ),
             ),
           ),
