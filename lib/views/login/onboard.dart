@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies/models/onboardingModel.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
+import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/call_ui/audioCallWithImage/size.config.dart';
 import 'package:spotmies/views/login/loginpage.dart';
 
@@ -278,7 +280,7 @@ class CommonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text ?? "",
-      style: TextStyle(
+      style: GoogleFonts.josefinSans(
           color: textColor ?? SpotmiesTheme.onBackground,
           fontWeight: fontWeight ?? FontWeight.w400,
           fontSize: SizeConfig.defaultSize! * (fontSize ?? 1.8)),
@@ -316,9 +318,9 @@ class MainContent extends StatelessWidget {
             0.9,
             Text(
               _list[index].title,
-              style: TextStyle(
+              style: GoogleFonts.josefinSans(
                   color: Colors.grey[900],
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w700,
                   fontSize: SizeConfig.defaultSize! * 2.6),
             ),
           ),
@@ -330,7 +332,7 @@ class MainContent extends StatelessWidget {
             Text(
               _list[index].text,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: GoogleFonts.josefinSans(
                   color: Colors.grey[800],
                   fontWeight: FontWeight.w400,
                   fontSize: SizeConfig.defaultSize! * 1.4),

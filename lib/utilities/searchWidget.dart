@@ -67,7 +67,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       FocusScope.of(context).requestFocus(FocusNode());
                     },
                   )
-                : Icon(widget.icon ?? Icons.home_repair_service,
+                : Icon(widget.icon ?? Icons.search,
                     color: SpotmiesTheme.onBackground),
             hintText: widget.hintText,
             hintStyle: style,

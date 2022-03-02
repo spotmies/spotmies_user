@@ -149,7 +149,7 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                             width: _width,
                             child: TextWid(
                               text:
-                                  'please enter one time password you recieved to +91-${widget.phone} to verify your account',
+                                  'Please enter the one-time password sent to your phone number +91-${widget.phone} to verify your account',
                               weight: FontWeight.bold,
                               align: TextAlign.center,
                               flow: TextOverflow.visible,

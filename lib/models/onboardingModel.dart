@@ -8,19 +8,20 @@ class OnboardingModel {
   static List<OnboardingModel> list = [
     OnboardingModel(
         image: "assets/step1.svg",
-        title: "take picture",
-        text: "Capture the issue your facing and let the solution come to you"),
+        title: "Take A Picture",
+        text:
+            "Capture the issue your facing and \nlet the solution come to you"),
     OnboardingModel(
         image: "assets/step2.svg",
-        title: "add location",
-        text: "Share your location and we share our \nservice"),
+        title: "Add Your Location",
+        text: "Share your location and \nwe share our service"),
     OnboardingModel(
         image: "assets/step3.svg",
-        title: "get quotes",
+        title: "Get Instant Quotes",
         text: "Choice of cost is yours and \nservice is ours"),
     OnboardingModel(
         image: "assets/step4.svg",
-        title: "get service",
-        text: "We deliver the right service at the \nright time")
+        title: "Precise & Quick Service",
+        text: "We deliver the right service at the right service")
   ];
 }
