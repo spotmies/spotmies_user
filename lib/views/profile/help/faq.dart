@@ -167,7 +167,7 @@ class _FAQState extends State<FAQ> {
           minWidth: width(context) * 0.6,
           height: height(context) * 0.06,
           textColor: Colors.white,
-          buttonName: 'Rise Query',
+          buttonName: 'Raise A Query',
           textSize: width(context) * 0.05,
           textStyle: FontWeight.w600,
           borderRadius: 10.0,

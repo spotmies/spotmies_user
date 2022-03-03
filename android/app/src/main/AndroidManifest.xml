@@ -21,7 +21,7 @@
          <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
          <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
    <application
-        android:label="spotmies"
+        android:label="Spotmies"
         android:icon="@mipmap/launcher_icon"
         >
         

@@ -78,7 +78,7 @@ class _HomeState extends StateMVC<Home> {
               },
               child: Text(
                   (_homeController.add2 == null)
-                      ? 'seethammadhara'
+                      ? 'Seethammadhara'
                       : _homeController.add2!,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,

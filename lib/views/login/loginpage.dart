@@ -219,6 +219,12 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                               BorderRadius.circular(15),
                                         ),
                                         child: TextFormField(
+                                          textInputAction: TextInputAction.done,
+                                          onFieldSubmitted: (_) {
+                                            if (data.loader) return;
+                                            _loginPageController.dataToOTP(
+                                                context, timerProvider);
+                                          },
                                           inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter.allow(
                                                 RegExp(r'[0-9]')),
