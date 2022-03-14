@@ -8,7 +8,6 @@ import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
-import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/login/step1.dart';
 import 'package:spotmies/views/login/step2.dart';
 import 'package:spotmies/views/login/step3.dart';

@@ -7,7 +7,6 @@ import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/home/category_view.dart';
-import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class Categories extends StatefulWidget {

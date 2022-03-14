@@ -9,10 +9,7 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/textWidget.dart';
-import 'package:spotmies/views/posts/post_overview.dart';
-import 'package:spotmies/views/reusable_widgets/load_more.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/partner_store.dart';
-import 'package:spotmies/views/reusable_widgets/partner_details/rating_starfield.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
