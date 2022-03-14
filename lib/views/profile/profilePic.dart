@@ -10,20 +10,23 @@ Widget profilePic(BuildContext context, upic, name, size,
   // kToolbarHeight;
   return CircleAvatar(
     child: Stack(children: [
-      ClipOval(
-        child: (upic == null || upic == "null") == false
-            ? Image.network(upic, height: size, width: size, fit: BoxFit.fill)
-            : Container(
-                height: size,
-                width: size,
-                alignment: Alignment.center,
-                child: TextWid(
-                  text: "${name[0] ?? "J"}",
-                  size: size * 0.5,
-                  weight: FontWeight.w600,
-                  color: SpotmiesTheme.background,
+      AspectRatio(
+        aspectRatio: 1,
+        child: ClipOval(
+          child: (upic == null || upic == "null") == false
+              ? Image.network(upic, height: size, width: size, fit: BoxFit.fill)
+              : Container(
+                  height: size,
+                  width: size,
+                  alignment: Alignment.center,
+                  child: TextWid(
+                    text: "${name[0] ?? "J"}",
+                    size: size * 0.5,
+                    weight: FontWeight.w600,
+                    color: SpotmiesTheme.background,
+                  ),
                 ),
-              ),
+        ),
       ),
       if (edit)
         Positioned(

@@ -34,7 +34,7 @@ banner(BuildContext context) {
                       Row(
                         children: [
                           TextWid(
-                            text: 'Find partner',
+                            text: 'Find Partner',
                             // align: TextAlign.end,
                             size: width(context) * 0.06,
                             weight: FontWeight.w600,

@@ -8,8 +8,8 @@ import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 newQueryBS(BuildContext context,
     {Function? onSubmit,
     String type = "text",
-    String heading = "Rise a new query",
-    String hint = "Ask Question",
+    String heading = "Feedback",
+    String hint = "Please enter your feedback",
     String label = "Enter Here"}) {
   TextEditingController queryControl = TextEditingController();
   GlobalKey<FormState> queryForm = GlobalKey<FormState>();
@@ -72,7 +72,7 @@ newQueryBS(BuildContext context,
                     bgColor: SpotmiesTheme.primary,
                     minWidth: width(context),
                     height: height(context) * 0.06,
-                    textColor: SpotmiesTheme.onBackground,
+                    textColor: SpotmiesTheme.background,
                     buttonName: 'Submit',
                     textSize: width(context) * 0.05,
                     textStyle: FontWeight.w600,

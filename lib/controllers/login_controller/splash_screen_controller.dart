@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
-    Timer(Duration(milliseconds: 200), () {
+    Timer(Duration(milliseconds: 2000), () {
       // print("18 ${FirebaseAuth.instance.currentUser}");
       getConstants(alwaysHit: false);
       universalProvider.fetchServiceList();
