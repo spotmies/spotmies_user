@@ -6,8 +6,7 @@ import 'package:spotmies/models/placesModel.dart';
 
 class PlacesApi {
   static Future<List<Places>> getLoc(String query) async {
-    final url =
-        Uri.parse('https://spotmiesserver.herokuapp.com/api/geocode/all');
+    final url = Uri.parse('https://spotmies.herokuapp.com/api/geocode/all');
     final response = await http.get(url);
     // List data  = json.decode(response.body);
 
@@ -32,8 +31,7 @@ class PlacesApi {
   }
 
   static Future<List> getAllLocations() async {
-    final url =
-        Uri.parse('https://spotmiesserver.herokuapp.com/api/geocode/all');
+    final url = Uri.parse('https://spotmies.herokuapp.com/api/geocode/all');
     final response = await http.get(url);
     // List data  = json.decode(response.body);
 

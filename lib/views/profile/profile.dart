@@ -47,7 +47,7 @@ class _ProfileState extends StateMVC<Profile> {
     Icons.share,
     Icons.security,
     Icons.history,
-    Icons.local_offer,
+    // Icons.local_offer,
     Icons.help,
     Icons.feedback,
     Icons.settings,
@@ -82,7 +82,7 @@ class _ProfileState extends StateMVC<Profile> {
         tr('invite'),
         tr('privacy_policies'),
         tr('service_history'),
-        tr('promotions'),
+        // tr('promotions'),
         tr('help&support'),
         tr('feedback'),
         tr('settings'),
@@ -257,11 +257,11 @@ class _ProfileState extends StateMVC<Profile> {
                                   if (index == 2) {
                                     history(context, ordersProvider, up);
                                   }
+                                  // if (index == 3) {
+                                  //   promotions(context, height(context),
+                                  //       width(context));
+                                  // }
                                   if (index == 3) {
-                                    promotions(context, height(context),
-                                        width(context));
-                                  }
-                                  if (index == 4) {
                                     helpAndSupport(
                                         context,
                                         height(context),
@@ -269,7 +269,7 @@ class _ProfileState extends StateMVC<Profile> {
                                         _profileController,
                                         u['_id']);
                                   }
-                                  if (index == 5) {
+                                  if (index == 4) {
                                     newQueryBS(context,
                                         onSubmit: (String value) {
                                       _profileController.submitQuery(
@@ -277,14 +277,14 @@ class _ProfileState extends StateMVC<Profile> {
                                           suggestionFor: "feedback");
                                     });
                                   }
-                                  if (index == 6) {
+                                  if (index == 5) {
                                     settings(
                                       context,
                                       height(context),
                                       width(context),
                                     );
                                   }
-                                  if (index == 7) {
+                                  if (index == 6) {
                                     signOut(context, height(context),
                                         width(context));
                                   }

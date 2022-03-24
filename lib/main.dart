@@ -159,7 +159,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   // void connect() {
   //   // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
-  //   socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+  //   socket = IO.io("https://spotmies.herokuapp.com", <String, dynamic>{
   //     "transports": ["websocket", "polling", "flashsocket"],
   //     "autoConnect": false,
   //   });

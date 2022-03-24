@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class API {
   static var uid = FirebaseAuth.instance.currentUser?.uid; //user id
-  // static var host = 'spotmiesserver.herokuapp.com'; //server path
+  // static var host = 'spotmies.herokuapp.com'; //server path
   static var host = 'spotmies.herokuapp.com';
   static var createOrder = '/api/order/Create-Ord/'; //post with user id
   static var getOrders = '/api/order/user/'; //get with user id
@@ -35,4 +35,5 @@ class API {
   static var accessToken = "/api/public/access-token";
   static var partnerStore = "/api/store/";
   static var partnerList = "/api/partner/partner-list";
+  static var catelogList = "/api/catelog/catelog-by-job/";
 }

@@ -18,7 +18,8 @@ class UniversalProvider extends ChangeNotifier {
   dynamic currentConstants;
   List faqList = [];
   dynamic partnerStore;
-  dynamic partnerList = [];
+  List partnerList = [];
+  List catelogList = [];
   dynamic checkNull = {"content": "Loading", "id": "0"};
   dynamic user;
 
@@ -162,10 +163,29 @@ class UniversalProvider extends ChangeNotifier {
     }
   }
 
-  refresh() async {
-    await Future.delayed(Duration(seconds: 0, milliseconds: 2000));
-    partnerList.clear();
-    fetchPartnerList(0, 3);
+  // refresh() async {
+  //   await Future.delayed(Duration(seconds: 0, milliseconds: 2000));
+  //   partnerList.clear();
+  //   fetchPartnerList(0, 3);
+  // }
+
+  fetchCatelogList(skip, limit, job) async {
+    var query = await {"skip": skip.toString(), "limit": limit.toString()};
+    dynamic response =
+        await Server().getMethodParems(API.catelogList + job.toString(), query);
+    if (response.statusCode == 200) {
+      dynamic responseDecode = jsonDecode(response.body);
+      if (responseDecode.isNotEmpty) {
+        catelogList.addAll(responseDecode);
+      } else {
+        checkNull = {"content": "No data found", "id": "1"};
+      }
+      notifyListeners();
+      // return true;
+    } else {
+      log('Something went wrong');
+      // return true;
+    }
   }
 
   void setEnableRoute(bool state) {

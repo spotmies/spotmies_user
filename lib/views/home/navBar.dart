@@ -124,7 +124,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   late IO.Socket socket;
 
   void socketResponse() {
-    socket = IO.io("https://spotmiesserver.herokuapp.com", <String, dynamic>{
+    socket = IO.io("https://spotmies.herokuapp.com", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });
@@ -220,7 +220,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     });
     //forground
     FirebaseMessaging.onMessage.listen((message) async {
-     await displayAwesomeNotification(message, context);
+      await displayAwesomeNotification(message, context);
       // if (message.notification != null) {
       //   print(message.notification?.title);
       //   print(message.notification?.body);
