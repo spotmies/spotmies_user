@@ -12,6 +12,8 @@ import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/rating_starfield.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
+import '../../chat/chatapp/personal_chat.dart';
+
 class PartnerStore extends StatefulWidget {
   final String? pid;
   const PartnerStore({Key? key, this.pid}) : super(key: key);
@@ -152,7 +154,18 @@ class _PartnerStoreState extends State<PartnerStore>
                                       height: height(context) * 0.04,
                                       bgColor: SpotmiesTheme.background,
                                       // onClick: onClick,
-                                      onClick: () {},
+                                      onClick: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PersonalChat(
+                                                      '1234',
+                                                      pId: ps['pId'],
+                                                      pDetails: ps['_id'],
+                                                      normalChat: true,
+                                                      name: ps['name'],
+                                                    )));
+                                      },
                                       buttonName: 'Message',
                                       textColor: SpotmiesTheme.onBackground,
                                       borderRadius: 10.0,
