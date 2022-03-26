@@ -44,14 +44,15 @@ class _ProfileState extends StateMVC<Profile> {
   var mode = true;
 
   List icons = [
-    Icons.share,
-    Icons.security,
-    Icons.history,
+    Icons.share_outlined,
+    Icons.security_outlined,
+    Icons.history_outlined,
     // Icons.local_offer,
-    Icons.help,
-    Icons.feedback,
-    Icons.settings,
-    Icons.power_settings_new
+    Icons.help_outline,
+    Icons.feedback_outlined,
+    Icons.store_outlined,
+    Icons.settings_outlined,
+    Icons.power_settings_new_outlined,
   ];
   var editpic;
 
@@ -85,6 +86,7 @@ class _ProfileState extends StateMVC<Profile> {
         // tr('promotions'),
         tr('help&support'),
         tr('feedback'),
+        tr('become_a_service_partner'),
         tr('settings'),
         tr('signout'),
       ];
@@ -172,7 +174,7 @@ class _ProfileState extends StateMVC<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '₹ ' + '1234',
+                                '₹ ' + '0',
                                 style: fonts(
                                     width(context) * 0.04,
                                     FontWeight.w600,
@@ -278,13 +280,24 @@ class _ProfileState extends StateMVC<Profile> {
                                     });
                                   }
                                   if (index == 5) {
+                                    newQueryBS(context,
+                                        hint:
+                                            'Please enter your Name and Phone number',
+                                        heading: "Become a service partner",
+                                        onSubmit: (String value) {
+                                      _profileController.submitQuery(
+                                          value, u['_id'].toString(), context,
+                                          suggestionFor: "partnerRegistration");
+                                    });
+                                  }
+                                  if (index == 6) {
                                     settings(
                                       context,
                                       height(context),
                                       width(context),
                                     );
                                   }
-                                  if (index == 6) {
+                                  if (index == 7) {
                                     signOut(context, height(context),
                                         width(context));
                                   }
@@ -294,7 +307,7 @@ class _ProfileState extends StateMVC<Profile> {
                                   children: [
                                     Icon(
                                       icons[index],
-                                      size: width(context) * 0.04,
+                                      size: width(context) * 0.052,
                                       color: SpotmiesTheme.secondaryVariant,
                                     ),
                                   ],

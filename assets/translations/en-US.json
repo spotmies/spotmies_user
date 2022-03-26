@@ -1,18 +1,18 @@
 {
-    "msg":"English is written in the Drevik language",
-    "profile":"Profile",
-    "invite": "Invite a friend",
-    "privacy_policies": "Privacy Policies",
-    "service_history": "Service History",
-    "promotions": "Promotions",
-    "help&support": "Help & Support",
-    "feedback": "Feedback",
-    "settings":"Settings",
-    "signout":"Sign Out",
-    "total_savings":"Total Savings",
-    "total_orders":"Total Orders",
-    "response":"Response",
-    "chat":"Chat",
-    "my_services":"My Services"
-
- }
+  "msg": "English is written in the Drevik language",
+  "profile": "Profile",
+  "invite": "Invite a friend",
+  "privacy_policies": "Privacy Policies",
+  "service_history": "Service History",
+  "promotions": "Promotions",
+  "help&support": "Help & Support",
+  "feedback": "Feedback",
+  "settings": "Settings",
+  "signout": "Sign Out",
+  "total_savings": "Total Savings",
+  "total_orders": "Total Orders",
+  "response": "Response",
+  "chat": "Chat",
+  "my_services": "My Services",
+  "become_a_service_partner": "Become a Service Partner"
+}
