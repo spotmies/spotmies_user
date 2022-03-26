@@ -9,6 +9,7 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
+import 'package:spotmies/views/reusable_widgets/calling_wid.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/rating_starfield.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -137,7 +138,15 @@ class _PartnerStoreState extends State<PartnerStore>
                                       height: height(context) * 0.04,
                                       bgColor: SpotmiesTheme.background,
                                       // onClick: onClick,
-                                      onClick: () {},
+                                      onClick: () {
+                                        calling(
+                                            context,
+                                            ps["phNum"].toString(),
+                                            ps['pId'].toString(),
+                                            ps['partnerPic'],
+                                            ps['name'],
+                                            ps['partnerDeviceToken']);
+                                      },
                                       buttonName: 'Call',
                                       textColor: SpotmiesTheme.onBackground,
                                       borderRadius: 10.0,
