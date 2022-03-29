@@ -16,6 +16,8 @@ import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/uploadFilesToCloud.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../views/chat/chatapp/personal_chat.dart';
+
 class ChatController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -27,12 +29,18 @@ class ChatController extends ControllerMVC {
   Map userDetails = {};
   Map orderDetails = {};
   String currentMsgId = "";
+  bool showChatInputField = false;
+  bool isNewChat = false;
   List<File> chatimages = [];
   List<File> chatVideo = [];
   List imageLink = [];
   List videoLink = [];
   List audioLink = [];
+  String defaultName = "Spotmies user";
   String? uuId = FirebaseAuth.instance.currentUser?.uid;
+  String uDetails = "";
+  String pId = "";
+  String pDetails = "";
   final picker = ImagePicker();
   late VideoPlayerController videoPlayerController;
   // @override
@@ -81,7 +89,8 @@ class ChatController extends ControllerMVC {
   getTargetChat(list, msgId) {
     List currentChatData =
         list.where((i) => i['msgId'].toString() == msgId.toString()).toList();
-
+    // log("84 $currentChatData");
+    if (currentChatData.length < 1) return null;
     return currentChatData[0];
   }
 
@@ -91,6 +100,11 @@ class ChatController extends ControllerMVC {
       String action: "",
       dynamic chatDetails,
       String type: "text"}) {
+    if (isNewChat) {
+      return createNewChat(
+          context, pId, pDetails, uuId!, uDetails, value, chatProvider, true,
+          type: type);
+    }
     if (chatProvider!.personalChatLoader) {
       snackbar(context, "wait a moment");
       return;
@@ -294,10 +308,10 @@ class ChatController extends ControllerMVC {
     }
 
     fileArray.forEach((imgFile) async {
-      // chatProvider!.setPersonalChatLoader(true, text: "Sending Files");
+      chatProvider?.setPersonalChatLoader(true, text: "Sending Files");
       String uploadedFile = await uploadFilesToCloud(imgFile,
           fileType: extensionType(), cloudLocation: "chat/$msgId");
-      // chatProvider.setPersonalChatLoader(false);
+      chatProvider?.setPersonalChatLoader(false);
       sendMessageHandler(
           msgId, uploadedFile, context, chatProvider, profileProvider,
           type: type);
@@ -329,6 +343,44 @@ class ChatController extends ControllerMVC {
       });
     } else {
       print(response.file);
+    }
+  }
+
+  createNewChat(
+      BuildContext context,
+      String pId,
+      String pDetails,
+      String uId,
+      String uDetails,
+      String message,
+      ChatProvider? chatProvider,
+      bool isNormalChat,
+      {String type = "text"}) async {
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    Map<String, String> newChatObj = {
+      "msgId": timestamp,
+      "msgs":
+          "{\"msg\":\"$message\",\"type\":\"$type\",\"sender\":\"user\",\"time\":$timestamp}",
+      "pId": pId,
+      "uId": uId,
+      "uDetails": uDetails,
+      "pDetails": pDetails,
+      "isNormalChat": 'true'
+    };
+    chatProvider?.setPersonalChatLoader(true);
+    dynamic response = await Server().postMethod(API.createNewChat, newChatObj);
+    chatProvider?.setPersonalChatLoader(false);
+
+    if (response.statusCode == 200) {
+      log("success ${jsonDecode(response.body)}");
+      dynamic newChat = jsonDecode(response.body);
+      chatProvider?.addNewchat(newChat);
+      Navigator.pop(context, false);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PersonalChat(newChat['msgId'].toString())));
+    } else {
+      log("req failed $response please try again later");
+      snackbar(context, "req failed $response please try again later");
     }
   }
 }

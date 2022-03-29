@@ -13,6 +13,9 @@ import 'package:spotmies/views/reusable_widgets/partner_details/partner_store.da
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
+import '../../chat/chatapp/personal_chat.dart';
+import '../calling_wid.dart';
+
 class PartnerList extends StatefulWidget {
   const PartnerList({Key? key}) : super(key: key);
 
@@ -119,13 +122,31 @@ class _PartnerListState extends State<PartnerList> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => PersonalChat(
+                                                  '1234',
+                                                  pId: pl[index]['pId'],
+                                                  pDetails: pl[index]['_id'],
+                                                  normalChat: true,
+                                                  name: pl[index]['name'],
+                                                )));
+                                  },
                                   icon: Icon(
                                     Icons.chat,
                                     size: width(context) * 0.04,
                                   )),
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    calling(
+                                        context,
+                                        pl[index]["phNum"].toString(),
+                                        pl[index]['pId'].toString(),
+                                        pl[index]['partnerPic'],
+                                        pl[index]['name'],
+                                        pl[index]['partnerDeviceToken']);
+                                  },
                                   icon: Icon(
                                     Icons.call,
                                     size: width(context) * 0.04,

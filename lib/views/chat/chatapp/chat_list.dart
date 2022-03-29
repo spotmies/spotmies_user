@@ -102,7 +102,7 @@ class _ChatListState extends StateMVC<ChatList> {
                               chatList[index]['uId'],
                               chatList[index]['pId'],
                               callBack: _chatController!.cardOnClick,
-                              chatProvider:chatProvider,
+                              chatProvider: chatProvider,
                             );
                           },
                         ),
@@ -153,7 +153,8 @@ class _ChatListCardState extends State<ChatListCard> {
             "status": 3
           };
           log(readReceiptobject.toString());
-          widget.callBack(widget.msgId, widget.msgId, readReceiptobject, widget.chatProvider);
+          widget.callBack(widget.msgId, widget.msgId, readReceiptobject,
+              widget.chatProvider);
           //navigate strore msg count value
 
           await Navigator.of(context).push(MaterialPageRoute(

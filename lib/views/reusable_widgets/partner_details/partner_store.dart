@@ -9,8 +9,11 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
+import 'package:spotmies/views/reusable_widgets/calling_wid.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/rating_starfield.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
+
+import '../../chat/chatapp/personal_chat.dart';
 
 class PartnerStore extends StatefulWidget {
   final String? pid;
@@ -145,7 +148,15 @@ class _PartnerStoreState extends State<PartnerStore>
                                         height: height(context) * 0.04,
                                         bgColor: SpotmiesTheme.background,
                                         // onClick: onClick,
-                                        onClick: () {},
+                                        onClick: () {
+                                          calling(
+                                              context,
+                                              ps["phNum"].toString(),
+                                              ps['pId'].toString(),
+                                              ps['partnerPic'],
+                                              ps['name'],
+                                              ps['partnerDeviceToken']);
+                                        },
                                         buttonName: 'Call',
                                         textColor: SpotmiesTheme.onBackground,
                                         borderRadius: 10.0,
@@ -163,7 +174,18 @@ class _PartnerStoreState extends State<PartnerStore>
                                         height: height(context) * 0.04,
                                         bgColor: SpotmiesTheme.background,
                                         // onClick: onClick,
-                                        onClick: () {},
+                                        onClick: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PersonalChat(
+                                                        '1234',
+                                                        pId: ps['pId'],
+                                                        pDetails: ps['_id'],
+                                                        normalChat: true,
+                                                        name: ps['name'],
+                                                      )));
+                                        },
                                         buttonName: 'Message',
                                         textColor: SpotmiesTheme.onBackground,
                                         borderRadius: 10.0,
