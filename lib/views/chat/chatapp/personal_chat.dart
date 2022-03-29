@@ -29,7 +29,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PersonalChat extends StatefulWidget {
   final String msgId;
-  PersonalChat(this.msgId);
+  final bool normalChat;
+  final String? pId;
+  final String? pDetails;
+  final String name;
+  PersonalChat(this.msgId,
+      {this.normalChat = false,
+      this.pId,
+      this.pDetails,
+      this.name = 'Spotmies user'});
   @override
   _PersonalChatState createState() => _PersonalChatState();
 }
@@ -58,6 +66,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   @override
   void initState() {
     super.initState();
+    _chatController?.currentMsgId = widget.msgId;
     chatProvider = Provider.of<ChatProvider>(context, listen: false);
     responseProvider = Provider.of<ResponsesProvider>(context, listen: false);
     profileProvider = Provider.of<UserDetailsProvider>(context, listen: false);
@@ -79,11 +88,55 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         }
       }
     });
+
+    _chatController?.currentMsgId = widget.msgId;
+
+    _chatController?.chatList = chatProvider?.getChatList2();
+    dynamic tempChat = _chatController?.getTargetChat(
+        _chatController?.chatList, _chatController?.currentMsgId);
+    if (tempChat == null) {
+      _chatController?.pId = widget.pId!;
+      _chatController?.pDetails = widget.pDetails!;
+      _chatController?.uDetails = profileProvider?.getUser['_id'];
+
+      _chatController?.showChatInputField = true;
+      _chatController?.isNewChat = true;
+      _chatController?.defaultName = widget.name;
+      List chatList = _chatController?.chatList ?? [];
+      int index = chatList
+          .indexWhere((element) => element['pId'].toString() == widget.pId);
+      if (index == 0 || index > 0) {
+        log("already a chat");
+        dynamic msgId = chatList[index]['msgId'];
+        Timer(Duration(milliseconds: 50), () {
+          Navigator.pop(context, false);
+
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PersonalChat(msgId.toString())));
+        });
+      }
+    }
+    _chatController?.targetChat = tempChat ?? {};
+    _chatController?.userDetails =
+        _chatController?.targetChat['uDetails'] ?? {};
+    _chatController?.partner = _chatController?.targetChat['pDetails'] ?? {};
   }
 
   sendMessageHandler(value, {sender: "user", action: ""}) {
-    _chatController?.sendMessageHandler(
-        widget.msgId, value, context, chatProvider, profileProvider,
+    if (_chatController!.isNewChat) {
+      dynamic userDetails = profileProvider?.getUser;
+      return _chatController?.createNewChat(
+          context,
+          widget.pId!,
+          widget.pDetails!,
+          userDetails['uId'],
+          userDetails['_id'],
+          value,
+          chatProvider,
+          widget.normalChat);
+    }
+    _chatController?.sendMessageHandler(_chatController?.currentMsgId, value,
+        context, chatProvider, profileProvider,
         sender: sender, action: action);
   }
 
@@ -146,7 +199,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       "responseType": responseType == "accept" ? "accept" : "reject"
     });
     _chatController?.sendMessageHandler(
-        widget.msgId,
+        _chatController?.currentMsgId,
         "${_chatController?.userDetails['name']} $responseType the order",
         context,
         chatProvider,
@@ -271,15 +324,23 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   @override
   Widget build(BuildContext context) {
     log("======== render chat screen =============");
+
     return Consumer<ChatProvider>(builder: (context, data, child) {
-      _chatController?.currentMsgId = widget.msgId;
-      _chatController?.chatList = data.getChatList2();
-      _chatController?.targetChat = _chatController?.getTargetChat(
-          _chatController?.chatList, widget.msgId);
-      _chatController?.userDetails = _chatController?.targetChat['uDetails'];
-      _chatController?.partner = _chatController?.targetChat['pDetails'];
+      // _chatController?.currentMsgId = widget.msgId;
+      // _chatController?.chatList = data.getChatList2();
+      // dynamic tempChat = _chatController?.getTargetChat(
+      //     _chatController?.chatList, _chatController?.currentMsgId);
+      // if (tempChat == null) {
+      //   _chatController?.showChatInputField = true;
+      //   _chatController?.isNewChat = true;
+      // }
+      // _chatController?.targetChat = tempChat ?? {};
+      // _chatController?.userDetails =
+      //     _chatController?.targetChat['uDetails'] ?? {};
+      // _chatController?.partner = _chatController?.targetChat['pDetails'] ?? {};
       bool showConfirmation = false;
-      if (!_chatController?.targetChat['isNormalChat']) {
+      if (_chatController?.targetChat['isNormalChat'] != null &&
+          !_chatController?.targetChat['isNormalChat']) {
         _chatController?.orderDetails =
             _chatController?.targetChat['orderDetails'];
         showConfirmation =
@@ -288,7 +349,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                 : false;
       }
 
-      List messages = _chatController?.targetChat['msgs'];
+      List messages = _chatController?.targetChat['msgs'] ?? [];
       return Stack(
         children: [
           Scaffold(
@@ -351,7 +412,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                                color: SpotmiesTheme.onBackground,
+                                                color:
+                                                    SpotmiesTheme.onBackground,
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             padding: EdgeInsets.only(
@@ -473,7 +535,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                           }),
                     ),
                   ),
-                  _chatController?.targetChat['cBuild'] == 1
+                  _chatController?.showChatInputField == true ||
+                          _chatController?.targetChat['cBuild'] == 1
                       ? chatInputField(sendMessageHandler, context,
                           controller: _chatController,
                           chatProvider: chatProvider,
@@ -664,8 +727,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         child: Row(
           children: [
             ProfilePic(
-              name: _chatController?.partner['name'],
-              profile: _chatController?.partner['partnerPic'],
+              name: _chatController?.partner['name'] ??
+                  _chatController?.defaultName,
+              profile: _chatController?.partner['partnerPic'] ?? "",
               status: false,
               bgColor: SpotmiesTheme.onBackground,
               size: width * 0.045,
@@ -675,7 +739,8 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
             ),
             Expanded(
                 child: TextWid(
-              text: _chatController?.partner['name'] ?? "Spotmies User",
+              text: _chatController?.partner['name'] ??
+                  _chatController?.defaultName,
               size: width * 0.058,
               weight: FontWeight.w600,
               color: SpotmiesTheme.onBackground,
@@ -693,7 +758,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
     }, option2Click: () {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyCalling(
-                msgId: widget.msgId,
+                msgId: _chatController?.currentMsgId,
                 ordId: _chatController?.targetChat['ordId'],
                 uId: FirebaseAuth.instance.currentUser?.uid,
                 pId: _chatController?.targetChat['pId'],
