@@ -6,7 +6,6 @@ import 'package:simple_animations/simple_animations.dart';
 import 'package:spotmies/models/onboardingModel.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
-import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/views/call_ui/audioCallWithImage/size.config.dart';
 import 'package:spotmies/views/login/loginpage.dart';
 
