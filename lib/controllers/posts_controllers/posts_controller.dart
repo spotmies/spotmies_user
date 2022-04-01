@@ -59,7 +59,8 @@ class PostsController extends ControllerMVC {
     return Text(addresses.first.locality.toString());
   }
 
-  Future getOrderFromDB(BuildContext context) async {
+  Future getOrderFromDB(
+      BuildContext context, GetOrdersProvider ordersProvider) async {
     var response = await Server().getMethod(API.getOrders + (uuId ?? ""));
     if (response.statusCode == 200) {
       var ordersList = jsonDecode(response.body);
