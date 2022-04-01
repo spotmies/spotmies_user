@@ -13,9 +13,8 @@ Widget profilePic(BuildContext context, upic, name, size,
       AspectRatio(
         aspectRatio: 1,
         child: ClipOval(
-          child: (upic == null || upic == "null") == false
-              ? Image.network(upic, height: size, width: size, fit: BoxFit.fill)
-              : Container(
+          child: (upic == null || upic == "null" || upic == "")
+              ? Container(
                   height: size,
                   width: size,
                   alignment: Alignment.center,
@@ -25,7 +24,9 @@ Widget profilePic(BuildContext context, upic, name, size,
                     weight: FontWeight.w600,
                     color: SpotmiesTheme.background,
                   ),
-                ),
+                )
+              : Image.network(upic,
+                  height: size, width: size, fit: BoxFit.fill),
         ),
       ),
       if (edit)
