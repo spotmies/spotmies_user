@@ -59,15 +59,36 @@ class LoginPageController extends ControllerMVC {
                 .signInWithCredential(credential)
                 .then((value) async {
               if (value.user != null) {
+                log("62");
                 // print("user already login");
                 // checkUserRegistered(value.user.uid);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StepperPersonalInfo(
-                            //value: '+91${widget.phone}'
-                            )),
-                    (route) => false);
+                // Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => StepperPersonalInfo(
+                //             //value: '+91${widget.phone}'
+                //             )),
+                //     (route) => false);
+                timerProvider.setLoader(true);
+
+                String resp = await checkUserRegistered(value.user?.uid);
+                log("respp 73 $resp");
+                timerProvider.setLoader(false);
+                if (resp == "false") {
+                  log("76");
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StepperPersonalInfo()),
+                      (route) => false);
+                } else if (resp == "true") {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => GoogleNavBar()),
+                      (route) => false);
+                } else {
+                  snackbar(context, "Something went wrong");
+                }
               }
             });
           },
@@ -105,11 +126,11 @@ class LoginPageController extends ControllerMVC {
   }
 
   loginUserWithOtp(otpValue, BuildContext context, timerProvider) async {
-    // log("verfication code ${timerProvider.verificationCode}");
-    // log(otpValue.toString());
+    log("verfication code ${timerProvider.verificationCode}");
+    log(otpValue.toString());
     timerProvider.setLoader(true);
     try {
-       await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(
               verificationId: timerProvider.verificationCode,
               smsCode: otpValue))
@@ -121,9 +142,10 @@ class LoginPageController extends ControllerMVC {
           timerProvider.setPhoneNumber(timerProvider.phNumber.toString());
           print("user already login");
           String resp = await checkUserRegistered(value.user?.uid);
-          // log("respp 122 $resp");
+          log("respp 124 $resp");
           timerProvider.setLoader(false);
           if (resp == "false") {
+            log("128");
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => StepperPersonalInfo()),
