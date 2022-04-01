@@ -140,7 +140,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           TimeOfDay.fromDateTime(_postOverViewController.pickedDate);
 
       List<String> images = List.from(d['media']);
-      dynamic fullAddress = jsonDecode(d['address']);
+      dynamic fullAddress;
+      try {
+        fullAddress = jsonDecode(d['address']);
+      } catch (e) {
+        fullAddress = {};
+      }
       // final coordinates = Coordinates(d['loc'][0], d['loc'][1]);
 
       return Stack(
@@ -386,9 +391,13 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                     onPressed: () {
                                       var coordiantes = {
                                         "latitude": double.parse(
-                                            fullAddress['latitude']),
+                                            fullAddress['latitude'] ??
+                                                d['loc']['coordinates'][0]
+                                                    .toString()),
                                         "logitude": double.parse(
-                                            fullAddress['logitude'])
+                                            fullAddress['logitude'] ??
+                                                d['loc']['coordinates'][1]
+                                                    .toString())
                                       };
                                       // log(fullAddress['latitude']);
 
