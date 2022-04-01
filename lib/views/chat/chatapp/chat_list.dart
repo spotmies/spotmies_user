@@ -10,7 +10,6 @@ import 'package:spotmies/controllers/chat_controllers/chat_controller.dart';
 import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
-import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/constants.dart';
 import 'package:spotmies/views/chat/chatapp/personal_chat.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates.dart';

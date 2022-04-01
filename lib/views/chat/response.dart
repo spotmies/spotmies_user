@@ -15,6 +15,7 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
+import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
@@ -114,6 +115,7 @@ class _ResponseeState extends StateMVC<Responsee> {
           //       size: width(context) * 0.045,
           //     ),
           //   );
+          // log(listResponse[0]["partnerPic"].toString());
           return Stack(children: [
             Container(
               child: RefreshIndicator(
@@ -284,11 +286,14 @@ class _ResponseeState extends StateMVC<Responsee> {
                                         children: [
                                           Container(
                                             padding: EdgeInsets.all(15),
-                                            child: CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                pDetails['partnerPic'],
-                                              ),
-                                            ),
+                                            child: pDetails == null
+                                                ? Icon(Icons.engineering)
+                                                : CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      pDetails['partnerPic'],
+                                                    ),
+                                                  ),
                                           ),
                                           Container(
                                             width: width(context) * 0.35,

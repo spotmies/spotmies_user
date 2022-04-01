@@ -9,6 +9,7 @@ import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/profile/become_service_partner.dart';
 import 'package:spotmies/views/profile/editDetailsBS.dart';
 import 'package:spotmies/views/profile/help&supportBS.dart';
 import 'package:spotmies/views/profile/orderHistoryBS.dart';
@@ -23,6 +24,7 @@ import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/profile/settingsBS.dart';
 import 'package:spotmies/views/profile/signoutBS.dart';
 import 'package:spotmies/views/reusable_widgets/queryBS.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -161,42 +163,40 @@ class _ProfileState extends StateMVC<Profile> {
                 ),
                 Container(
                   height: height(context) * 0.08,
-                  // color: Colors.amber,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: width(context) * 0.4,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                '₹ ' + '0',
-                                style: fonts(
-                                    width(context) * 0.04,
-                                    FontWeight.w600,
-                                    SpotmiesTheme.secondaryVariant),
-                              ),
-                              Text(
-                                tr('total_savings'),
-                                style: fonts(
-                                    width(context) * 0.02,
-                                    FontWeight.w500,
-                                    SpotmiesTheme.secondaryVariant),
-                              ),
-                            ]),
-                      ),
-                      Container(
-                        width: width(context) * 0.002,
-                        height: height(context) * 0.04,
-                        color: Colors.grey[500],
-                      ),
-                      Container(
-                        width: width(context) * 0.4,
-                        child: Consumer<GetOrdersProvider>(
-                            builder: (context, data, child) {
-                          return Column(
+                  child: Container(
+                    width: width(context) * 0.4,
+                    child: Consumer<GetOrdersProvider>(
+                        builder: (context, data, child) {
+                      log(data.getOrdersList.toString());
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '₹ ' +
+                                      moneyAvg(data.getOrdersList).toString(),
+                                  style: fonts(
+                                      width(context) * 0.04,
+                                      FontWeight.w600,
+                                      SpotmiesTheme.secondaryVariant),
+                                ),
+                                Text(
+                                  tr('total_savings'),
+                                  style: fonts(
+                                      width(context) * 0.02,
+                                      FontWeight.w500,
+                                      SpotmiesTheme.secondaryVariant),
+                                ),
+                              ]),
+                          Container(
+                            width: width(context) * 0.002,
+                            height: height(context) * 0.04,
+                            color: Colors.grey[500],
+                          ),
+                          Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -212,10 +212,10 @@ class _ProfileState extends StateMVC<Profile> {
                                         width(context) * 0.02,
                                         FontWeight.w500,
                                         SpotmiesTheme.secondaryVariant)),
-                              ]);
-                        }),
-                      )
-                    ],
+                              ]),
+                        ],
+                      );
+                    }),
                   ),
                 ),
                 Container(
@@ -278,15 +278,33 @@ class _ProfileState extends StateMVC<Profile> {
                                     });
                                   }
                                   if (index == 5) {
-                                    newQueryBS(context,
-                                        hint:
-                                            'Please enter your Name and Phone number',
-                                        heading: "Become a service partner",
-                                        onSubmit: (String value) {
+                                    becomServiceProvider(context,
+                                        onSubmit: () async {
+                                      String value = await {
+                                        "name": u['name'],
+                                        "number": u['phNum']
+                                      }.toString();
                                       _profileController.submitQuery(
                                           value, u['_id'].toString(), context,
                                           suggestionFor: "partnerRegistration");
+
+                                      const url =
+                                          "https://play.google.com/store/apps/details?id=com.spotmiespartner";
+                                      if (await canLaunch(url))
+                                        await launch(url);
+                                      else
+                                        // can't launch url, there is some error
+                                        throw "Could not launch $url";
                                     });
+                                    // newQueryBS(context,
+                                    //     hint:
+                                    //         'Please enter your Name and Phone number',
+                                    //     heading: "Become a service partner",
+                                    //     onSubmit: (String value) {
+                                    //   _profileController.submitQuery(
+                                    //       value, u['_id'].toString(), context,
+                                    //       suggestionFor: "partnerRegistration");
+                                    // });
                                   }
                                   if (index == 6) {
                                     settings(
@@ -335,4 +353,20 @@ class _ProfileState extends StateMVC<Profile> {
       );
     });
   }
+}
+
+moneyAvg(List<dynamic> args) {
+  int sum = 0;
+  List avg = args;
+
+  for (var i = 0; i < avg.length; i++) {
+    if (avg[i]['moneyGivenByUser'] != null) {
+      sum += avg[i]['moneyGivenByUser'] as int;
+    } else {
+      sum += 0;
+    }
+  }
+  // int mny = (sum / avg.length).round();
+
+  return sum;
 }

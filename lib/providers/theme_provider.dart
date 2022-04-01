@@ -44,6 +44,9 @@ class SpotmiesTheme {
   static Color equal = Colors.grey.shade500;
   static Color lite = Colors.white;
   static Color cyan = Colors.cyan;
+  static Color uChat = Colors.blueGrey.shade100;
+  static Color pChat = Colors.blueGrey.shade300;
+  static Color bChat = Colors.grey.shade900;
 
   Map<colorScheme, Color> lightColorScheme = {
     colorScheme.background: Colors.white,
@@ -69,6 +72,9 @@ class SpotmiesTheme {
     colorScheme.equal: Colors.grey.shade500,
     colorScheme.lite: Colors.white,
     colorScheme.cyan: Colors.cyan,
+    colorScheme.uChat: Colors.blueGrey.shade300,
+    colorScheme.pChat: Colors.blueGrey.shade100,
+    colorScheme.bChat: Colors.grey.shade900,
   };
   Map<colorScheme, Color> darkColorScheme = {
     colorScheme.background: Colors.grey.shade800,
@@ -94,6 +100,9 @@ class SpotmiesTheme {
     colorScheme.equal: Colors.grey.shade500,
     colorScheme.lite: Colors.grey.shade700,
     colorScheme.cyan: Colors.grey.shade700,
+    colorScheme.uChat: Colors.grey.shade700,
+    colorScheme.pChat: Colors.grey.shade500,
+    colorScheme.bChat: Colors.grey.shade100,
   };
   init(context) {
     Provider.of<ThemeProvider>(context, listen: true).addListener(() {
@@ -174,6 +183,15 @@ class SpotmiesTheme {
       cyan = (themeMode
           ? darkColorScheme[colorScheme.cyan]
           : lightColorScheme[colorScheme.cyan])!;
+      uChat = (themeMode
+          ? darkColorScheme[colorScheme.uChat]
+          : lightColorScheme[colorScheme.uChat])!;
+      pChat = (themeMode
+          ? darkColorScheme[colorScheme.pChat]
+          : lightColorScheme[colorScheme.pChat])!;
+      bChat = (themeMode
+          ? darkColorScheme[colorScheme.bChat]
+          : lightColorScheme[colorScheme.bChat])!;
     });
   }
 }
@@ -201,5 +219,8 @@ enum colorScheme {
   dull,
   equal,
   lite,
-  cyan
+  cyan,
+  uChat,
+  pChat,
+  bChat
 }

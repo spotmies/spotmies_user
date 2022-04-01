@@ -457,7 +457,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                 maxWidth:
                                                     width(context) * 0.50),
                                             decoration: BoxDecoration(
-                                                color: messageColorTheme(
+                                                color: messageColorTheme( 
                                                     sender.toString())[0],
                                                 border: Border.all(
                                                     color: Colors
@@ -711,18 +711,20 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
       ],
       title: InkWell(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => PartnerDetails(
-                  profileDetails: _chatController!.partner,
-                  chatDetails: _chatController!.targetChat,
-                  msgId: _chatController?.targetChat['msgId'].toString(),
-                  isMyProfileRevealed: isMyProfileRevealedFunc(),
-                  revealMyProfile: (state) {
-                    revealMyProfile(state);
-                  },
-                  onTapPhone: () {
-                    calling(context);
-                  })));
+          _chatController?.partner['partnerPic'] == null
+              ? snackbar(context, "Need to start conversation")
+              : Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PartnerDetails(
+                      profileDetails: _chatController!.partner,
+                      chatDetails: _chatController!.targetChat,
+                      msgId: _chatController?.targetChat['msgId'].toString(),
+                      isMyProfileRevealed: isMyProfileRevealedFunc(),
+                      revealMyProfile: (state) {
+                        revealMyProfile(state);
+                      },
+                      onTapPhone: () {
+                        calling(context);
+                      })));
         },
         child: Row(
           children: [

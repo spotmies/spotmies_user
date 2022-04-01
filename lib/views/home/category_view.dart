@@ -62,9 +62,9 @@ class _CatelogOverViewState extends State<CatelogOverView> {
       child: Consumer<UniversalProvider>(builder: (context, data, child) {
         dynamic cat = data.catelogList;
         log(cat.toString());
-        if (cat.isEmpty) {
-          return circleProgress();
-        }
+        // if (cat.isEmpty) {
+        //   return circleProgress();
+        // }
         return Scaffold(
           backgroundColor: widget.color,
           body: ListView(

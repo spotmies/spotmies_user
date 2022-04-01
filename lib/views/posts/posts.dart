@@ -16,7 +16,6 @@ import 'package:spotmies/controllers/posts_controllers/posts_controller.dart';
 import 'package:spotmies/views/profile/profile_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
-import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 import '../reusable_widgets/progress_waiter.dart';
 

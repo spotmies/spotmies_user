@@ -61,10 +61,10 @@ class _PartnerStoreState extends State<PartnerStore>
       child: Consumer<UniversalProvider>(builder: (context, data, child) {
         dynamic ps = data.partnerStore;
 
-        log("452" + ps['catelogs'].toString());
-        if (data.partnerStore.isEmpty) {
+        if (ps == null || ps['catelogs'] == null) {
           return circleProgress();
         }
+
         return Scaffold(
           body: CustomScrollView(
             // physics: NeverScrollableScrollPhysics(),
