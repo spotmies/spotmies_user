@@ -51,3 +51,36 @@ class ProgressWaiter extends StatelessWidget {
     );
   }
 }
+
+class NoDataPlaceHolder extends StatelessWidget {
+  const NoDataPlaceHolder({
+    Key? key,
+    required double height,
+    required double width,
+    required String title,
+  })  : _height = height,
+        _width = width,
+        title = title,
+        super(key: key);
+
+  final double _height;
+  final double _width;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+          height: _height * 0.8,
+          width: _width,
+          alignment: Alignment.center,
+          child: TextWid(
+            maxlines: 5,
+            text: title,
+            color: SpotmiesTheme.onBackground,
+            size: 18,
+          )),
+    );
+  }
+}
