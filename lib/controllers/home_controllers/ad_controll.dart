@@ -247,7 +247,14 @@ class AdController extends ControllerMVC {
   step3(userDetails, BuildContext context, GetOrdersProvider ordersProvider) {
     isUploading = 1;
     refresh();
-    adbutton(userDetails, context, ordersProvider);
+    adbutton(userDetails, context, ordersProvider, cat: false);
+  }
+
+  catFinish(userDetails, BuildContext context, GetOrdersProvider ordersProvider,
+      {catData}) {
+    isUploading = 1;
+    refresh();
+    adbutton(userDetails, context, ordersProvider, catData: catData, cat: true);
   }
 
   updateLocations(lat, log, fulladdress) {
@@ -264,14 +271,36 @@ class AdController extends ControllerMVC {
     return pickedDateTime.millisecondsSinceEpoch.toString();
   }
 
-  adbutton(userDetails, BuildContext context,
-      GetOrdersProvider ordersProvider) async {
+  adbutton(userDetails, BuildContext context, GetOrdersProvider ordersProvider,
+      {catData, bool? cat}) async {
     dynamic ordId = DateTime.now().millisecondsSinceEpoch;
-    await uploadServiceMedia(ordId);
-    // String images = imageLink.toString();
+    cat == true ? log("service placed") : await uploadServiceMedia(ordId);
     CircularProgressIndicator();
-    // log(userDetails.toString());
-    // var ud = userDetails["_id"].toString();
+
+    var catBody = {
+      if (catData != null) "problem": catData["name"].toString(),
+      if (catData != null) "job": catData["category"].toString(),
+      "ordId": ordId.toString(),
+      if (catData != null) "money": catData["price"].toString(),
+      "ordState": "req",
+      "join": DateTime.now().millisecondsSinceEpoch.toString(),
+      "schedule": getDateAndTime().toString(),
+      "uId": FirebaseAuth.instance.currentUser?.uid.toString(),
+      if (catData != null)
+        "media": catData["media"][0]["url"] == "null"
+            ? "https://www.caretastic.in/upload/productimg/imagenotfound.jpg"
+            : catData["media"][0]["url"].toString(),
+      "loc.coordinates.0": fullAddress['latitude'].toString(),
+      "loc.coordinates.1": fullAddress['logitude'].toString(),
+      "uDetails": userDetails["_id"].toString(),
+      if (catData != null) "catelog": catData["_id"].toString(),
+      if (catData != null) "pId": catData["pId"].toString(),
+      "pDetails": "620dfc5284018e96b51e6979",
+      if (catData != null) "revealProfileTo": catData["pId"].toString(),
+      "address":
+          fullAddress.isNotEmpty ? jsonEncode(fullAddress).toString() : ""
+    };
+
     var body = {
       "problem": this.title.toString(),
       "job": (this.dropDownValue).toString(),
@@ -294,7 +323,13 @@ class AdController extends ControllerMVC {
     log(body.toString());
 
     // controller.postData();
-    Server().postMethod(API.createOrder + (uuId ?? ""), body).then((response) {
+    Server()
+        .postMethod(
+            cat == true
+                ? API.catBook + (uuId ?? "")
+                : API.createOrder + (uuId ?? ""),
+            cat == false ? body : catBody)
+        .then((response) {
       if (response.statusCode == 200) {
         isUploading = 3;
         refresh();

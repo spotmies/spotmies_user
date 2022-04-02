@@ -5,6 +5,7 @@ class API {
   // static var host = 'spotmies.herokuapp.com'; //server path
   static var host = 'spotmies.herokuapp.com';
   static var createOrder = '/api/order/Create-Ord/'; //post with user id
+  static var catBook = "/api/order/book-service/";
   static var getOrders = '/api/order/user/'; //get with user id
   static var particularOrder = '/api/order/orders/'; //get with order id
   static var userRegister = '/api/user/newUser'; //post

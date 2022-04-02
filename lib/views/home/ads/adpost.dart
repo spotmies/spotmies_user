@@ -9,6 +9,7 @@ import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
+import 'package:spotmies/views/home/ads/catPost.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/home/ads/page3.dart';
 import 'package:spotmies/views/home/ads/page1.dart';
@@ -20,7 +21,9 @@ import 'package:spotmies/utilities/appConfig.dart';
 
 class PostAd extends StatefulWidget {
   final int? sid;
-  PostAd({this.sid});
+  final bool? cat;
+  final dynamic catData;
+  PostAd({this.sid, this.cat, this.catData});
   @override
   _PostAdState createState() => _PostAdState();
 }
@@ -39,7 +42,7 @@ class _PostAdState extends StateMVC<PostAd> {
   UniversalProvider? up;
 
   UserDetailsProvider? uDetailsProvider;
-  
+
   GetOrdersProvider? ordersProvider;
 
   @override
@@ -82,22 +85,25 @@ class _PostAdState extends StateMVC<PostAd> {
           backgroundColor: SpotmiesTheme.background,
           body: SafeArea(
               child: SingleChildScrollView(
-            child: Column(children: [
-              PageSlider(key: _adController.sliderKey, pages: [
-                Container(
-                    height: height(context) * 1.08,
-                    // child: Page1(),
-                    child: page1(context, _adController, up!, widget.sid)),
-                Container(
-                    height: height(context) * 1.08,
-                    child: page2(height(context), width(context), context,
-                        _adController)),
-                Container(
-                    height: height(context) * 1.08,
-                    child: page3(height(context), width(context), user,
-                        _adController, context, ordersProvider)),
-              ]),
-            ]),
+            child: widget.cat == true
+                ? catPost(context, _adController, up!, widget.catData, ordersProvider, user)
+                : Column(children: [
+                    PageSlider(key: _adController.sliderKey, pages: [
+                      Container(
+                          height: height(context) * 1.08,
+                          // child: Page1(),
+                          child:
+                              page1(context, _adController, up!, widget.sid)),
+                      Container(
+                          height: height(context) * 1.08,
+                          child: page2(height(context), width(context), context,
+                              _adController)),
+                      Container(
+                          height: height(context) * 1.08,
+                          child: page3(height(context), width(context), user,
+                              _adController, context, ordersProvider)),
+                    ]),
+                  ]),
           )));
     });
   }
