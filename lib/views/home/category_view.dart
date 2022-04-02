@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
-import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 

@@ -15,7 +15,6 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/chat/partnerDetailsSummery.dart';
-import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/posts/post_overview.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
 import 'package:spotmies/views/reusable_widgets/date_formates%20copy.dart';
