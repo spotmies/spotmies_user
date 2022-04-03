@@ -124,7 +124,8 @@ constantsAPI() async {
 
       /* -------------- CONFIRM ALL CONSTANTS AND SETTINGS DOWNLOADED ------------- */
       Map<String, String> body = {"appConfig": "false"};
-      Server().editMethod(API.userDetails + currentUser.uid.toString(), body);
+      Server()
+          .editMethod(API.editPersonalInfo + currentUser.uid.toString(), body);
     }
     return appConstants;
   } else {
