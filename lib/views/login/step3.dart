@@ -46,7 +46,7 @@ class _Step3State extends State<Step3> {
                     child: widget.stepperController?.profilepic == null
                         ? Icon(
                             Icons.person,
-                            color: SpotmiesTheme.onBackground,
+                            color: SpotmiesTheme.dull,
                             size: width(context) * 0.3,
                           )
                         : Container(
@@ -65,7 +65,7 @@ class _Step3State extends State<Step3> {
                           ),
                   ),
                   radius: 30,
-                  backgroundColor: SpotmiesTheme.dull,
+                  backgroundColor: SpotmiesTheme.onSurface,
                 ),
               ),
             ),
@@ -80,8 +80,8 @@ class _Step3State extends State<Step3> {
                 // border: Border.all()
               ),
               child: TextButton(
-                  onPressed: ()async {
-                   await widget.stepperController?.profilePic();
+                  onPressed: () async {
+                    await widget.stepperController?.profilePic();
                     setState(() {});
                   },
                   // icon: Icon(Icons.select_all),

@@ -9,8 +9,6 @@ import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/home/ads/adpost.dart';
-import 'package:spotmies/views/home/ads/catPost.dart';
-import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
 class CatelogOverView extends StatefulWidget {
@@ -104,7 +102,7 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                                 width: width(context) * 0.5,
                                 child: TextWid(
                                   text:
-                                      'wertyuiop bsdjhbuisad ivuusd jbdfj bhsadf ibdfhsd f hjdbfhusad  vhdbsyuhfbfysad bvudsbvsad  byuf v',
+                                      widget.service["description"].toString(),
                                   size: width(context) * 0.04,
                                   weight: FontWeight.w400,
                                   flow: TextOverflow.visible,
@@ -125,7 +123,7 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                                   width: width(context) * 0.5,
                                   // color: Colors.amber,
                                   child: SvgPicture.asset(
-                                      catImages[widget.index!])),
+                                      widget.service["userAppIcon"])),
                               SizedBox(
                                 height: height(context) * 0.03,
                               ),
@@ -183,12 +181,11 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                                 dynamic w = constraints.maxWidth;
                                 return InkWell(
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
                                             builder: (context) => PostAd(
-                                                  cat: true,
-                                                  catData: cat[index]
-                                                )));
+                                                cat: true,
+                                                catData: cat[index])));
                                   },
                                   child: Stack(
                                     children: [

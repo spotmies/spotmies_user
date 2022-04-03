@@ -9,7 +9,6 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/textWidget.dart';
-import 'package:spotmies/views/home/data.dart';
 import 'package:spotmies/views/maps/offLine_placesModel.dart';
 import 'package:spotmies/views/maps/onLine_placesSearch.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
