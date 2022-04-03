@@ -8,7 +8,8 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/home/banner.dart';
 import 'package:spotmies/views/home/categeries_card.dart';
-import 'package:spotmies/views/home/data.dart';
+import 'package:spotmies/models/data.dart';
+import 'package:spotmies/views/home/notification_screens.dart';
 import 'package:spotmies/views/home/searchJobs/search.dart';
 import 'package:spotmies/views/home/processSteps_card.dart';
 import 'package:spotmies/views/home/popular_services_card.dart';
@@ -105,7 +106,10 @@ class _HomeState extends StateMVC<Home> {
             Container(
                 // padding: EdgeInsets.only(right: 10),
                 child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => NotifyHome()));
+              },
               icon: Icon(
                 Icons.notifications_outlined,
                 color: SpotmiesTheme.onBackground,
