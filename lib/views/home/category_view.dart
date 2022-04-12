@@ -140,7 +140,7 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                     ],
                   ),
                   Container(
-                    height: height(context) * 0.75,
+                    height: height(context) * 0.78,
                     width: width(context) * 0.9,
                     padding: EdgeInsets.all(width(context) * 0.05),
                     decoration: BoxDecoration(
