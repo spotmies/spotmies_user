@@ -344,7 +344,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         _chatController?.orderDetails =
             _chatController?.targetChat['orderDetails'];
         showConfirmation =
-            _chatController?.targetChat['orderDetails']['orderState'] < 7
+            _chatController?.targetChat['orderDetails']['orderState'] < 7 &&
+                    _chatController?.targetChat['orderDetails']?['isBooking'] ==
+                        false
                 ? true
                 : false;
       }
@@ -457,7 +459,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                                                 maxWidth:
                                                     width(context) * 0.50),
                                             decoration: BoxDecoration(
-                                                color: messageColorTheme( 
+                                                color: messageColorTheme(
                                                     sender.toString())[0],
                                                 border: Border.all(
                                                     color: Colors
