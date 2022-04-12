@@ -9,7 +9,10 @@ import 'package:spotmies/views/reusable_widgets/rating/rating_star.dart';
 import 'package:spotmies/views/reusable_widgets/rating/rating_textfield.dart';
 import 'package:spotmies/views/reusable_widgets/rating/size_provider.dart';
 
-reviewBS(BuildContext context, Function onSubmit) {
+import '../../../providers/getOrdersProvider.dart';
+
+reviewBS(BuildContext context, GetOrdersProvider? ordersProvider,
+    Function onSubmit) {
   return showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -24,7 +27,7 @@ reviewBS(BuildContext context, Function onSubmit) {
           create: (context) => ServiceViewModel(),
           child: RatingCard(
             onFeedbackSubmitted: (int rating, String comment) {
-              onSubmit(rating, comment);
+              onSubmit(rating, comment, ordersProvider, context);
             },
           ),
         );

@@ -43,7 +43,7 @@ class ProcessCard extends StatelessWidget {
                   padding: EdgeInsets.all(
                     width(context) * 0.05,
                   ),
-                  height: height(context) * 0.18,
+                  height: height(context) * 0.19,
                   width: width(context) * 0.86,
                   decoration: BoxDecoration(
                       color: color![index],
