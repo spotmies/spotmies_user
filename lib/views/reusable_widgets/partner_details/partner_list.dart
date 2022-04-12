@@ -135,7 +135,7 @@ class _PartnerListState extends State<PartnerList> {
                                   },
                                   icon: Icon(
                                     Icons.chat,
-                                    size: width(context) * 0.04,
+                                    size: width(context) * 0.06,
                                   )),
                               IconButton(
                                   onPressed: () {
@@ -149,7 +149,7 @@ class _PartnerListState extends State<PartnerList> {
                                   },
                                   icon: Icon(
                                     Icons.call,
-                                    size: width(context) * 0.04,
+                                    size: width(context) * 0.06,
                                   ))
                             ],
                           ),
