@@ -439,12 +439,12 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                     color: SpotmiesTheme.dull,
                   ),
                   mediaView(height(context), width(context), images),
-                  Divider(
-                    color: SpotmiesTheme.dull,
-                  ),
-                  d['orderState'] > 8
-                      ? warrentyCard(height(context), width(context))
-                      : Container(),
+                  // Divider(
+                  //   color: SpotmiesTheme.dull,
+                  // ),
+                  // d['orderState'] > 8
+                  //     ? warrentyCard(height(context), width(context))
+                  //     : Container(),
                   Divider(
                     color: SpotmiesTheme.dull,
                   ),
@@ -586,7 +586,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                               height: height(context) * 0.05,
                               minWidth: width(context) * 0.5,
                               onClick: () {
-                                reviewBS(context,
+                                reviewBS(context, ordersProvider,
                                     _postOverViewController.submitReview);
                               },
                               bgColor: SpotmiesTheme.onBackground,
@@ -1214,7 +1214,9 @@ class _Timeline2 extends StatelessWidget {
                       child: Icon(
                         Icons.build,
                         size: width(context) * 0.035,
-                        color: SpotmiesTheme.onBackground,
+                        color: isServiceStarted()
+                            ? SpotmiesTheme.dull
+                            : SpotmiesTheme.onBackground,
                       ),
                     );
                   case _TimelineStatus.completed:

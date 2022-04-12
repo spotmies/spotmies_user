@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spotmies/utilities/fonts.dart';
 
+import '../providers/theme_provider.dart';
+
 class ElevatedButtonWidget extends StatefulWidget {
   final Color? bgColor;
   final Color? textColor;
@@ -70,7 +72,7 @@ class _ElevatedButtonWidgetState extends State<ElevatedButtonWidget> {
               Text(
                 widget.buttonName ?? 'Button',
                 style: fonts(widget.textSize ?? 10.0, widget.textStyle,
-                    widget.textColor ?? Colors.black),
+                    widget.textColor ?? SpotmiesTheme.surface),
               ),
               buildTrailingIcon(widget.trailingIcon),
             ],
