@@ -308,10 +308,10 @@ class _PostOverViewState extends StateMVC<PostOverView> {
               ],
             ),
             body: Container(
-              height: height(context),
               width: width(context),
               color: SpotmiesTheme.background,
               child: ListView(
+                shrinkWrap: true,
                 children: [
                   Divider(
                     color: SpotmiesTheme.dull,
@@ -723,8 +723,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           ),
           images.length > 0
               ? Container(
-                  height: hight * 0.14,
                   child: ListView.builder(
+                      shrinkWrap: true,
                       itemCount: images.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {

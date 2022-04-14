@@ -135,6 +135,7 @@ class _PartnerListState extends State<PartnerList> {
                                   },
                                   icon: Icon(
                                     Icons.chat,
+                                    color: SpotmiesTheme.onBackground,
                                     size: width(context) * 0.06,
                                   )),
                               IconButton(
@@ -149,6 +150,7 @@ class _PartnerListState extends State<PartnerList> {
                                   },
                                   icon: Icon(
                                     Icons.call,
+                                    color: SpotmiesTheme.onBackground,
                                     size: width(context) * 0.06,
                                   ))
                             ],

@@ -130,12 +130,12 @@ messageColorTheme(String sender) {
   switch (sender) {
     case "user":
       return [
-        SpotmiesTheme.uChat,
-        SpotmiesTheme.bChat
+        SpotmiesTheme.primary,
+        Colors.white
       ]; //background is index - 0 && text color is index - 1
 
     case "partner":
-      return [SpotmiesTheme.pChat, SpotmiesTheme.bChat];
+      return [SpotmiesTheme.secondary, SpotmiesTheme.surfaceVariant];
 
     case "bot":
       return [SpotmiesTheme.bChat, SpotmiesTheme.background];
