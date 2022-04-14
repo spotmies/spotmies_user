@@ -219,8 +219,8 @@ class _ProfileState extends StateMVC<Profile> {
                   ),
                 ),
                 Container(
-                  height: height(context) * 0.8,
                   child: ListView.builder(
+                      shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: tabnames.length,
                       itemBuilder: (BuildContext context, int index) {
