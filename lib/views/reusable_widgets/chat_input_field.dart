@@ -160,7 +160,7 @@ Widget chatInputField(
                 // log(inputController.text);
               },
               child: CircleAvatar(
-                backgroundColor: Colors.blueGrey[500],
+                backgroundColor: SpotmiesTheme.primary,
                 radius: width(context) * 0.065,
                 child: Icon(
                   Icons.send,
