@@ -8,6 +8,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
+import '../../utilities/snackbar.dart';
+
 class HomeController extends ControllerMVC {
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
@@ -71,12 +73,13 @@ class HomeController extends ControllerMVC {
     super.initState();
     //notifications();
     //address
-    getAddressofLocation();
+    // getAddressofLocation();
     //for notifications
     var androidInitialize = AndroidInitializationSettings('asdf');
     var initializesettings = InitializationSettings(android: androidInitialize);
     localNotifications = FlutterLocalNotificationsPlugin();
     localNotifications.initialize(initializesettings);
+    // up = Provider.of<UniversalProvider>(context, listen: false);
   }
 
 //get token
@@ -85,12 +88,18 @@ class HomeController extends ControllerMVC {
   // }
 
 //address
-  getAddressofLocation() async {
+  getAddressofLocation(BuildContext context) async {
+    log("get address");
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationServiceEnabled) {
       await Geolocator.checkPermission();
     } else {
       await Geolocator.requestPermission();
+    }
+
+    if (await Geolocator.isLocationServiceEnabled() == false) {
+      snackbar(context, "Please turn on location");
+      return "";
     }
 
     Position position = await Geolocator.getCurrentPosition(
@@ -105,6 +114,7 @@ class HomeController extends ControllerMVC {
       add2 = placemarks.first.subLocality;
       add3 = placemarks.first.subAdministrativeArea;
     });
+    return placemarks.first.subLocality.toString();
   }
 
   FlutterLocalNotificationsPlugin localNotifications =

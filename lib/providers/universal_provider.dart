@@ -22,6 +22,13 @@ class UniversalProvider extends ChangeNotifier {
   List catelogList = [];
   dynamic checkNull = {"content": "Loading", "id": "0"};
   dynamic user;
+  String add2 = "";
+
+  get getAdd2 => add2;
+
+  void setAdd2(String address) {
+    add2 = address;
+  }
 
   void setUser(data) {
     user = data;

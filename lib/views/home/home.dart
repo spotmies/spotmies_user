@@ -27,13 +27,21 @@ class _HomeState extends StateMVC<Home> {
   _HomeState() : super(HomeController()) {
     this._homeController = controller as HomeController;
   }
+  getLocation() async {
+    print(up.add2);
+    if (up.add2 == "") {
+      print("getting address");
+      String subLocality = await _homeController.getAddressofLocation(context);
+      up.setAdd2(subLocality);
+    }
+  }
 
   @override
-  void initState() {
+  initState() {
     up = Provider.of<UniversalProvider>(context, listen: false);
     up.setCurrentConstants("home");
-    _homeController.getAddressofLocation();
 
+    getLocation();
     super.initState();
   }
 
@@ -75,19 +83,19 @@ class _HomeState extends StateMVC<Home> {
             width: width(context) * 0.5,
             child: InkWell(
               onTap: () async {
-                await _homeController.getAddressofLocation();
+                String loc =
+                    await _homeController.getAddressofLocation(context);
+                up.setAdd2(loc);
               },
-              child: Text(
-                  (_homeController.add2 == null)
-                      ? 'Seethammadhara'
-                      : _homeController.add2!,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: GoogleFonts.josefinSans(
-                    fontSize: width(context) * 0.045,
-                    fontWeight: FontWeight.bold,
-                    color: SpotmiesTheme.onBackground,
-                  )),
+              child:
+                  Text((up.add2 != "") ? up.getAdd2.toString() : "Loading...",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.josefinSans(
+                        fontSize: width(context) * 0.045,
+                        fontWeight: FontWeight.bold,
+                        color: SpotmiesTheme.onBackground,
+                      )),
             ),
           ),
           actions: [
