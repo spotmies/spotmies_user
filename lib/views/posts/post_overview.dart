@@ -1197,7 +1197,7 @@ class _Timeline2 extends StatelessWidget {
                     return DotIndicator(
                       color: orderData['orderState'] > 6
                           ? SpotmiesTheme.primary
-                          : Colors.white,
+                          : SpotmiesTheme.dull,
                       child: Icon(
                         Icons.how_to_reg_rounded,
                         size: width(context) * 0.035,
@@ -1210,7 +1210,7 @@ class _Timeline2 extends StatelessWidget {
                     return DotIndicator(
                       color: isServiceStarted()
                           ? SpotmiesTheme.primary
-                          : Colors.white,
+                          : SpotmiesTheme.dull,
                       child: Icon(
                         Icons.build,
                         size: width(context) * 0.035,
