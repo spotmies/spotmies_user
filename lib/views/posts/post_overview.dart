@@ -629,7 +629,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 bottom: width(context) * 0.3),
                             child: ElevatedButtonWidget(
                               height: height(context) * 0.05,
-                              minWidth: width(context) * 0.5,
+                              minWidth: width(context) * 0.55,
                               onClick: () {
                                 Map<String, dynamic> sendPayload = {
                                   "socketName": "broadCastOrder",
