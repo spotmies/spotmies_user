@@ -270,7 +270,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 borderSideColor: SpotmiesTheme.background,
                                 borderRadius: 10.0,
                                 buttonName: 'Re-schedule',
-                                textColor: SpotmiesTheme.background,
+                                textColor: Colors.white,
                                 textSize: width(context) * 0.04,
                                 trailingIcon: Icon(
                                   Icons.refresh,
@@ -723,8 +723,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
           ),
           images.length > 0
               ? Container(
+                  height: width * 0.15,
                   child: ListView.builder(
-                      shrinkWrap: true,
                       itemCount: images.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -1189,7 +1189,7 @@ class _Timeline2 extends StatelessWidget {
                       color: SpotmiesTheme.primary,
                       child: Icon(
                         Icons.work_rounded,
-                        color: SpotmiesTheme.dull,
+                        color: Colors.white,
                         size: width(context) * 0.035,
                       ),
                     );
@@ -1197,12 +1197,12 @@ class _Timeline2 extends StatelessWidget {
                     return DotIndicator(
                       color: orderData['orderState'] > 6
                           ? SpotmiesTheme.primary
-                          : SpotmiesTheme.dull,
+                          : Colors.white,
                       child: Icon(
                         Icons.how_to_reg_rounded,
                         size: width(context) * 0.035,
                         color: orderData['orderState'] > 6
-                            ? SpotmiesTheme.dull
+                            ? Colors.white
                             : SpotmiesTheme.onBackground,
                       ),
                     );
@@ -1210,12 +1210,12 @@ class _Timeline2 extends StatelessWidget {
                     return DotIndicator(
                       color: isServiceStarted()
                           ? SpotmiesTheme.primary
-                          : SpotmiesTheme.dull,
+                          : Colors.white,
                       child: Icon(
                         Icons.build,
                         size: width(context) * 0.035,
                         color: isServiceStarted()
-                            ? SpotmiesTheme.dull
+                            ? Colors.white
                             : SpotmiesTheme.onBackground,
                       ),
                     );
