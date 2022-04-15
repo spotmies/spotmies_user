@@ -564,11 +564,11 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                                   money: value);
                                             });
                                           },
-                                          textColor: SpotmiesTheme.background,
+                                          textColor: Colors.white,
                                           textSize: width(context) * 0.04,
                                           leadingIcon: Icon(
                                             Icons.check_circle,
-                                            color: SpotmiesTheme.background,
+                                            color: Colors.white,
                                             size: width(context) * 0.045,
                                           ),
                                         )
