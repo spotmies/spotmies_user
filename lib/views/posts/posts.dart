@@ -421,7 +421,7 @@ class _PostListState extends StateMVC<PostList> {
                                                       o[index]['schedule']) +
                                                   ' - ' +
                                                   getTime(o[index]['schedule']),
-                                              color: Colors.grey[600],
+                                              color: SpotmiesTheme.secondary,
                                               size: width(context) * 0.03,
                                               weight: FontWeight.w600,
                                             ),
@@ -443,7 +443,9 @@ class _PostListState extends StateMVC<PostList> {
                                                   orderStateIcon(
                                                       ordState: o[index]
                                                           ['orderState']),
-                                                  color: SpotmiesTheme.primary,
+                                                  color: SpotmiesTheme.themeMode
+                                                      ? Color(0xff22afd6)
+                                                      : SpotmiesTheme.primary,
                                                   size: width(context) * 0.04,
                                                 ),
                                                 SizedBox(
@@ -453,8 +455,10 @@ class _PostListState extends StateMVC<PostList> {
                                                     text: orderStateString(
                                                         ordState: o[index]
                                                             ['orderState']),
-                                                    color:
-                                                        SpotmiesTheme.primary,
+                                                    color: SpotmiesTheme
+                                                            .themeMode
+                                                        ? Color(0xff55afc7)
+                                                        : SpotmiesTheme.primary,
                                                     weight: FontWeight.w600,
                                                     size: width(context) * 0.03)
                                               ],

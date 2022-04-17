@@ -76,6 +76,7 @@ Widget page1(BuildContext context, AdController adController,
                                     color: SpotmiesTheme.surfaceVariant,
                                     borderRadius: BorderRadius.circular(15)),
                                 child: DropdownButton(
+                                  dropdownColor: SpotmiesTheme.surface,
                                   underline: SizedBox(),
                                   value: adController.dropDownValue,
                                   hint: TextWid(

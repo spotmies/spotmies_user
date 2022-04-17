@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 
 circleProgress() {
   return Scaffold(
     body: Center(
       child: CircularProgressIndicator(
-        backgroundColor: Colors.indigo[100],
-        color: Colors.indigo[900],
+        backgroundColor: SpotmiesTheme.themeMode
+            ? SpotmiesTheme.primary
+            : SpotmiesTheme.primaryVariant,
+        color: SpotmiesTheme.themeMode
+            ? SpotmiesTheme.primaryVariant
+            : SpotmiesTheme.primary,
       ),
     ),
   );

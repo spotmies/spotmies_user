@@ -25,46 +25,48 @@ Future becomServiceProvider(BuildContext context, {Function? onSubmit}) {
           padding: EdgeInsets.only(top: height(context) * 0.03),
           child: ListView(children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
+                  margin: EdgeInsets.only(left: width(context) * 0.07),
                   width: width(context) * 0.8,
                   child: TextWid(
-                    text: 'Do you want become a spotmies service provider?',
+                    text: 'Do you want become a Spotmies service provider?',
                     size: width(context) * 0.1,
                     lSpace: height(context) * 0.0017,
                     weight: FontWeight.w600,
                     flow: TextOverflow.visible,
                     align: TextAlign.start,
-                    color: SpotmiesTheme.onBackground,
+                    color: Color(0xFFb2dbe6),
                   ),
                 ),
               ],
             ),
             Container(
+              margin: EdgeInsets.only(left: width(context) * 0.07),
               width: width(context) * 0.8,
-              padding:
-                  EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
+              padding: EdgeInsets.only(top: 20, left: 0, right: 10, bottom: 20),
               child: TextWid(
                 text:
-                    'Click below botton to install spotmies partner app and register to become service partner',
+                    'Click the button below to install the \'Spotmies Partner\' app\nand register to become service partner!',
                 flow: TextOverflow.visible,
                 color: SpotmiesTheme.onBackground,
-                align: TextAlign.center,
               ),
             ),
             Container(
                 height: height(context) * 0.2,
                 width: width(context) * 0.55,
-                child: Image.asset('assets/icons/spotmies_patner_logo.png')),
+                child: Image.asset(
+                    'assets/icons/spotmies_partner_logo${SpotmiesTheme.themeMode ? "" : "_light"}.png')),
             Container(
               padding: EdgeInsets.all(5),
+              margin: EdgeInsets.symmetric(horizontal: width(context) * 0.05),
               child: ElevatedButtonWidget(
                 bgColor: SpotmiesTheme.primary,
-                minWidth: width(context) * 0.9,
+                minWidth: width(context) * 0.8,
                 height: height(context) * 0.06,
-                textColor: SpotmiesTheme.background,
-                buttonName: 'Get spotmies partner app',
+                textColor: Colors.white,
+                buttonName: 'Get the Spotmies Partner app',
                 textSize: width(context) * 0.05,
                 textStyle: FontWeight.w600,
                 borderRadius: height(context) * 0.015,

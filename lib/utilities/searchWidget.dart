@@ -40,14 +40,10 @@ class _SearchWidgetState extends State<SearchWidget> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: SpotmiesTheme.background,
-          boxShadow: [
-            BoxShadow(
-                color: SpotmiesTheme.shadow, blurRadius: 5, spreadRadius: 3)
-          ]
-          // border: Border.all(color: Colors.grey[700]),
-          ),
+        borderRadius: BorderRadius.circular(15),
+        color: SpotmiesTheme.surfaceVariant2,
+        // border: Border.all(color: Colors.grey[700]),
+      ),
       // padding: const EdgeInsets.symmetric(horizontal: 0),
       child: TextField(
         controller: controller,

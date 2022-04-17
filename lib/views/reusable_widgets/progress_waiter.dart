@@ -32,13 +32,18 @@ class ProgressWaiter extends StatelessWidget {
                 CircularProgressIndicator(
                   // strokeWidth: 6.0,
                   // backgroundColor: Colors.white,
-                  color: SpotmiesTheme.primary,
+                  color: SpotmiesTheme.themeMode
+                      ? SpotmiesTheme.primaryVariant
+                      : SpotmiesTheme.primary,
+                      
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 20),
                   child: TextWid(
                     text: loadingName,
-                    color: SpotmiesTheme.primary,
+                    color: SpotmiesTheme.themeMode
+                        ? SpotmiesTheme.primaryVariant
+                        : SpotmiesTheme.primary,
                     weight: FontWeight.bold,
                     size: width(context) * 0.06,
                   ),

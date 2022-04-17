@@ -78,13 +78,20 @@ Widget page3(double hight, double width, user, AdController adController,
                               Row(
                                 children: [
                                   TextWidget(
-                                      text: adController.fullAddress['latitude']
-                                              .toString() +
-                                          ","),
+                                    text: adController.fullAddress['latitude']
+                                            .toString() +
+                                        ",",
+                                    color: SpotmiesTheme.primaryVariant,
+                                  ),
                                   TextWidget(
-                                      text: adController.fullAddress['logitude']
-                                          .toString()),
+                                    text: adController.fullAddress['logitude']
+                                        .toString(),
+                                    color: SpotmiesTheme.primaryVariant,
+                                  ),
                                 ],
+                              ),
+                              SizedBox(
+                                height: 8,
                               ),
                               TextWidget(
                                 text: adController.fullAddress.isNotEmpty
@@ -109,8 +116,9 @@ Widget page3(double hight, double width, user, AdController adController,
                               children: [
                                 ElevatedButtonWidget(
                                   buttonName: 'My Location',
-                                  bgColor: Colors.transparent,
-                                  borderSideColor: SpotmiesTheme.primary,
+                                  bgColor:
+                                      SpotmiesTheme.primary.withOpacity(0.2),
+                                  borderSideColor: Colors.transparent,
                                   textSize: width * 0.035,
                                   textColor: SpotmiesTheme.onBackground,
                                   borderRadius: 15.0,
@@ -169,16 +177,16 @@ Widget page3(double hight, double width, user, AdController adController,
                         adController.sliderKey.currentState?.previous();
                       },
                       buttonName: 'Back',
-                      bgColor: Colors.indigo[50],
-                      borderSideColor: Colors.indigo[50],
-                      textColor: Colors.indigo[900],
+                      bgColor: SpotmiesTheme.primaryVariant,
+                      borderSideColor: SpotmiesTheme.primaryVariant,
+                      textColor: SpotmiesTheme.primary,
                       height: hight * 0.05,
                       minWidth: width * 0.30,
                       textSize: hight * 0.02,
                       leadingIcon: Icon(
                         Icons.arrow_back_ios,
                         size: hight * 0.015,
-                        color: Colors.indigo[900],
+                        color: SpotmiesTheme.primary,
                       ),
                       borderRadius: 10.0,
                     ),

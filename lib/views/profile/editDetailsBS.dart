@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spotmies/controllers/profile_controllers/profile_controller.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/elevatedButtonWidget.dart';
@@ -72,6 +73,7 @@ Future editDetails(
       elevation: 0,
       isScrollControlled: true,
       enableDrag: false,
+      backgroundColor: SpotmiesTheme.background,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),
@@ -80,7 +82,7 @@ Future editDetails(
       builder: (BuildContext context) {
         return Container(
           padding: EdgeInsets.only(top: _hight * 0.04),
-          height: _hight * 0.76,
+          height: _hight * 0.7,
           child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setStatee) {
             return Column(
@@ -93,9 +95,10 @@ Future editDetails(
                     onClick: () {
                       pickImage(setStatee);
                     },
-                    onClickLabel: "change profile",
+                    onClickLabel: "Change\nProfile",
                   ),
                 ),
+                Spacer(),
                 Container(
                     margin: EdgeInsets.only(top: 20, left: 20),
                     alignment: Alignment.centerLeft,
@@ -103,9 +106,9 @@ Future editDetails(
                         text: 'Edit Profile',
                         size: _width * 0.05,
                         weight: FontWeight.w600,
-                        color: AppColors.dark)),
+                        color: SpotmiesTheme.secondary)),
                 Container(
-                    height: _hight * 0.4,
+                    height: _hight * 0.3,
                     padding: EdgeInsets.only(top: 20),
                     child: ListView(children: [
                       Form(
@@ -121,7 +124,7 @@ Future editDetails(
                                   hint: 'Enter your name Here',
                                   label: "Name",
                                   enableBorderColor: AppColors.grey,
-                                  focusBorderColor: AppColors.primaryColorLite,
+                                  focusBorderColor: SpotmiesTheme.secondary,
                                   enableBorderRadius: 15,
                                   focusBorderRadius: 15,
                                   errorBorderRadius: 15,
@@ -131,9 +134,9 @@ Future editDetails(
                                   postIcon: Icon(
                                     Icons.edit,
                                     size: _width * 0.045,
-                                    color: AppColors.dark,
+                                    color: SpotmiesTheme.secondary,
                                   ),
-                                  postIconColor: AppColors.primaryColorLite,
+                                  postIconColor: SpotmiesTheme.secondary,
                                 ),
                               ),
                             ],
@@ -151,7 +154,7 @@ Future editDetails(
                                   hint: 'Enter your Email Here',
                                   label: "Email",
                                   enableBorderColor: AppColors.grey,
-                                  focusBorderColor: AppColors.primaryColorLite,
+                                  focusBorderColor: SpotmiesTheme.secondary,
                                   enableBorderRadius: 15,
                                   focusBorderRadius: 15,
                                   errorBorderRadius: 15,
@@ -161,9 +164,9 @@ Future editDetails(
                                   postIcon: Icon(
                                     Icons.email_rounded,
                                     size: _width * 0.045,
-                                    color: AppColors.dark,
+                                    color: SpotmiesTheme.secondary,
                                   ),
-                                  postIconColor: AppColors.primaryColorLite,
+                                  postIconColor: SpotmiesTheme.primary,
                                 ),
                               ),
                             ],
@@ -184,8 +187,8 @@ Future editDetails(
                                   ],
                                   controller: mobileNoController,
                                   hint: 'Alternative',
-                                  enableBorderColor: AppColors.grey,
-                                  focusBorderColor: AppColors.primaryColorLite,
+                                  enableBorderColor: SpotmiesTheme.secondary,
+                                  focusBorderColor: Color(0xFFb2dbe6),
                                   enableBorderRadius: 15,
                                   focusBorderRadius: 15,
                                   errorBorderRadius: 15,
@@ -196,9 +199,9 @@ Future editDetails(
                                   postIcon: Icon(
                                     Icons.phone,
                                     size: _width * 0.045,
-                                    color: AppColors.dark,
+                                    color: SpotmiesTheme.secondary,
                                   ),
-                                  postIconColor: AppColors.primaryColorLite,
+                                  postIconColor: SpotmiesTheme.primary,
                                 ),
                               ),
                             ],
@@ -210,18 +213,18 @@ Future editDetails(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButtonWidget(
-                        bgColor: AppColors.secondaryColorLite,
+                        bgColor: Color(0xFFb2dbe6),
                         minWidth: _width * 0.35,
                         height: _hight * 0.06,
-                        textColor: AppColors.primaryColorLite,
+                        textColor: SpotmiesTheme.primary,
                         buttonName: 'Discard',
                         textSize: _width * 0.035,
                         textStyle: FontWeight.w600,
                         borderRadius: 15.0,
-                        borderSideColor: AppColors.secondaryColorLite,
+                        borderSideColor: SpotmiesTheme.background,
                         leadingIcon: Icon(
                           Icons.close,
-                          color: AppColors.primaryColorLite,
+                          color: SpotmiesTheme.primary,
                           size: _width * 0.04,
                         ),
                         onClick: () {
@@ -229,7 +232,7 @@ Future editDetails(
                         },
                       ),
                       ElevatedButtonWidget(
-                        bgColor: AppColors.primaryColorLite,
+                        bgColor: SpotmiesTheme.primary,
                         minWidth: _width * 0.55,
                         height: _hight * 0.06,
                         textColor: AppColors.white,
@@ -237,7 +240,7 @@ Future editDetails(
                         textSize: _width * 0.035,
                         textStyle: FontWeight.w600,
                         borderRadius: 15.0,
-                        borderSideColor: AppColors.primaryColorLite,
+                        borderSideColor: SpotmiesTheme.primary,
                         trailingIcon: Icon(
                           Icons.published_with_changes,
                           color: AppColors.white,
@@ -250,6 +253,9 @@ Future editDetails(
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                )
               ],
             );
           }),

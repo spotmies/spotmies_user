@@ -152,7 +152,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.fallback().copyWith(useMaterial3: true),
+      theme: ThemeData.fallback().copyWith(
+          useMaterial3: true,
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+              secondary: SpotmiesTheme.themeMode
+                  ? SpotmiesTheme.surface
+                  : SpotmiesTheme.primaryVariant)),
       home: SplashScreen(),
     );
   }

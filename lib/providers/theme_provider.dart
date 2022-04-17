@@ -30,7 +30,7 @@ class SpotmiesTheme {
   static Color onSurface = Colors.grey.shade100;
   static Color tertiaryVariant = Colors.blue.shade900;
   static Color surfaceVariant = Colors.grey.shade50;
-  static Color primaryVariant = Colors.indigo.shade50;
+  static Color primaryVariant = Color(0xFFb2dbe6);
   static Color surfaceVariant2 = Colors.grey.shade200;
   static Color dull = Colors.grey.shade200;
 
@@ -59,7 +59,7 @@ class SpotmiesTheme {
     colorScheme.onSurface: Colors.grey.shade100,
     colorScheme.tertiaryVariant: Colors.blue.shade900,
     colorScheme.surfaceVariant: Colors.grey.shade50,
-    colorScheme.primaryVariant: Colors.indigo.shade50,
+    colorScheme.primaryVariant: Color(0xFFb2dbe6),
     colorScheme.surfaceVariant2: Colors.grey.shade200,
     colorScheme.title: Colors.blueGrey.shade600,
     colorScheme.titleVariant: Colors.blueGrey.shade900,
@@ -87,7 +87,7 @@ class SpotmiesTheme {
     colorScheme.onSurface: Colors.grey.shade100,
     colorScheme.tertiaryVariant: Colors.blue.shade300,
     colorScheme.surfaceVariant: Colors.grey.shade700,
-    colorScheme.primaryVariant: Colors.indigo.shade400,
+    colorScheme.primaryVariant: Color(0xFFb2dbe6),
     colorScheme.surfaceVariant2: Colors.grey.shade600,
     colorScheme.title: Colors.blueGrey.shade100,
     colorScheme.titleVariant: Colors.blueGrey.shade50,

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
+import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/views/home/ads/adpost.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -50,8 +51,15 @@ class _CatelogOverViewState extends State<CatelogOverView> {
     up?.catelogList.clear();
   }
 
+  var isEmptyList = false;
+
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 10), () {
+      setState(() {
+        isEmptyList = true;
+      });
+    });
     // log(widget.service.toString());
     return WillPopScope(
       onWillPop: () async {
@@ -59,11 +67,9 @@ class _CatelogOverViewState extends State<CatelogOverView> {
         return true;
       },
       child: Consumer<UniversalProvider>(builder: (context, data, child) {
-        dynamic cat = data.catelogList;
+        List<dynamic> cat = data.catelogList;
         log(cat.toString());
-        // if (cat.isEmpty) {
-        //   return circleProgress();
-        // }
+
         return Scaffold(
           backgroundColor: widget.color,
           body: ListView(
@@ -156,122 +162,142 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                         Container(
                           height: height(context) * 0.67,
                           padding: EdgeInsets.only(top: width(context) * 0.03),
-                          child: GridView.builder(
-                            controller: scrollController,
-                            itemCount: cat.length,
-                            gridDelegate: SliverWovenGridDelegate.count(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 0,
-                              crossAxisSpacing: 0,
-                              pattern: [
-                                WovenGridTile(
-                                  5 / 7,
-                                ),
-                                WovenGridTile(
-                                  5 / 7,
-                                  crossAxisRatio: 0.9,
-                                  alignment: AlignmentDirectional.centerEnd,
-                                ),
-                              ],
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              return LayoutBuilder(builder: (BuildContext ctx,
-                                  BoxConstraints constraints) {
-                                // dynamic h = constraints.maxHeight;
-                                dynamic w = constraints.maxWidth;
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => PostAd(
-                                                cat: true,
-                                                catData: cat[index])));
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: widget.color,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                child: Image.network(
-                                                  cat[index]["media"][0]
-                                                              ["url"] ==
-                                                          "null"
-                                                      ? "https://www.caretastic.in/upload/productimg/imagenotfound.jpg"
-                                                      : cat[index]["media"][0]
-                                                          ["url"],
-                                                  height: w * 0.85,
-                                                  width: w * 0.85,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Container(
-                                                    padding: EdgeInsets.only(
-                                                        left: width(context) *
-                                                            0.05),
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: TextWid(
-                                                      text: "Rs." +
-                                                          cat[index]["price"]
-                                                              .toString(),
-                                                      weight: FontWeight.w600,
-                                                      size: w * 0.125,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding: EdgeInsets.only(
-                                                        left: width(context) *
-                                                            0.05),
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: TextWid(
-                                                      text: toBeginningOfSentenceCase(
-                                                              cat[index]["name"]
-                                                                  .toString())
-                                                          .toString(),
-                                                      weight: FontWeight.w500,
-                                                      size: w * 0.1,
-                                                      color: Colors.grey[700],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          )),
-                                      Positioned(
-                                        right: w * 0.05,
-                                        top: w * 0.15,
-                                        child: Container(
-                                          width: w * 0.9,
-                                          padding: EdgeInsets.only(
-                                              right: width(context) * 0.02),
-                                          // alignment: Alignment.centerLeft,
-                                          child: TextWid(
-                                            text: "Book",
-                                            weight: FontWeight.w600,
-                                            size: w * 0.1,
-                                            color: Colors.grey[700],
-                                            align: TextAlign.end,
-                                          ),
-                                        ),
-                                      )
+                          child: cat.isNotEmpty
+                              ? GridView.builder(
+                                  controller: scrollController,
+                                  itemCount: cat.length,
+                                  gridDelegate: SliverWovenGridDelegate.count(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 0,
+                                    crossAxisSpacing: 0,
+                                    pattern: [
+                                      WovenGridTile(
+                                        5 / 7,
+                                      ),
+                                      WovenGridTile(
+                                        5 / 7,
+                                        crossAxisRatio: 0.9,
+                                        alignment:
+                                            AlignmentDirectional.centerEnd,
+                                      ),
                                     ],
                                   ),
-                                );
-                              });
-                            },
-                          ),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return LayoutBuilder(builder:
+                                        (BuildContext ctx,
+                                            BoxConstraints constraints) {
+                                      // dynamic h = constraints.maxHeight;
+                                      dynamic w = constraints.maxWidth;
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) => PostAd(
+                                                      cat: true,
+                                                      catData: cat[index])));
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                                decoration: BoxDecoration(
+                                                    color: widget.color,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      child: Image.network(
+                                                        cat[index]["media"][0]
+                                                                    ["url"] ==
+                                                                "null"
+                                                            ? "https://www.caretastic.in/upload/productimg/imagenotfound.jpg"
+                                                            : cat[index]
+                                                                    ["media"][0]
+                                                                ["url"],
+                                                        height: w * 0.85,
+                                                        width: w * 0.85,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        Container(
+                                                          padding: EdgeInsets.only(
+                                                              left: width(
+                                                                      context) *
+                                                                  0.05),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: TextWid(
+                                                            text: "Rs." +
+                                                                cat[index][
+                                                                        "price"]
+                                                                    .toString(),
+                                                            weight:
+                                                                FontWeight.w600,
+                                                            size: w * 0.125,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          padding: EdgeInsets.only(
+                                                              left: width(
+                                                                      context) *
+                                                                  0.05),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: TextWid(
+                                                            text: toBeginningOfSentenceCase(cat[
+                                                                            index]
+                                                                        ["name"]
+                                                                    .toString())
+                                                                .toString(),
+                                                            weight:
+                                                                FontWeight.w500,
+                                                            size: w * 0.1,
+                                                            color: Colors
+                                                                .grey[700],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )),
+                                            Positioned(
+                                              right: w * 0.05,
+                                              top: w * 0.15,
+                                              child: Container(
+                                                width: w * 0.9,
+                                                padding: EdgeInsets.only(
+                                                    right:
+                                                        width(context) * 0.02),
+                                                // alignment: Alignment.centerLeft,
+                                                child: TextWid(
+                                                  text: "Book",
+                                                  weight: FontWeight.w600,
+                                                  size: w * 0.1,
+                                                  color: Colors.grey[700],
+                                                  align: TextAlign.end,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    });
+                                  },
+                                )
+                              : !isEmptyList
+                                  ? circleProgress()
+                                  : TextWid(
+                                      text: 'Service currently unavailable :('),
                         ),
                       ],
                     ),
