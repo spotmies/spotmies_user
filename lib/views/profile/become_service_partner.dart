@@ -37,7 +37,7 @@ Future becomServiceProvider(BuildContext context, {Function? onSubmit}) {
                     weight: FontWeight.w600,
                     flow: TextOverflow.visible,
                     align: TextAlign.start,
-                    color: Color(0xFFb2dbe6),
+                    color: SpotmiesTheme.primary,
                   ),
                 ),
               ],

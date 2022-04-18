@@ -9,6 +9,7 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/textWidget.dart';
+import 'package:spotmies/views/reusable_widgets/partner_details/custom_widget_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/partner_store.dart';
 import 'package:spotmies/views/reusable_widgets/profile_pic.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
@@ -70,9 +71,11 @@ class _PartnerListState extends State<PartnerList> {
       body: Consumer<UniversalProvider>(builder: (context, data, child) {
         dynamic pl = data.partnerList;
         log(pl.toString());
-        if (pl == null) {
+        if (pl == null || pl.isEmpty) {
           print("Geeting PL");
-          circleProgress();
+          print("testing circle progress");
+          //circleProgress();
+          return buildShimmer();
         }
         return Container(
           color: SpotmiesTheme.background,
@@ -467,5 +470,99 @@ class _PartnerListState extends State<PartnerList> {
         );
       }),
     );
+  }
+}
+
+class buildShimmer extends StatelessWidget {
+  const buildShimmer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return ListTile(
+            isThreeLine: true,
+            leading: CustomWidget.circular(
+              height: height(context) * 0.035,
+              width: height(context) * 0.035,
+            ),
+            title: CustomWidget.rectangular(
+              height: width(context) * 0.045,
+              width: width(context) * 0.2,
+            ),
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomWidget.rectangular(
+                        height: width(context) * 0.025,
+                        width: width(context) * 0.2),
+                    SizedBox(width: 8),
+                    CustomWidget.circular(
+                      width: width(context) * 0.035,
+                      height: width(context) * 0.035,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                CustomWidget.rectangular(
+                    // color: Colors.amber,
+                    height: height(context) * 0.015,
+                    width: width(context) * 0.2),
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    CustomWidget.circular(
+                      height: width(context) * 0.03,
+                      width: width(context) * 0.03,
+                    ),
+                    SizedBox(
+                      width: width(context) * 0.02,
+                    ),
+                    CustomWidget.rectangular(
+                        width: width(context) * 0.3,
+                        height: width(context) * 0.03),
+                  ],
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                    color: SpotmiesTheme.surfaceVariant2,
+                    width: width(context) * 0.8,
+                    height: width(context) * 0.005),
+              ],
+            ),
+            trailing: Container(
+              width: width(context) * 0.27,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomWidget.circular(
+                    height: width(context) * 0.06,
+                    width: width(context) * 0.06,
+                  ),
+                  CustomWidget.circular(
+                    height: width(context) * 0.06,
+                    width: width(context) * 0.06,
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
