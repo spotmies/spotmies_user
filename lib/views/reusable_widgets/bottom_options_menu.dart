@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
 import 'package:spotmies/views/reusable_widgets/text_wid.dart';
 
@@ -19,15 +20,15 @@ bottomOptionsMenu(context,
     builder: (BuildContext context) {
       return Container(
         padding: EdgeInsets.only(top: 10),
-        color: Colors.white,
-        height: height(context) * 0.18,
+        color: SpotmiesTheme.surfaceVariant,
+        height: height(context) * 0.17,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextWid(
                   text: menuTitle,
-                  color: Colors.grey[800],
+                  color: SpotmiesTheme.secondaryVariant,
                   size: width(context) * 0.04,
                   weight: FontWeight.w300),
               Divider(
@@ -63,31 +64,32 @@ bottomOptionsMenu(context,
                           // Navigator.pop(context);
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  options?.length == 2 || options?.length == 3
-                                      ? width(context) * 0.03
-                                      : 5),
-                          child: CircleAvatar(
-                            radius: width(context) * 0.099,
-                            backgroundColor: Colors.white,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  options?[index]['icon'],
-                                  color: Colors.grey[700],
-                                ),
-                                SizedBox(
-                                  height: height(context) * 0.01,
-                                ),
-                                TextWid(
-                                  text: options?[index]['name'],
-                                  color: Colors.grey[800],
-                                  weight: FontWeight.bold,
-                                )
-                              ],
-                            ),
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                options?[index]['icon'],
+                                color: index == 2
+                                    ? SpotmiesTheme.themeMode
+                                        ? Colors.red.shade300
+                                        : Colors.red
+                                    : SpotmiesTheme.secondary,
+                              ),
+                              SizedBox(
+                                height: height(context) * 0.01,
+                              ),
+                              TextWid(
+                                text: options?[index]['name'],
+                                color: index == 2
+                                    ? SpotmiesTheme.themeMode
+                                        ? Colors.red.shade200
+                                        : Colors.red
+                                    : SpotmiesTheme.secondaryVariant,
+                                weight: FontWeight.bold,
+                                flow: TextOverflow.visible,
+                              )
+                            ],
                           ),
                         ),
                       );

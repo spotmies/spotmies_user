@@ -8,6 +8,8 @@ import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/searchWidget.dart';
 import 'package:spotmies/views/home/ads/adpost.dart';
 
+import '../../../utilities/appConfig.dart';
+
 class FilterLocalListPage extends StatefulWidget {
   @override
   FilterLocalListPageState createState() => FilterLocalListPageState();
@@ -76,7 +78,7 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
           onPressed: () {},
           icon: Icon(
             Icons.home_repair_service,
-            color: SpotmiesTheme.onBackground,
+            color: SpotmiesTheme.primary.withOpacity(0.5),
           ),
         ),
         //  Image.network(
@@ -85,10 +87,17 @@ class FilterLocalListPageState extends State<FilterLocalListPage> {
         //   width: 50,
         //   height: 50,
         // ),
-        title: Text(
-          job['nameOfService'],
-          style: GoogleFonts.josefinSans(
-              color: SpotmiesTheme.onBackground, fontWeight: FontWeight.w600),
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              job['nameOfService'],
+              style: GoogleFonts.josefinSans(
+                  color: SpotmiesTheme.onBackground,
+                  fontSize: height(context) * 0.025),
+            ),
+          ],
         ),
         // subtitle: RichText(
         //   text: TextSpan(children: <InlineSpan>[

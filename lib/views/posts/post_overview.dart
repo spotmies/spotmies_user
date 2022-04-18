@@ -267,7 +267,7 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                 height: height(context) * 0.05,
                                 minWidth: width(context) * 0.55,
                                 bgColor: SpotmiesTheme.primary,
-                                borderSideColor: SpotmiesTheme.background,
+                                borderSideColor: SpotmiesTheme.primary,
                                 borderRadius: 10.0,
                                 buttonName: 'Re-schedule',
                                 textColor: Colors.white,
@@ -546,7 +546,8 @@ class _PostOverViewState extends StateMVC<PostOverView> {
                                           height: height(context) * 0.05,
                                           minWidth: width(context) * 0.45,
                                           bgColor: SpotmiesTheme.primary,
-                                          borderSideColor: SpotmiesTheme.dull,
+                                          borderSideColor:
+                                              SpotmiesTheme.primary,
                                           borderRadius: 10.0,
                                           buttonName: 'Completed',
                                           onClick: () {

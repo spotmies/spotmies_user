@@ -43,7 +43,7 @@ Future signOut(BuildContext context, hight, width) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                    bgColor: Colors.indigo[900],
+                    bgColor: SpotmiesTheme.primary,
                     minWidth: width,
                     height: hight * 0.06,
                     textColor: Colors.white,
@@ -51,7 +51,7 @@ Future signOut(BuildContext context, hight, width) {
                     textSize: width * 0.05,
                     textStyle: FontWeight.w600,
                     borderRadius: 5.0,
-                    borderSideColor: Colors.indigo[900],
+                    borderSideColor: SpotmiesTheme.primary,
                     // trailingIcon: Icon(Icons.share),
                     onClick: () async {
                       await FirebaseAuth.instance.signOut().then((action) {
@@ -68,15 +68,15 @@ Future signOut(BuildContext context, hight, width) {
               Container(
                 padding: EdgeInsets.all(5),
                 child: ElevatedButtonWidget(
-                  bgColor: Colors.indigo[50],
+                  bgColor: Color(0xFFb2dbe6),
                   minWidth: width,
                   height: hight * 0.06,
-                  textColor: Colors.grey[900],
+                  textColor: SpotmiesTheme.primary,
                   buttonName: 'Close',
                   textSize: width * 0.05,
                   textStyle: FontWeight.w600,
                   borderRadius: 5.0,
-                  borderSideColor: Colors.indigo[50],
+                  borderSideColor: Color(0xFFb2dbe6),
                   onClick: () {
                     Navigator.pop(context);
                   },

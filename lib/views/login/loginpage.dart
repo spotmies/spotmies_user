@@ -245,7 +245,9 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                                                     BorderRadius.circular(15)),
                                             suffixIcon: Icon(
                                               Icons.phone_android,
-                                              color: SpotmiesTheme.primary,
+                                              color: SpotmiesTheme.themeMode
+                                                  ? SpotmiesTheme.primaryVariant
+                                                  : SpotmiesTheme.primary,
                                             ),
                                             focusedBorder: OutlineInputBorder(
                                                 borderRadius: BorderRadius.all(
@@ -320,7 +322,7 @@ class _LoginPageScreenState extends StateMVC<LoginPageScreen> {
                             backgroundColor: SpotmiesTheme.primary,
                             child: data.loader
                                 ? CircularProgressIndicator(
-                                    color: SpotmiesTheme.surface)
+                                    color: SpotmiesTheme.primaryVariant)
                                 : Icon(Icons.arrow_forward_ios),
                             onPressed: () {
                               // _loginPageController.dataToOTP();

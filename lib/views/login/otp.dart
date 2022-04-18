@@ -121,7 +121,9 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               weight: FontWeight.bold,
                               align: TextAlign.center,
                               size: _width * 0.075,
-                              color: SpotmiesTheme.primary,
+                              color: SpotmiesTheme.themeMode
+                                  ? SpotmiesTheme.primaryVariant
+                                  : SpotmiesTheme.primary,
                             ),
                           ),
                           SizedBox(
@@ -134,7 +136,9 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                               weight: FontWeight.bold,
                               align: TextAlign.center,
                               size: _width * 0.04,
-                              color: SpotmiesTheme.primary,
+                              color: SpotmiesTheme.themeMode
+                                  ? SpotmiesTheme.primaryVariant
+                                  : SpotmiesTheme.primary,
                             ),
                           ),
                         ],
@@ -165,8 +169,12 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                     RegExp(r'[0-9]')),
                               ],
                               fieldsCount: 6,
-                              textStyle: fonts(_width * 0.045, FontWeight.w800,
-                                  SpotmiesTheme.primary),
+                              textStyle: fonts(
+                                  _width * 0.045,
+                                  FontWeight.w800,
+                                  SpotmiesTheme.themeMode
+                                      ? SpotmiesTheme.primaryVariant
+                                      : SpotmiesTheme.primary),
                               eachFieldWidth: _width * 0.1,
                               eachFieldHeight: _hight * 0.08,
                               focusNode: _pinPutFocusNode,
@@ -203,12 +211,18 @@ class _OTPScreenState extends StateMVC<OTPScreen> {
                                   lineWidth: 3,
                                   animation: true,
                                   animationDuration: 99999,
-                                  progressColor: SpotmiesTheme.primaryVariant,
+                                  progressColor: SpotmiesTheme.themeMode
+                                      ? SpotmiesTheme.primaryVariant
+                                      : SpotmiesTheme.primary,
                                   percent: 1.0,
-                                  backgroundColor: SpotmiesTheme.primary,
+                                  backgroundColor: SpotmiesTheme.themeMode
+                                      ? SpotmiesTheme.primary
+                                      : SpotmiesTheme.primaryVariant,
                                   center: TextWid(
                                     text: '${data.countDown}',
-                                    color: SpotmiesTheme.primary,
+                                    color: SpotmiesTheme.themeMode
+                                        ? SpotmiesTheme.primaryVariant
+                                        : SpotmiesTheme.primary,
                                     size: width(context) * 0.055,
                                     weight: FontWeight.w600,
                                   )),

@@ -125,17 +125,24 @@ class _HomeState extends StateMVC<Home> {
             )),
           ],
         ),
-        body: ListView(
-          children: [
-            ProcessCard(images: images, titles: titles, color: color),
-            PopularServices(
-              icons: icons,
-              serviceNames: serviceNames,
-            ),
-            Categories(color: color),
-            banner(context),
-            bottomFooter(context),
-          ],
+        body: Theme(
+          data: Theme.of(context).copyWith(
+              colorScheme: Theme.of(context).colorScheme.copyWith(
+                  secondary: SpotmiesTheme.themeMode
+                      ? SpotmiesTheme.surface
+                      : SpotmiesTheme.primaryVariant)),
+          child: ListView(
+            children: [
+              ProcessCard(images: images, titles: titles, color: color),
+              PopularServices(
+                icons: icons,
+                serviceNames: serviceNames,
+              ),
+              Categories(color: color),
+              banner(context),
+              bottomFooter(context),
+            ],
+          ),
         ));
   }
 }

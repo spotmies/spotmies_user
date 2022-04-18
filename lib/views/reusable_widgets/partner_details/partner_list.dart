@@ -71,6 +71,7 @@ class _PartnerListState extends State<PartnerList> {
         dynamic pl = data.partnerList;
         log(pl.toString());
         if (pl == null) {
+          print("Geeting PL");
           circleProgress();
         }
         return Container(

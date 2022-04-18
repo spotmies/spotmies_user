@@ -167,19 +167,19 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
 
   List options = [
     {
-      "name": "view order",
+      "name": "View Order",
       "icon": Icons.remove_red_eye,
     },
     {
-      "name": "Reveal My profile",
+      "name": "Reveal My Profile",
       "icon": Icons.share,
     },
     {
-      "name": "Disable chat",
+      "name": "Disable Chat",
       "icon": Icons.block,
     },
     {
-      "name": "Delete chat",
+      "name": "Delete Chat",
       "icon": Icons.delete_forever,
     },
   ];
@@ -539,7 +539,7 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
                   ),
                   _chatController?.showChatInputField == true ||
                           _chatController?.targetChat['cBuild'] == 1
-                      ? chatInputField(sendMessageHandler, context,
+                      ? ChatInputField(sendMessageHandler, context,
                           controller: _chatController,
                           chatProvider: chatProvider,
                           profileProvider: profileProvider)
