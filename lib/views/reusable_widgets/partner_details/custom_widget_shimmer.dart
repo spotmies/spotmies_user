@@ -18,14 +18,18 @@ class CustomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Shimmer.fromColors(
-        baseColor: Colors.grey.shade400,
-        highlightColor: Colors.grey,
+        baseColor:
+            SpotmiesTheme.themeMode ? Colors.grey.shade700 : Color(0xFFf8faf8),
+        highlightColor:
+            SpotmiesTheme.themeMode ? Colors.grey.shade800 : Color(0xFFe0e1e2),
         period: Duration(seconds: 2),
         child: Container(
           width: width,
           height: height,
           decoration: ShapeDecoration(
-            color: Colors.grey[400]!,
+            color: SpotmiesTheme.themeMode
+                ? Colors.grey.shade700
+                : Color(0xFFf8faf8),
             shape: shapeBorder,
           ),
         ),

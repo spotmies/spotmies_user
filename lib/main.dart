@@ -127,7 +127,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangePlatformBrightness() {
     super.didChangePlatformBrightness();
     print("ThemeModeChanged");
-    setPrefThemeMode(context);
+    //setPrefThemeMode(context);
   }
 
   @override
