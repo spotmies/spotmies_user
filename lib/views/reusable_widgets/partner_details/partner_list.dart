@@ -93,7 +93,9 @@ class _PartnerListState extends State<PartnerList> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (data.checkNull['id'] == "0")
-                          CupertinoActivityIndicator(),
+                          CupertinoActivityIndicator(
+                            color: SpotmiesTheme.onBackground,
+                          ),
                         SizedBox(
                           width: width(context) * 0.015,
                         ),
@@ -482,13 +484,13 @@ class buildShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: 5,
+        itemCount: 10,
         itemBuilder: (context, index) {
           return ListTile(
             isThreeLine: true,
             leading: CustomWidget.circular(
-              height: height(context) * 0.035,
-              width: height(context) * 0.035,
+              height: height(context) * 0.05,
+              width: height(context) * 0.05,
             ),
             title: CustomWidget.rectangular(
               height: width(context) * 0.045,
@@ -553,12 +555,12 @@ class buildShimmer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CustomWidget.circular(
-                    height: width(context) * 0.06,
-                    width: width(context) * 0.06,
+                    height: width(context) * 0.08,
+                    width: width(context) * 0.08,
                   ),
                   CustomWidget.circular(
-                    height: width(context) * 0.06,
-                    width: width(context) * 0.06,
+                    height: width(context) * 0.08,
+                    width: width(context) * 0.08,
                   )
                 ],
               ),
