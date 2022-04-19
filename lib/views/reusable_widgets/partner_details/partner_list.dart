@@ -49,6 +49,7 @@ class _PartnerListState extends State<PartnerList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: SpotmiesTheme.background,
       appBar: AppBar(
         backgroundColor: SpotmiesTheme.background,
         elevation: 0,
