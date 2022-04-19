@@ -161,6 +161,7 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                         ),
                         Container(
                           height: height(context) * 0.67,
+                          color: SpotmiesTheme.background,
                           padding: EdgeInsets.only(top: width(context) * 0.03),
                           child: cat.isNotEmpty
                               ? GridView.builder(

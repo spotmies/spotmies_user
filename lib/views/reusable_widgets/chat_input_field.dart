@@ -82,7 +82,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                           style: fonts(width(context) * 0.05, FontWeight.w500,
                               SpotmiesTheme.secondaryVariant),
                           controller: inputController,
-                          maxLines: null,
+                          maxLines: 10,
                           minLines: 1,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
