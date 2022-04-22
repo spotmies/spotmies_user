@@ -96,6 +96,7 @@ Widget page4(
                           TextWidget(
                             text: "Media",
                             weight: FontWeight.bold,
+                            color: SpotmiesTheme.onBackground,
                             size: height(context) * 0.025,
                           ),
                           Column(
@@ -255,6 +256,7 @@ class TitleAndText extends StatelessWidget {
       children: [
         TextWidget(
           text: "$title:",
+          color: SpotmiesTheme.onBackground,
           weight: FontWeight.bold,
           size: size,
         ),
