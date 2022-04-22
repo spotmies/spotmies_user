@@ -22,11 +22,16 @@ class UniversalProvider extends ChangeNotifier {
   List catelogList = [];
   dynamic checkNull = {"content": "Loading", "id": "0"};
   dynamic user;
-  String add2 = "";
+  dynamic add2 = null;
+  List currentLocation = [17.7442522, 83.3129482];
 
   get getAdd2 => add2;
 
-  void setAdd2(String address) {
+  void setCurrentLocation(loc) {
+    currentLocation = loc;
+  }
+
+  void setAdd2(dynamic address) {
     add2 = address;
   }
 
@@ -153,7 +158,14 @@ class UniversalProvider extends ChangeNotifier {
   }
 
   fetchPartnerList(skip, limit) async {
-    var query = await {"skip": skip.toString(), "limit": limit.toString()};
+    log("location");
+    log(currentLocation.toString());
+    var query = await {
+      "skip": skip.toString(),
+      "limit": limit.toString(),
+      "lat": currentLocation[0],
+      "log": currentLocation[1]
+    };
     dynamic response = await Server().getMethodParems(API.partnerList, query);
     if (response.statusCode == 200) {
       dynamic responseDecode = jsonDecode(response.body);

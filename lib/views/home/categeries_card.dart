@@ -51,7 +51,7 @@ class _CategoriesState extends State<Categories> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 dynamic serve = up?.getCategoryMainList().toList();
-                log(serve[index].toString());
+                // log(serve[index].toString());
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -133,5 +133,3 @@ class _CategoriesState extends State<Categories> {
     );
   }
 }
-
-

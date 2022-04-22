@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:spotmies/providers/universal_provider.dart';
 
 import '../../utilities/snackbar.dart';
 
@@ -88,7 +89,7 @@ class HomeController extends ControllerMVC {
   // }
 
 //address
-  getAddressofLocation(BuildContext context) async {
+  getAddressofLocation(BuildContext context, UniversalProvider up) async {
     log("get address");
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationServiceEnabled) {
@@ -107,14 +108,22 @@ class HomeController extends ControllerMVC {
 
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    log(placemarks[0].toString());
+    log(placemarks.toString());
+
+    List<String> currentLocation = [];
+    // currentLocation.add(position.latitude.toString());
+    // currentLocation.add(position.longitude.toString());
+    currentLocation.insert(0, position.latitude.toString());
+    currentLocation.insert(1, position.longitude.toString());
+
+    up.setCurrentLocation(currentLocation);
 
     setState(() {
       add1 = placemarks.first.street;
       add2 = placemarks.first.subLocality;
       add3 = placemarks.first.subAdministrativeArea;
     });
-    return placemarks.first.subLocality.toString();
+    return placemarks.first;
   }
 
   FlutterLocalNotificationsPlugin localNotifications =
