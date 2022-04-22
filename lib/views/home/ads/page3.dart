@@ -195,7 +195,7 @@ Widget page3(double hight, double width, user, AdController adController,
                         await adController.step3(
                             user, context, ordersProvider!);
                       },
-                      buttonName: 'Finish',
+                      buttonName: 'Review',
                       bgColor: SpotmiesTheme.primary,
                       borderSideColor: SpotmiesTheme.primary,
                       textColor: Colors.white,
