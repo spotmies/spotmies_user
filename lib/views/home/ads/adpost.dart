@@ -13,6 +13,7 @@ import 'package:spotmies/views/home/ads/catPost.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
 import 'package:spotmies/views/home/ads/page3.dart';
 import 'package:spotmies/views/home/ads/page1.dart';
+import 'package:spotmies/views/home/ads/page4.dart';
 import 'package:spotmies/views/reusable_widgets/onFailure.dart';
 import 'package:spotmies/views/reusable_widgets/onPending.dart';
 import 'package:spotmies/views/reusable_widgets/onSuccuss.dart';
@@ -86,7 +87,8 @@ class _PostAdState extends StateMVC<PostAd> {
           body: SafeArea(
               child: SingleChildScrollView(
             child: widget.cat == true
-                ? catPost(context, _adController, up!, widget.catData, ordersProvider, user)
+                ? catPost(context, _adController, up!, widget.catData,
+                    ordersProvider, user)
                 : Column(children: [
                     PageSlider(key: _adController.sliderKey, pages: [
                       Container(
@@ -102,6 +104,10 @@ class _PostAdState extends StateMVC<PostAd> {
                           height: height(context) * 1.08,
                           child: page3(height(context), width(context), user,
                               _adController, context, ordersProvider)),
+                      Container(
+                          height: height(context) * 1.08,
+                          child: page4(height(context), width(context), user,
+                              _adController, context, ordersProvider, up)),
                     ]),
                   ]),
           )));

@@ -245,6 +245,15 @@ class AdController extends ControllerMVC {
   }
 
   step3(userDetails, BuildContext context, GetOrdersProvider ordersProvider) {
+    setState(() {
+      sliderKey.currentState!.next();
+    });
+    // isUploading = 1;
+    // refresh();
+    // adbutton(userDetails, context, ordersProvider, cat: false);
+  }
+
+  step4(userDetails, BuildContext context, GetOrdersProvider ordersProvider) {
     isUploading = 1;
     refresh();
     adbutton(userDetails, context, ordersProvider, cat: false);

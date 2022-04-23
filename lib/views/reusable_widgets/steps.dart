@@ -24,6 +24,11 @@ steps(
           radius: step == 3 ? width * 0.015 : width * 0.01,
           backgroundColor:
               step == 3 ? SpotmiesTheme.primary : Color(0xFFb2dbe6),
+        ),
+        CircleAvatar(
+          radius: step == 4 ? width * 0.015 : width * 0.01,
+          backgroundColor:
+              step == 4 ? SpotmiesTheme.primary : Color(0xFFb2dbe6),
         )
       ],
     ),
