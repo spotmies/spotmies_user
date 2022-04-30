@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spotmies/controllers/home_controllers/ad_controll.dart';
@@ -11,9 +9,9 @@ import 'package:spotmies/utilities/elevatedButtonWidget.dart';
 import 'package:spotmies/utilities/media_player.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/ads/page2.dart';
-import 'package:spotmies/views/maps/offLine_placesModel.dart';
-import 'package:spotmies/views/maps/onLine_placesSearch.dart';
 import 'package:spotmies/views/reusable_widgets/steps.dart';
+
+import '../../reusable_widgets/text_wid.dart';
 
 Widget page4(
     double hight,
@@ -71,120 +69,126 @@ Widget page4(
                     Container(
                       width: double.infinity,
                       height: hight * 0.4,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          TitleAndText(
-                            "Category",
-                            text: up
-                                ?.getCategoryMainList()
-                                .map((services) =>
-                                    (services["nameOfService"] as String?))
-                                .elementAt(adController.dropDownValue ?? 0),
-                          ),
-                          TitleAndText(
-                            "Problem",
-                            text: adController.title.toString(),
-                          ),
-                          TitleAndText(
-                            "Scheduled",
-                            text: DateFormat('EEE, dd MMM yyyy')
-                                .format(adController.pickedDate),
-                          ),
-                          Divider(),
-                          TextWidget(
-                            text: "Media",
-                            weight: FontWeight.bold,
-                            color: SpotmiesTheme.onBackground,
-                            size: height(context) * 0.025,
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                height: hight * 0.15,
-                                width: width * 1,
-                                child: GridView.builder(
-                                    itemCount:
-                                        adController.serviceImages.length + 1,
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            mainAxisSpacing: 3.5,
-                                            crossAxisSpacing: 3.5,
-                                            crossAxisCount: 4),
-                                    itemBuilder: (context, index) {
-                                      // String type =  _adController.serviceImages[index].toString();
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: height(context) * 0.03,
+                            ),
+                            TitleAndText(
+                              "Category",
+                              text: up
+                                  ?.getCategoryMainList()
+                                  .map((services) =>
+                                      (services["nameOfService"] as String?))
+                                  .elementAt(adController.dropDownValue ?? 0),
+                            ),
+                            TitleAndText(
+                              "Problem",
+                              text: adController.title.toString(),
+                            ),
+                            TitleAndText(
+                              "Scheduled",
+                              text: DateFormat('EEE, dd MMM yyyy')
+                                  .format(adController.pickedDate),
+                            ),
+                            Divider(),
+                            TextWidget(
+                              text: "Media",
+                              weight: FontWeight.bold,
+                              color: SpotmiesTheme.onBackground,
+                              size: height(context) * 0.025,
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  height: hight * 0.15,
+                                  width: width * 1,
+                                  child: GridView.builder(
+                                      itemCount:
+                                          adController.serviceImages.length + 1,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              mainAxisSpacing: 3.5,
+                                              crossAxisSpacing: 3.5,
+                                              crossAxisCount: 4),
+                                      itemBuilder: (context, index) {
+                                        // String type =  _adController.serviceImages[index].toString();
 
-                                      return index == 0
-                                          ? Center(
-                                              child: IconButton(
-                                                  icon: Icon(Icons.add),
-                                                  onPressed: () {
-                                                    return !adController
-                                                            .uploading
-                                                        ? adController
-                                                            .chooseImage()
-                                                        : null;
-                                                  }),
-                                            )
-                                          : InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            MediaPlayer(
-                                                              mediaList: [
-                                                                adController
-                                                                        .serviceImagesStrings[
-                                                                    index - 1]
-                                                              ],
-                                                              isOnlinePlayer:
-                                                                  false,
-                                                            )));
-                                              },
-                                              child: Stack(children: [
-                                                mediaContent(adController
-                                                    .serviceImages[index - 1]),
-                                                Positioned(
-                                                    right: 0,
-                                                    top: 0,
-                                                    child: InkWell(
-                                                        onTap: () {
-                                                          adController
-                                                              .serviceImages
-                                                              .removeAt(
-                                                                  index - 1);
-                                                          adController
-                                                              .serviceImagesStrings
-                                                              .removeAt(
-                                                                  index - 1);
-                                                          adController
-                                                              .refresh();
-                                                        },
-                                                        child: Icon(
-                                                          Icons.close,
-                                                          size: width * 0.05,
-                                                          color: Colors.white,
-                                                        )))
-                                              ]),
-                                            );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Divider(),
-                          TitleAndText(
-                            "Address",
-                            text: adController.fullAddress.isNotEmpty
-                                ? '${adController.fullAddress['name']},${adController.fullAddress['street']}, ${adController.fullAddress['subLocality']}, ${adController.fullAddress['locality']}, ${adController.fullAddress['subAdminArea']}, ${adController.fullAddress['adminArea']}, ${adController.fullAddress['postalCode']}, ${adController.fullAddress['isoCountryCode']}'
-                                    .toString()
-                                : "Unable to Get your Location",
-                          ),
-                          SizedBox(
-                            height: hight * 0.03,
-                          ),
-                        ],
+                                        return index == 0
+                                            ? Center(
+                                                child: IconButton(
+                                                    icon: Icon(Icons.add),
+                                                    onPressed: () {
+                                                      return !adController
+                                                              .uploading
+                                                          ? adController
+                                                              .chooseImage()
+                                                          : null;
+                                                    }),
+                                              )
+                                            : InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              MediaPlayer(
+                                                                mediaList: [
+                                                                  adController
+                                                                          .serviceImagesStrings[
+                                                                      index - 1]
+                                                                ],
+                                                                isOnlinePlayer:
+                                                                    false,
+                                                              )));
+                                                },
+                                                child: Stack(children: [
+                                                  mediaContent(adController
+                                                          .serviceImages[
+                                                      index - 1]),
+                                                  Positioned(
+                                                      right: 0,
+                                                      top: 0,
+                                                      child: InkWell(
+                                                          onTap: () {
+                                                            adController
+                                                                .serviceImages
+                                                                .removeAt(
+                                                                    index - 1);
+                                                            adController
+                                                                .serviceImagesStrings
+                                                                .removeAt(
+                                                                    index - 1);
+                                                            adController
+                                                                .refresh();
+                                                          },
+                                                          child: Icon(
+                                                            Icons.close,
+                                                            size: width * 0.05,
+                                                            color: Colors.white,
+                                                          )))
+                                                ]),
+                                              );
+                                      }),
+                                ),
+                              ],
+                            ),
+                            Divider(),
+                            TitleAndText(
+                              "Address",
+                              text: adController.fullAddress.isNotEmpty
+                                  ? '${adController.fullAddress['name']},${adController.fullAddress['street']}, ${adController.fullAddress['subLocality']}, ${adController.fullAddress['locality']}, ${adController.fullAddress['subAdminArea']}, ${adController.fullAddress['adminArea']}, ${adController.fullAddress['postalCode']}, ${adController.fullAddress['isoCountryCode']}'
+                                      .toString()
+                                  : "Unable to Get your Location",
+                            ),
+                            SizedBox(
+                              height: hight * 0.03,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -254,7 +258,7 @@ class TitleAndText extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextWidget(
+        TextWid(
           text: "$title:",
           color: SpotmiesTheme.onBackground,
           weight: FontWeight.bold,
@@ -264,11 +268,12 @@ class TitleAndText extends StatelessWidget {
           width: 8,
         ),
         Flexible(
-          child: TextWidget(
+          child: TextWid(
             text: text ?? "N/A",
             color: SpotmiesTheme.secondaryVariant,
             flow: TextOverflow.visible,
             size: size,
+            maxlines: 8,
           ),
         ),
       ],

@@ -10,7 +10,6 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/shared_preference.dart';
-import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/home/navBar.dart';
 import 'package:spotmies/views/login/onboard.dart';

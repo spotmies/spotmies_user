@@ -49,7 +49,7 @@ class _MapsState extends State<Maps> {
   Position? position;
   double? lat;
   double? long;
-  Placemark? addressline;
+  String? addressline;
   dynamic generatedAddress;
   Map<MarkerId, Marker>? markers = <MarkerId, Marker>{};
   void getmarker(double lat, double long) {
@@ -74,7 +74,7 @@ class _MapsState extends State<Maps> {
             long = coordinates == null
                 ? position?.latitude
                 : coordinates?['logitude'];
-            addressline = firstAddress;
+            addressline = firstAddress.toString();
           });
           coordinates == null
               ? bottomAddressSheet(
@@ -168,7 +168,7 @@ class _MapsState extends State<Maps> {
               setState(() {
                 lat = tapped.latitude;
                 long = tapped.longitude;
-                addressline = firstAddress as Placemark?;
+                addressline = firstAddress;
               });
               bottomAddressSheet(
                 lat!,

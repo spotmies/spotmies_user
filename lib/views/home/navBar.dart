@@ -214,7 +214,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
     awesomeInitilize();
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       final routefromMessage = message?.data["route"];
-      log(routefromMessage);
+      print(routefromMessage);
       // Navigator.pushAndRemoveUntil(context,
       //     MaterialPageRoute(builder: (_) => GoogleNavBar()), (route) => false);
     });
