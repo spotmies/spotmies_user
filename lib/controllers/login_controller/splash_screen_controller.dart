@@ -22,6 +22,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late UniversalProvider universalProvider;
+  bool loading = false;
   checkUser() async {
     if (FirebaseAuth.instance.currentUser != null) {
       Navigator.pushAndRemoveUntil(context,
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
     dynamic appConstants = await constantsAPI();
     if (appConstants != null) {
       universalProvider.setAllConstants(appConstants);
-      snackbar(context, "new settings imported");
+      // snackbar(context, "new settings imported");
     }
     return;
   }
@@ -58,10 +59,16 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     universalProvider = Provider.of<UniversalProvider>(context, listen: false);
 
-    Timer(Duration(milliseconds: 2000), () {
+    Timer(Duration(milliseconds: 500), () async {
       // print("18 ${FirebaseAuth.instance.currentUser}");
-      getConstants(alwaysHit: false);
-      universalProvider.fetchServiceList();
+      setState(() {
+        loading = true;
+      });
+      await getConstants(alwaysHit: false);
+      await universalProvider.fetchServiceList(alwaysHit: false);
+      setState(() {
+        loading = false;
+      });
       checkUser();
     });
   }
@@ -106,6 +113,17 @@ class _SplashScreenState extends State<SplashScreen> {
                   // ),
                 ],
               ),
+              SizedBox(
+                height: _hight * 0.05,
+              ),
+              loading
+                  ? CircularProgressIndicator(
+                      strokeWidth: 4.0,
+                      backgroundColor: SpotmiesTheme.background,
+                    )
+                  : Container(
+                      height: _hight * 0.01,
+                    ),
             ],
           ),
         ));
