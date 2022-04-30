@@ -173,33 +173,55 @@ class _PartnerListState extends State<PartnerList> {
                         ),
                         subtitle: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              // mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextWidget(
-                                  text:
-                                      up?.getServiceNameById(pl[index]['job']) +
-                                          ' | ',
-                                  size: width(context) * 0.025,
-                                  weight: FontWeight.w600,
-                                  color: SpotmiesTheme.equal,
-                                ),
-                                TextWidget(
-                                  text: pl[index]['rate'].isEmpty
-                                      ? "5.0"
-                                      : avg(pl[index]['rate']).toString(),
-                                  // text: '4.5',
-                                  size: width(context) * 0.025,
-                                  weight: FontWeight.w600,
-                                  color: SpotmiesTheme.equal,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: width(context) * 0.035,
-                                )
-                              ],
+                            Container(
+                              width: width(context) * 0.35,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    // width: width(context) * 0.27,
+                                    constraints: BoxConstraints(
+                                        minWidth: width(context) * 0.1,
+                                        maxWidth: width(context) * 0.26),
+                                    child: TextWidget(
+                                      text: up?.getServiceNameById(
+                                          pl[index]['job']),
+                                      size: width(context) * 0.025,
+                                      weight: FontWeight.w600,
+                                      color: SpotmiesTheme.equal,
+                                      flow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  TextWid(
+                                    text: '|',
+                                    size: width(context) * 0.025,
+                                    weight: FontWeight.w600,
+                                    color: SpotmiesTheme.equal,
+                                  ),
+                                  Row(
+                                    children: [
+                                      TextWidget(
+                                        text: pl[index]['rate'].isEmpty
+                                            ? "5.0"
+                                            : avg(pl[index]['rate']).toString(),
+                                        // text: '4.5',
+                                        size: width(context) * 0.025,
+                                        weight: FontWeight.w600,
+                                        color: SpotmiesTheme.equal,
+                                        flow: TextOverflow.ellipsis,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                        size: width(context) * 0.035,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                             Container(
                               // color: Colors.amber,

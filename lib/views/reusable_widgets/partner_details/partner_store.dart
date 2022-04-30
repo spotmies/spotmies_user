@@ -141,10 +141,10 @@ class _PartnerStoreState extends State<PartnerStore>
                                   width: width(context) * 0.65,
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceAround,
                                     children: [
                                       ElevatedButtonWidget(
-                                        minWidth: width(context) * 0.30,
+                                        minWidth: width(context) * 0.25,
                                         height: height(context) * 0.04,
                                         bgColor: SpotmiesTheme.background,
                                         // onClick: onClick,
@@ -170,7 +170,7 @@ class _PartnerStoreState extends State<PartnerStore>
                                             SpotmiesTheme.background,
                                       ),
                                       ElevatedButtonWidget(
-                                        minWidth: width(context) * 0.30,
+                                        minWidth: width(context) * 0.32,
                                         height: height(context) * 0.04,
                                         bgColor: SpotmiesTheme.background,
                                         // onClick: onClick,

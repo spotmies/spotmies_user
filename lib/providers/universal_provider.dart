@@ -166,7 +166,8 @@ class UniversalProvider extends ChangeNotifier {
       "lat": currentLocation[0],
       "log": currentLocation[1]
     };
-    dynamic response = await Server().getMethodParems(API.partnerList, query);
+    dynamic response =
+        await Server().getMethodParems(API.nearestPartner, query);
     if (response.statusCode == 200) {
       dynamic responseDecode = jsonDecode(response.body);
       if (responseDecode.isNotEmpty) {
