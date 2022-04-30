@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
-import 'package:spotmies/utilities/progressIndicator.dart';
 import 'package:spotmies/utilities/textWidget.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/custom_widget_shimmer.dart';
 import 'package:spotmies/views/reusable_widgets/partner_details/partner_store.dart';

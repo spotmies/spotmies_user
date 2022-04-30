@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,7 +6,6 @@ import 'package:spotmies/providers/chat_provider.dart';
 import 'package:spotmies/providers/theme_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/appConfig.dart';
-// import 'package:spotmies/utilities/fonts.dart';
 import 'package:spotmies/utilities/snackbar.dart';
 import 'package:spotmies/views/reusable_widgets/audio.dart';
 import 'package:spotmies/views/reusable_widgets/bottom_options_menu.dart';
@@ -20,9 +18,9 @@ TextEditingController inputController = TextEditingController();
 class ChatInputField extends StatefulWidget {
   final dynamic sendCallBack;
   final BuildContext context;
-  ChatController? controller;
-  ChatProvider? chatProvider;
-  UserDetailsProvider? profileProvider;
+  final ChatController? controller;
+  final ChatProvider? chatProvider;
+  final UserDetailsProvider? profileProvider;
   ChatInputField(
     this.sendCallBack,
     this.context, {
