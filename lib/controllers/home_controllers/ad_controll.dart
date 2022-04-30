@@ -261,6 +261,12 @@ class AdController extends ControllerMVC {
 
   catFinish(userDetails, BuildContext context, GetOrdersProvider ordersProvider,
       {catData}) {
+    if (fullAddress["latitude"] == null || fullAddress["latitude"] == "") {
+      getCurrentLocation();
+      getAddressofLocation();
+      return;
+    }
+
     isUploading = 1;
     refresh();
     adbutton(userDetails, context, ordersProvider, catData: catData, cat: true);

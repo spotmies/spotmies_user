@@ -89,7 +89,7 @@ class _HomeState extends StateMVC<Home> {
                 up.setAdd2(loc);
               },
               child: Text(
-                  (up.add2 != null)
+                  (up.add2 != null && up.getAdd2 != null && up.getAdd2 != "")
                       ? up.getAdd2.subLocality.toString()
                       : "Loading...",
                   overflow: TextOverflow.ellipsis,

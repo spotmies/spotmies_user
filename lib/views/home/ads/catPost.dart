@@ -248,7 +248,6 @@ Widget catPost(
               top: height(context) * 0.03, left: width(context) * 0.03),
           child: Column(
             children: [
-             
               Container(
                 height: height(context) * 0.75,
                 width: width(context) * 0.8,
@@ -397,7 +396,8 @@ Widget catPost(
                     ElevatedButtonWidget(
                       onClick: () async {
                         await adController.catFinish(
-                            user, context, ordersProvider!,catData: catData);
+                            user, context, ordersProvider!,
+                            catData: catData);
                       },
                       buttonName: 'Finish',
                       bgColor: SpotmiesTheme.primary,

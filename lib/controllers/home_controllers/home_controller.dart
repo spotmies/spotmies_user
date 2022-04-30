@@ -99,10 +99,17 @@ class HomeController extends ControllerMVC {
     }
 
     if (await Geolocator.isLocationServiceEnabled() == false) {
-      snackbar(context, "Please turn on location");
+      Geolocator.openLocationSettings().then((value) async {
+        log("value");
+        log(value.toString());
+        if (await Geolocator.isLocationServiceEnabled() == false) {
+          snackbar(context, "Please turn on Location");
+          return "";
+        }
+      });
       return "";
     }
-
+    await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
