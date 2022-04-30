@@ -83,7 +83,9 @@ Widget page4(
                                   ?.getCategoryMainList()
                                   .map((services) =>
                                       (services["nameOfService"] as String?))
-                                  .elementAt(adController.dropDownValue ?? 0),
+                                  .elementAt(adController.dropDownValue != null
+                                      ? adController.dropDownValue! + 1
+                                      : 0),
                             ),
                             TitleAndText(
                               "Problem",
