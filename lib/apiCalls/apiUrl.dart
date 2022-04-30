@@ -37,4 +37,5 @@ class API {
   static var partnerStore = "/api/store/";
   static var partnerList = "/api/partner/partner-list";
   static var catelogList = "/api/catelog/catelog-by-job/";
+  static var nearestPartner = "/api/partner/nearest-partner";
 }

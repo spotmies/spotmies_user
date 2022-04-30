@@ -29,9 +29,10 @@ class _HomeState extends StateMVC<Home> {
   }
   getLocation() async {
     print(up.add2);
-    if (up.add2 == "") {
+    if (up.add2 == null) {
       print("getting address");
-      String subLocality = await _homeController.getAddressofLocation(context);
+      dynamic subLocality =
+          await _homeController.getAddressofLocation(context, up);
       up.setAdd2(subLocality);
     }
   }
@@ -83,19 +84,21 @@ class _HomeState extends StateMVC<Home> {
             width: width(context) * 0.5,
             child: InkWell(
               onTap: () async {
-                String loc =
-                    await _homeController.getAddressofLocation(context);
+                dynamic loc =
+                    await _homeController.getAddressofLocation(context, up);
                 up.setAdd2(loc);
               },
-              child:
-                  Text((up.add2 != "") ? up.getAdd2.toString() : "Loading...",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: GoogleFonts.josefinSans(
-                        fontSize: width(context) * 0.045,
-                        fontWeight: FontWeight.bold,
-                        color: SpotmiesTheme.onBackground,
-                      )),
+              child: Text(
+                  (up.add2 != null)
+                      ? up.getAdd2.subLocality.toString()
+                      : "Loading...",
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.josefinSans(
+                    fontSize: width(context) * 0.045,
+                    fontWeight: FontWeight.bold,
+                    color: SpotmiesTheme.onBackground,
+                  )),
             ),
           ),
           actions: [
