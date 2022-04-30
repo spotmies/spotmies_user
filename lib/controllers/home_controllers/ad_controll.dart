@@ -90,39 +90,47 @@ class AdController extends ControllerMVC {
 
   //function for location
   void getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
 
-    var lastPosition = await Geolocator.getLastKnownPosition();
-    print(lastPosition);
+      var lastPosition = await Geolocator.getLastKnownPosition();
+      print(lastPosition);
 
-    String lat = '${position.latitude}';
-    String long = '${position.longitude}';
+      String lat = '${position.latitude}';
+      String long = '${position.longitude}';
 
-    print('$lat,$long');
+      print('$lat,$long');
 
-    setState(() {
-      latitude = '${position.latitude}';
-      longitude = '${position.longitude}';
-    });
+      setState(() {
+        latitude = '${position.latitude}';
+        longitude = '${position.longitude}';
+      });
+    } catch (e) {
+      log("location error" + e.toString());
+    }
   }
 
   getAddressofLocation({double? lat, double? long}) async {
     log('message');
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    // final coordinates = (lat == null && long == null)
-    //     ? Coordinates(position.latitude, position.longitude)
-    //     : Coordinates(lat!, long!);
-    final lati = (lat == null) ? position.latitude : lat;
-    final longi = (long == null) ? position.longitude : long;
-    // var addresses =
-    //     await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    List<Placemark> placemarks = await placemarkFromCoordinates(lati, longi);
-    // log(placemarks.first.toString());
-    setState(() {
-      fullAddress = addressExtractor(placemarks.first, lati, longi);
-    });
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      // final coordinates = (lat == null && long == null)
+      //     ? Coordinates(position.latitude, position.longitude)
+      //     : Coordinates(lat!, long!);
+      final lati = (lat == null) ? position.latitude : lat;
+      final longi = (long == null) ? position.longitude : long;
+      // var addresses =
+      //     await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      List<Placemark> placemarks = await placemarkFromCoordinates(lati, longi);
+      // log(placemarks.first.toString());
+      setState(() {
+        fullAddress = addressExtractor(placemarks.first, lati, longi);
+      });
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   pickDate(BuildContext context) async {
@@ -245,6 +253,12 @@ class AdController extends ControllerMVC {
   }
 
   step3(userDetails, BuildContext context, GetOrdersProvider ordersProvider) {
+    if (fullAddress["latitude"] == null || fullAddress["latitude"] == "") {
+      getCurrentLocation();
+      getAddressofLocation();
+      return;
+    }
+
     setState(() {
       sliderKey.currentState!.next();
     });

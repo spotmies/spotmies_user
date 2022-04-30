@@ -190,9 +190,14 @@ bottomFooter(BuildContext context) {
                   width(context) * 0.1, FontWeight.bold, SpotmiesTheme.dull),
             ),
             TextSpan(
-              text: 'technicians ',
+              text: 'Service ',
               style: fonts(
-                  width(context) * 0.19, FontWeight.bold, SpotmiesTheme.dull),
+                  width(context) * 0.15, FontWeight.bold, SpotmiesTheme.dull),
+            ),
+            TextSpan(
+              text: 'Providers',
+              style: fonts(
+                  width(context) * 0.10, FontWeight.bold, SpotmiesTheme.dull),
             ),
             TextSpan(
               text: ' in the',

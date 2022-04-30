@@ -118,11 +118,15 @@ class _MapsState extends State<Maps> {
         return snackbar(context, 'Location permissions are denied');
       }
     }
-    Position currentPosition =
-        await GeolocatorPlatform.instance.getCurrentPosition();
-    setState(() {
-      position = currentPosition;
-    });
+    try {
+      Position currentPosition =
+          await GeolocatorPlatform.instance.getCurrentPosition();
+      setState(() {
+        position = currentPosition;
+      });
+    } catch (e) {
+      log("location error 130 " + e.toString());
+    }
   }
 
   UniversalProvider? up;
