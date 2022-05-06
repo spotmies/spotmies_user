@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/controllers/chat_controllers/chat_list_controller.dart';
 import 'package:spotmies/controllers/login_controller/login_controller.dart';
 import 'package:spotmies/controllers/login_controller/splash_screen_controller.dart';
@@ -124,7 +125,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   late IO.Socket socket;
 
   void socketResponse() {
-    socket = IO.io("https://spotmies.herokuapp.com", <String, dynamic>{
+    socket = IO.io("https://" + API.host, <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });

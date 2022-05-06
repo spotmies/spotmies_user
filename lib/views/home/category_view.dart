@@ -272,20 +272,31 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                                                   ],
                                                 )),
                                             Positioned(
-                                              right: w * 0.05,
-                                              top: w * 0.15,
+                                              right: w * 0.085,
+                                              top: w * 0.13,
                                               child: Container(
-                                                width: w * 0.9,
-                                                padding: EdgeInsets.only(
-                                                    right:
-                                                        width(context) * 0.02),
-                                                // alignment: Alignment.centerLeft,
-                                                child: TextWid(
-                                                  text: "Book",
-                                                  weight: FontWeight.w600,
-                                                  size: w * 0.1,
-                                                  color: Colors.grey[700],
-                                                  align: TextAlign.end,
+                                                alignment: Alignment.center,
+                                                width: w * 0.35,
+                                                height: w * 0.125,
+                                                decoration: BoxDecoration(
+                                                    color: SpotmiesTheme
+                                                        .background,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                child: Container(
+                                                  width: w * 0.9,
+                                                  padding: EdgeInsets.only(
+                                                      right: width(context) *
+                                                          0.02),
+                                                  // alignment: Alignment.centerLeft,
+                                                  child: TextWid(
+                                                    text: "Book",
+                                                    weight: FontWeight.w600,
+                                                    size: w * 0.1,
+                                                    color: Colors.grey[700],
+                                                    align: TextAlign.end,
+                                                  ),
                                                 ),
                                               ),
                                             )

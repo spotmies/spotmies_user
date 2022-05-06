@@ -19,10 +19,11 @@ import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/notifications.dart';
+import 'package:spotmies/views/home/ads/catPost.dart';
 
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
-  displayAwesomeNotificationBackground(message); 
+  displayAwesomeNotificationBackground(message);
 }
 
 void main() async {
@@ -158,6 +159,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               secondary: SpotmiesTheme.themeMode
                   ? SpotmiesTheme.surface
                   : SpotmiesTheme.primaryVariant)),
+      // home: CatBook(),
       home: SplashScreen(),
     );
   }
@@ -199,7 +201,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 //     PermissionStatus _permissionGranted;
 //     LocationData _locationData;
 
-//     _serviceEnabled = await location.serviceEnabled();
+//     _serviceEnabled = await location.serviceEnabled();25
 //     if (!_serviceEnabled) {
 //       _serviceEnabled = await location.requestService();
 //       if (!_serviceEnabled) {

@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class API {
   static var uid = FirebaseAuth.instance.currentUser?.uid; //user id
   // static var host = 'spotmies.herokuapp.com'; //server path
+  // production server => server.spotmies.com
   static var host = 'spotmies.herokuapp.com';
+  static var thost1 = 'spotmiesserver.herokuapp.com';
+  static var thost2 = 'spotmies.herokuapp.com';
   static var createOrder = '/api/order/Create-Ord/'; //post with user id
   static var catBook = "/api/order/book-service/";
   static var getOrders = '/api/order/user/'; //get with user id
