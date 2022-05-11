@@ -36,7 +36,7 @@ class _CatelogOverViewState extends State<CatelogOverView> {
         getMoreData();
       }
     });
-    log("38     ----->      ${up?.catelogList}");
+    // log("38     ----->      ${up?.catelogList}");
     super.initState();
   }
 
@@ -68,7 +68,7 @@ class _CatelogOverViewState extends State<CatelogOverView> {
       },
       child: Consumer<UniversalProvider>(builder: (context, data, child) {
         List<dynamic> cat = data.catelogList;
-        log(cat.toString());
+        // log(cat.toString());
 
         return Scaffold(
           backgroundColor: widget.color,
@@ -196,7 +196,8 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                                               MaterialPageRoute(
                                                   builder: (context) => PostAd(
                                                       cat: true,
-                                                      catData: cat[index])));
+                                                      catData: cat[index]
+                                                          ["_id"])));
                                         },
                                         child: Stack(
                                           children: [

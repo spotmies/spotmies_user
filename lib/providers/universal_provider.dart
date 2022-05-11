@@ -20,6 +20,7 @@ class UniversalProvider extends ChangeNotifier {
   dynamic partnerStore;
   List partnerList = [];
   List catelogList = [];
+  dynamic singleCatelog;
   dynamic checkNull = {"content": "Loading", "id": "0"};
   dynamic user;
   dynamic add2 = null;
@@ -197,6 +198,25 @@ class UniversalProvider extends ChangeNotifier {
       dynamic responseDecode = jsonDecode(response.body);
       if (responseDecode.isNotEmpty) {
         catelogList.addAll(responseDecode);
+      } else {
+        checkNull = {"content": "No data found", "id": "1"};
+      }
+      notifyListeners();
+      // return true;
+    } else {
+      log('Something went wrong');
+      // return true;
+    }
+  }
+
+  getSingleCatelog(id) async {
+    dynamic response = await Server().getMethod(
+      API.singleCat + id.toString(),
+    );
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      dynamic responseDecode = jsonDecode(response.body);
+      if (responseDecode.isNotEmpty) {
+        singleCatelog = responseDecode;
       } else {
         checkNull = {"content": "No data found", "id": "1"};
       }

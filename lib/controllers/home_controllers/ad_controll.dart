@@ -304,11 +304,11 @@ class AdController extends ControllerMVC {
       {catData, bool? cat}) async {
     dynamic ordId = DateTime.now().millisecondsSinceEpoch;
     cat == true ? log("service placed") : await uploadServiceMedia(ordId);
-    CircularProgressIndicator();
+    // CircularProgressIndicator();
 
     var catBody = {
       if (catData != null) "problem": catData["name"].toString(),
-      if (catData != null) "job": catData["category"].toString(),
+      if (catData != null) "job": catData["pDetails"]["job"].toString(),
       "ordId": ordId.toString(),
       if (catData != null) "money": catData["price"].toString(),
       "ordState": "req",
@@ -323,9 +323,10 @@ class AdController extends ControllerMVC {
       "loc.coordinates.1": fullAddress['logitude'].toString(),
       "uDetails": userDetails["_id"].toString(),
       if (catData != null) "catelog": catData["_id"].toString(),
-      if (catData != null) "pId": catData["pId"].toString(),
+      if (catData != null) "pId": catData["pDetails"]["pId"].toString(),
       "pDetails": "620dfc5284018e96b51e6979",
-      if (catData != null) "revealProfileTo": catData["pId"].toString(),
+      if (catData != null)
+        "revealProfileTo": catData["pDetails"]["pId"].toString(),
       "address":
           fullAddress.isNotEmpty ? jsonEncode(fullAddress).toString() : ""
     };

@@ -71,11 +71,11 @@ class _PostAdState extends StateMVC<PostAd> {
       if (data.getLoader || user == null) return circleProgress();
       switch (_adController.isUploading) {
         case 1:
-          return onPending(height(context), width(context));
+          return OnPending();
         case 2:
-          return onFail(height(context), width(context), context);
+          return OnFail();
         case 3:
-          return onSuccess(height(context), width(context), context);
+          return OnSuccuss();
 
         default:
           break;
