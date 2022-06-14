@@ -51,15 +51,8 @@ class _CatelogOverViewState extends State<CatelogOverView> {
     up?.catelogList.clear();
   }
 
-  var isEmptyList = false;
-
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 10), () {
-      setState(() {
-        isEmptyList = true;
-      });
-    });
     // log(widget.service.toString());
     return WillPopScope(
       onWillPop: () async {
@@ -307,10 +300,9 @@ class _CatelogOverViewState extends State<CatelogOverView> {
                                     });
                                   },
                                 )
-                              : !isEmptyList
+                              : data.catelogListLoader
                                   ? circleProgress()
-                                  : TextWid(
-                                      text: 'Service currently unavailable :('),
+                                  : TextWid(text: 'No Services available'),
                         ),
                       ],
                     ),
