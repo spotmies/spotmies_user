@@ -20,6 +20,7 @@ class UniversalProvider extends ChangeNotifier {
   dynamic partnerStore;
   List partnerList = [];
   List catelogList = [];
+  bool catelogListLoader = false;
   dynamic singleCatelog;
   dynamic checkNull = {"content": "Loading", "id": "0"};
   dynamic user;
@@ -27,6 +28,11 @@ class UniversalProvider extends ChangeNotifier {
   List currentLocation = [17.7442522, 83.3129482];
 
   get getAdd2 => add2;
+
+  void setCatLoader(bool state) {
+    catelogListLoader = state;
+    notifyListeners();
+  }
 
   void setCurrentLocation(loc) {
     currentLocation = loc;
@@ -192,10 +198,13 @@ class UniversalProvider extends ChangeNotifier {
 
   fetchCatelogList(skip, limit, job) async {
     var query = await {"skip": skip.toString(), "limit": limit.toString()};
+    setCatLoader(true);
     dynamic response =
         await Server().getMethodParems(API.catelogList + job.toString(), query);
+    setCatLoader(false);
     if (response.statusCode == 200) {
       dynamic responseDecode = jsonDecode(response.body);
+      log(responseDecode.toString());
       if (responseDecode.isNotEmpty) {
         catelogList.addAll(responseDecode);
       } else {

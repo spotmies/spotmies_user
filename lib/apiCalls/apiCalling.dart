@@ -59,8 +59,8 @@ class Server {
 
   /* --------------------------- END OF ACCESS TOKEN -------------------------- */
 
-  Future<dynamic> getMethod(String api) async {
-    var uri = Uri.https(API.host, api);
+  Future<dynamic> getMethod(String api, {Map<String, dynamic>? query}) async {
+    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     final String accessToken = await fetchAccessToken();
 
     try {
@@ -97,8 +97,9 @@ class Server {
     }
   }
 
-  Future<dynamic> postMethod(String api, Map<String, dynamic> body) async {
-    var uri = Uri.https(API.host, api);
+  Future<dynamic> postMethod(String api, Map<String, dynamic> body,
+      {Map<String, dynamic>? query}) async {
+    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     // var bodyData = json.encode(body);
     final String accessToken = await fetchAccessToken();
     try {
@@ -117,8 +118,9 @@ class Server {
     }
   }
 
-  Future<dynamic> editMethod(String api, Map<String, dynamic> body) async {
-    var uri = Uri.https(API.host, api);
+  Future<dynamic> editMethod(String api, Map<String, dynamic> body,
+      {Map<String, dynamic>? query}) async {
+    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
     // var bodyData = json.encode(body);
     final String accessToken = await fetchAccessToken();
     try {
@@ -139,7 +141,7 @@ class Server {
 
   Future<dynamic> deleteMethod(String api,
       {Map<String, dynamic>? params}) async {
-    var uri = Uri.https(API.host, api, params ?? {});
+    var uri = Uri.https(API.host, api, {...?params, ...API.defaultQuery});
     final String accessToken = await fetchAccessToken();
 
     try {
