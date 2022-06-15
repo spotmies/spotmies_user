@@ -42,4 +42,5 @@ class API {
   static var catelogList = "/api/catelog/catelog-by-job/";
   static var singleCat = "/api/catelog/catelogs/";
   static var nearestPartner = "/api/partner/nearest-partner";
+  static Map<String, dynamic> defaultQuery = {"api_from": "user_app"};
 }
