@@ -206,7 +206,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
 
   @override
   initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
       log(token.toString());
@@ -332,7 +332,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }

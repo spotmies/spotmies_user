@@ -11,7 +11,8 @@ void calling(BuildContext context, String phNum, String pId, String profile,
     {String msgId = "", String ordId = "", bool isIncoming = false}) {
   bottomOptionsMenu(context, options: Constants.bottomSheetOptionsForCalling,
       option1Click: () {
-    launch("tel://$phNum");
+    // launch("tel://$phNum");
+    launchUrl(Uri(scheme: "tel", path: phNum.toString()));
   }, option2Click: () {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => MyCalling(

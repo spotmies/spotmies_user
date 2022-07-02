@@ -184,3 +184,7 @@ typeofLastMessage(String type, String lastMessage, String data) {
     }
   }
 }
+
+removeHttpFromurl(String url) {
+  return url.replaceAll(RegExp(r"http://|https://"), "");
+}

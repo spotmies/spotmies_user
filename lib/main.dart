@@ -19,7 +19,6 @@ import 'package:spotmies/providers/timer_provider.dart';
 import 'package:spotmies/providers/universal_provider.dart';
 import 'package:spotmies/providers/userDetailsProvider.dart';
 import 'package:spotmies/utilities/notifications.dart';
-import 'package:spotmies/views/home/ads/catPost.dart';
 
 // recieve messages when app is in background
 Future<void> backGroundHandler(RemoteMessage message) async {
@@ -90,7 +89,7 @@ void main() async {
 Future<void> setPrefThemeMode(BuildContext context) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   var system_themeMode =
-      WidgetsBinding.instance?.window.platformBrightness == Brightness.dark;
+      WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
   var pref_themeMode =
       (sharedPreferences.getBool("theme_mode") ?? system_themeMode);
   var themeMode = system_themeMode ? ThemeMode.dark : ThemeMode.light;
@@ -112,15 +111,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     // connect();
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setPrefThemeMode(context);
     });
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
