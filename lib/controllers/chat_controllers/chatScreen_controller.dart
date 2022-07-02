@@ -46,7 +46,7 @@ class ChatScreenController extends ControllerMVC {
 
   chooseImage() async {
     final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedFile != null) {
         profilepic?.add(File(pickedFile.path));
@@ -56,7 +56,7 @@ class ChatScreenController extends ControllerMVC {
   }
 
   Future<void> retrieveLostData() async {
-    final LostData response = await ImagePicker().getLostData();
+    final LostDataResponse response = await ImagePicker().retrieveLostData();
     if (response.isEmpty) {
       return;
     }

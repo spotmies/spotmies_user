@@ -21,7 +21,7 @@ class SettingsController extends ControllerMVC {
       .doc(FirebaseAuth.instance.currentUser?.uid);
 
   Future<void> profilePic() async {
-    var profile = await ImagePicker().getImage(
+    var profile = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 40,
       preferredCameraDevice: CameraDevice.rear,

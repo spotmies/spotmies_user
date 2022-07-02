@@ -261,7 +261,7 @@ class ChatController extends ControllerMVC {
       await imageLink.removeAt(0);
       chatimages.removeAt(0);
     }
-    final pickedFile = await ImagePicker().getImage(
+    final pickedFile = await ImagePicker().pickImage(
       source: source,
       imageQuality: 10,
     );
@@ -320,8 +320,10 @@ class ChatController extends ControllerMVC {
 
   pickVideo(sendCallBack, String msgId, ChatProvider? chatProvider,
       BuildContext context, UserDetailsProvider? profileProvider) async {
-    PickedFile? pickedFile = await picker.getVideo(
+    XFile? pickedFile = await picker.pickVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
+    // getVideo(
+    //     source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     if (pickedFile != null) {
       chatVideo.add(File(pickedFile.path));
     }
@@ -333,7 +335,8 @@ class ChatController extends ControllerMVC {
   }
 
   Future<void> retrieveLostData() async {
-    final LostData response = await ImagePicker().getLostData();
+    final LostDataResponse response = await ImagePicker().retrieveLostData();
+    // .getLostData();
     if (response.isEmpty) {
       return;
     }

@@ -142,7 +142,7 @@ class StepperPersonal extends ControllerMVC {
 
   //image pick
   Future<void> profilePic() async {
-    var front = await ImagePicker().getImage(
+    var front = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 20,
       preferredCameraDevice: CameraDevice.rear,
