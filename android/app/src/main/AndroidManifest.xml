@@ -15,11 +15,11 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE " />
 
-         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-         <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-         <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-         <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
    <application
         android:label="Spotmies"
         android:icon="@mipmap/launcher_icon"

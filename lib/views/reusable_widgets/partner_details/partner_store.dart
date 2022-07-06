@@ -35,7 +35,7 @@ class _PartnerStoreState extends State<PartnerStore>
     up = Provider.of<UniversalProvider>(context, listen: false);
     up?.fetchPartnerStore(widget.pid);
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         isDrawingLayout = false;
       });

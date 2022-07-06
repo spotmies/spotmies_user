@@ -336,8 +336,15 @@ class _MapsState extends State<Maps> {
                             bgColor: Colors.indigo[900],
                             onClick: () async {
                               try {
-                                launch(
-                                    'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                                // launch(
+                                //     'https://www.google.com/maps/search/?api=1&query=$lat,$long');
+                                launchUrl(
+                                  Uri(
+                                      scheme: "https",
+                                      path:
+                                          'www.google.com/maps/search/?api=1&query=$lat,$long'),
+                                  mode: LaunchMode.externalApplication,
+                                );
                               } catch (e) {
                                 snackbar(context, "something went worng");
                               }

@@ -138,7 +138,9 @@ Future helpAndSupport(BuildContext context, double hight, double width,
                               backgroundColor: SpotmiesTheme.surface,
                               child: IconButton(
                                 onPressed: () {
-                                  launch('tel:+918341980196');
+                                  // launch('tel:+918341980196');
+                                    launchUrl(
+                                      Uri(scheme: "tel", path: "8341980196"));
                                 },
                                 icon: Icon(
                                   icons[2],

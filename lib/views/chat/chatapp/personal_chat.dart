@@ -219,7 +219,11 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
         type == 'text') {
       return TextButton(
           onPressed: () {
-            launch(message);
+            // launch(message);
+            launchUrl(
+              Uri(scheme: "https", path: removeHttpFromurl(message)),
+              mode: LaunchMode.externalApplication,
+            );
           },
           child: TextWid(
               text: message,
@@ -758,7 +762,9 @@ class _PersonalChatState extends StateMVC<PersonalChat> {
   void calling(BuildContext context) {
     bottomOptionsMenu(context, options: Constants.bottomSheetOptionsForCalling,
         option1Click: () {
-      launch("tel://${_chatController?.partner['phNum']}");
+      // launch("tel://${_chatController?.partner['phNum']}");
+      launchUrl(Uri(
+          scheme: "tel", path: _chatController?.partner['phNum'].toString()));
     }, option2Click: () {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyCalling(

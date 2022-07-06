@@ -228,12 +228,12 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     if (!_isPlaying) {
       _isPlaying = true;
 
-      _audioPlayer.play(message == null ? _filePath : message, isLocal: true);
-      _audioPlayer.onPlayerCompletion.listen((duration) {
-        setState(() {
-          _isPlaying = false;
-        });
-      });
+      // _audioPlayer.play(message == null ? _filePath : message, isLocal: true);
+      // _audioPlayer.onPlayerCompletion.listen((duration) {
+      //   setState(() {
+      //     _isPlaying = false;
+      //   });
+      // });
     } else {
       _audioPlayer.pause();
       _isPlaying = false;

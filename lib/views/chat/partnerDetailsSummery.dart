@@ -155,7 +155,9 @@ Future partnerDetailsSummury(
                       bottomOptionsMenu(context,
                           options: Constants.bottomSheetOptionsForCalling,
                           option1Click: () {
-                        launch("tel://${pDetails['phNum']}");
+                        // launch("tel://${pDetails['phNum']}");
+                        launchUrl(Uri(
+                            scheme: "tel", path: pDetails['phNum'].toString()));
                       }, option2Click: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => MyCalling(

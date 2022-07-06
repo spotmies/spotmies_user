@@ -57,7 +57,7 @@ Future editDetails(
 
   pickImage(setStatee) async {
     print(" profile $editpic");
-    final pickedFile = await ImagePicker().getImage(
+    final pickedFile = await ImagePicker().pickImage(
         source: ImageSource.camera,
         imageQuality: 60,
         preferredCameraDevice: CameraDevice.rear);

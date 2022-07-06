@@ -29,6 +29,8 @@ import 'package:spotmies/views/profile/profile.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../apiCalls/apiCalling.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(GoogleNavBar());
@@ -99,7 +101,11 @@ class _GoogleNavBarState extends State<GoogleNavBar>
         universalProvider.getServiceListFromServer();
         dynamic appConstants = await constantsAPI();
         if (appConstants != null) {
+          dynamic_base_server_url = null;
+          dynamic_base_socket_url = null;
+          dynamic_security_type = null;
           universalProvider.setAllConstants(appConstants);
+          socketResponse(reConnect: true);
         }
       }
     }
@@ -124,19 +130,29 @@ class _GoogleNavBarState extends State<GoogleNavBar>
 
   late IO.Socket socket;
 
-  void socketResponse() {
-    socket = IO.io("https://" + API.host, <String, dynamic>{
+  Future<void> socketResponse({reConnect = false}) async {
+    if (reConnect) {
+      socket.disconnect();
+      log("socket reconnecting... ");
+    }
+    final String host = await Server().getSocketUrl();
+    log("socket url + $host");
+    socket = IO.io("wss://${host}", <String, dynamic>{
       "transports": ["websocket", "polling", "flashsocket"],
       "autoConnect": false,
     });
     socket.onConnect((data) {
-      setStringToSF(id: "isSocketConnected", value: false);
+      setStringToSF(id: "isSocketConnected", value: true);
 
       print("Connected");
       socket.on("message", (msg) {
         print(msg);
       });
     });
+    socket.onConnectError((data) => {
+          log(" 62 error ❌❌❌❌" + data.toString()),
+          setStringToSF(id: "isSocketConnected", value: false)
+        });
     socket.onDisconnect((data) {
       log("disconnect $data");
       log("socket disconnected >>>>>>>>>");
@@ -206,7 +222,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
 
   @override
   initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
       log(token.toString());
@@ -332,7 +348,7 @@ class _GoogleNavBarState extends State<GoogleNavBar>
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
@@ -340,12 +356,12 @@ class _GoogleNavBarState extends State<GoogleNavBar>
   checkSocketStatus() async {
     bool socketStatus = await getStringValuesSF("isSocketConnected") ?? true;
     if (!socketStatus) {
-      snackbar(context, "socket disconnected trying to connect again");
+      // snackbar(context, "socket disconnected trying to connect again");
       log("socket disconnected trying to connect again");
-      socket.disconnect();
-      socket.connect();
-      socket.emit('join-room', FirebaseAuth.instance.currentUser?.uid);
-
+      // socket.disconnect();
+      // socket.connect();
+      // socket.emit('join-room', FirebaseAuth.instance.currentUser?.uid);
+      socketResponse(reConnect: true);
       checkUserRegistered(FirebaseAuth.instance.currentUser?.uid);
       if (FirebaseAuth.instance.currentUser != null) {
         getImportantApis(FirebaseAuth.instance.currentUser!.uid);

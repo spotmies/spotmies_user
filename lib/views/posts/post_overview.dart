@@ -1034,7 +1034,10 @@ partnerDetails(hight, width, BuildContext context, controller, orderDetails,
                 bottomOptionsMenu(context,
                     options: Constants.bottomSheetOptionsForCalling,
                     option1Click: () {
-                  launch("tel://${orderDetails['pDetails']['phNum']}");
+                  // launch("tel://${orderDetails['pDetails']['phNum']}");
+                      launchUrl(Uri(
+                      scheme: "tel",
+                      path: orderDetails['pDetails']['phNum'].toString()));
                 }, option2Click: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => MyCalling(

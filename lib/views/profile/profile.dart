@@ -288,13 +288,27 @@ class _ProfileState extends StateMVC<Profile> {
                                           value, u['_id'].toString(), context,
                                           suggestionFor: "partnerRegistration");
 
-                                      const url =
-                                          "https://play.google.com/store/apps/details?id=com.spotmiespartner";
-                                      if (await canLaunch(url))
-                                        await launch(url);
-                                      else
-                                        // can't launch url, there is some error
+                                      const String url =
+                                          "play.google.com/store/apps/details";
+
+                                      try {
+                                        launchUrl(
+                                          Uri(
+                                              scheme: "https",
+                                              path: url,
+                                              queryParameters: {
+                                                "id": "com.spotmiespartner"
+                                              }),
+                                          mode: LaunchMode.externalApplication,
+                                        );
+                                      } catch (e) {
                                         throw "Could not launch $url";
+                                      }
+                                      // if (await canLaunch(url))
+                                      //   await launch(url);
+                                      // else
+                                      //   // can't launch url, there is some error
+                                      //   throw "Could not launch $url";
                                     });
                                     // newQueryBS(context,
                                     //     hint:

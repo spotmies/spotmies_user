@@ -164,7 +164,7 @@ class AdController extends ControllerMVC {
   // image pick
 
   chooseImage() async {
-    final pickedFile = await ImagePicker().getImage(
+    final pickedFile = await ImagePicker().pickImage(
         source: ImageSource.camera,
         imageQuality: 10,
         preferredCameraDevice: CameraDevice.rear);
@@ -182,7 +182,7 @@ class AdController extends ControllerMVC {
   late VideoPlayerController videoPlayerController;
 
   pickVideo() async {
-    PickedFile? pickedFile = await picker.getVideo(
+    XFile? pickedFile = await picker.pickVideo(
         source: ImageSource.camera, maxDuration: Duration(seconds: 10));
     if (pickedFile != null) {
       serviceVideo = File(pickedFile.path);
@@ -199,7 +199,7 @@ class AdController extends ControllerMVC {
   }
 
   Future<void> retrieveLostData() async {
-    final LostData response = await ImagePicker().getLostData();
+    final LostDataResponse response = await ImagePicker().retrieveLostData();
     if (response.isEmpty) {
       return;
     }
