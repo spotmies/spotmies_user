@@ -9,12 +9,73 @@ import 'package:spotmies/apiCalls/apiUrl.dart';
 import 'package:spotmies/models/access_token.dart';
 import 'package:spotmies/utilities/shared_preference.dart';
 
+String? dynamic_base_server_url;
+String? dynamic_base_socket_url;
+String? dynamic_security_type;
+
 class Server {
+  Future<Uri> getServerUri(String api, Map<String, dynamic>? query) async {
+    log(dynamic_base_server_url.toString());
+    if (dynamic_base_server_url != null)
+      return dynamic_security_type == "http"
+          ? Uri.http(dynamic_base_server_url.toString(), api,
+              {...?query, ...API.defaultQuery})
+          : Uri.https(dynamic_base_server_url.toString(), api,
+              {...?query, ...API.defaultQuery});
+    try {
+      log("getting server url from storage");
+      String base_server_url = await getDynamicUrl("base_server_url");
+      String security_type = await getDynamicUrl("server_security_type");
+      if (base_server_url != "null") {
+        dynamic_base_server_url = base_server_url.toString();
+        log("server url dynamic" + base_server_url);
+        if (security_type != "null") dynamic_security_type = security_type;
+        return security_type == "http"
+            ? Uri.http(dynamic_base_server_url.toString(), api,
+                {...?query, ...API.defaultQuery})
+            : Uri.https(dynamic_base_server_url.toString(), api,
+                {...?query, ...API.defaultQuery});
+      }
+      return Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    } catch (e) {
+      log("server url err" + e.toString());
+      return Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    }
+  }
+
+  Future<String> getSocketUrl() async {
+    if (dynamic_base_socket_url != null)
+      return dynamic_base_server_url.toString();
+    final String socketUrl = await getDynamicUrl("base_socket_url");
+    if (socketUrl != "null") {
+      dynamic_base_socket_url = socketUrl;
+      return socketUrl;
+    }
+    return API.host;
+  }
+
+  Future<String> getDynamicUrl(String objId) async {
+    // socket = base_socket_url
+    // server = base_server_url
+    try {
+      final dynamic constants = await getAppConstants();
+      final List utilities = constants['utilities'] as List;
+      final String base_server_url = utilities[utilities
+          .indexWhere((element) => element['objId'] == objId)]['value'];
+      log("server url " + base_server_url);
+      return base_server_url.toString();
+    } catch (e) {
+      return "null";
+    }
+  }
+
   /* -------------------------- GET USER ACCESS TOKEN ------------------------- */
 
   Future<dynamic> getAccessTokenApi() async {
     log("getting access token");
-    dynamic uri = Uri.https(API.host, API.accessToken);
+    // Uri uri = Uri.https(API.host, API.accessToken);
+    Map<String, dynamic>? query;
+    Uri uri = await getServerUri(API.accessToken, query);
     if (FirebaseAuth.instance.currentUser == null) return null;
     Map<String, String> body = {"uId": FirebaseAuth.instance.currentUser!.uid};
     try {
@@ -60,7 +121,9 @@ class Server {
   /* --------------------------- END OF ACCESS TOKEN -------------------------- */
 
   Future<dynamic> getMethod(String api, {Map<String, dynamic>? query}) async {
-    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    // var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    Uri uri = await getServerUri(api, query);
+    log("server url $uri");
     final String accessToken = await fetchAccessToken();
 
     try {
@@ -79,7 +142,8 @@ class Server {
   }
 
   Future<dynamic> getMethodParems(String api, queryParameters) async {
-    var uri = Uri.https(API.host, api, queryParameters);
+    // var uri = Uri.https(API.host, api, queryParameters);
+    Uri uri = await getServerUri(api, queryParameters);
 
     print(uri);
     final String accessToken = await fetchAccessToken();
@@ -99,7 +163,8 @@ class Server {
 
   Future<dynamic> postMethod(String api, Map<String, dynamic> body,
       {Map<String, dynamic>? query}) async {
-    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    // var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    Uri uri = await getServerUri(api, query);
     // var bodyData = json.encode(body);
     final String accessToken = await fetchAccessToken();
     try {
@@ -120,7 +185,8 @@ class Server {
 
   Future<dynamic> editMethod(String api, Map<String, dynamic> body,
       {Map<String, dynamic>? query}) async {
-    var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    // var uri = Uri.https(API.host, api, {...?query, ...API.defaultQuery});
+    Uri uri = await getServerUri(api, query);
     // var bodyData = json.encode(body);
     final String accessToken = await fetchAccessToken();
     try {
@@ -141,7 +207,8 @@ class Server {
 
   Future<dynamic> deleteMethod(String api,
       {Map<String, dynamic>? params}) async {
-    var uri = Uri.https(API.host, api, {...?params, ...API.defaultQuery});
+    // var uri = Uri.https(API.host, api, {...?params, ...API.defaultQuery});
+    Uri uri = await getServerUri(api, params);
     final String accessToken = await fetchAccessToken();
 
     try {
