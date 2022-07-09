@@ -67,10 +67,12 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
               children: [
                 buildSearch(),
                 data.locationsLoader
+                    // true
                     ? Container(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            pickYourLocation(context),
                             CircularProgressIndicator(
                               color: Colors.indigo[900],
                               backgroundColor: Colors.grey[100],
@@ -93,36 +95,7 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
                             //return
 
                             if (index == 0) {
-                              return ListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Maps(
-                                                  isNavigate: false,
-                                                  popBackTwice: true,
-                                                  onSave: (cords, fullAddress) {
-                                                    if (widget.onSave == null)
-                                                      return snackbar(context,
-                                                          "something went wrong");
-                                                    widget.onSave!(
-                                                        cords, fullAddress);
-                                                    Navigator.pop(context);
-                                                  },
-                                                )));
-                                  },
-                                  leading: CircleAvatar(
-                                      backgroundColor: Colors.grey[200],
-                                      child: Icon(Icons.gps_fixed)),
-                                  title: TextWidget(
-                                    text: 'Your Location',
-                                    size: 15,
-                                    weight: FontWeight.w700,
-                                  ),
-                                  trailing: IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.directions),
-                                  ));
+                              return pickYourLocation(context);
                             } else {
                               return buildBook(book);
                             }
@@ -134,6 +107,36 @@ class OnlinePlaceSearchState extends State<OnlinePlaceSearch> {
           );
         }),
       );
+
+  ListTile pickYourLocation(BuildContext context) {
+    return ListTile(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Maps(
+                        isNavigate: false,
+                        popBackTwice: true,
+                        onSave: (cords, fullAddress) {
+                          if (widget.onSave == null)
+                            return snackbar(context, "something went wrong");
+                          widget.onSave!(cords, fullAddress);
+                          Navigator.pop(context);
+                        },
+                      )));
+        },
+        leading: CircleAvatar(
+            backgroundColor: Colors.grey[200], child: Icon(Icons.gps_fixed)),
+        title: TextWidget(
+          text: 'Pick Your Location',
+          size: 15,
+          weight: FontWeight.w700,
+        ),
+        trailing: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.directions),
+        ));
+  }
 
   Widget buildSearch() => SearchWidget(
         text: query,

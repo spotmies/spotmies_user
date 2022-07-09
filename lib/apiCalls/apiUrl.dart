@@ -43,4 +43,5 @@ class API {
   static var singleCat = "/api/catelog/catelogs/";
   static var nearestPartner = "/api/partner/nearest-partner";
   static Map<String, dynamic> defaultQuery = {"api_from": "user_app"};
+  static String geocodes = "/api/geocode/all";
 }

@@ -1,17 +1,20 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:spotmies/apiCalls/apiCalling.dart';
+import 'package:spotmies/apiCalls/apiUrl.dart';
 
 import 'package:spotmies/models/placesModel.dart';
 
 class PlacesApi {
   static Future<List<Places>> getLoc(String query) async {
-    final url = Uri.parse('https://spotmies.herokuapp.com/api/geocode/all');
-    final response = await http.get(url);
+    // final url = Uri.parse('https://spotmies.herokuapp.com/api/geocode/all');
+    final response = await Server().getMethod(API.geocodes);
+    // await http.get(url);
     // List data  = json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      final List geoLocations = json.decode(response.body);
+    if (response?.statusCode == 200) {
+      final List geoLocations = json.decode(response?.body);
       log('API Hit');
       log(geoLocations.toString());
 
