@@ -99,14 +99,17 @@ class HomeController extends ControllerMVC {
     }
 
     if (await Geolocator.isLocationServiceEnabled() == false) {
-      Geolocator.openLocationSettings().then((value) async {
-        log("value");
-        log(value.toString());
-        if (await Geolocator.isLocationServiceEnabled() == false) {
-          snackbar(context, "Please turn on Location");
-          return "";
-        }
+      snackbar(context, "Turn on Location", label: "Turn On", ontap: () {
+        Geolocator.openLocationSettings().then((value) async {
+          // log("value");
+          // log(value.toString());
+          if (await Geolocator.isLocationServiceEnabled() == false) {
+            snackbar(context, "Please turn on Location");
+            return "";
+          }
+        });
       });
+
       return "";
     }
     await Geolocator.requestPermission();
